@@ -30,6 +30,7 @@ class CreateDoctorTable extends Migration
             $table->string('identity')->default('general');
             $table->integer('currentOfficialLeaveHours')->nullable();
             $table->integer('currentShiftHours')->nullable();
+            $table->rememberToken();
             $table->timestamps();
         });
     }
