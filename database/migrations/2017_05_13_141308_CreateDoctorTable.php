@@ -16,8 +16,8 @@ class CreateDoctorTable extends Migration
         // table 5
         Schema::create('Doctor', function (Blueprint $table) {
             $table->increments('doctorID');
-            // The email and name haven't been added to DB
             $table->string('email')->unique();
+            $table->string('password');
             $table->string('name')->default('');
             $table->string('level')->default('A1');
             $table->string('major')->default('');

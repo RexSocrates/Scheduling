@@ -20,6 +20,8 @@ class CreateShiftRecordsTable extends Migration
             $table->bigInteger('scheduleID_2')->default(0);
             $table->integer('schID_1_doctor')->default(0);
             $table->integer('schID_2_doctor')->default(0);
+            $table->boolean('doc2Confirm')->nullable();
+            $table->boolean('adminConfirm')->nullable();
             $table->timestamps();
         });
     }
