@@ -5,9 +5,13 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use DB;
+
 class User extends Authenticatable
 {
     use Notifiable;
+    
+    protected $table = "Doctor";
 
     /**
      * The attributes that are mass assignable.
@@ -26,4 +30,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    public function getDoctorList() {
+        $doctors = DB::table('Doctor')->get();
+        
+        return $doctors;
+    }
 }

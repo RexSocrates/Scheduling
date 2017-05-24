@@ -4,13 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-// import the model
-use App\Doctor;
+use App\User;
 
 class AccountController extends Controller
 {
     //
-    public function addNewDoctor() {
-        
-    }
+    
 }
