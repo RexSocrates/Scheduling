@@ -31,9 +31,21 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
     
+    // 取得所有醫生列表(須進行身份確認)
     public function getDoctorList() {
-        $doctors = DB::table('Doctor')->get();
+        $doctors = DB::table('Doctor')
+            orderBy('doctorID')
+            ->get();
         
         return $doctors;
     }
+    
+    // 透過醫生ID取得單一醫生資訊
+    public function getDoctorInforByID($id) {
+        $doctor = DB::table('Doctor')->where('doctorID', $id)-first();
+        
+        return $doctor;
+    }
+    
+    //更新醫生資訊
 }
