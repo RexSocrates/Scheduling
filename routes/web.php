@@ -18,3 +18,21 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/reservation', 'AccountController@reservation');
+
+Route::get('/reservation/updateReservation/{id}', function() {
+	return view('updateReservation');
+});
+
+Route::post('reservation/updateReservation/{id}', 'AccountController@updateReservation');
+
+Route::get('/reservation/delete/{id}', 'AccountController@deleteReservation');
+
+Route::get('/addReservation', function() {
+    return view('addReservation');
+});
+
+Route::post('/addReservation', 'AccountController@addReservation');
+
+Route::get('/shiftRecords/{id}', 'ShiftRecordsController@shiftRecords');
