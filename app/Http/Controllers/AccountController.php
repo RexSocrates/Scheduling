@@ -6,11 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
 use App\Reservation;
+use App\DoctorAndReservation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
-
-
-
 
 use App\User;
 
@@ -18,7 +16,7 @@ use App\User;
 
 class AccountController extends Controller
 {
-    //
+    //查看全部醫師預班班表
     public function reservation() {
         $reservation = new Reservation();
         $reservationData = $reservation->reservationList();
@@ -26,15 +24,29 @@ class AccountController extends Controller
          return view('reservation', array('reservations' => $reservationData));
     }
 
+    //查看個人預班班表
+      public function getReservationByID() {
+
+        $reservation = new Reservation();
+        $reservationData = $reservation->getReservationByID();
+        // echo $reservationData;
+        return view('getReservationByID', array('reservations' => $reservationData));
+     }
+
+     //新增預班
     public function addReservation(){
     		$addReservation = new Reservation();
+        $addDoctor = new DoctorAndReservation();
+        $periodSerial = Input::get('periodSerial');
     		$isWeekday = Input::get('isWeekday');
     		$location = Input::get('location');
     		$isOn = Input::get('isOn');
     		$remark = Input::get('remark');
     		$date = Input::get('date');
-
-    		$newResSerial = $addReservation->addReservation($isWeekday,$location,$isOn,$remark,$date);
+            $doctorID = Input::get('doctorID');
+           
+    		$newResSerial = $addReservation->addReservation($periodSerial,$isWeekday,$location,$isOn,$remark,$date,$doctorID);
+        $addDoctorToTable = $addDoctor->addDoctor($newResSerial); //醫生id
 
     		 return redirect('reservation'); 
 
@@ -47,10 +59,24 @@ class AccountController extends Controller
      		
         }
        
+    public function updateReservation(){
+        $serial = Input::get('serial');
+       	$updateReservation = new Reservation();
+        $updateDoctorReservation = new DoctorAndReservation();
+        $periodSerial = Input::get('periodSerial');
+        $isWeekday = Input::get('isWeekday');
+        $location = Input::get('location');
+        $isOn = Input::get('isOn');
+        $remark = Input::get('remark');
+        $date = Input::get('date');
+        $update = $updateReservation->updateReservation($serial,$periodSerial,$isWeekday,$location,$isOn,$remark,$date);
+        $updateDoctorReservationToTable = $updateDoctorReservation->doctorUpdateReservation($serial,$update);
+        return redirect('reservation');
+    }
 
-    public function updateReservation(Request $request,$id){
-       		//$updatereservation=DB::table('Reservation')->where('resSerial',$id);
-         
+    public function getDataByID() {
+        $serial = Input::geT('serial');
+        return view('updateReservation', ['serial' => $serial] );
 
     }
     

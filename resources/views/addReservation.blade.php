@@ -5,6 +5,10 @@
     </head>
     <body>
         <form action="addReservation" method="post">
+            <label>periodSerial:</label>
+            <br>
+            <input type="text" name="periodSerial">
+            <br>
             <label>isWeekday :</label>
             <br>
             <input type="boolean" name="isWeekday">
@@ -24,6 +28,10 @@
             <label>date :</label>
             <br>
             <input type="date" name="date">
+            <br>
+             <label>doctorID:</label>
+            <br>
+            <input type="text" name="doctorID">
             <br>
             <input type="submit" name="submit" value="Submit">
             {{ csrf_field() }}

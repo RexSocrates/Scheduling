@@ -19,20 +19,44 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+// ===========================showallReservationList==================================
 Route::get('/reservation', 'AccountController@reservation');
 
-Route::get('/reservation/updateReservation/{id}', function() {
-	return view('updateReservation');
-});
+// ==================================showDoctor'sReservation==========================
 
-Route::post('reservation/updateReservation/{id}', 'AccountController@updateReservation');
+Route::post('doctor', 'AccountController@getDoctorID');
+Route::get('getReservationByID', 'AccountController@getReservationByID');
+
+// =============================update================================================
+Route::post('updateReservation', 'AccountController@updateReservation');
+
+Route::post('toEdit', 'AccountController@getDataByID');
+
+// ===================================================================================
 
 Route::get('/reservation/delete/{id}', 'AccountController@deleteReservation');
 
+// =============================add================================================
 Route::get('/addReservation', function() {
     return view('addReservation');
 });
-
 Route::post('/addReservation', 'AccountController@addReservation');
+// ===================================================================================
 
-Route::get('/shiftRecords/{id}', 'ShiftRecordsController@shiftRecords');
+
+
+
+Route::get('/shiftRecords/', 'ShiftRecordsController@shiftRecords');
+
+Route::get('/addShifts', function() {
+    return view('addShifts');
+});
+
+Route::post('/addShifts', 'ShiftRecordsController@addShifts');
+
+
+//Route::post('reservation/updateReservation/{id}', 'AccountController@updateReservation');
+//Route::get('/reservation/updateReservation/{id}', function() {
+//	return view('updateReservation');
+
+//});

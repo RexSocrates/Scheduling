@@ -4,9 +4,13 @@
         <title>Update Reservation</title>
     </head>
     <body>
-    @section('content')
-
         <form action="updateReservation" method="post">
+            <input type="hidden" name="serial" value={{$serial}}>
+            
+            <label>periodSerial :</label>
+            <br>
+            <input type="text" name="periodSerial" >
+            <br>
             <label>isWeekday :</label>
             <br>
             <input type="boolean" name="isWeekday" >
