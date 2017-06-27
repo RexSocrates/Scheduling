@@ -1,0 +1,386 @@
+/*@import "reset.css";*/
+@charset utf-8;
+
+body {
+    min-width: 970px !important;
+}
+
+.logo-padding-left{
+	padding-left: 10px;
+}
+
+header, main, footer {
+  	margin-left: 250px;
+}
+
+@media only screen and (max-width : 992px) {
+    body {
+        position: relative;
+        float: left;
+    }
+    
+  	header, main, footer {
+    	padding-left: 0;
+  	}
+    
+    .side-nav {
+        position: absolute !important;
+    }
+    
+    #header {
+        position: absolute !important;
+    }
+    
+    nav .brand-logo {
+        left: auto;
+        -webkit-transform: translateX(0%);
+        transform: translateX(0%);
+    }
+}
+
+#header {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.margin-0 {
+    margin: 0px;
+}
+
+.margin-t0 {
+    margin-top: 0px !important;
+}
+
+.margin-r0 {
+    margin-right: 0px !important;
+}
+
+.margin-b0 {
+    margin-bottom: 0px !important;  
+}
+
+.margin-bottom-20 {
+    margin-bottom: 20px;  
+}
+
+.padding-b0 {
+    padding-bottom: 0px !important;
+}
+
+#navbar {
+    height: 64px;
+    line-height: 64px;
+}
+
+.waves-effect.waves-brown .waves-ripple {
+ 	  /* The alpha value allows the text and background color of the button to still show through. */
+  	background-color: rgba(60, 0, 72, 0.25);
+}
+
+.menu-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    vertical-align: middle;
+}
+
+.side-nav {
+     /* 0 width - change this with JavaScript */
+     /* Place content 60px from the top */
+    transition: 0.5s;
+    transform: translateX(0) !important;
+    position: fixed;
+}
+
+.side-nav a {
+    padding: 0 32px !important;
+}
+
+.side-nav li {
+    width: 250px;
+    transition: 0.3s;
+}
+
+.trans-left-five {
+    transition: margin-left .5s;
+}
+
+.logo-div {
+    /*margin: 0px 0px 5px 0px;*/
+    text-align: center;
+    width: 250PX;
+    height: 55px;
+}
+
+.logo-a {
+    line-height: 65px !important;
+    height: 64px !important;
+}
+
+.logo-a:hover {
+    background-color: white !important;
+}
+
+.logo-img {
+    width: 28px;
+    height: 28px;
+    vertical-align: middle;
+    /*margin-left: -10px;*/
+}
+
+.logo-p {
+    font-size: 18px;
+    margin: 0px 0px 0px 10px;
+    vertical-align: middle;
+    font-weight: 400;
+    color: #616161;
+}
+
+.menu-icon {
+    height: 64px !important;
+    line-height: 64px !important;
+    text-align: center;
+    text-align: center;
+    margin-top: -7px;
+}
+
+.notifications-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+
+.side-nav-icon {
+    width: 26px;
+    height: 26px;
+}
+
+.brand-logo {
+    margin: 0px 0px 0px 15px;
+    font-size: 20px !important;
+    /*font-weight: lighter !important;*/
+}
+
+.container-section {
+    margin: 95px 40px 0px 40px;
+}
+
+.container-fix {
+    min-width: 970px !important;
+    margin-left: 250px;
+}
+
+.side-nav li.active a {
+    color: #37474f;
+}
+
+.solar-system {
+    margin: 25px 0px -5px 0px;
+    height: 100px;
+    width: 100px;
+}
+
+.boss-img {
+    height: 70px;
+    width: 70px;
+    
+}
+
+.modal-announcement {
+/*    width: 600px;*/
+    height: 700px !important;
+    border-radius: 5px;
+}
+
+.modal-announcement-title {
+    margin: 15px 0px;
+    color: white;
+    padding-left: 15px;
+}
+
+.modal-header {
+    padding: 1px 0px 0px 0px;
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #546e7a;
+}
+
+.modal-content-customize {
+    height: calc(100% - 155px) !important;
+}
+
+.btn-save {
+    width: 100px;
+}
+
+.btn-cancel {
+    width: 100px;
+    margin-right: 10px !important;
+    text-align: center;
+    padding: 0;
+}
+
+.modal-icons {
+    margin-top: 7px;
+}
+
+/* label color */
+.input-field label {
+    color: #000;
+}
+/* label focus color */
+.input-field input[type=text]:focus + label {
+    color: #ff5b62;
+}
+/* label underline focus color */
+.input-field input[type=text]:focus {
+    border-bottom: 1px solid #ff5b62;
+    box-shadow: 0 1px 0 0 #ff5b62;
+}
+/* valid color */
+.input-field input[type=text].valid {
+    border-bottom: 1px solid green;
+    box-shadow: 0 1px 0 0 green;
+}
+/* invalid color */
+.input-field input[type=text].invalid {
+    border-bottom: 1px solid #000;
+    box-shadow: 0 1px 0 0 #000;
+}
+
+/* icon prefix color */
+.input-field .prefix {
+    color: rgba(68, 68, 68, 0.87);
+}
+
+/* icon prefix focus color */
+.input-field .prefix.active {
+    color: #ff5b62;
+}
+
+/* textarea label focus color */
+.input-field textarea[type=text]:focus + label {
+    color: #ff5b62;
+}
+/* textarea label underline focus color */
+.input-field textarea[type=text]:focus {
+    border-bottom: 1px solid #ff5b62;
+    box-shadow: 0 1px 0 0 #ff5b62;
+}
+
+.notification {
+    font-size: 16px;
+    color: #26a69a;
+    display: block;
+    line-height: 22px;
+    padding: 14px 16px 10px 16px;
+    font-weight: 400;
+}
+
+.notification p {
+    font-size: 7px;
+    color: black;
+    line-height: 0px;
+}
+.radio-location {
+    margin: 0px 0px 25px 0px !important;
+}
+
+.doctor-td {
+    padding: 7px 5px !important;
+}
+
+.doctor-td-btn {
+    display: inline-block;
+    padding: 0 1rem;
+}
+
+
+
+/*mdl-test*/
+
+.mdl-button.mdl-button--disabled.mdl-button--disabled, .mdl-button[disabled][disabled] {
+    color: rgba(0,0,0,.26);
+    cursor: default;
+    background-color: transparent;
+}
+
+.mdl-button {
+    background: 0 0;
+    border: none;
+    border-radius: 2px;
+    color: #000;
+    position: relative;
+    height: 36px;
+    margin: 0;
+    min-width: 64px;
+    padding: 0 16px;
+    display: inline-block;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    overflow: hidden;
+    will-change: box-shadow;
+    transition: box-shadow .2s cubic-bezier(.4,0,1,1),background-color .2s cubic-bezier(.4,0,.2,1),color .2s cubic-bezier(.4,0,.2,1);
+    outline: none;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    line-height: 36px;
+    vertical-align: middle;
+}
+
+.mdl-accordion, .mdl-button, .mdl-card, .mdl-checkbox, .mdl-dropdown-menu, .mdl-icon-toggle, .mdl-item, .mdl-radio, .mdl-slider, .mdl-switch, .mdl-tabs__tab, a {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: rgba(255,255,255,0);
+}
+
+.mdl-button.mdl-button--colored {
+    color: #3f51b5;
+}
+
+.mdl-button--raised.mdl-button--colored {
+    background: #3f51b5;
+    color: #fff;
+}
+
+.mdl-button--raised {
+    background: rgba(158,158,158,.2);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+}
+
+.mdl-cell {
+    margin: 8px;
+}
+
+.mdl-cell.mdl-cell--4-col {
+    display: inline-block;
+}
+
+.mdl-cell.mdl-cell--8-col {
+    display: inline-block;
+}
+
+.mdl-cell--4-col {
+    width: calc(22.3333333333% - 16px);
+}
+
+.mdl-cell--8-col {
+    width: calc(77.6666666667% - 16px);
+}
+
+.dataTables_info {
+    font-size: xx-small;
+}
+
+.paging_simple_numbers {
+    text-align:right;
+}
+
+
+
+

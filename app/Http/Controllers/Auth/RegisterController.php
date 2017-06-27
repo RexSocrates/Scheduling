@@ -69,7 +69,11 @@ class RegisterController extends Controller
             'major' => $data['major'],
             'level' => $data['level'],
             'location' => $data['location'],
-            'identity' => $data['identiry'],
+            'identity' => $data['identity'],
         ]);
+    }
+    
+    public function showRegistrationForm() {
+        return view('system.pages.doctor');
     }
 }

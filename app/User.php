@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'email', 'password', 'name', 'level', 'major', 'location', 'identity'
     ];
 
     /**
@@ -61,6 +61,16 @@ class User extends Authenticatable
         $doctor = DB::table('Doctor')->where('doctorID', $id)-first();
         
         return $doctor;
+    }
+    
+    // 一般醫師更新個人資訊
+    public function updatePersonalInfo($id, $data) {
+        $rows = DB::table('Doctor')
+            ->where('doctorID', $id)
+            ->update([
+                'email' => $data['email'],
+                'name' => $data['name'],
+            ]);
     }
     
     // 更新指定ID的使用者資訊
