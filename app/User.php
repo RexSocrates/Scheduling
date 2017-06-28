@@ -41,7 +41,7 @@ class User extends Authenticatable
     // 取得所有醫生列表(manager only)
     public function getDoctorList() {
         $doctors = DB::table('Doctor')
-            orderBy('doctorID')
+            ->orderBy('doctorID')
             ->get();
         
         return $doctors;
@@ -92,7 +92,7 @@ class User extends Authenticatable
     
     
     // 系統管理人員更新醫師排班資訊
-    public function updateShifts($id, data) {
+    public function updateShifts($id, $data) {
         $rows = DB::table('Doctor')
             ->where('doctorID', $id)
             ->update([

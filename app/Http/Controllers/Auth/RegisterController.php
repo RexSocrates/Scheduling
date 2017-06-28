@@ -48,9 +48,13 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:Doctor',
-            'password' => 'required|string|min:4|confirmed',
+            'password' => 'required|string|min:4',
+            'name' => 'required|string|max:255',
+            'level' => 'required|string',
+            'major' => 'required|string',
+            'location' => 'required|string',
+            'identity' => 'required|string'
         ]);
     }
 
@@ -65,7 +69,7 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['birth']),
+            'password' => bcrypt($data['password']),
             'major' => $data['major'],
             'level' => $data['level'],
             'location' => $data['location'],
@@ -73,7 +77,9 @@ class RegisterController extends Controller
         ]);
     }
     
+    // 顯示註冊表單
     public function showRegistrationForm() {
-        return view('system.pages.doctor');
+        return view('testPage.registerForm');
+//        return view('system.pages.doctor');
     }
 }
