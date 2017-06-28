@@ -19,9 +19,14 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+// ========================================================================
 
 Route::get('testUserID', 'TestController@getUserID');
 
 Route::get('testDate', 'TestController@getDateForm');
 
 Route::post('testDate', 'TestController@getDateValue');
+
+Route::get('testDoctorList', 'TestController@getDoctorList');
+
+// ========================================================================
