@@ -29,4 +29,8 @@ Route::post('testDate', 'TestController@getDateValue');
 
 Route::get('testDoctorList', 'TestController@getDoctorList');
 
+Route::get('testShowAtWorkDoctorList', 'TestController@showAtWorkDoctorList');
+
+Route::post('resign', 'TestController@resign');
+
 // ========================================================================

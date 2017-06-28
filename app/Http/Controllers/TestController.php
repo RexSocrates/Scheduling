@@ -38,5 +38,23 @@ class TestController extends Controller
         return view('testPage.doctorList', $data);
     }
     
+    // 取得在職醫師名單
+    public function showAtWorkDoctorList() {
+        $user = new User();
+        
+        $data = ['doctors' => $user->getAtWorkDoctors()];
+        
+        return view('testPage.doctorAtWorkList', $data);
+    }
     
+    // 單一醫生離職
+    public function resign() {
+        $user = new User();
+        
+        $resignedDoctorID = Input::get('doctorID');
+        
+        $user->resign($resignedDoctorID);
+        
+        return redirect('testShowAtWorkDoctorList');
+    }
 }
