@@ -9,6 +9,9 @@
             <br>
             <label>Name : {{ $doctor->name }}</label>
             <br>
+            <a href='getDoctorShifts/{{$doctor->doctorID}}'>取得該醫師班數</a>
+            <br>
+            <br>
         @endforeach
     </body>
 </html>

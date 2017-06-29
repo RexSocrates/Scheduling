@@ -57,8 +57,10 @@ class User extends Authenticatable
     }
     
     // 透過醫生ID取得單一醫生資訊
-    public function getDoctorInforByID($id) {
-        $doctor = DB::table('Doctor')->where('doctorID', $id)-first();
+    public function getDoctorInfoByID($id) {
+        $doctor = DB::table('Doctor')
+            ->where('doctorID', $id)
+            ->first();
         
         return $doctor;
     }
@@ -97,7 +99,7 @@ class User extends Authenticatable
             ->where('doctorID', $id)
             ->update([
                 'mustOnDutyTotalShifts' => $data['mustOnDutyTotalShifts'],
-                'mustOnDutyInternalShifts' => $data['mustOnDutyInternalShifts'],
+                'mustOnDutyMedicalShifts' => $data['mustOnDutyMedicalShifts'],
                 'mustOnDutySurgicalShifts' => $data['mustOnDutySurgicalShifts'],
                 'mustOnDutyTaipeiShifts' => $data['mustOnDutyTaipeiShifts'],
                 'mustOnDutyTamsuiShifts' => $data['mustOnDutyTamsuiShifts']

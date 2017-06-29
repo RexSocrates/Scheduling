@@ -20,7 +20,6 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 // ========================================================================
-
 Route::get('testUserID', 'TestController@getUserID');
 
 Route::get('testDate', 'TestController@getDateForm');
@@ -32,5 +31,10 @@ Route::get('testDoctorList', 'TestController@getDoctorList');
 Route::get('testShowAtWorkDoctorList', 'TestController@showAtWorkDoctorList');
 
 Route::post('resign', 'TestController@resign');
+
+// 取得單一醫師班數的醫生ID傳遞 從醫師列表傳送
+Route::get('getDoctorShifts/{id}', 'TestController@getShiftForDoctor');
+
+Route::post('getDoctorShifts/updateShifts', 'TestController@updateDoctorShifts');
 
 // ========================================================================

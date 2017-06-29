@@ -57,4 +57,25 @@ class TestController extends Controller
         
         return redirect('testShowAtWorkDoctorList');
     }
+    
+    // 取得單一醫生所有的排班班數
+    public function getShiftForDoctor($id) {
+//        echo 'Doctor ID : '.$id;
+        $user = new User();
+        
+        $userData = $user->getDoctorInfoByID($id);
+        
+        return view('testPage.doctorShifts', ['userData' => $userData]);
+    }
+    
+    // 更新單一醫師的排班資料
+    public function updateDoctorShifts(Request $request) {
+        $data = $request->all();
+        
+        $user = new User();
+        
+        $rows = $user->updateShifts($data['doctorID'], $data);
+        
+        return redirect('testDoctorList');
+    }
 }
