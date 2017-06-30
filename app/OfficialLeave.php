@@ -59,8 +59,10 @@ class OfficialLeave extends Model
     public function changeConfirmStatus($dataArray) {
         DB::table('OfficialLeave')
             ->where('leaveSerial', $dataArray['serial'])
-            ->update(['confirmStatus' => $dataArray['newStatus'],
-                     'confirmingPersonID' => $dataArray['confirmingPerson']]);
+            ->update([
+                'confirmStatus' => $dataArray['newStatus'],
+                'confirmingPersonID' => $dataArray['confirmingPerson']
+            ]);
     }
     
 }

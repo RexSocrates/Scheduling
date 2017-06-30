@@ -120,7 +120,7 @@ class User extends Authenticatable
     }
     
     // 測試項目
-    private function testing($id, $columnName, $newValue) {
+    private function testing1($id, $columnName, $newValue) {
         $rows = DB::table('Doctor')
             ->where('doctorID', $id)
             ->update([
