@@ -37,4 +37,14 @@ Route::get('getDoctorShifts/{id}', 'TestController@getShiftForDoctor');
 
 Route::post('getDoctorShifts/updateShifts', 'TestController@updateDoctorShifts');
 
+
+// mail
+Route::get('shiftExchangeMail', 'MailController@shiftExchange');
+
+Route::get('applyShiftExchangeMail', 'MailController@applyShiftExchange');
+
+Route::get('exchangingSuccessMail', 'MailController@exchangingSuccess');
+
+Route::get('exchangingFailedMail', 'MailController@exchangingFailed');
+
 // ========================================================================
