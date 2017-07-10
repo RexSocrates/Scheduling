@@ -4,21 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Mail;
 use Auth;
 
-use App\Mail\ShiftExchange;
-use App\Mail\ApplyShiftExchange;
-use App\Mail\ExchangingSuccess;
-use App\Mail\ExchangingFailed;
+use App\Jobs\SendApplyShiftExchangeMail;
+use App\Jobs\SendExchangingFailedMail;
+use App\Jobs\SendExchangingSuccessMail;
+use App\Jobs\SendShiftExchangeMail;
 
+// 僅供信件發送測試用
 class MailController extends Controller
 {
     
     // 排班人員換班後通知被換班的兩位醫師
     public function shiftExchange() {
-        Mail::to('georgelesliemackay0@gmail.com')
-            ->send(new ShiftExchange('台北白班發燒1', '淡水夜班發燒1'));
+        
+        $job = new SendShiftExchangeMail('台北白班發燒1', '淡水夜班發燒1');
+        
+        dispatch($job);
         
         echo '郵件已送出';
     }
@@ -28,8 +30,9 @@ class MailController extends Controller
         $applicant = 'George';
         $receiver = 'Mario';
         
-        Mail::to('georgelesliemackay0@gmail.com')
-            ->send(new ApplyShiftExchange($applicant, $receiver));
+        $job = new SendApplyShiftExchangeMail($applicant, $receiver, 'georgelesliemackay0@gmail.com');
+        
+        dispatch($job);
         
         echo '郵件已送出';
     }
@@ -39,8 +42,9 @@ class MailController extends Controller
         $applicant = 'George';
         $receiver = 'Mario';
         
-        Mail::to('georgelesliemackay0@gmail.com')
-            ->send(new ExchangingSuccess($applicant, $receiver));
+        $job = new SendExchangingSuccessMail($applicant, $receiver, 'georgelesliemackay0@gmail.com');
+        
+        dispatch($job);
         
         echo '郵件已送出';
     }
@@ -50,8 +54,9 @@ class MailController extends Controller
         $applicant = 'George';
         $receiver = 'Mario';
         
-        Mail::to('georgelesliemackay0@gmail.com')
-            ->send(new ExchangingFailed($applicant, $receiver));
+        $job = new SendExchangingFailedMail($applicant, $receiver, 'georgelesliemackay0@gmail.com');
+        
+        dispatch($job);
         
         echo '郵件已送出';
     }
