@@ -41,10 +41,10 @@ Route::post('getDoctorShifts/updateShifts', 'TestController@updateDoctorShifts')
 // push mail-sending work on the queue
 Route::get('shiftExchangeMail', 'MailController@shiftExchange');
 
-Route::get('applyShiftExchangeMail', 'MailController@applyShiftExchange');
+Route::get('applyShiftExchangeMail', 'MailController@applyShiftExchanging');
 
-Route::get('exchangingSuccessMail', 'MailController@exchangingSuccess');
+Route::get('exchangingSuccessMail', 'MailController@agreeShiftExchanging');
 
-Route::get('exchangingFailedMail', 'MailController@exchangingFailed');
+Route::get('exchangingFailedMail', 'MailController@rejectShiftExchanging');
 
 // ========================================================================

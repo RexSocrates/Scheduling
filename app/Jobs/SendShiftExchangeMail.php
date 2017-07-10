@@ -15,21 +15,24 @@ class SendShiftExchangeMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     
-    protected $shift1 = '';
-    protected $shift2 = '';
-    protected $receiverEmail = '';
+    protected $receiver;
+    protected $originalShift;
+    protected $newShift;
+    protected $admin;
+    
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($shift1, $shift2, $receiverEmail)
+    public function __construct($receiver, $originalShift, $newShift, $admin)
     {
-        //
-        $this->shift1 = $shift1;
-        $this->shift2 = $shift2;
-        $this->receiverEmail = $receiverEmail
+        //從controller 接收資料
+        $this->receiver = $receiver;
+        $this->originalShift = $originalShift;
+        $this->newShift = $newShift;
+        $this->admin = $admin;
     }
 
     /**
@@ -39,8 +42,8 @@ class SendShiftExchangeMail implements ShouldQueue
      */
     public function handle()
     {
-        //
-        Mail::to($this->receiverEmail)
-            ->send(new ShiftExchange($this->shift1, $this->shift2));
+        // 寄送換班通知信件
+        Mail::to($this->receiver->email)
+            ->send(new ShiftExchange($this->receiver->name, $this->originalShift, $this->newShift, $this->admin));
     }
 }

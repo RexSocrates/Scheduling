@@ -11,19 +11,24 @@ class ShiftExchange extends Mailable
 {
     use Queueable, SerializesModels;
     
-    protected $shift1 = '';
-    protected $shift2 = '';
+    // 排班人員將醫師換班後寄送通知信
+    protected $receiverName = '';
+    protected $originalShift;
+    protected $newShift;
+    protected $admin;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($shift1, $shift2)
+    public function __construct($receiverName, $originalShift, $newShift, $admin)
     {
         //
-        $this->shift1 = $shift1;
-        $this->shift2 = $shift2;
+        $this->receiverName = $receiverName;
+        $this->originalShift = $originalShift;
+        $this->newShift = $newShift;
+        $this->admin = $admin;
     }
 
     /**
@@ -34,10 +39,12 @@ class ShiftExchange extends Mailable
     public function build()
     {
         return $this
-            ->subject('排班人員換班通知')
+            ->subject('【馬偕醫院】班表更動通知')
             ->markdown('emails.shiftExchange', [
-                'shift1' => $this->shift1,
-                'shift2' => $this->shift2
+                'receiverName' => $this->receiverName,
+                'originalShift' => $this->originalShift,
+                'newShift' => $this->newShift,
+                'admin' =. $this->admin
             ]);
     }
 }

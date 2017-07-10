@@ -38,6 +38,15 @@ class User extends Authenticatable
         return Auth::id();
     }
     
+    // 取得排班人員列表
+    public function getAdminList() {
+        $list = DB::table('Doctor')
+            ->where('identity', 'Admin')
+            ->get();
+        
+        return $list;
+    }
+    
     // 取得所有醫生列表(manager only)
     public function getDoctorList() {
         $doctors = DB::table('Doctor')

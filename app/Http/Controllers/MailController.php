@@ -26,7 +26,7 @@ class MailController extends Controller
     }
     
     // 醫師A向醫師B提出換班申請時，以電子郵件通知
-    public function applyShiftExchange() {
+    public function applyShiftExchanging() {
         $applicant = 'George';
         $receiver = 'Mario';
         
@@ -38,7 +38,7 @@ class MailController extends Controller
     }
     
     // 醫師B同意換班後以電子郵件通知醫師A
-    public function exchangingSuccess() {
+    public function agreeShiftExchanging() {
         $applicant = 'George';
         $receiver = 'Mario';
         
@@ -50,7 +50,7 @@ class MailController extends Controller
     }
     
     // 醫師B拒絕換班後以電子郵件通知醫師A
-    public function exchangingFailed() {
+    public function rejectShiftExchanging() {
         $applicant = 'George';
         $receiver = 'Mario';
         
@@ -59,5 +59,10 @@ class MailController extends Controller
         dispatch($job);
         
         echo '郵件已送出';
+    }
+    
+    // 通知排班人員醫師A以及醫師B已同意換班
+    public function shiftExchangingInform() {
+        
     }
 }

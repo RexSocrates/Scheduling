@@ -9,33 +9,32 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
 use Mail;
-use App\Mail\ApplyShiftExchange;
+use App\Mail\ShiftExchangingInform;
 
-class SendApplyShiftExchangeMail implements ShouldQueue
+class SendShiftExchangingInformMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     
-    //
-    protected $receiver;
+    // 雙方同意換班後通知排班人員進行確認，applicantShift與receiverShift 為尚未換班時的資料
+    protected $admin;
     protected $applicant;
+    protected $receiver;
     protected $applicantShift;
     protected $receiverShift;
-    protected $admin;
-    
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($receiver, $applicant, $applicantShift, $receiverShift, $admin)
+    public function __construct($admin, $applicant, $receiver, $applicantShift, $receiverShift)
     {
         //
-        $this->receiver = $receiver;
-        $this->applicant = $applicant;
-        $this->applicantShift = $applicantShift;
-        $this->receiverShift = $$receiverShift;
         $this->admin = $admin;
+        $this->applicant = $applicant;
+        $this->receiver = $receiver;
+        $this->applicantShift = $applicantShift;
+        $this->receiverShift = $receiverShift;
     }
 
     /**
@@ -46,7 +45,8 @@ class SendApplyShiftExchangeMail implements ShouldQueue
     public function handle()
     {
         //
-        Mail::to($this->receiver->email)
-            ->send(new ApplyShiftExchange($this->applicant, $this->receiver));
+        Mail::to($this->admin->email)
+            ->send(new ShiftExchangingInform($this->admin, $this->applicant, $this->receiver, 
+                                             $this->applicantShift, $this->receiverShift));
     }
 }
