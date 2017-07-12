@@ -48,3 +48,4 @@ Route::get('exchangingSuccessMail', 'MailController@agreeShiftExchanging');
 Route::get('exchangingFailedMail', 'MailController@rejectShiftExchanging');
 
 // ========================================================================
+

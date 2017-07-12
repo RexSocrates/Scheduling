@@ -1926,28 +1926,28 @@
             <div class="modal-content modal-content-customize">
                 <div id="modal-left" class="row margin-b0">
                     <div class="input-field col s12">
-                        <input id="title" type="text" value="" required>
+                        <input id="title" type="text" name="name" value="" required>
                         <label for="title">醫生名稱</label>
                     </div>
                     <div class="input-field col s12">
-                        <input id="email" type="email" class="validate" value="" required>
+                        <input id="email" type="email" class="validate" name="email" value="" required>
                         <label for="email" data-error="wrong" data-success="right">Email</label>
                     </div>
                     <div class="input-field col s12">
-                        <input id="date" type="date" class="datepicker" value="">
+                        <input id="date" type="date" class="datepicker" name="password" value="">
                         <label for="date">出生日期</label>
                     </div>
                     <div class="input-field col s12">
-                        <select required>
+                        <select name="major" required>
                             <option value="" disabled selected>選擇專科</option>
-                            <option value="1">Option 1</option>
-                            <option value="2">Option 2</option>
-                            <option value="3">Option 3</option>
+                            <option value="all">All</option>
+                            <option value="medical">Medical</option>
+                            <option value="surgical">Surgical</option>
                         </select>
                         <label>專職科別</label>
                     </div>
                     <div class="input-field col s12">
-                        <select required>
+                        <select name="level" required>
                             <option value="" disabled selected>選擇級別</option>
                             <option value="1">Option 1</option>
                             <option value="2">Option 2</option>
@@ -1965,11 +1965,10 @@
                         </p>
                     </div>
                     <div class="input-field col s12">
-                        <select required>
+                        <select name="identity" required>
                             <option value="" disabled selected>選擇權限</option>
-                            <option value="1">Option 1</option>
-                            <option value="2">Option 2</option>
-                            <option value="3">Option 3</option>
+                            <option value="general">General</option>
+                            <option value="admin">Admin</option>
                         </select>
                         <label>權限</label>
                     </div>

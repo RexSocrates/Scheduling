@@ -6,17 +6,18 @@ use Illuminate\Http\Request;
 
 use Auth;
 
+use App\Jobs\SendAgreeShiftExchangeMail;
 use App\Jobs\SendApplyShiftExchangeMail;
-use App\Jobs\SendExchangingFailedMail;
-use App\Jobs\SendExchangingSuccessMail;
+use App\Jobs\SendDenyShiftExchangeMail;
 use App\Jobs\SendShiftExchangeMail;
+use App\Jobs\SendShiftExchangingInformMail;
 
 // 僅供信件發送測試用
 class MailController extends Controller
 {
     
     // 排班人員換班後通知被換班的兩位醫師
-    public function shiftExchange() {
+    public function sendShiftExchangeMail() {
         
         $job = new SendShiftExchangeMail('台北白班發燒1', '淡水夜班發燒1');
         
