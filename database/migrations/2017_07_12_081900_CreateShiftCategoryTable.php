@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateShiftNameTable extends Migration
+class CreateShiftCategoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateShiftNameTable extends Migration
      */
     public function up()
     {
-        Schema::create('ShiftName', function (Blueprint $table) {
-            $table->integer('shiftSerial');
-            $table->string('shiftName', 30);
+        Schema::create('CreateShiftCategory', function (Blueprint $table) {
+            $table->integer('categorySerial');
+            $table->string('categoryName', 20);
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ class CreateShiftNameTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ShiftName');
+        Schema::dropIfExists('CreateShiftCategory');
     }
 }
