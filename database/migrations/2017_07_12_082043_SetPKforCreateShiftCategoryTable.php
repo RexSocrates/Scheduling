@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class SetPKforShiftName extends Migration
+class SetPKforCreateShiftCategoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class SetPKforShiftName extends Migration
      */
     public function up()
     {
-        Schema::table('ShiftName', function (Blueprint $table) {
+        Schema::table('CreateShiftCategory', function (Blueprint $table) {
             //
-            $table->primary('shiftSerial');
+            $table->primary('categorySerial');
         });
     }
 
@@ -26,7 +26,7 @@ class SetPKforShiftName extends Migration
      */
     public function down()
     {
-        Schema::table('ShiftName', function (Blueprint $table) {
+        Schema::table('CreateShiftCategory', function (Blueprint $table) {
             //
         });
     }
