@@ -146,7 +146,7 @@
                     
 
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
-                            scheduler.config.dblclick_create = false;   //雙擊新增
+                            // scheduler.config.dblclick_create = false;   //雙擊新增
 //                            scheduler.config.readonly = true;   //唯讀，不能修改東西
 //                            scheduler.config.drag_create = false;   //拖拉新增
 
@@ -154,12 +154,12 @@
                             
                             
                             var priorities = [
-                                { key: 1, label: '台北白班' },
-                                { key: 2, label: '台北夜班' },
-                                { key: 3, label: '淡水白班' },
-                                { key: 4, label: '淡水夜班' },
-                                { key: 5, label: '行政' },
-                                { key: 6, label: '教學' },
+                                { key: 1, label: '行政' },
+                                { key: 2, label: '教學' },
+                                { key: 3, label: '台北白班' },
+                                { key: 4, label: '台北夜班' },
+                                { key: 5, label: '淡水白班' },
+                                { key: 6, label: '淡水夜班' },
                                 { key: 7, label: 'off班' }
                             ];
                             
@@ -173,10 +173,10 @@
 //                                {name:"time", height:72, type:"time", map_to:"auto"}
                             ];
                             
-                            //在Lightbox按下save時執行
+                            //在Lightbox打開
                             scheduler.attachEvent("onBeforeLightbox", function (id){
                                 var event = scheduler.getEvent(id);
-                                console.log("22"+event.some);
+                                
                                 if (event.text == "New event"){
                                     event.text = "預班";
                                 }
@@ -195,14 +195,21 @@
                             scheduler.init('scheduler_here',new Date(2017,5,30),"month");
                             
                             //讀取資料
+                            
+                        	
+                        	
+
                             scheduler.parse([
-                                { start_date: "2017-06-02 00:00", end_date: "2017-06-04 00:00", text:"淡水白班", section_id:1},
-                                { start_date: "2017-06-06 00:00", end_date: "2017-06-09 00:00", text:"淡水白班", section_id:2},
-                                { start_date: "2017-06-10 00:00", end_date: "2017-06-15 00:00", text:"淡水白班", section_id:3},
-                                { start_date: "2017-06-20 00:00", end_date: "2017-06-28 00:00", text:"淡水白班", section_id:4}
+                            	@foreach($reservations as $reservation)
+                                	{ start_date: "{{ $reservation->date}} 01:00", end_date: "{{ $reservation->date}} 01:00", text:"淡水", section_id:1},
+                                @endforeach
                             ],"json");
 
+                            
                         </script>
+                        @foreach($reservations as $reservation)
+                        	{{ $reservation->date}}
+                        @endforeach
                     </div>
                 </div>
                 
@@ -261,6 +268,6 @@
         
     </script>
 
-	
+	 {{ csrf_field() }}
 </body>
 </html>

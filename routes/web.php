@@ -54,31 +54,31 @@ Route::get('getTestPage', 'TestController@getTestPage');
 
 
 // ===========================showallReservationList==================================
-Route::get('/reservation', 'AccountController@reservation');
+Route::get('/reservation', 'ReservationController@reservation');
 
 // ===========================showReservationByresSerial==============================
-Route::get('/showReservation', 'AccountController@showReservation');
-Route::post('/show','AccountController@getDataByResSerial');
+Route::get('/showReservation', 'ReservationController@showReservation');
+Route::post('/show','ReservationController@getDataByResSerial');
 
 // ==================================showDoctor'sReservation==========================
 
-//Route::post('doctor', 'AccountController@getDoctorID');
-Route::get('getReservationByID', 'AccountController@getReservationByID');
-//Route::get('getReseverationByPeriodSerial','AccountController@getReseverationByPeriodSerial');
+//Route::post('doctor', 'ReservationController@getDoctorID');
+Route::get('getReservationByID', 'ReservationController@getReservationByID');
+//Route::get('getReseverationByPeriodSerial','ReservationController@getReseverationByPeriodSerial');
 
 // =============================update================================================
-Route::post('updateReservation', 'AccountController@updateReservation');
-Route::post('toEdit', 'AccountController@getDataByID');
+Route::post('updateReservation', 'ReservationController@updateReservation');
+Route::post('toEdit', 'ReservationController@getDataByID');
 
 // ===================================================================================
 
-Route::get('/reservation/delete/{id}', 'AccountController@deleteReservation');
+Route::get('/reservation/delete/{id}', 'ReservationController@deleteReservation');
 
 // =============================add================================================
 Route::get('/addReservation', function() {
     return view('addReservation');
 });
-Route::post('/addReservation', 'AccountController@addReservation');
+Route::post('/addReservation', 'ReservationController@addReservation');
 // ===================================================================================
 
 
@@ -101,7 +101,7 @@ Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
 
-//Route::post('reservation/updateReservation/{id}', 'AccountController@updateReservation');
+//Route::post('reservation/updateReservation/{id}', 'ReservationController@updateReservation');
 //Route::get('/reservation/updateReservation/{id}', function() {
 //	return view('updateReservation');
 

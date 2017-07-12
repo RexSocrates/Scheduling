@@ -30,7 +30,7 @@ class Reservation extends Model
             $arr[] = $doctorDatum->resSerial;
          }
 
-         $data = $data=DB::table('Reservation') -> whereIn("resSerial",$arr)->get();
+         $data=DB::table('Reservation') -> whereIn("resSerial",$arr)->get();
 
          return $data;
 

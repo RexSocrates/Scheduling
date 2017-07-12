@@ -14,14 +14,14 @@ use App\User;
 
 // import the model
 
-class AccountController extends Controller
+class ReservationController extends Controller
 {
     //查看全部醫師預班班表
     public function reservation() {
         $reservation = new Reservation();
         $reservationData = $reservation->reservationList();
        
-        return view('reservation', array('reservations' => $reservationData));
+        return view('pages.reservation', array('reservations' => $reservationData));
     }
 
     //為了做查看醫生而做的
