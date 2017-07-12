@@ -1,13 +1,11 @@
 <!doctype html>
 <html>
     <head>
-        <title>Show ShiftRecords</title>
+        <title>Doctor Shift</title>
     </head>
     <body>
-         @foreach($shiftRecords as $shiftRecord)
+         @foreach($data as $shiftRecord)
         <ul>
-        <form action="doctorCheck" method="post">
-            <input type="hidden" name="serial" value={{$shiftRecord->changeSerial}}>
             <li>changeSerial: {{ $shiftRecord->changeSerial }}</li> 
             <li>scheduleID_1 : {{ $shiftRecord->scheduleID_1}}</li> 
             <li>scheduleID_2 : {{ $shiftRecord->scheduleID_2}}</li> 
@@ -19,8 +17,7 @@
             <li>updated_at : {{ $shiftRecord->updated_at}}</li> 
             </ul>
              
-             <input type="submit" value="submit">
-                {{ csrf_field() }}
+            
         </form>
         @endforeach
       

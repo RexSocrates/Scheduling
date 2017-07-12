@@ -17,6 +17,14 @@ class ShiftRecordsController extends Controller
 
     } 
 
+    //查詢 單一醫生換班紀錄
+    public function getShiftRecordsByDoctorID(){
+        $shiftRecords = new ShiftRecords();
+        $data = $shiftRecords ->getShiftRecordsByDoctorID();
+
+        return view ("getShiftRecordsByDoctorID",array('data' => $data));
+    }
+
     //新增換班
     public function addShifts(){
     		$addShifts = new ShiftRecords();
@@ -35,13 +43,13 @@ class ShiftRecordsController extends Controller
     }
 
     //醫生確認換班
-    public function doc2Confirm($id){
-        $update = new ShiftRecords();
+    public function doc2Confirm(){
         $doc2Confirm = Input::get('doc2Confirm');
-
-        $updatedDoc2Confirm = $update->doc2Confirm($id,$doc2Confirm);
-
-         return redirect('shiftRecords'); 
+        $update = new ShiftRecords();
+        $serial = Input::get('serial');
+        $updatedDoc2Confirm = $update->doc2Confirm($serial,$doc2Confirm);
+        
+        return redirect('shiftRecords'); 
 
     }
 
@@ -52,8 +60,16 @@ class ShiftRecordsController extends Controller
 
         $updatedDoc2Confirm = $update->doc2Confirm($id,$adminConfirm);
 
-         return redirect('shiftRecords'); 
+        return redirect('shiftRecords'); 
 
     }
+
+     public function getDataByID() {
+        $serial = Input::get('serial');
+
+        return view('doctorCheckShift', array('serial' => $serial) );
+
+    }
+
 
 }

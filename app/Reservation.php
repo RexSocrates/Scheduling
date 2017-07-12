@@ -21,33 +21,21 @@ class Reservation extends Model
 
     //查看 單一醫生預班資訊
      public function getReservationByID()
-    {
-        $doctorData = DB::table('DoctorAndReservation')->where("doctorID","1")->get();
-        // $data=DB::table('Reservation') -> whereIn("resSerial",[$doctorData])->get();
+      {
+           $doctorData = DB::table('DoctorAndReservation')->where("doctorID","1")->get();
+         // $data=DB::table('Reservation') -> whereIn("resSerial",[$doctorData])->get();
 
         $arr = array();
         foreach ($doctorData as $doctorDatum ) {
-            arr[] = $doctorDatum->resSerial;
-        }
+            $arr[] = $doctorDatum->resSerial;
+         }
 
-        $data = $data=DB::table('Reservation') -> whereIn("resSerial",arr)->get();
+         $data = $data=DB::table('Reservation') -> whereIn("resSerial",$arr)->get();
 
-        return $data;
+         return $data;
 
-        // return $data;
-       
-    }
+     }
 
-    // 查詢 所有醫生預班的班數
-    public function getReservationBySerial($periodSerial) {
-        $data = DB::table('Reservation')
-            ->where('periodSerial', $periodSerial)
-            ->orderBy('doctorID')
-            ->get();
-        
-        return $data;
-    }
-    
     //新增預班
     public function addReservation($periodSerial, $isWeekday, $location, $isOn, $remark, $date){
         $generatedSerial = 0;

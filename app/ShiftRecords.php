@@ -15,6 +15,16 @@ class ShiftRecords extends Model
          return $shiftRecords;
 
     }
+
+     //查詢 單一醫生換班紀錄
+    public function getShiftRecordsByDoctorID(){
+        $shiftRecords=DB::table('ShiftRecords',"1")
+        ->where('schID_1_doctor','2')
+        ->get();
+
+        return $shiftRecords;
+    }
+
     //提出換班
     public function addShifts($scheduleID_1, $scheduleID_2, $schID_1_doctor, $schID_2_doctor, $doc2Confirm, $adminConfirm, $created_at){
 
@@ -32,7 +42,7 @@ class ShiftRecords extends Model
     		return $newChangeSerial;
     }
 
-    // 醫生確認,  有不確認和確認
+    // 醫生確認
     public function doc2Confirm($id, $doc2Confirm){
 
             DB::table('shiftRecords')
@@ -42,7 +52,7 @@ class ShiftRecords extends Model
 
     }
 
-	// 主管確認,  有不確認和確認
+	// 排班確認
     public function adminConfirm($id, $adminConfirm){
 
             DB::table('shiftRecords')
@@ -50,4 +60,6 @@ class ShiftRecords extends Model
                 ->update(['adminConfirm' => $adminConfirm]);        
 
     }
+
+    
 }
