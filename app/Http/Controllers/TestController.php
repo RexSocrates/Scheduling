@@ -78,4 +78,8 @@ class TestController extends Controller
         
         return redirect('testDoctorList');
     }
+    
+    public function getTestPage() {
+        return view('pages.doctor');
+    }
 }
