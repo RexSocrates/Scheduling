@@ -19,7 +19,7 @@ class ShiftsPerMonth extends Model
             ->where('date', $currentMonth);
             ->get();
         
-        return shifts;
+        return $shifts;
     }
     
     // 取得單一醫生過去每個月各班數
