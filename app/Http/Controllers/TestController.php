@@ -35,7 +35,7 @@ class TestController extends Controller
         
         $data = ['doctors' => $user->getDoctorList()];
         
-        return view('testPage.doctorList', $data);
+        return view('pages.doctor', $data);
     }
     
     // 取得在職醫師名單
@@ -81,5 +81,14 @@ class TestController extends Controller
     
     public function getTestPage() {
         return view('pages.doctor');
+    }
+    
+    public function addoneDay() {
+        $time = strtotime(date('Y-m-d'));
+        echo $time.'<br>';
+        
+        $newformat = date('Y-m-d',$time + 24 * 60 * 60);
+        
+        echo $newformat;
     }
 }
