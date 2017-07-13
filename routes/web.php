@@ -54,7 +54,7 @@ Route::get('getTestPage', 'TestController@getTestPage');
 
 
 // ===========================showallReservationList==================================
-Route::get('/reservation', 'ReservationController@reservation');
+Route::get('/reservation-all', 'ReservationController@reservation');
 
 // ===========================showReservationByresSerial==============================
 Route::get('/showReservation', 'ReservationController@showReservation');
@@ -63,7 +63,7 @@ Route::post('/show','ReservationController@getDataByResSerial');
 // ==================================showDoctor'sReservation==========================
 
 //Route::post('doctor', 'ReservationController@getDoctorID');
-Route::get('getReservationByID', 'ReservationController@getReservationByID');
+Route::get('/reservation', 'ReservationController@getReservationByID');
 //Route::get('getReseverationByPeriodSerial','ReservationController@getReseverationByPeriodSerial');
 
 // =============================update================================================
@@ -100,7 +100,7 @@ Route::post('/doctorCheckShift', 'ShiftRecordsController@doc2Confirm');
 Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
-
+Route::get('/dateadd', 'ReservationController@getdateAdd');
 //Route::post('reservation/updateReservation/{id}', 'ReservationController@updateReservation');
 //Route::get('/reservation/updateReservation/{id}', function() {
 //	return view('updateReservation');

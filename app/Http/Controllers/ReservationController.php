@@ -21,7 +21,7 @@ class ReservationController extends Controller
         $reservation = new Reservation();
         $reservationData = $reservation->reservationList();
        
-        return view('pages.reservation', array('reservations' => $reservationData));
+        return view('pages.reservation-all', array('reservations' => $reservationData));
     }
 
     //為了做查看醫生而做的
@@ -37,8 +37,8 @@ class ReservationController extends Controller
 
          $reservation = new Reservation();
          $reservationData = $reservation->getReservationByID();
-
-        return view('getReservationByID', array('reservations' => $reservationData));
+      
+        return view('pages.reservation', array('reservations' => $reservationData));
       }
 
 
@@ -108,6 +108,11 @@ class ReservationController extends Controller
 
     }
 
+    public function getdateAdd(){
+        $res = new Reservation();
+        $res->date_add();
+       
+    }
     
     
 }

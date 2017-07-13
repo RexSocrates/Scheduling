@@ -151,8 +151,6 @@
 //                            scheduler.config.drag_create = false;   //拖拉新增
 
 
-                            
-                            
                             var priorities = [
                                 { key: 1, label: '行政' },
                                 { key: 2, label: '教學' },
@@ -197,14 +195,14 @@
                             //讀取資料
                             
                         	
-                        	
+                        	@foreach($reservations as $reservation)
 
-                            scheduler.parse([
-                            	@foreach($reservations as $reservation)
-                                	{ start_date: "{{ $reservation->date}} 01:00", end_date: "{{ $reservation->date}} 01:00", text:"淡水", section_id:1},
-                                @endforeach
-                            ],"json");
-
+	                            scheduler.parse([
+	                            	
+	                            { start_date: "{{ $reservation->date }} 00:00", end_date: "{{$reservation->date}} 00:00", text:"{{ $reservation->categorySerial}}", section_id:1},
+	                                
+	                            ],"json");
+							@endforeach
                             
                         </script>
                         @foreach($reservations as $reservation)
