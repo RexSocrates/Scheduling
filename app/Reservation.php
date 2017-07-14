@@ -23,12 +23,13 @@ class Reservation extends Model
      public function getReservationByID()
       {
            $doctorData = DB::table('DoctorAndReservation')->where("doctorID","1")->get();
-         // $data=DB::table('Reservation') -> whereIn("resSerial",[$doctorData])->get();
+           //$date=DB::table('Reservation') -> whereIn("resSerial",)->date;
 
         $arr = array();
         foreach ($doctorData as $doctorDatum ) {
             $arr[] = $doctorDatum->resSerial;
-         }
+            
+        }
 
          $data=DB::table('Reservation') -> whereIn("resSerial",$arr)->get();
 
@@ -112,6 +113,12 @@ class Reservation extends Model
 
              return $generatedSerial;     
     }
+    //日期加一
+    public function date_add($date){
+        $time = strtotime($date);
+        $newdate = date('Y-m-d', $time + 24 * 60* 60);
+        return $newdate;
+    } 
 
    //  public function getReservationBySerial($serial) {
    //      $data = DB::table('Reservation')->where('resSerial', $serial)->first();
