@@ -21,7 +21,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'email', 'password', 'name', 'level', 'major', 'location', 'identity'
+        'email', 'password', 'name', 'level', 'major', 'location', 'identity',
+        'mustOnDutyTotalShifts', 'mustOnDutyMedicalShifts', 'mustOnDutySurgicalShifts',
+        'mustOnDutyTaipeiShifts', 'mustOnDutyTamsuiShifts', 'mustOnDutyDayShifts',
+        'mustOnDutyNightShifts'
     ];
 
     /**
@@ -36,6 +39,15 @@ class User extends Authenticatable
     // 回傳目前登入之使用者ID
     public function getCurrentUserID() {
         return Auth::id();
+    }
+    
+    // 回傳目前登入之使用者資訊
+    public function getCurrentUserInfo() {
+        $user = DB::table('Doctor')
+            ->where('doctorID', $this->getCurrentUserID())
+            ->first();
+        
+        return $user;
     }
     
     // 取得排班人員列表

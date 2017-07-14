@@ -21,13 +21,13 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 // ========================================================================
-Route::get('testUserID', 'TestController@getUserID');
+Route::get('testUserInfo', 'TestController@getUserInfo');
 
 Route::get('testDate', 'TestController@getDateForm');
 
 Route::post('testDate', 'TestController@getDateValue');
 
-Route::get('testDoctorList', 'TestController@getDoctorList');
+Route::get('testDoctorList', 'TestController@getDoctorList')->middleware('authenticatedUser');
 
 Route::get('testShowAtWorkDoctorList', 'TestController@showAtWorkDoctorList');
 

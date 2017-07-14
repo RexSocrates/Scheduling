@@ -11,7 +11,7 @@ class TestController extends Controller
 {
     
     // 印出目前登入的使用者ID
-    public function getUserID() {
+    public function getUserInfo() {
         $user = new User();
         
         echo 'User ID : '.$user->getCurrentUserID();
@@ -27,15 +27,6 @@ class TestController extends Controller
         $date = Input::get('date');
         
         echo $date;
-    }
-    
-    // 回傳醫生名單頁面
-    public function getDoctorList() {
-        $user = new User();
-        
-        $data = ['doctors' => $user->getDoctorList()];
-        
-        return view('pages.doctor', $data);
     }
     
     // 取得在職醫師名單
@@ -90,5 +81,17 @@ class TestController extends Controller
         $newformat = date('Y-m-d',$time + 24 * 60 * 60);
         
         echo $newformat;
+    }
+    
+    // 回傳醫生名單頁面
+    public function getDoctorList() {
+        $user = new User();
+        
+        $data = [
+            'doctors' => $user->getDoctorList(),
+            'userName' => $user->getCurrentUserInfo()->name
+        ];
+        
+        return view('pages.doctor', $data);
     }
 }

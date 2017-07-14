@@ -49,7 +49,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'email' => 'required|string|email|max:255|unique:Doctor',
-            'password' => 'required|string|min:4',
+            'birthday' => 'required|string|min:4',
             'name' => 'required|string|max:255',
             'level' => 'required|string',
             'major' => 'required|string',
@@ -69,11 +69,18 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => bcrypt($data['birthday']),
             'major' => $data['major'],
             'level' => $data['level'],
             'location' => $data['location'],
             'identity' => $data['identity'],
+            'mustOnDutyTotalShifts' => $data['mustOnDutyTotalShifts'],
+            'mustOnDutyMedicalShifts' => $data['mustOnDutyMedicalShifts'],
+            'mustOnDutySurgicalShifts' => $data['mustOnDutySurgicalShifts'],
+            'mustOnDutyTaipeiShifts' => $data['mustOnDutyTaipeiShifts'],
+            'mustOnDutyTamsuiShifts' => $data['mustOnDutyTamsuiShifts'],
+            'mustOnDutyDayShifts' => $data['mustOnDutyDayShifts'],
+            'mustOnDutyNightShifts' => $data['mustOnDutyNightShifts']
         ]);
     }
     
