@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
 use App\Reservation;
 use App\DoctorAndReservation;
+use App\ShiftCategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,9 +20,32 @@ class ReservationController extends Controller
     //查看全部醫師預班班表
     public function reservation() {
         $reservation = new Reservation();
+        $doctorName = new User();
+        $doctorID = new DoctorAndReservation();
         $reservationData = $reservation->reservationList();
+        $resSerial = array();
+        foreach ($reservationData as $res) {
+          $id = $doctorID->getDoctorsByResSerial($res->resSerial);
+            $names  =  array();
+                foreach ($id as $personalID) {
+                     $doctor = $doctorName->getDoctorInfoByID($personalID->doctorID);//->name; 
+                     array_push($names, $doctor);
+                }     
+            array_push($resSerial,array($res,$names));
+               // echo $doctor->name;
+        }   
+        foreach ($resSerial as $res) {
+             echo $res[0]->resSerial.'<br>';
+
+             foreach($res[1] as $doctor) {
+                echo $doctor->name.'<br>';
+             }
+             echo '<br>';
+
+        }
        
-        return view('pages.reservation-all', array('reservations' => $reservationData));
+        return view('pages.reservation-all', array('reservations' => $resSerial));
+         //return view('pages.reservation-all', array('reservations' => $reservationData ,'doctors'=> $doctor));
     }
 
     //為了做查看醫生而做的
@@ -36,7 +60,15 @@ class ReservationController extends Controller
       public function getReservationByID() {
 
          $reservation = new Reservation();
+         $shiftCategory = new ShiftCategory();
          $reservationData = $reservation->getReservationByID();
+         
+
+         foreach ($reservationData as $res) {
+            $name = $shiftCategory->findName($res->categorySerial);
+            $res->categorySerial = $name->categoryName;
+         }
+
       
         return view('pages.reservation', array('reservations' => $reservationData));
       }

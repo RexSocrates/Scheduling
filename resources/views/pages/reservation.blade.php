@@ -146,11 +146,12 @@
                     
 
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
+                            scheduler.config.api_date="%Y-%m-%d %H:%i";
                             // scheduler.config.dblclick_create = false;   //雙擊新增
 //                            scheduler.config.readonly = true;   //唯讀，不能修改東西
 //                            scheduler.config.drag_create = false;   //拖拉新增
 
-
+                            
                             var priorities = [
                                 { key: 1, label: '行政' },
                                 { key: 2, label: '教學' },
@@ -168,26 +169,55 @@
 //                                {name:"description", height:130, map_to:"text", type:"textarea" , focus:true},
 //                                {name:"custom", height:23, type:"select", options:sections, map_to:"section_id" },
                                 {name:"班別名稱", height:180, options:priorities, map_to:"priority", type:"radio", vertical:true},
+                                
+                                
 //                                {name:"time", height:72, type:"time", map_to:"auto"}
                             ];
-                            
-                            //在Lightbox打開
+
+
+ 
+                            //在Lightbox關掉
                             scheduler.attachEvent("onBeforeLightbox", function (id){
-                                var event = scheduler.getEvent(id);
-                                
-                                if (event.text == "New event"){
-                                    event.text = "預班";
+                                var eventId = scheduler.addEvent({
+                                    start_date: "2017-06-06 09:00",
+                                    end_date:   "2017-06-07 12:00",
+                                    //text:   "Meeting",
+                                    section_id: "2"
+
+                                });
+                                var event = scheduler.getEvent(eventId);
+                                //console.log(event.text);
+                                if (event.section_id == "2"){
+                                    event.text = "教學";
+                                    console.log(event.id);
+                                    console.log(event.start_date);
+                                    console.log(event.section_id);
+                                     
                                 }
+
+                                scheduler.attachEvent("onEventSave",function(id,ev,is_new){
+//                                var radio = scheduler.getEvent(id);
+                                 console.log('a'+event.id);
+                                 console.log('b'+event.start_date);
+                                 console.log('c'+event.section_id);
+                                return true;
+                            })
+                               
                                 return true;
                             });
                             
                             //在Lightbox按下save時執行
-                            scheduler.attachEvent("onEventSave",function(id,ev,is_new){
-//                                var radio = scheduler.getEvent(id);
-                                
-                                return true;
-                            })
+                             
+//                             scheduler.attachEvent("onEventSave",function(id,ev,is_new){
+// //                                var radio = scheduler.getEvent(id);
+//                             console.log('a'+event.id);
+//                             console.log('b'+event.start_date);
+//                             console.log('c'+event.section_id);
+//                                 return true;
+//                             })
                             
+
+
                             
                             //進入畫面後顯示的東西
                             scheduler.init('scheduler_here',new Date(2017,5,30),"month");
@@ -199,11 +229,11 @@
 
 	                            scheduler.parse([
 	                            	
-	                            { start_date: "{{ $reservation->date }} 00:00", end_date: "{{$reservation->date}} 00:00", text:"{{ $reservation->categorySerial}}", section_id:1},
+	                            { start_date: "{{ $reservation->date }} 00:00", end_date: "{{$reservation->endDate}} 00:00", text:"{{ $reservation->categorySerial}}", section_id:"{{ $reservation->categorySerial}}"},
 	                                
 	                            ],"json");
-							@endforeach
-                            
+							
+                            @endforeach
                         </script>
                         @foreach($reservations as $reservation)
                         	{{ $reservation->date}}

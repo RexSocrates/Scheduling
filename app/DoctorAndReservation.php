@@ -27,7 +27,7 @@ class DoctorAndReservation extends Model
                 ->update(['resSerial' => $newResSerial]);
 
     }
-
+    
     //查詢 單一時段上班的醫生
     public function getDoctorsByResSerial($serial) {
         $doctors = DB::table('DoctorAndReservation')

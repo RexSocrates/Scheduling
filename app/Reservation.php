@@ -30,9 +30,7 @@ class Reservation extends Model
             $arr[] = $doctorDatum->resSerial;
             
         }
-
          $data=DB::table('Reservation') -> whereIn("resSerial",$arr)->get();
-
          return $data;
 
      }
@@ -50,6 +48,7 @@ class Reservation extends Model
             ->count();
         if($count==0){
             //新增預班
+                   
     	            $generatedSerial = DB::table('Reservation')-> insertGetId([
                     'periodSerial' => $periodSerial,
     				'isWeekday' => $isWeekday,
@@ -57,6 +56,7 @@ class Reservation extends Model
     				'isOn' => $isOn,
     				'remark' => $remark,
     				'date' => $date,
+                    'endDate' => date_add($date),
                     
     		]);
 
@@ -96,6 +96,8 @@ class Reservation extends Model
                     'isOn' => $isOn,
                     'remark' => $remark,
                     'date' => $date,
+                    'endDate' => date_add($date),
+
                     
             ]);
 

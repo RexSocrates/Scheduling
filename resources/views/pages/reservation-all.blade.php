@@ -182,52 +182,18 @@
                             
                             //進入畫面後顯示的東西
                             scheduler.init('scheduler_here',new Date(2017,5,26),"timeline");
-                            
+                           
                             scheduler.parse([
-                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"王志平", section_id:3},
-                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"黃明源", section_id:3},
-                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"莊錦康", section_id:3},
-                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"簡立仁", section_id:4},
-                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"陳長志", section_id:4},
-                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"劉良嶸", section_id:4},
-                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"陳楷宏", section_id:4},
-                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"黃明源", section_id:5},
-                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"鄭婓茵", section_id:5},
-                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"劉蕙慈", section_id:5},
+                            @foreach($reservations as $reservation)
+                               
+                                @foreach($reservation[1] as $doctor)
                                 
-                                { start_date: "2017-07-01 00:00", end_date: "2017-07-02 00:00", text:"王志平", section_id:2},
-                                { start_date: "2017-07-01 00:00", end_date: "2017-07-02 00:00", text:"黃明源", section_id:3},
-                                { start_date: "2017-07-01 00:00", end_date: "2017-07-02 00:00", text:"莊錦康", section_id:3},
-                                { start_date: "2017-07-01 00:00", end_date: "2017-07-02 00:00", text:"簡立仁", section_id:4},
-                                { start_date: "2017-07-01 00:00", end_date: "2017-07-02 00:00", text:"陳長志", section_id:4},
-                                { start_date: "2017-07-01 00:00", end_date: "2017-07-02 00:00", text:"劉良嶸", section_id:4},
-                                { start_date: "2017-07-01 00:00", end_date: "2017-07-02 00:00", text:"陳楷宏", section_id:4},
-                                { start_date: "2017-07-01 00:00", end_date: "2017-07-02 00:00", text:"黃明源", section_id:4},
-                                { start_date: "2017-07-01 00:00", end_date: "2017-07-02 00:00", text:"鄭婓茵", section_id:5},
-                                { start_date: "2017-07-01 00:00", end_date: "2017-07-02 00:00", text:"劉蕙慈", section_id:5},
-
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"王志平", section_id:1},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"黃明源", section_id:3},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"莊錦康", section_id:3},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"簡立仁", section_id:4},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"陳長志", section_id:4},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"劉良嶸", section_id:5},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"陳楷宏", section_id:5},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"黃明源", section_id:5},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"鄭婓茵", section_id:5},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"劉蕙慈", section_id:5},
-
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"王志平", section_id:2},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"黃明源", section_id:3},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"莊錦康", section_id:4},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"簡立仁", section_id:4},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"陳長志", section_id:4},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"劉良嶸", section_id:4},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"陳楷宏", section_id:4},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"黃明源", section_id:4},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"鄭婓茵", section_id:5},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"劉蕙慈", section_id:5}
+                                 { start_date: "{{ $reservation[0]->date}} 00:00", end_date: "{{ $reservation[0]->endDate }} 00:00", text:"{{ $doctor->name }}", section_id:"{{ $reservation[0]->categorySerial}}"},
+                               
+                               @endforeach
+                            @endforeach
                             ],"json");
+                           
 
                         </script>
                     </div>
