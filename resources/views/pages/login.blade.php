@@ -26,16 +26,16 @@
                 
                 <div class="card-content" style="padding: 0px 24px 0px 24px">
                     <div class="row">
-                        <form class="col s12" action="#!" method="post">
+                        <form class="col s12" action="{{ route('login') }}" method="post">
                             <div class="row margin-b0 inline">
                                 <div class="input-field col s12">
                                     <i class="material-icons prefix">email</i>
-                                    <input id="icon_prefix" type="text" class="validate">
+                                    <input id="icon_prefix" type="text" class="validate" name="email">
                                     <label for="icon_prefix">Email</label>
                                 </div>
                                 <div class="input-field col s12">
                                     <i class="material-icons prefix">lock_outline</i>
-                                    <input id="icon_telephone" type="password" class="validate">
+                                    <input id="icon_telephone" type="password" class="validate" name="password">
                                     <label for="icon_telephone">Password</label>
                                 </div>
                                 <div class="col s12 margin-top-20">
@@ -47,6 +47,7 @@
                                     </center>
                                 </div>
                             </div>
+                            {{ csrf_field() }}
                         </form>
                     </div>
                 </div>

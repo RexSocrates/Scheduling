@@ -68,7 +68,15 @@
 		  	<li><a href="setting.html">設定</a></li>
 		  	<li><a href="profile.html">個人資料</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="/logout">登出</a></li>
+		  	<li><a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                登出
+                </a>
+                
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                </form>
+            </li>
 		</ul>
         
         <a href="#" data-activates="slide-out" class="button-collapse"></a>
