@@ -116,7 +116,7 @@
                                         <td>{{ $doctor->identity }}</td>
                                         <td class="doctor-td">
                                             <a class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" href="#modal2">編輯</a>
-                                            <a class="waves-effect waves-light red accent-2 btn doctor-td-btn">刪除</a>
+                                            <a class="waves-effect waves-light red accent-2 btn doctor-td-btn" href="resign/{{ $doctor->doctorID }}">刪除</a>
                                         </td>
                                     </tr>
                                     @endforeach

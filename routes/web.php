@@ -19,8 +19,17 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/resign/{id}', 'TestController@resign');
+
+// 正式路由
+Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
+
+Route::get('resign/{id}', 'AccountController@resign');
+
 
 // ========================================================================
+Route::post('testDateFormat', 'TestController@testDateFormat');
+
 Route::get('testUserInfo', 'TestController@getUserInfo');
 
 Route::get('testDate', 'TestController@getDateForm');
