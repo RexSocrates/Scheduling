@@ -106,3 +106,4 @@ Route::get('/dateadd', 'ReservationController@getdateAdd');
 //	return view('updateReservation');
 
 //});
+
