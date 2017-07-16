@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
@@ -10,101 +10,113 @@ class Schedule extends Model
 	protected $table = 'Schedule';
 
     //查看 班表資訊
-	public function scheduleList()
-	{
-		$schedule = DB::table('Schedule')->get();
+	// public function scheduleList()
+	// {
+	// 	$schedule = DB::table('Schedule')->get();
 
-		return $reservation;
-	}
+	// 	return $schedule;
+	// }
+
+    //查看 單一班表資訊
+    public function scheduleData($scheduleID)
+    {
+        $schedule = DB::table('Schedule')
+        ->where("scheduleID",$scheduleID)
+        ->first();
+
+        return $schedule;
+    }
+
+
 
     //查看 新增班表
-	public function addSchedule($isWeekday, $location, $category, $date, $confirmed){
-        $generatedSerial = 0;
+	// public function addSchedule($isWeekday, $location, $category, $date, $confirmed){
+ //        $generatedSerial = 0;
 
-        $count = DB::table("Schedule")
-            -> where('doctorID',$doctorID) 
-            -> where('periodSerial',$periodSerial) 
-            -> where('isWeekday',$isWeekday)
-            -> where('location',$location) 
-            -> where('category',$category)
-            -> where('date',$date)
-            -> where('confirmed',$confirmed)
-            ->count();
-        if($count==0){
+ //        $count = DB::table("Schedule")
+ //            -> where('doctorID',$doctorID) 
+ //            -> where('periodSerial',$periodSerial) 
+ //            -> where('isWeekday',$isWeekday)
+ //            -> where('location',$location) 
+ //            -> where('category',$category)
+ //            -> where('date',$date)
+ //            -> where('confirmed',$confirmed)
+ //            ->count();
+ //        if($count==0){
         //新增預班
-                $generatedSerial = DB::table('Schedule')-> insertGetId([
-                'doctorID' => $doctorID,
-                'periodSerial' => $periodSerial,
-                'isWeekday' => $isWeekday,
-                'location' => $location,
-                'category' => $category,
-                'date' => $date, 
-                'confirmed' => $confirmed      
-            ]);
-        }
-        else{
+        //         $generatedSerial = DB::table('Schedule')-> insertGetId([
+        //         'doctorID' => $doctorID,
+        //         'periodSerial' => $periodSerial,
+        //         'isWeekday' => $isWeekday,
+        //         'location' => $location,
+        //         'category' => $category,
+        //         'date' => $date, 
+        //         'confirmed' => $confirmed      
+        //     ]);
+        // }
+        // else{
             //得到預班表id
-                $generatedSerial = DB::table("Schedule")
-                -> where('doctorID',$doctorID)
-                -> where('periodSerial',$periodSerial) 
-                -> where('isWeekday',$isWeekday)
-                -> where('location',$location) 
-                -> where('category',$category)
-                -> where('date',$date)
-                -> where('confirmed',$confirmed)
-                -> value('scheduleID');
-        }
+    //             $generatedSerial = DB::table("Schedule")
+    //             -> where('doctorID',$doctorID)
+    //             -> where('periodSerial',$periodSerial) 
+    //             -> where('isWeekday',$isWeekday)
+    //             -> where('location',$location) 
+    //             -> where('category',$category)
+    //             -> where('date',$date)
+    //             -> where('confirmed',$confirmed)
+    //             -> value('scheduleID');
+    //     }
 
-    	return $generatedSerial;
-    }
+    // 	return $generatedSerial;
+    // }
 
-    public function updateSchedule($scheduleID, $doctorID,$isWeekday, $location, $category, $date, $confirmed){
+    // public function updateSchedule($scheduleID, $doctorID,$isWeekday, $location, $category, $date, $confirmed){
 
-        $generatedSerial ＝ 0;
+    //     $generatedSerial ＝ 0;
 
-        $count = DB::table("Schedule")
-                -> where('doctorID',$doctorID)
-                -> where('periodSerial',$periodSerial) 
-                -> where('isWeekday',$isWeekday)
-                -> where('location',$location) 
-                -> where('category',$category)
-                -> where('date',$date)
-                -> where('confirmed',$confirmed)
-                ->count();
-            if($count==0){
-                //新增班表
-                $generatedSerial = DB::table('Schedule')-> insertGetId([
-                'doctorID' => $doctorID,
-                'periodSerial' => $periodSerial,
-                'isWeekday' => $isWeekday,
-                'location' => $location,
-                'category' => $category,
-                'date' => $date, 
-                'confirmed' => $confirmed  
+    //     $count = DB::table("Schedule")
+    //             -> where('doctorID',$doctorID)
+    //             -> where('periodSerial',$periodSerial) 
+    //             -> where('isWeekday',$isWeekday)
+    //             -> where('location',$location) 
+    //             -> where('category',$category)
+    //             -> where('date',$date)
+    //             -> where('confirmed',$confirmed)
+    //             ->count();
+    //         if($count==0){
+    //             //新增班表
+    //             $generatedSerial = DB::table('Schedule')-> insertGetId([
+    //             'doctorID' => $doctorID,
+    //             'periodSerial' => $periodSerial,
+    //             'isWeekday' => $isWeekday,
+    //             'location' => $location,
+    //             'category' => $category,
+    //             'date' => $date, 
+    //             'confirmed' => $confirmed  
                     
-            ]);
+    //         ]);
 
-            }
+    //         }
                
-            else{
+    //         else{
                 //取得班表id
-                $generatedSerial = DB::table("Schedule")
-                -> where('doctorID',$doctorID)
-                -> where('periodSerial',$periodSerial) 
-                -> where('isWeekday',$isWeekday)
-                -> where('location',$location) 
-                -> where('category',$category)
-                -> where('date',$date)
-                -> where('confirmed',$confirmed)
-                -> value('scheduleID');
-            }
-        return $generatedSerial;
-    }
+    //             $generatedSerial = DB::table("Schedule")
+    //             -> where('doctorID',$doctorID)
+    //             -> where('periodSerial',$periodSerial) 
+    //             -> where('isWeekday',$isWeekday)
+    //             -> where('location',$location) 
+    //             -> where('category',$category)
+    //             -> where('date',$date)
+    //             -> where('confirmed',$confirmed)
+    //             -> value('scheduleID');
+    //         }
+    //     return $generatedSerial;
+    // }
 
-    public function deleteSchedule($scheduleID){
-        $generatedSerial = DB::table("Schedule")
-        $generatedSerial = DB::where('scheduleID','==',  scheduleID) -> delete()
+    // public function deleteSchedule($scheduleID){
+    //     $generatedSerial = DB::table("Schedule")
+    //     $generatedSerial = DB::where('scheduleID','==',  scheduleID) -> delete()
 
-        return $generatedSerial;
-    }
+    //     return $generatedSerial;
+    // }
 }

@@ -13,7 +13,7 @@ class ShiftCategory extends Model
     public function findName($serial){
     	$name = DB::table('CreateShiftCategory')->where("categorySerial",$serial)->first();
 
-    	return $name; 
+    	return $name->categoryName;
 
 
     }
