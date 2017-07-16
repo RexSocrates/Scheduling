@@ -28,21 +28,21 @@ class ReservationController extends Controller
           $id = $doctorID->getDoctorsByResSerial($res->resSerial);
             $names  =  array();
                 foreach ($id as $personalID) {
-                     $doctor = $doctorName->getDoctorInfoByID($personalID->doctorID);//->name; 
+                     $doctor = $doctorName->getDoctorInfoByID($personalID->doctorID); 
                      array_push($names, $doctor);
                 }     
             array_push($resSerial,array($res,$names));
                // echo $doctor->name;
         }   
-        foreach ($resSerial as $res) {
-             echo $res[0]->resSerial.'<br>';
+        // foreach ($resSerial as $res) {
+        //      echo $res[0]->resSerial.'<br>';
 
-             foreach($res[1] as $doctor) {
-                echo $doctor->name.'<br>';
-             }
-             echo '<br>';
+        //      foreach($res[1] as $doctor) {
+        //         echo $doctor->name.'<br>';
+        //      }
+        //      echo '<br>';
 
-        }
+        // }
        
         return view('pages.reservation-all', array('reservations' => $resSerial));
          //return view('pages.reservation-all', array('reservations' => $reservationData ,'doctors'=> $doctor));
@@ -59,20 +59,26 @@ class ReservationController extends Controller
     //單一醫生預班資訊
       public function getReservationByID() {
 
-         $reservation = new Reservation();
-         $shiftCategory = new ShiftCategory();
-         $reservationData = $reservation->getReservationByID();
-         
+        $reservation = new Reservation();
+        $shiftCategory = new ShiftCategory();
+        $reservationData = $reservation->getReservationByID();
+        $user = new User();
+        $doctorDay= $user->getDoctorInfoByID(1)->mustOnDutyDayShifts;
+        $doctorNight= $user->getDoctorInfoByID(1)->mustOnDutyNightShifts;        
+        $countDay = $doctorDay-$reservation->amountDayShifts();
+        $countNight = $doctorNight-$reservation->amountNightShifts();
+
 
          foreach ($reservationData as $res) {
-            $name = $shiftCategory->findName($res->categorySerial);
-            $res->categorySerial = $name->categoryName;
+         $name = $shiftCategory->findName($res->categorySerial);
+        $res->categorySerial = $name->categoryName;
          }
 
       
-        return view('pages.reservation', array('reservations' => $reservationData));
+        return view('pages.reservation', array('reservations' => $reservationData,'countDay' => $countDay,
+                 'countNight' => $countNight ));
       }
-
+       
 
      //查詢 所有醫生指定時段的班數
      public function getDataByResSerial() {
@@ -90,7 +96,8 @@ class ReservationController extends Controller
         $count = $dAndR ->amountInResserial($serial);
         echo $count;
     }
-
+   
+  
     //新增預班
     public function addReservation(){
     	$addReservation = new Reservation();

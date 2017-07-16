@@ -47,20 +47,36 @@ class DateTest extends Seeder
         //         'name' => "張國頌"
                  
         //  ]);
+    //      DB::table('Reservation')-> insertGetId([
+    //             'periodSerial' => 22,
+    //             'isWeekday' => 0,
+    //             'location' => "淡水",
+    //             'isOn' => 1,
+    //             'categorySerial' => 2, 
+    //             'date' => '2017-06-26',
+    //             'endDate' => '2017-06-27'
+         
+    // ]);
+    // DB::table('DoctorAndReservation')-> insert([
+    //             'resSerial' => 29,
+    //             'doctorID' => 2
+    //         ]);
+         
+    // }
          DB::table('Reservation')-> insertGetId([
                 'periodSerial' => 22,
                 'isWeekday' => 0,
                 'location' => "淡水",
                 'isOn' => 1,
-                'categorySerial' => 2, 
-                'date' => '2017-06-26',
-                'endDate' => '2017-06-27'
-         
-    ]);
-    DB::table('DoctorAndReservation')-> insert([
-                'resSerial' => 29,
-                'doctorID' => 2
-            ]);
-         
-    }
+                'categorySerial' => 6, 
+                'date' => '2017-06-06',
+                'endDate' => '2017-06-07'
+         ]);
+          DB::table('DoctorAndReservation')-> insert([
+                'resSerial' => 32,
+                'doctorID' => 1
+         ]);
+    }   
+   
+
 }

@@ -64,7 +64,11 @@ Route::post('/show','ReservationController@getDataByResSerial');
 
 //Route::post('doctor', 'ReservationController@getDoctorID');
 Route::get('/reservation', 'ReservationController@getReservationByID');
+
+//Route::get('/reservation', 'ReservationController@amountDayShift');
+
 //Route::get('getReseverationByPeriodSerial','ReservationController@getReseverationByPeriodSerial');
+
 
 // =============================update================================================
 Route::post('updateReservation', 'ReservationController@updateReservation');

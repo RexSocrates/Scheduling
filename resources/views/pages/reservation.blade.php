@@ -104,7 +104,7 @@
                                     <div class="col s5">
                                         <p class="information">開放時間: 2017/06/01 - 2017/06/25</p>
                                         <p class="information">可排天班數: 白班:10 夜班:5</p>
-                                        <p class="information">尚需排班數: 白班:5 夜班:1</p>    
+                                        <p class="information">尚需排班數: 白班:{{$countDay}} 夜班:{{$countNight}}</p>    
                                     </div>
                                     <div class="col s7">
                                         <form class="col s6">
@@ -175,33 +175,62 @@
                             ];
 
 
- 
+                            
                             //在Lightbox關掉
                             scheduler.attachEvent("onBeforeLightbox", function (id){
+                               
+                                //var date = new Date();
+                               // var id = scheduler.getState().select_id;
+                                //var new_event = scheduler.getState().new_event;
+
+
+                                 //console.log("id"+id);
+                                 //console.log("event"+new_event);
+                                //   scheduler.attachEvent("onMouseMove", function(event, e){
+                                //  var action_data = scheduler.getActionData(e);
+                                //  console.log(action_data);
+                                // console.log("11"+action_data);
+                                scheduler.attachEvent("onEventSave",function(id,ev,is_new){
+                                console.log(id);
                                 var eventId = scheduler.addEvent({
-                                    start_date: "2017-06-06 09:00",
-                                    end_date:   "2017-06-07 12:00",
+                                    
+
+                                    start_date: "2017-06-06 00:00",
+                                    end_date:   "2017-06-07 00:00",
                                     //text:   "Meeting",
                                     section_id: "2"
 
                                 });
+
+                                //console.log("dates"+date);
                                 var event = scheduler.getEvent(eventId);
+                                
+                             //    scheduler.attachEvent("onClick", function(event, e){
+                             //     var action_data = scheduler.getActionData(e);
+                             //     console.log(action_data);
+ 
+                              //})
+                               
                                 //console.log(event.text);
                                 if (event.section_id == "2"){
                                     event.text = "教學";
-                                    console.log(event.id);
-                                    console.log(event.start_date);
-                                    console.log(event.section_id);
+                                    console.log("id"+event.id);
+
+                                    // console.log(event.start_date);
+                                     //console.log(event.section_id);
                                      
                                 }
-
-                                scheduler.attachEvent("onEventSave",function(id,ev,is_new){
+                               //在Lightbox按下save時執行
+                                
 //                                var radio = scheduler.getEvent(id);
-                                 console.log('a'+event.id);
-                                 console.log('b'+event.start_date);
-                                 console.log('c'+event.section_id);
+                                 // console.log('a'+event.id);
+                                 //  console.log('b'+event.start_date);
+                                 //  console.log('c'+event.section_id);
+                                  //console.log(is_new);
+                                 
                                 return true;
-                            })
+                            });
+                                
                                
                                 return true;
                             });

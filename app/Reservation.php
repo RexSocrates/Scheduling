@@ -35,6 +35,43 @@ class Reservation extends Model
 
      }
 
+     //計算醫生白天上班總數
+     public function amountDayShifts()
+      {
+        $doctorData = DB::table('DoctorAndReservation')->where("doctorID","1")->get();
+           //$date=DB::table('Reservation') -> whereIn("resSerial",)->date;
+
+        $arr = array();
+        foreach ($doctorData as $doctorDatum ) {
+            $arr[] = $doctorDatum->resSerial;
+            
+        }
+         $data=DB::table('Reservation') -> whereIn("resSerial",$arr)->whereIn('categorySerial',[3,5])->count();
+
+
+         return $data;
+
+     }
+
+     //計算醫生夜班上班總數
+     public function amountNightShifts()
+      {
+        $doctorData = DB::table('DoctorAndReservation')->where("doctorID","1")->get();
+           //$date=DB::table('Reservation') -> whereIn("resSerial",)->date;
+
+        $arr = array();
+        foreach ($doctorData as $doctorDatum ) {
+            $arr[] = $doctorDatum->resSerial;
+            
+        }
+         $data=DB::table('Reservation') -> whereIn("resSerial",$arr)->whereIn('categorySerial',[4,6])->count();
+
+
+         return $data;
+
+     }
+
+
     //新增預班
     public function addReservation($periodSerial, $isWeekday, $location, $isOn, $remark, $date){
         $generatedSerial = 0;
