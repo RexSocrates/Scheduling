@@ -68,15 +68,44 @@ class DateTest extends Seeder
                 'isWeekday' => 0,
                 'location' => "淡水",
                 'isOn' => 1,
-                'categorySerial' => 6, 
-                'date' => '2017-06-06',
-                'endDate' => '2017-06-07'
+                'categorySerial' => 2, 
+                'date' => '2017-06-18',
+                'endDate' => '2017-06-19'
          ]);
           DB::table('DoctorAndReservation')-> insert([
-                'resSerial' => 32,
-                'doctorID' => 1
+                'resSerial' => 41,
+                'doctorID' => 3
+         ]);
+     
+    DB::table('Reservation')-> insertGetId([
+                'periodSerial' => 22,
+                'isWeekday' => 0,
+                'location' => "淡水",
+                'isOn' => 1,
+                'categorySerial' => 4, 
+                'date' => '2017-06-15',
+                'endDate' => '2017-06-16'
+         ]);
+          DB::table('DoctorAndReservation')-> insert([
+                'resSerial' => 42,
+                'doctorID' => 3
+         ]);
+     
+     DB::table('Reservation')-> insertGetId([
+                'periodSerial' => 22,
+                'isWeekday' => 0,
+                'location' => "淡水",
+                'isOn' => 1,
+                'categorySerial' => 6, 
+                'date' => '2017-06-20',
+                'endDate' => '2017-06-21'
+         ]);
+          DB::table('DoctorAndReservation')-> insert([
+                'resSerial' => 43,
+                'doctorID' => 3
          ]);
     }   
+    
    
 
 }

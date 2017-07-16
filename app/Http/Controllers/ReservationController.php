@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Reservation;
 use App\DoctorAndReservation;
 use App\ShiftCategory;
+use App\Remark;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
@@ -56,29 +57,37 @@ class ReservationController extends Controller
         return view('showReservation', array('reservations' => $reservationData));
     }
 
-    //單一醫生預班資訊
+    //單一醫生預班資訊 計算尚須上的白夜班 增加備註
       public function getReservationByID() {
 
         $reservation = new Reservation();
         $shiftCategory = new ShiftCategory();
-        $reservationData = $reservation->getReservationByID();
         $user = new User();
-        $doctorDay= $user->getDoctorInfoByID(1)->mustOnDutyDayShifts;
-        $doctorNight= $user->getDoctorInfoByID(1)->mustOnDutyNightShifts;        
+        $reservationData = $reservation->getReservationByID();
+        $doctorID = $user->getCurrentUserID();
+        $doctorDay = $user->getDoctorInfoByID($doctorID)->mustOnDutyDayShifts;
+        $doctorNight = $user->getDoctorInfoByID($doctorID)->mustOnDutyNightShifts;        
         $countDay = $doctorDay-$reservation->amountDayShifts();
         $countNight = $doctorNight-$reservation->amountNightShifts();
 
-
-         foreach ($reservationData as $res) {
-         $name = $shiftCategory->findName($res->categorySerial);
-        $res->categorySerial = $name->categoryName;
-         }
+            // foreach ($reservationData as $res) {
+            // $name = $shiftCategory->findName($res->categorySerial);
+            // $res->categorySerial = $name->categoryName;
+            // }
 
       
         return view('pages.reservation', array('reservations' => $reservationData,'countDay' => $countDay,
-                 'countNight' => $countNight ));
+                 'countNight' => $countNight ,'doctorDay' =>$doctorDay, 'doctorNight'=> $doctorNight ));
       }
-       
+    //增加備註
+    public  function addRemark(){
+        $remark = new Remark();
+        $user = new User();
+        $doctorID = $user->getCurrentUserID();
+        $addRemark = Input::get('remark');
+        $remarkData = $remark->addremark($doctorID,$addRemark);
+
+    }
 
      //查詢 所有醫生指定時段的班數
      public function getDataByResSerial() {
