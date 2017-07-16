@@ -62,6 +62,9 @@ Route::get('exchangingFailedMail', 'MailController@rejectShiftExchanging');
 Route::get('getTestPage', 'TestController@getTestPage');
 
 // ========================================================================
+Route::get('/schedule', 'ScheduleController@schedule');
+
+Route::get('/reservation', 'AccountController@reservation');
 
 
 // ===========================showallReservationList==================================
@@ -121,8 +124,3 @@ Route::get('/dateadd', 'ReservationController@getdateAdd');
 //	return view('updateReservation');
 
 //});
-
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
