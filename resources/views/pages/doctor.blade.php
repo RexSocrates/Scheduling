@@ -68,7 +68,15 @@
 		  	<li><a href="setting.html">設定</a></li>
 		  	<li><a href="profile.html">個人資料</a></li>
 		  	<li class="divider"></li>
-		  	<li><a href="/logout">登出</a></li>
+		  	<li><a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                登出
+                </a>
+                
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                </form>
+            </li>
 		</ul>
         
         <a href="#" data-activates="slide-out" class="button-collapse"></a>
@@ -108,7 +116,7 @@
                                         <td>{{ $doctor->identity }}</td>
                                         <td class="doctor-td">
                                             <a class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" href="#modal2">編輯</a>
-                                            <a class="waves-effect waves-light red accent-2 btn doctor-td-btn">刪除</a>
+                                            <a class="waves-effect waves-light red accent-2 btn doctor-td-btn" href="resign/{{ $doctor->doctorID }}">刪除</a>
                                         </td>
                                     </tr>
                                     @endforeach

@@ -39,12 +39,12 @@ class TestController extends Controller
     }
     
     // 單一醫生離職
-    public function resign() {
+    public function resign($id) {
         $user = new User();
         
-        $resignedDoctorID = Input::get('doctorID');
+//        $resignedDoctorID = Input::get('doctorID');
         
-        $user->resign($resignedDoctorID);
+        $user->resign($id);
         
         return redirect('testShowAtWorkDoctorList');
     }
@@ -93,5 +93,11 @@ class TestController extends Controller
         ];
         
         return view('pages.doctor', $data);
+    }
+    
+    public function testDateFormat(Request $request) {
+        $data = $request->all();
+        
+        echo 'Date format : '.$data['birthday'];
     }
 }

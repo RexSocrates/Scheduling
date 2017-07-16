@@ -66,6 +66,14 @@ header, main, footer {
     margin-bottom: 20px;  
 }
 
+.margin-top-20 {
+    margin-top: 20px;  
+}
+
+.padding-t0 {
+    padding-top: 0px !important;
+}
+
 .padding-b0 {
     padding-bottom: 0px !important;
 }
@@ -271,19 +279,26 @@ header, main, footer {
 }
 
 /* icon prefix focus color */
+/*
 .input-field .prefix.active {
     color: #ff5b62;
 }
+*/
 
 /* textarea label focus color */
+/*
 .input-field textarea[type=text]:focus + label {
     color: #ff5b62;
 }
+*/
+
 /* textarea label underline focus color */
+/*
 .input-field textarea[type=text]:focus {
     border-bottom: 1px solid #ff5b62;
     box-shadow: 0 1px 0 0 #ff5b62;
 }
+*/
 
 .notification {
     font-size: 16px;
@@ -455,3 +470,18 @@ header, main, footer {
     border-bottom: 2px solid white;
     color: #fff !important;
 }
+
+.profile-img {
+    width:225px;height:225px;margin: 0px 0px 20px 0px;border:7px solid #546e7a; border-radius:50%;
+}
+
+.login-box {
+    width: 400px;
+    height: 700px;
+    background-color: red;
+}
+
+
+
+
+
