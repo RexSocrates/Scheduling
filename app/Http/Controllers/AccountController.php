@@ -28,4 +28,12 @@ class AccountController extends Controller
         
         return redirect('doctors');
     }
+    
+    public function getProfilePage() {
+        $user = new User();
+        
+        return view('pages.profile', [
+            'doctor' => $user->getCurrentUserInfo()
+        ]);
+    }
 }

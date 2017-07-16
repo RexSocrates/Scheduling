@@ -26,6 +26,8 @@ Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
 
 Route::get('resign/{id}', 'AccountController@resign');
 
+Route::get('profile', 'AccountController@getProfilePage');
+
 
 // ========================================================================
 Route::post('testDateFormat', 'TestController@testDateFormat');
@@ -120,3 +122,7 @@ Route::get('/dateadd', 'ReservationController@getdateAdd');
 
 //});
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
