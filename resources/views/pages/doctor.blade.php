@@ -255,7 +255,7 @@
        
     <!-- Modal Structure -->
     <div id="modal2" class="modal modal-fixed-footer modal-announcement">
-        <form method="post">
+        <form action="" method="post">
            
             <div class="modal-header">
                 <h5 class="modal-announcement-title">修改醫生</h5>
