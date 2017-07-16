@@ -95,6 +95,14 @@
                     <div class="card">
                         <div class="card-action">
                             <font class="card-title">排班歷史紀錄</font>
+                            @foreach($doctorShiftRecords as $doctorShiftRecord)
+                            <ul>
+                            <li>scheduleID_1: {{ $doctorShiftRecord->scheduleID_1}}</li> 
+                            <li>scheduleID_2 : {{ $doctorShiftRecord->scheduleID_2}}</li> 
+                            <li>schID_1_doctor : {{ $doctorShiftRecord->schID_1_doctor}}</li>
+                            <li>schID_2_doctor : {{ $doctorShiftRecord->schID_2_doctor}}</li> 
+                            </ul>
+                             @endforeach
                         </div>
                         <div class="divider"></div>
                         <div class="card-content">

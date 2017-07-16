@@ -62,48 +62,78 @@ class DateTest extends Seeder
     //             'doctorID' => 2
     //         ]);
          
-    // }
-         DB::table('Reservation')-> insertGetId([
-                'periodSerial' => 22,
-                'isWeekday' => 0,
-                'location' => "淡水",
-                'isOn' => 1,
-                'categorySerial' => 2, 
-                'date' => '2017-06-18',
-                'endDate' => '2017-06-19'
-         ]);
-          DB::table('DoctorAndReservation')-> insert([
-                'resSerial' => 41,
-                'doctorID' => 3
-         ]);
+    // // }
+    //     DB::table('Reservation')-> insertGetId([
+    //             'periodSerial' => 22,
+    //             'isWeekday' => 0,
+    //             'location' => "淡水",
+    //             'isOn' => 1,
+    //             'categorySerial' => 2, 
+    //             'date' => '2017-06-18',
+    //             'endDate' => '2017-06-19'
+    //      ]);
+    //       DB::table('DoctorAndReservation')-> insert([
+    //             'resSerial' => 41,
+    //             'doctorID' => 3
+    //      ]);
      
-    DB::table('Reservation')-> insertGetId([
-                'periodSerial' => 22,
-                'isWeekday' => 0,
-                'location' => "淡水",
-                'isOn' => 1,
-                'categorySerial' => 4, 
-                'date' => '2017-06-15',
-                'endDate' => '2017-06-16'
-         ]);
-          DB::table('DoctorAndReservation')-> insert([
-                'resSerial' => 42,
-                'doctorID' => 3
-         ]);
-     
-     DB::table('Reservation')-> insertGetId([
-                'periodSerial' => 22,
-                'isWeekday' => 0,
-                'location' => "淡水",
-                'isOn' => 1,
-                'categorySerial' => 6, 
-                'date' => '2017-06-20',
-                'endDate' => '2017-06-21'
-         ]);
-          DB::table('DoctorAndReservation')-> insert([
-                'resSerial' => 43,
-                'doctorID' => 3
-         ]);
+    //     DB::table('Reservation')-> insertGetId([
+    //             'periodSerial' => 22,
+    //             'isWeekday' => 0,
+    //             'location' => "淡水",
+    //             'isOn' => 1,
+    //             'categorySerial' => 4, 
+    //             'date' => '2017-06-15',
+    //             'endDate' => '2017-06-16'
+    //      ]);
+    //       DB::table('DoctorAndReservation')-> insert([
+    //             'resSerial' => 42,
+    //             'doctorID' => 3
+    //      ]);
+        
+    //     DB::table('Reservation')-> insertGetId([
+    //             'periodSerial' => 22,
+    //             'isWeekday' => 0,
+    //             'location' => "淡水",
+    //             'isOn' => 1,
+    //             'categorySerial' => 6, 
+    //             'date' => '2017-06-20',
+    //             'endDate' => '2017-06-21'
+    //      ]);
+    //       DB::table('DoctorAndReservation')-> insert([
+    //             'resSerial' => 43,
+    //             'doctorID' => 3
+    //      ]);
+
+
+    //    DB::table('ShiftRecords')-> insertGetId([
+    //         'scheduleID_1' => 1,
+    //         'scheduleID_2' => 2,
+    //         'schID_1_doctor' => 3,
+    //         'schID_2_doctor' => 2,
+    //         'doc2Confirm' => 1, 
+    //         'adminConfirm' => 1,
+               
+    //   ]);
+        DB::table('Schedule')-> insertGetId([
+            'doctorID' => 3,
+            'shiftName' =>"2",
+            'category' => 2,
+            'date' => "2017-06-07",
+            'endDate' => '2017-06-08'
+                 
+      ]);
+        DB::table('Schedule')-> insertGetId([
+            'doctorID' => 2,
+            'shiftName' =>"3",
+            'category' => 3,
+            'date' => "2017-06-08",
+            'endDate' => '2017-06-09'
+
+                 
+      ]);
+
+
     }   
     
    

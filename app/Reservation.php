@@ -91,14 +91,14 @@ class Reservation extends Model
                    
     	            $generatedSerial = DB::table('Reservation')-> insertGetId([
                     'periodSerial' => $periodSerial,
-    				'isWeekday' => $isWeekday,
-    				'location' => $location,
-    				'isOn' => $isOn,
-    				'remark' => $remark,
-    				'date' => $date,
+    				        'isWeekday' => $isWeekday,
+    				        'location' => $location,
+    				        'isOn' => $isOn,
+    				        'remark' => $remark,
+    				        'date' => $date,
                     'endDate' => date_add($date),
                     
-    		]);
+    		            ]);
 
          }
         else{

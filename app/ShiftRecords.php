@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use App\User;
 class ShiftRecords extends Model
 {
     protected $table = "ShiftRecords";
@@ -15,11 +16,14 @@ class ShiftRecords extends Model
          return $shiftRecords;
 
     }
+   
 
      //查詢 單一醫生換班紀錄
     public function getShiftRecordsByDoctorID(){
-        $shiftRecords=DB::table('ShiftRecords',"1")
-        ->where('schID_1_doctor','2')
+        $user = new User();
+        $doctorID = $user->getCurrentUserID();
+        $shiftRecords=DB::table('ShiftRecords')
+        ->where('schID_1_doctor',$doctorID)
         ->get();
 
         return $shiftRecords;

@@ -167,7 +167,7 @@
                             
                             //彈出視窗的選項
                             scheduler.config.lightbox.sections=[
-//                                {name:"description", height:130, map_to:"text", type:"textarea" , focus:true},
+                               {name:"description", height:130, map_to:"text", type:"textarea" , focus:true},
 //                                {name:"custom", height:23, type:"select", options:sections, map_to:"section_id" },
                                 {name:"班別名稱", height:180, options:priorities, map_to:"priority", type:"radio", vertical:true},
                                 
