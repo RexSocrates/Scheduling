@@ -99,21 +99,22 @@
                         <div class="card-content">
                             
                             
-                            <form action="#!" method="post">
+                            <form>
                                 <div class="row margin-b0">
                                     <div class="col s5">
                                         <p class="information">開放時間: 2017/06/01 - 2017/06/25</p>
-                                        <p class="information">可排天班數: 白班:10 夜班:5</p>
+                                        <p class="information">可排天班數: 白班:{{$doctorDay}} 夜班:{{$doctorNight}}</p>
                                         <p class="information">尚需排班數: 白班:{{$countDay}} 夜班:{{$countNight}}</p>    
                                     </div>
                                     <div class="col s7">
-                                        <form class="col s6">
+                                        <form action="reservation" method="post" class="col s6">
                                             <div class="input-field">
-                                                <textarea id="textarea1" class="materialize-textarea" placeholder="請輸入XXXXX"></textarea>
+                                                <textarea id="textarea1" class="materialize-textarea"  name="remark"placeholder="請輸入XXXXX"></textarea>
 <!--                                                     data-length="150"-->
                                                 <label for="textarea1">備註:</label>
                                             </div>
                                             <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right">提交</button>
+                                            {{ csrf_field() }}
                                         </form>
                                     </div>
                                 </div>
@@ -258,7 +259,7 @@
 
 	                            scheduler.parse([
 	                            	
-	                            { start_date: "{{ $reservation->date }} 00:00", end_date: "{{$reservation->endDate}} 00:00", text:"{{ $reservation->categorySerial}}", section_id:"{{ $reservation->categorySerial}}"},
+	                            { start_date: "{{ $reservation->date }} 00:00", end_date: "{{$reservation->endDate}} 00:00", text:"{{ $reservation->categorySerial}}", priority:"{{ $reservation->categorySerial}}"},
 	                                
 	                            ],"json");
 							
@@ -266,6 +267,7 @@
                         </script>
                         @foreach($reservations as $reservation)
                         	{{ $reservation->date}}
+                            {{ $reservation->categorySerial}}
                         @endforeach
                     </div>
                 </div>

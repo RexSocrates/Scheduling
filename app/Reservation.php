@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 use DB;
+use App\User;
 class Reservation extends Model
 {
     protected $table = 'Reservation';
@@ -22,7 +23,9 @@ class Reservation extends Model
     //查看 單一醫生預班資訊
      public function getReservationByID()
       {
-           $doctorData = DB::table('DoctorAndReservation')->where("doctorID","1")->get();
+        $user = new User();
+        $id = $user->getCurrentUserID();
+        $doctorData = DB::table('DoctorAndReservation')->where("doctorID",$id)->get();
            //$date=DB::table('Reservation') -> whereIn("resSerial",)->date;
 
         $arr = array();

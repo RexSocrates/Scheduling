@@ -36,7 +36,7 @@ Route::get('testDate', 'TestController@getDateForm');
 
 Route::post('testDate', 'TestController@getDateValue');
 
-Route::get('testDoctorList', 'TestController@getDoctorList')->middleware('authenticatedUser');
+Route::get('testDoctorList', 'TestController@getDoctorList');
 
 Route::get('testShowAtWorkDoctorList', 'TestController@showAtWorkDoctorList');
 
@@ -73,6 +73,8 @@ Route::post('/show','ReservationController@getDataByResSerial');
 
 //Route::post('doctor', 'ReservationController@getDoctorID');
 Route::get('/reservation', 'ReservationController@getReservationByID');
+Route::post('/reservation', 'ReservationController@addRemark');
+
 
 //Route::get('/reservation', 'ReservationController@amountDayShift');
 
