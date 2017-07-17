@@ -11,6 +11,8 @@ use App\ShiftCategory;
 use App\Remark;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Dhtmlx\Connector\SchedulerConnector;
+
 
 use App\User;
 
@@ -57,12 +59,15 @@ class ReservationController extends Controller
         return view('showReservation', array('reservations' => $reservationData));
     }
 
-    //單一醫生預班資訊 計算尚須上的白夜班 增加備註
+    //單一醫生預班資訊 計算尚須上的白夜班 
       public function getReservationByID() {
 
         $reservation = new Reservation();
         $shiftCategory = new ShiftCategory();
         $user = new User();
+
+        $data = array();
+
         $reservationData = $reservation->getReservationByID();
         $doctorID = $user->getCurrentUserID();
         $doctorDay = $user->getDoctorInfoByID($doctorID)->mustOnDutyDayShifts;
@@ -70,14 +75,22 @@ class ReservationController extends Controller
         $countDay = $doctorDay-$reservation->amountDayShifts();
         $countNight = $doctorNight-$reservation->amountNightShifts();
 
-            // foreach ($reservationData as $res) {
-            // $name = $shiftCategory->findName($res->categorySerial);
-            // $res->categorySerial = $name->categoryName;
-            // }
+        foreach ($reservationData as $res) {
+            $name = $shiftCategory->findName($res->categorySerial);
+            //$res->categorySerial = $name;
+            array_push($data, array($res, $name));
+        }
 
-      
-        return view('pages.reservation', array('reservations' => $reservationData,'countDay' => $countDay,
-                 'countNight' => $countNight ,'doctorDay' =>$doctorDay, 'doctorNight'=> $doctorNight ));
+        
+        //$connector = new SchedulerConnector('reservation', "PHPLaravel");    
+       // $connector->configure(new reservation(),"event_id",                                                        
+        // "start_date, end_date");                                                          
+       // $connector->render();                                       
+                
+      return view('pages.reservation', array('reservations' => $data,'countDay' => $countDay,
+                'countNight' => $countNight ,'doctorDay' =>$doctorDay, 'doctorNight'=> $doctorNight ));
+       
+
       }
     //增加備註
     public  function addRemark(){

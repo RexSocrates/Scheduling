@@ -63,7 +63,7 @@ class Schedule extends Model
     
     // 確認當月班表
     public function confirmSchedule() {
-        $currentMonthStr = date('Y-m')
+        $currentMonthStr = date('Y-m');
         
         $affectedRows = DB::table('Schedule')
             ->where('date', 'like', $currentMonthStr.'%')

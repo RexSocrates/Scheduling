@@ -8,10 +8,10 @@ use DB;
 
 class ShiftCategory extends Model
 {
-    protected $table = "CreateShiftCategory";
+    protected $table = "ShiftCategory";
 
     public function findName($serial){
-    	$name = DB::table('CreateShiftCategory')->where("categorySerial",$serial)->first();
+    	$name = DB::table('ShiftCategory')->where("categorySerial",$serial)->first();
 
     	return $name->categoryName;
 

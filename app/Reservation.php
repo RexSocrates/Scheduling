@@ -117,7 +117,7 @@ class Reservation extends Model
     }
 
     //更新預班
-    public function updateReservation($id, $periodSerial, $isWeekday, $location, $isOn, $remark, $date){
+    public function addAndUpdateReservation( $periodSerial, $isWeekday, $location, $isOn, $remark, $date){
         $generatedSerial＝0;
 
         $count = DB::table("Reservation")
@@ -126,6 +126,7 @@ class Reservation extends Model
                 -> where('location',$location) 
                 -> where('isOn',$isOn)
                 -> where('date',$date)
+                -> where('endDated',date_add($date))
                 ->count();
             if($count==0){
                 //新增預班
@@ -150,6 +151,7 @@ class Reservation extends Model
                 -> where('location',$location) 
                 -> where('isOn',$isOn)
                 -> where('date',$date)
+                -> where('endDated',date_add($date))
                 -> value('resSerial');
             }     
 

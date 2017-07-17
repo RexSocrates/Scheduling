@@ -67,8 +67,17 @@ Route::get('/schedule', 'ScheduleController@schedule');
 Route::get('/reservation', 'AccountController@reservation');
 
 
-// ===========================showallReservationList==================================
+// 列出全部人的預班資訊
 Route::get('/reservation-all', 'ReservationController@reservation');
+
+// 列出個人的預班資訊
+Route::get('/reservation', 'ReservationController@getReservationByID');
+Route::post('/reservation', 'ReservationController@addRemark');
+
+
+Route::get('/schedule', function(){
+	return view('pages.schedule-all');
+});
 
 // ===========================showReservationByresSerial==============================
 Route::get('/showReservation', 'ReservationController@showReservation');
@@ -77,8 +86,7 @@ Route::post('/show','ReservationController@getDataByResSerial');
 // ==================================showDoctor'sReservation==========================
 
 //Route::post('doctor', 'ReservationController@getDoctorID');
-Route::get('/reservation', 'ReservationController@getReservationByID');
-Route::post('/reservation', 'ReservationController@addRemark');
+
 
 
 //Route::get('/reservation', 'ReservationController@amountDayShift');

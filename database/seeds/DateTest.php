@@ -115,24 +115,57 @@ class DateTest extends Seeder
     //         'adminConfirm' => 1,
                
     //   ]);
-        DB::table('Schedule')-> insertGetId([
-            'doctorID' => 3,
-            'shiftName' =>"2",
-            'category' => 2,
-            'date' => "2017-06-07",
-            'endDate' => '2017-06-08'
+      //   DB::table('Schedule')-> insertGetId([
+      //       'doctorID' => 3,
+      //       'shiftName' =>"2",
+      //       'category' => 2,
+      //       'date' => "2017-06-07",
+      //       'endDate' => '2017-06-08'
                  
-      ]);
-        DB::table('Schedule')-> insertGetId([
-            'doctorID' => 2,
-            'shiftName' =>"3",
-            'category' => 3,
-            'date' => "2017-06-08",
-            'endDate' => '2017-06-09'
+      // ]);
+      //   DB::table('Schedule')-> insertGetId([
+      //       'doctorID' => 2,
+      //       'shiftName' =>"3",
+      //       'category' => 3,
+      //       'date' => "2017-06-08",
+      //       'endDate' => '2017-06-09'
 
                  
-      ]);
-
+      // ]);
+        DB::table('ShiftCategory')->insert([
+            'categorySerial' => 1,
+            'categoryName' => '行政'
+        ]);
+        
+        DB::table('ShiftCategory')->insert([
+            'categorySerial' => 2,
+            'categoryName' => '教學'
+        ]);
+        
+        DB::table('ShiftCategory')->insert([
+            'categorySerial' => 3,
+            'categoryName' => '台北白班'
+        ]);
+        
+        DB::table('ShiftCategory')->insert([
+            'categorySerial' => 4,
+            'categoryName' => '台北夜班'
+        ]);
+        
+        DB::table('ShiftCategory')->insert([
+            'categorySerial' => 5,
+            'categoryName' => '淡水白班'
+        ]);
+        
+        DB::table('ShiftCategory')->insert([
+            'categorySerial' => 6,
+            'categoryName' => '淡水夜班'
+        ]);
+        
+        DB::table('ShiftCategory')->insert([
+            'categorySerial' => 7,
+            'categoryName' => 'off班'
+        ]);
 
     }   
     

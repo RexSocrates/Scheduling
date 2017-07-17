@@ -25,6 +25,8 @@ class ShiftRecords extends Model
         $shiftRecords=DB::table('ShiftRecords')
         ->where('schID_1_doctor',$doctorID)
         ->orwhere('schID_2_doctor',$doctorID)
+        ->where('doc2Confirm',1)
+        ->where('adminConfirm',1)
         ->get();
 
         return $shiftRecords;

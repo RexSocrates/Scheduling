@@ -4,8 +4,49 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cdb8dd2a416fdf927b0426481251efb6",
+    "content-hash": "708cddea5143ac56e8547cb3ed25e030",
     "packages": [
+        {
+            "name": "dhtmlx/connector-php",
+            "version": "3.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DHTMLX/connector-php.git",
+                "reference": "918dcc77e75e44a42ed4570423c7813b264eb5d9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DHTMLX/connector-php/zipball/918dcc77e75e44a42ed4570423c7813b264eb5d9",
+                "reference": "918dcc77e75e44a42ed4570423c7813b264eb5d9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "yii2": "1.0.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Dhtmlx\\Connector\\": "codebase/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GNU"
+            ],
+            "description": "PHP extension for the DHTMLX library",
+            "homepage": "http://dhtmlx.com/docs/products/dhtmlxConnector/index.shtml",
+            "keywords": [
+                "connector",
+                "connector-php",
+                "dhtmlx"
+            ],
+            "time": "2016-06-10T13:39:04+00:00"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "0.1",

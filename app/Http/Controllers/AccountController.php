@@ -45,10 +45,10 @@ class AccountController extends Controller
         foreach ($doctorShiftRecords as $record) {
             $doctor1 = $user->getDoctorInfoByID($record->schID_1_doctor);
             $doctor2 = $user->getDoctorInfoByID($record->schID_2_doctor);
-            $schedule1 = $schedule->scheduleData($record->scheduleID_1);
-            $schedule2 = $schedule->scheduleData($record->scheduleID_2);
-            $catName1 = $shiftCategory->findName($schedule1->category);
-            $catName2 = $shiftCategory->findName($schedule2->category);
+            $schedule1 = $schedule->getScheduleDataByID($record->scheduleID_1);
+            $schedule2 = $schedule->getScheduleDataByID($record->scheduleID_2);
+            $catName1 = $shiftCategory->findName($schedule1->categorySerial);
+            $catName2 = $shiftCategory->findName($schedule2->categorySerial);
 
             $record->schID_1_doctor = $doctor1->name;
             $record->schID_2_doctor = $doctor2->name;

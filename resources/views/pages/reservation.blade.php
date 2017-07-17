@@ -13,6 +13,7 @@
    	<script src='../codebase/dhtmlxscheduler.js' type="text/javascript" charset="utf-8"></script>
 	<script src='../codebase/ext/dhtmlxscheduler_timeline.js' type="text/javascript" charset="utf-8"></script>
 	<script src='../codebase/ext/dhtmlxscheduler_container_autoresize.js' type="text/javascript" charset="utf-8"></script>
+    <!--<script src='../dhtmlxDataProcessor/codebase/dhtmlxdataprocessor.js'></script>-->
 	<script src='../codebase/ext/dhtmlxscheduler_editors.js' type="text/javascript" charset="utf-8"></script>
 	
 	<link rel='stylesheet' type='text/css' href='../codebase/dhtmlxscheduler_flat.css'>
@@ -167,84 +168,61 @@
                             
                             //彈出視窗的選項
                             scheduler.config.lightbox.sections=[
-                               {name:"description", height:130, map_to:"text", type:"textarea" , focus:true},
-//                                {name:"custom", height:23, type:"select", options:sections, map_to:"section_id" },
+                               //{name:"description", height:130, map_to:"text", type:"textarea" , focus:true},
+                                //{name:"custom", height:23, type:"select", options:sections, map_to:"section_id" },
                                 {name:"班別名稱", height:180, options:priorities, map_to:"priority", type:"radio", vertical:true},
-                                
-                                
-//                                {name:"time", height:72, type:"time", map_to:"auto"}
+//                              {name:"time", height:72, type:"time", map_to:"auto"}
                             ];
 
 
                             
                             //在Lightbox關掉
-                            scheduler.attachEvent("onBeforeLightbox", function (id){
-                               
-                                //var date = new Date();
-                               // var id = scheduler.getState().select_id;
-                                //var new_event = scheduler.getState().new_event;
-
-
-                                 //console.log("id"+id);
-                                 //console.log("event"+new_event);
-                                //   scheduler.attachEvent("onMouseMove", function(event, e){
-                                //  var action_data = scheduler.getActionData(e);
-                                //  console.log(action_data);
-                                // console.log("11"+action_data);
-                                scheduler.attachEvent("onEventSave",function(id,ev,is_new){
-                                console.log(id);
-                                var eventId = scheduler.addEvent({
-                                    
-
-                                    start_date: "2017-06-06 00:00",
-                                    end_date:   "2017-06-07 00:00",
-                                    //text:   "Meeting",
-                                    section_id: "2"
-
-                                });
-
-                                //console.log("dates"+date);
-                                var event = scheduler.getEvent(eventId);
+                             scheduler.attachEvent("onBeforeLightbox", function (id){
+                                var event = scheduler.getEvent(id);
                                 
-                             //    scheduler.attachEvent("onClick", function(event, e){
-                             //     var action_data = scheduler.getActionData(e);
-                             //     console.log(action_data);
- 
-                              //})
-                               
-                                //console.log(event.text);
-                                if (event.section_id == "2"){
-                                    event.text = "教學";
-                                    console.log("id"+event.id);
-
-                                    // console.log(event.start_date);
-                                     //console.log(event.section_id);
-                                     
+                                if (event.text == "New event"){
+                                    event.text = "預班";
                                 }
-                               //在Lightbox按下save時執行
                                 
-//                                var radio = scheduler.getEvent(id);
-                                 // console.log('a'+event.id);
-                                 //  console.log('b'+event.start_date);
-                                 //  console.log('c'+event.section_id);
-                                  //console.log(is_new);
-                                 
-                                return true;
-                            });
-                                
-                               
                                 return true;
                             });
                             
                             //在Lightbox按下save時執行
-                             
-//                             scheduler.attachEvent("onEventSave",function(id,ev,is_new){
-// //                                var radio = scheduler.getEvent(id);
-//                             console.log('a'+event.id);
-//                             console.log('b'+event.start_date);
-//                             console.log('c'+event.section_id);
-//                                 return true;
-//                             })
+                            
+                            scheduler.attachEvent("onEventSave",function(id,ev,is_new){
+                                 
+                                var event = scheduler.getEvent(id);
+                                
+                                event.text = event.priority;
+
+                                //scheduler = new dhtmlXGridObject('scheduler_here');  
+                                // var dp = new dataProcessor("myconnector.php");
+                                // dp.init(scheduler);
+                                
+                                return true;
+                            
+                            });
+                            
+                            scheduler.attachEvent("onEventChanged", function(id,e){
+                                var event = scheduler.getEvent(id);
+                                
+                                if(event.priority == 1){
+                                    event.text = "行政";
+                                }else if(event.priority == 2){
+                                    event.text = "教學";
+                                }else if(event.priority == 3){
+                                    event.text = "台北白班";
+                                }else if(event.priority == 4){
+                                    event.text = "台北夜班";
+                                }else if(event.priority == 5){
+                                    event.text = "淡水白班";
+                                }else if(event.priority == 6){
+                                    event.text = "淡水夜班";
+                                }else if(event.priority == 7){
+                                    event.text = "off";
+                                }
+                                
+                            });
                             
 
 
@@ -259,16 +237,14 @@
 
 	                            scheduler.parse([
 	                            	
-	                            { start_date: "{{ $reservation->date }} 00:00", end_date: "{{$reservation->endDate}} 00:00", text:"{{ $reservation->categorySerial}}", priority:"{{ $reservation->categorySerial}}"},
+	                            { start_date: "{{ $reservation[0]->date }} 00:00", end_date: "{{$reservation[0]->endDate}} 00:00", text: "{{ $reservation[1] }}", priority:"{{ $reservation[0]->categorySerial}}", eventID:"{{ $reservation[0]->resSerial}}"},
 	                                
 	                            ],"json");
 							
                             @endforeach
+
                         </script>
-                        @foreach($reservations as $reservation)
-                        	{{ $reservation->date}}
-                            {{ $reservation->categorySerial}}
-                        @endforeach
+
                     </div>
                 </div>
                 
