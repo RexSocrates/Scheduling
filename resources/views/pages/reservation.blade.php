@@ -227,15 +227,10 @@
                                 
                             });
                             
-
-
-                            
                             //進入畫面後顯示的東西
                             scheduler.init('scheduler_here',new Date(),"month");
                             
                             //讀取資料
-                            
-                        	
                         	@foreach($reservations as $reservation)
 
 	                            scheduler.parse([
