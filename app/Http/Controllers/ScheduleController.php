@@ -12,16 +12,20 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\User;
 use App\ScheduleCategory;
+use App\ShiftRecords;
+
+use App\Jobs\GetShiftRecordsInformation;
 
 
 // import the model
 
 class ScheduleController extends Controller
 {
-    //查看全部班表
+    //查看全部班表 所有醫生換班紀錄
     public function schedule() {
         $schedule = new Schedule();
         $user = new User();
+        $shiftRecords = new ShiftRecords(); 
         $scheduleData = $schedule->getSchedule();
 
         foreach ($scheduleData as $data) {
@@ -29,7 +33,10 @@ class ScheduleController extends Controller
             $data->doctorID = $doctorName->name;
         }
 
-        return view('pages.schedule-all', array('schedule' => $scheduleData));
+        $data = $shiftRecords->getMoreShiftsRecordsInformation(false);
+
+        
+        return view('pages.schedule-all', array('schedule' => $scheduleData,'shiftRecords'=>$data));
     }
 
     //單一月份班表資訊
@@ -56,6 +63,9 @@ class ScheduleController extends Controller
 
         return view('pages.schedule', array('schedule' => $scheduleData));
       }
+
+    
+    
 
     //新增班表
     public function addSchedule(){

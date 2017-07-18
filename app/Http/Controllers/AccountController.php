@@ -8,6 +8,7 @@ use App\ShiftRecords;
 use App\ShiftCategory;
 use App\Schedule;
 
+use App\Jobs\GetShiftRecordsInformation;
 
 class AccountController extends Controller
 {
@@ -35,31 +36,13 @@ class AccountController extends Controller
     public function getProfilePage() {
         $user = new User();
         $shiftRecords = new ShiftRecords();
-        $shiftCategory = new ShiftCategory();
-        $schedule = new Schedule();
 
-        $dataInschedule = array();
+        $data = $shiftRecords->getMoreShiftsRecordsInformation(true); //到shiftrecords modle找資料
 
-        $doctorShiftRecords = $shiftRecords->getShiftRecordsByDoctorID();
-
-        foreach ($doctorShiftRecords as $record) {
-            $doctor1 = $user->getDoctorInfoByID($record->schID_1_doctor);
-            $doctor2 = $user->getDoctorInfoByID($record->schID_2_doctor);
-            $schedule1 = $schedule->getScheduleDataByID($record->scheduleID_1);
-            $schedule2 = $schedule->getScheduleDataByID($record->scheduleID_2);
-            $catName1 = $shiftCategory->findName($schedule1->categorySerial);
-            $catName2 = $shiftCategory->findName($schedule2->categorySerial);
-
-            $record->schID_1_doctor = $doctor1->name;
-            $record->schID_2_doctor = $doctor2->name;
-            // $record->categorySerial = $categoryName->categoryName;
-
-            array_push($dataInschedule, array($doctor1->name, $doctor2->name, $schedule1->date, $schedule2->date, $catName1, $catName2));
-        }
-
+       
         return view('pages.profile', [
-            'doctor' => $user->getCurrentUserInfo(),
-            'doctorShiftRecords' =>$dataInschedule
-        ]);
+             'doctor' => $user->getCurrentUserInfo(),
+             'doctorShiftRecords' =>$data
+         ]);
     }
 }
