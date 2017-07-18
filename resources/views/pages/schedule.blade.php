@@ -18,9 +18,6 @@
 	
 	<link rel='stylesheet' type='text/css' href='../codebase/dhtmlxscheduler_flat.css'>
 	
-    <script src="../codebase/locale/locale_cn.js" type="text/javascript"></script>
-    <script src="../codebase/locale/recurring/locale_recurring_cn.js" ></script>
-
     <style>
         td{
             padding: 0;
@@ -107,8 +104,8 @@
                                 <div class="row margin-b0">
                                     <div class="col s5">
                                         <p class="information">開放時間: 2017/06/01 - 2017/06/25</p>
-                                        <p class="information">可排天班數: 白班:{{$doctorDay}} 夜班:{{$doctorNight}}</p>
-                                        <p class="information">尚需排班數: 白班:{{$countDay}} 夜班:{{$countNight}}</p>    
+                                        <p class="information">可排天班數: 白班: 夜班:</p>
+                                        <p class="information">尚需排班數: 白班: 夜班:</p>    
                                     </div>
                                     <div class="col s7">
                                         <form action="reservation" method="post" class="col s6">
@@ -231,23 +228,22 @@
 
                             
                             //進入畫面後顯示的東西
-                            scheduler.init('scheduler_here',new Date(),"month");
+                            scheduler.init('scheduler_here',new Date(2017,5,30),"month");
                             
                             //讀取資料
                             
                         	
-                        	@foreach($reservations as $reservation)
+                        	@foreach($schedule as $data)
 
 	                            scheduler.parse([
 	                            	
-	                            { start_date: "{{ $reservation[0]->date }} 00:00", end_date: "{{$reservation[0]->endDate}} 00:00", text: "{{ $reservation[1] }}", priority:"{{ $reservation[0]->categorySerial}}", eventID:"{{ $reservation[0]->resSerial}}"},
-	                                
+	                            { start_date: "{{ $data->date }} 00:00", end_date: "{{$data->endDate}} 00:00", text: "{{ $data->schCategorySerial }}"},    
 	                            ],"json");
 							
                             @endforeach
 
                         </script>
-
+ 
                     </div>
                 </div>
                 

@@ -25,8 +25,9 @@ class Reservation extends Model
       {
         $user = new User();
         $id = $user->getCurrentUserID();
+        
         $doctorData = DB::table('DoctorAndReservation')->where("doctorID",$id)->get();
-           //$date=DB::table('Reservation') -> whereIn("resSerial",)->date;
+        //$date=DB::table('Reservation') -> whereIn("resSerial",)->date;
 
         $arr = array();
         foreach ($doctorData as $doctorDatum ) {

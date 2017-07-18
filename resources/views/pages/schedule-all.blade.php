@@ -16,6 +16,9 @@
 	<script src='../codebase/ext/dhtmlxscheduler_editors.js' type="text/javascript" charset="utf-8"></script>
 	
 	<link rel='stylesheet' type='text/css' href='../codebase/dhtmlxscheduler_flat.css'>
+
+    <script src="../codebase/locale/locale_cn.js" type="text/javascript"></script>
+    <script src="../codebase/locale/recurring/locale_recurring_cn.js" ></script>
 	
     <style>
         td{
@@ -141,11 +144,26 @@
                             var sections=[
                                 {key:1, label:"行政"},
                                 {key:2, label:"教學"},
-                                {key:3, label:"(上限6人) 台北 白班"},
-                                {key:4, label:"(上限6人) 台北 夜班"},
-                                {key:5, label:"(上限4人) 淡水 白班"},
-                                {key:6, label:"(上限3人) 淡水 夜班"},
-                                {key:7, label:"(上限12人) OFF"}
+                                {key:3, label:"北白急救"},
+                                {key:4, label:"北白發燒"},
+                                {key:5, label:"北白內1"},
+                                {key:6, label:"北白內2"},
+                                {key:7, label:"北白外1"}
+                                {key:8, label:"北白外2"}
+                                {key:9, label:"淡白內1"}
+                                {key:10, label:"淡白內2"}
+                                {key:11, label:"淡白外1"}
+                                {key:12, label:"淡白外2"}
+                                {key:13, label:"北夜急救"}
+                                {key:14, label:"北夜發燒"}
+                                {key:15, label:"北夜內1"}
+                                {key:16, label:"北夜內2"}
+                                {key:17, label:"北夜外1"}
+                                {key:18, label:"北夜外2"}
+                                {key:19, label:"淡夜內1"}
+                                {key:20, label:"淡夜內2"}
+                                {key:21, label:"淡夜外"}
+
                             ];
 
                             scheduler.createTimelineView({
@@ -181,10 +199,13 @@
                             };
                             
                             //進入畫面後顯示的東西
-                            scheduler.init('scheduler_here',new Date(2017,5,26),"timeline");
+                            scheduler.init('scheduler_here',new Date(),"timeline");
                            
-                            scheduler.parse([
-                            
+                           scheduler.parse([
+                            @foreach($schedule as $data)
+                                 { start_date: "{{ $data->date}} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial}}"},
+                               
+                            @endforeach
                             ],"json");
                            
 

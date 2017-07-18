@@ -102,6 +102,8 @@ class ReservationController extends Controller
 
     }
 
+    
+
      //查詢 所有醫生指定時段的班數
      public function getDataByResSerial() {
         $serial = Input::get('serial');
