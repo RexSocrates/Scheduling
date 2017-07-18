@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 
-
-
 use App\User;
+use App\ScheduleCategory;
+
 
 // import the model
 
@@ -20,10 +20,16 @@ class ScheduleController extends Controller
 {
     //查看全部班表
     public function schedule() {
-        $schedule = new schedule();
-        $scheduleData = $schedule->scheduleList();
-       
-         return view('schedule', array('schedule' => $scheduleData));
+        $schedule = new Schedule();
+        $user = new User();
+        $scheduleData = $schedule->getSchedule();
+
+        foreach ($scheduleData as $data) {
+            $doctorName = $user->getDoctorInfoByID($data->doctorID);
+            $data->doctorID = $doctorName->name;
+        }
+
+        return view('pages.schedule-all', array('schedule' => $scheduleData));
     }
 
     //單一月份班表資訊
@@ -33,6 +39,22 @@ class ScheduleController extends Controller
          $scheduleData = $schedule->getScheduleByID();
 
         return view('getScheduleByID', array('schedule' => $scheduleData));
+      }
+
+    //查看 單一醫生班表
+      public function getScheduleByDoctorID() {
+
+         $schedule = new Schedule();
+         $scheduleCategory = new ScheduleCategory();
+
+         $scheduleData = $schedule->getScheduleByDoctorID();
+
+         foreach ($scheduleData as $data) {
+            $scheduleName = $scheduleCategory->findScheduleName($data->schCategorySerial);
+            $data->schCategorySerial =  $scheduleName;
+        }
+
+        return view('pages.schedule', array('schedule' => $scheduleData));
       }
 
     //新增班表

@@ -1,4 +1,4 @@
-<!DOCTYPE html<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -13,28 +13,18 @@
    	<script src='../codebase/dhtmlxscheduler.js' type="text/javascript" charset="utf-8"></script>
 	<script src='../codebase/ext/dhtmlxscheduler_timeline.js' type="text/javascript" charset="utf-8"></script>
 	<script src='../codebase/ext/dhtmlxscheduler_container_autoresize.js' type="text/javascript" charset="utf-8"></script>
+    <!--<script src='../dhtmlxDataProcessor/codebase/dhtmlxdataprocessor.js'></script>-->
 	<script src='../codebase/ext/dhtmlxscheduler_editors.js' type="text/javascript" charset="utf-8"></script>
-	
-	<link rel='stylesheet' type='text/css' href='../codebase/dhtmlxscheduler_flat.css'>
 
     <script src="../codebase/locale/locale_cn.js" type="text/javascript"></script>
     <script src="../codebase/locale/recurring/locale_recurring_cn.js" ></script>
 	
+	<link rel='stylesheet' type='text/css' href='../codebase/dhtmlxscheduler_flat.css'>
+
+	
     <style>
         td{
             padding: 0;
-        }
-        .white_cell{
-            background-color:white;
-        }
-        .green_cell{
-            background-color:#95FF95;
-        }
-        .yellow_cell{
-            background-color:#FFFF79;
-        }
-        .red_cell{
-            background-color:#FF5353;
         }
     </style>
 </head>
@@ -77,9 +67,9 @@
 			    </ul>
 	    	</div>
 	    	<div class="nav-content blue-grey darken-1">
-               <ul class="tabs1 tabs-transparent">
-                    <li class="tab1"><a href="schedule">個人</a></li>
-                    <li class="tab1"><a href="schedule-all" class="tab-active">查看全部</a></li>
+                <ul class="tabs1 tabs-transparent">
+                    <li class="tab1"><a href="schedule" class="tab-active">個人</a></li>
+                    <li class="tab1"><a href="schedule-all">查看全部</a></li>
                 </ul>
             </div>
 	  	</nav>
@@ -104,20 +94,53 @@
 	    
 		<div class="container-section2">
 			<div class="row">
-                <div id="all" class="col s12">
+                <div id="self" class="col s12">
+                    <div class="card">
+                        <div class="card-action">
+                            <font class="card-title">排班資訊</font>
+
+                        </div>
+                        <div class="divider"></div>
+                        <div class="card-content">
+                            
+                            
+                            <form>
+                                <div class="row margin-b0">
+                                    <div class="col s5">
+                                        <p class="information">開放時間: 2017/06/01 - 2017/06/25</p>
+                                        <p class="information">可排天班數: 白班: 夜班:</p>
+                                        <p class="information">尚需排班數: 白班: 夜班:</p>    
+                                    </div>
+                                    <div class="col s7">
+                                        <form action="reservation" method="post" class="col s6">
+                                            <div class="input-field">
+                                                <textarea id="textarea1" class="materialize-textarea"  name="remark"placeholder="請輸入XXXXX"></textarea>
+<!--                                                     data-length="150"-->
+                                                <label for="textarea1">備註:</label>
+                                            </div>
+                                            <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right">提交</button>
+                                            {{ csrf_field() }}
+                                        </form>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                        </div>
+                    </div>
+                    
                     <div class="card border-t">
-                        <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
+                        <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:1750px;'>
                             <div class="dhx_cal_navline">
-                                <div class="dhx_cal_prev_button"></div>
-                                <div class="dhx_cal_next_button"></div>
+                                <div class="dhx_cal_prev_button">&nbsp;</div>
+                                <div class="dhx_cal_next_button">&nbsp;</div>
                                 <div class="dhx_cal_today_button"></div>
                                 <div class="dhx_cal_date"></div>
-        <!--
-                                <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
-                                <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
-                                <div class="dhx_cal_tab" name="timeline_tab" style="right:280px;"></div>
-                                <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
-        -->
+        
+<!--                                <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>-->
+<!--                                <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>-->
+<!--                                <div class="dhx_cal_tab" name="timeline_tab" style="right:280px;"></div>-->
+<!--                                <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>-->
+        
                             </div>
                             <div class="dhx_cal_header">
                             </div>
@@ -127,90 +150,34 @@
 
                         <script type="text/javascript" charset="utf-8">
                     
-                            scheduler.locale.labels.timeline_tab = "Timeline";
-                            scheduler.locale.labels.section_custom="Section";
-                            //scheduler.config.details_on_create=true;
-                            //scheduler.config.details_on_dblclick = true;
+
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
-
+                            scheduler.config.api_date="%Y-%m-%d %H:%i";
+                            scheduler.config.dblclick_create = false;   //雙擊新增
                             scheduler.config.readonly = true;   //唯讀，不能修改東西
-                //            scheduler.config.dblclick_create = false;   //雙擊新增
-                //            scheduler.config.drag_create = false;   //拖拉新增
-                            scheduler.xy.margin_left = -19;
-                            //scheduler.config.container_autoresize = true;
+                            scheduler.config.drag_create = false;   //拖拉新增
 
-                            //===============
-                            //Configuration
-                            //===============
-                            var sections=[
-                                {key:1, label:"行政"},
-                                {key:2, label:"教學"},
-                                {key:3, label:"北白急救"},
-                                {key:4, label:"北白發燒"},
-                                {key:5, label:"北白內1"},
-                                {key:6, label:"北白內2"},
-                                {key:7, label:"北白外1"},
-                                {key:8, label:"北白外2"},
-                                {key:9, label:"淡白內1"},
-                                {key:10, label:"淡白內2"},
-                                {key:11, label:"淡白外1"},
-                                {key:12, label:"淡白外2"},
-                                {key:13, label:"北夜急救"},
-                                {key:14, label:"北夜發燒"},
-                                {key:15, label:"北夜內1"},
-                                {key:16, label:"北夜內2"},
-                                {key:17, label:"北夜外1"},
-                                {key:18, label:"北夜外2"},
-                                {key:19, label:"淡夜內1"},
-                                {key:20, label:"淡夜內2"},
-                                {key:21, label:"淡夜外"}
-
-                            ];
-
-                            scheduler.createTimelineView({
-                                name:	"timeline",
-                                x_unit:	"day",
-                                x_date:	"%d %D",
-                                x_step:	1,
-                                x_size: 14,
-                                y_unit:	sections,
-                                y_property:	"section_id",
-                                render:"bar",
-                                round_position:true,    //有點像磁石
-//                                event_dy: 46,
-                            });
                             
-                            //===============
-                            //Customization
-                            //===============
-                            //週末有特別顏色
-                            scheduler.templates.timeline_cell_class = function(evs,x,y){
-                                var day = x.getDay();
-                                return (day==0 || day == 6) ? "yellow_cell" : "white_cell";
-                            };
-
-                            scheduler.templates.timeline_scalex_class = function(date){
-                                if (date.getDay()==0 || date.getDay()==6)  return "yellow_cell";
-                                return "";
-                            }
                             
-                            //增加最左邊欄位的class
-                            scheduler.templates.timeline_scaley_class = function(key, label, section){ 
-                                return "width-200";
-                            };
+                            
                             
                             //進入畫面後顯示的東西
-                            scheduler.init('scheduler_here',new Date(),"timeline");
-                           
-                           scheduler.parse([
-                            @foreach($schedule as $data)
-                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}"},
-                               
+                            scheduler.init('scheduler_here',new Date(),"month");
+                            
+                            //讀取資料
+                            
+                        	
+                        	@foreach($schedule as $data)
+
+	                            scheduler.parse([
+	                            	
+	                            { start_date: "{{ $data->date }} 00:00", end_date: "{{$data->endDate}} 00:00", text: "{{ $data->schCategorySerial }}"},    
+	                            ],"json");
+							
                             @endforeach
-                            ],"json");
-                           
 
                         </script>
+ 
                     </div>
                 </div>
                 
@@ -269,6 +236,6 @@
         
     </script>
 
-	
+	 {{ csrf_field() }}
 </body>
 </html>

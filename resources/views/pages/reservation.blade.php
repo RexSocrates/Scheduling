@@ -18,6 +18,9 @@
 	
 	<link rel='stylesheet' type='text/css' href='../codebase/dhtmlxscheduler_flat.css'>
 	
+    <script src="../codebase/locale/locale_cn.js" type="text/javascript"></script>
+    <script src="../codebase/locale/recurring/locale_recurring_cn.js" ></script>
+
     <style>
         td{
             padding: 0;
@@ -64,8 +67,8 @@
 	    	</div>
 	    	<div class="nav-content blue-grey darken-1">
                 <ul class="tabs1 tabs-transparent">
-                    <li class="tab1"><a href="reservation.html" class="tab-active">個人</a></li>
-                    <li class="tab1"><a href="reservation-all.html">查看全部</a></li>
+                    <li class="tab1"><a href="reservation" class="tab-active">個人</a></li>
+                    <li class="tab1"><a href="reservation-all">查看全部</a></li>
                 </ul>
             </div>
 	  	</nav>
@@ -196,7 +199,7 @@
                                 event.text = event.priority;
 
                                 //scheduler = new dhtmlXGridObject('scheduler_here');  
-                                // var dp = new dataProcessor("myconnector.php");
+                                var dp = new dataProcessor("myconnector.php");
                                 // dp.init(scheduler);
                                 
                                 return true;
@@ -228,7 +231,7 @@
 
                             
                             //進入畫面後顯示的東西
-                            scheduler.init('scheduler_here',new Date(2017,5,30),"month");
+                            scheduler.init('scheduler_here',new Date(),"month");
                             
                             //讀取資料
                             

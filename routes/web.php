@@ -74,10 +74,11 @@ Route::get('/reservation-all', 'ReservationController@reservation');
 Route::get('/reservation', 'ReservationController@getReservationByID');
 Route::post('/reservation', 'ReservationController@addRemark');
 
+//列出全部班表資訊
+Route::get('/schedule-all', 'ScheduleController@schedule');
 
-Route::get('/schedule', function(){
-	return view('pages.schedule-all');
-});
+//列出個人班表資訊
+Route::get('/schedule', 'ScheduleController@getScheduleByDoctorID');
 
 // ===========================showReservationByresSerial==============================
 Route::get('/showReservation', 'ReservationController@showReservation');
