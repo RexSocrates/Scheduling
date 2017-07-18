@@ -15,8 +15,12 @@
 	<script src='../codebase/ext/dhtmlxscheduler_container_autoresize.js' type="text/javascript" charset="utf-8"></script>
     <!--<script src='../dhtmlxDataProcessor/codebase/dhtmlxdataprocessor.js'></script>-->
 	<script src='../codebase/ext/dhtmlxscheduler_editors.js' type="text/javascript" charset="utf-8"></script>
+
+    <script src="../codebase/locale/locale_cn.js" type="text/javascript"></script>
+    <script src="../codebase/locale/recurring/locale_recurring_cn.js" ></script>
 	
 	<link rel='stylesheet' type='text/css' href='../codebase/dhtmlxscheduler_flat.css'>
+
 	
     <style>
         td{
@@ -49,7 +53,7 @@
 	    		<a onclick="sideNav()" class="blue-grey darken-1 waves-effect waves-light menu-btn">
 	    			<i class="material-icons menu-icon" valign="middle">menu</i>
 	    		</a>
-			    <p class="brand-logo light">預班表</p>
+			    <p class="brand-logo light">正式班表</p>
 			    <ul class="right">
 			      	<li>
 			      		<a class="dropdown-notification-button" href="#!" data-activates="dropdown-notification">
@@ -64,8 +68,8 @@
 	    	</div>
 	    	<div class="nav-content blue-grey darken-1">
                 <ul class="tabs1 tabs-transparent">
-                    <li class="tab1"><a href="reservation" class="tab-active">個人</a></li>
-                    <li class="tab1"><a href="reservation-all">查看全部</a></li>
+                    <li class="tab1"><a href="schedule" class="tab-active">個人</a></li>
+                    <li class="tab1"><a href="schedule-all">查看全部</a></li>
                 </ul>
             </div>
 	  	</nav>
@@ -149,86 +153,16 @@
 
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
                             scheduler.config.api_date="%Y-%m-%d %H:%i";
-                            // scheduler.config.dblclick_create = false;   //雙擊新增
-//                            scheduler.config.readonly = true;   //唯讀，不能修改東西
-//                            scheduler.config.drag_create = false;   //拖拉新增
+                            scheduler.config.dblclick_create = false;   //雙擊新增
+                            scheduler.config.readonly = true;   //唯讀，不能修改東西
+                            scheduler.config.drag_create = false;   //拖拉新增
 
                             
-                            var priorities = [
-                                { key: 1, label: '行政' },
-                                { key: 2, label: '教學' },
-                                { key: 3, label: '台北白班' },
-                                { key: 4, label: '台北夜班' },
-                                { key: 5, label: '淡水白班' },
-                                { key: 6, label: '淡水夜班' },
-                                { key: 7, label: 'off班' }
-                            ];
                             
-                            scheduler.locale.labels.section_priority = 'Priority';
                             
-                            //彈出視窗的選項
-                            scheduler.config.lightbox.sections=[
-                               //{name:"description", height:130, map_to:"text", type:"textarea" , focus:true},
-                                //{name:"custom", height:23, type:"select", options:sections, map_to:"section_id" },
-                                {name:"班別名稱", height:180, options:priorities, map_to:"priority", type:"radio", vertical:true},
-//                              {name:"time", height:72, type:"time", map_to:"auto"}
-                            ];
-
-
-                            
-                            //在Lightbox關掉
-                             scheduler.attachEvent("onBeforeLightbox", function (id){
-                                var event = scheduler.getEvent(id);
-                                
-                                if (event.text == "New event"){
-                                    event.text = "預班";
-                                }
-                                
-                                return true;
-                            });
-                            
-                            //在Lightbox按下save時執行
-                            
-                            scheduler.attachEvent("onEventSave",function(id,ev,is_new){
-                                 
-                                var event = scheduler.getEvent(id);
-                                
-                                event.text = event.priority;
-
-                                //scheduler = new dhtmlXGridObject('scheduler_here');  
-                                var dp = new dataProcessor("myconnector.php");
-                                // dp.init(scheduler);
-                                
-                                return true;
-                            
-                            });
-                            
-                            scheduler.attachEvent("onEventChanged", function(id,e){
-                                var event = scheduler.getEvent(id);
-                                
-                                if(event.priority == 1){
-                                    event.text = "行政";
-                                }else if(event.priority == 2){
-                                    event.text = "教學";
-                                }else if(event.priority == 3){
-                                    event.text = "台北白班";
-                                }else if(event.priority == 4){
-                                    event.text = "台北夜班";
-                                }else if(event.priority == 5){
-                                    event.text = "淡水白班";
-                                }else if(event.priority == 6){
-                                    event.text = "淡水夜班";
-                                }else if(event.priority == 7){
-                                    event.text = "off";
-                                }
-                                
-                            });
-                            
-
-
                             
                             //進入畫面後顯示的東西
-                            scheduler.init('scheduler_here',new Date(2017,5,30),"month");
+                            scheduler.init('scheduler_here',new Date(),"month");
                             
                             //讀取資料
                             

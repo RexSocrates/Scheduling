@@ -28,7 +28,6 @@ class ScheduleController extends Controller
             $doctorName = $user->getDoctorInfoByID($data->doctorID);
             $data->doctorID = $doctorName->name;
         }
-       
 
         return view('pages.schedule-all', array('schedule' => $scheduleData));
     }

@@ -78,8 +78,8 @@
 	    	</div>
 	    	<div class="nav-content blue-grey darken-1">
                <ul class="tabs1 tabs-transparent">
-                    <li class="tab1"><a href="reservation.html">個人</a></li>
-                    <li class="tab1"><a href="reservation-all.html" class="tab-active">查看全部</a></li>
+                    <li class="tab1"><a href="schedule">個人</a></li>
+                    <li class="tab1"><a href="schedule-all" class="tab-active">查看全部</a></li>
                 </ul>
             </div>
 	  	</nav>
@@ -129,14 +129,15 @@
                     
                             scheduler.locale.labels.timeline_tab = "Timeline";
                             scheduler.locale.labels.section_custom="Section";
-                            scheduler.config.details_on_create=true;
-                            scheduler.config.details_on_dblclick = true;
+                            //scheduler.config.details_on_create=true;
+                            //scheduler.config.details_on_dblclick = true;
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
+
                             scheduler.config.readonly = true;   //唯讀，不能修改東西
                 //            scheduler.config.dblclick_create = false;   //雙擊新增
                 //            scheduler.config.drag_create = false;   //拖拉新增
                             scheduler.xy.margin_left = -19;
-                            scheduler.config.container_autoresize = true;
+                            //scheduler.config.container_autoresize = true;
 
                             //===============
                             //Configuration
@@ -148,20 +149,20 @@
                                 {key:4, label:"北白發燒"},
                                 {key:5, label:"北白內1"},
                                 {key:6, label:"北白內2"},
-                                {key:7, label:"北白外1"}
-                                {key:8, label:"北白外2"}
-                                {key:9, label:"淡白內1"}
-                                {key:10, label:"淡白內2"}
-                                {key:11, label:"淡白外1"}
-                                {key:12, label:"淡白外2"}
-                                {key:13, label:"北夜急救"}
-                                {key:14, label:"北夜發燒"}
-                                {key:15, label:"北夜內1"}
-                                {key:16, label:"北夜內2"}
-                                {key:17, label:"北夜外1"}
-                                {key:18, label:"北夜外2"}
-                                {key:19, label:"淡夜內1"}
-                                {key:20, label:"淡夜內2"}
+                                {key:7, label:"北白外1"},
+                                {key:8, label:"北白外2"},
+                                {key:9, label:"淡白內1"},
+                                {key:10, label:"淡白內2"},
+                                {key:11, label:"淡白外1"},
+                                {key:12, label:"淡白外2"},
+                                {key:13, label:"北夜急救"},
+                                {key:14, label:"北夜發燒"},
+                                {key:15, label:"北夜內1"},
+                                {key:16, label:"北夜內2"},
+                                {key:17, label:"北夜外1"},
+                                {key:18, label:"北夜外2"},
+                                {key:19, label:"淡夜內1"},
+                                {key:20, label:"淡夜內2"},
                                 {key:21, label:"淡夜外"}
 
                             ];
@@ -203,7 +204,7 @@
                            
                            scheduler.parse([
                             @foreach($schedule as $data)
-                                 { start_date: "{{ $data->date}} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial}}"},
+                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}"},
                                
                             @endforeach
                             ],"json");
