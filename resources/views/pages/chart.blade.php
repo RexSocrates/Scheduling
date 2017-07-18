@@ -76,15 +76,18 @@
 		       	<div id="test1" class="col s12">
 			       	<div class="card">
 	                        <div class="card-action">
-	                        
-	                            <p class="inline">醫師名稱</p>
-							  	<select class="browser-default">
-								    <option value="" disabled selected>選擇醫師名稱</option>
-								    <option value="1">全部醫師</option>
-								    <option value="2">張國訟</option>
-								    <option value="3">王樹林</option>
-							  	</select>
-							  	<a class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" href="#modal2">確認</a>
+	                           <form action="doctorsChart" method="post">
+	                               <p class="inline">醫師名稱</p>
+							  	   <select name="selectedUserID" class="browser-default">
+								        <option value="" disabled selected>選擇醫師名稱</option>
+                                        @foreach($doctors as $doctor)
+                                            <option value={{ $doctor->doctorID }}>{{ $doctor->name }}</option>
+                                        @endforeach
+							  	  </select>
+                                   <input class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" type="submit" value="確認">
+<!--							  	  <a class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" href="#modal2">確認</a>-->
+                                    {{ csrf_field() }}
+                                </form>
 	                        </div>
 	                        <div class="divider"></div>
 	                        <div class="card-content">
@@ -103,33 +106,33 @@
 									        <thead>
 									            <tr>
 									                <th>醫生名字</th>
-									                <th>張國訟</th>
+									                <th>{{$currentUser->name}}</th>
 									             </tr>
 									        </thead>
 									        <tbody>
 									            <tr>
 									                <td>總班數</td>
-									                <td>15</td>
+									                <td>{{ $totalShift }}</td>
 									            </tr>
 									            <tr>
 									                <td>台北白班</td>
-									                <td>10</td>
+									                <td>{{ $shiftsData['taipeiDay'] }}</td>
 									            </tr>
 									            <tr>
 									                <td>台北夜班</td>
-									                <td>0</td>
+									                <td>{{ $shiftsData['taipeiNight'] }}</td>
 									            </tr>
 									            <tr>
 									                <td>淡水白班</td>
-									            	<td>0</td>
+									            	<td>{{ $shiftsData['tamsuiDay'] }}</td>
 									            </tr>
 									            <tr>
 									            	<td>淡水夜班</td>
-									            	<td>2</td>
+									            	<td>{{ $shiftsData['tamsuiNight'] }}</td>
 									            </tr>
 									            <tr>
 									            	<td>行政教學班</td>
-									            	<td>3</td>
+									            	<td>{{ $shiftsData['others'] }}</td>
 									            </tr>
 									        </tbody>
 									    </table>
@@ -353,11 +356,11 @@
 	        data: {
 	            datasets: [{
 	                data: [
-	                    10,
-	                    0,
-	                    0,
-	                    2,
-	                    3,
+	                    {{ $shiftsData['taipeiDay'] }},
+	                    {{ $shiftsData['taipeiNight'] }},
+	                    {{ $shiftsData['tamsuiDay'] }},
+	                    {{ $shiftsData['tamsuiNight'] }},
+	                    {{ $shiftsData['others'] }},
 	                ],
 	                backgroundColor: [
 	                    window.chartColors.red,

@@ -60,6 +60,18 @@ class Schedule extends Model
         return $newScheduleID;
     }
     
+    // 透過醫生ID 取得當月醫生上的所有班
+    public function getCurrentMonthShiftsByID($id) {
+        $currentMonth = date('Y-m');
+        
+        $shifts = DB::table('Schedule')
+            ->where('doctorId', $id)
+            ->where('date', 'like', $currentMonth.'%')
+            ->get();
+        
+        return $shifts;
+    }
+    
     // 透過班ID更新單一個班
     public function updateScheduleByID($scheduleID, array $data) {
         $affectedRows = DB::table('Schedule')
@@ -96,5 +108,90 @@ class Schedule extends Model
         DB::table('Schedule')
             ->where('scheduleID', $scheduleID)
             ->delete();
+    }
+    
+    // 計算各種類的班的數量
+    public function countScheduleCategory($shifts) {
+        
+        $shiftsData = [
+            'taipeiDay' => 0,
+            'taipeiNight' => 0,
+            'tamsuiDay' => 0,
+            'tamsuiNight' => 0,
+            'others' => 0
+        ];
+        
+        foreach($shifts as $shift) {
+            switch($shift->schCategorySerial) {
+                case 1 :
+                    $shiftsData['others'] += 1;
+                    break;
+                case 2 :
+                    $shiftsData['others'] += 1;
+                    break;
+                case 3 :
+                    $shiftsData['taipeiDay'] += 1;
+                    break;
+                case 4 :
+                    $shiftsData['taipeiDay'] += 1;
+                    break;
+                case 5 :
+                    $shiftsData['taipeiDay'] += 1;
+                    break;
+                case 6 :
+                    $shiftsData['taipeiDay'] += 1;
+                    break;
+                case 7 :
+                    $shiftsData['taipeiDay'] += 1;
+                    break;
+                case 8 :
+                    $shiftsData['taipeiDay'] += 1;
+                    break;
+                case 9 :
+                    $shiftsData['tamsuiDay'] += 1;
+                    break;
+                case 10 :
+                    $shiftsData['tamsuiDay'] += 1;
+                    break;
+                case 11 :
+                    $shiftsData['tamsuiDay'] += 1;
+                    break;
+                case 12 :
+                    $shiftsData['tamsuiDay'] += 1;
+                    break;
+                case 13 :
+                    $shiftsData['taipeiNight'] += 1;
+                    break;
+                case 14 :
+                    $shiftsData['taipeiNight'] += 1;
+                    break;
+                case 15 :
+                    $shiftsData['taipeiNight'] += 1;
+                    break;
+                case 16 :
+                    $shiftsData['taipeiNight'] += 1;
+                    break;
+                case 17 :
+                    $shiftsData['taipeiNight'] += 1;
+                    break;
+                case 18 :
+                    $shiftsData['taipeiNight'] += 1;
+                    break;
+                case 19 :
+                    $shiftsData['tamsuiNight'] += 1;
+                    break;
+                case 20 :
+                    $shiftsData['tamsuiNight'] += 1;
+                    break;
+                case 21 :
+                    $shiftsData['tamsuiNight'] += 1;
+                    break;
+                default :
+                    echo 'Something wrong';
+                    break;
+            }
+        }
+        
+        return $shiftsData;
     }
 }
