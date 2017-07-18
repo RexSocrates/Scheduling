@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
         $this->call(LeaveConfirmStatusSeeder::class);
         $this->call(DateTest::class);
         $this->call(ShiftCategorySeeder::class);
+        $this->call(ScheduleCategorySeeder::class);
     }
 }
