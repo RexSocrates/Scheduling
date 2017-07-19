@@ -100,4 +100,8 @@ class TestController extends Controller
         
         echo 'Date format : '.$data['birthday'];
     }
+    
+    public function getChartPage() {
+        return view('pages.chart');
+    }
 }

@@ -28,6 +28,10 @@ Route::get('resign/{id}', 'AccountController@resign');
 
 Route::get('profile', 'AccountController@getProfilePage');
 
+Route::get('getChartPage', 'ChartController@getChartPage');
+
+Route::post('doctorsChart', 'ChartController@getChartPageBySelectedID');
+
 
 // ========================================================================
 Route::post('testDateFormat', 'TestController@testDateFormat');
