@@ -15,7 +15,7 @@ class AddLeaveDateToOfficialLeave extends Migration
     {
         Schema::table('OfficialLeave', function (Blueprint $table) {
             //
-            $table->string('leaveDate', 20);
+            $table->string('leaveDate', 20)->after('leaveHours');
         });
     }
 
