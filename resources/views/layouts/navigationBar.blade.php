@@ -10,6 +10,22 @@
     <link type="text/css" rel="stylesheet" href="../css/materialize.css"  media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="../css/styles.css"/>
    	
+   	<script src='../codebase/dhtmlxscheduler.js' type="text/javascript" charset="utf-8"></script>
+	<script src='../codebase/ext/dhtmlxscheduler_timeline.js' type="text/javascript" charset="utf-8"></script>
+	<script src='../codebase/ext/dhtmlxscheduler_container_autoresize.js' type="text/javascript" charset="utf-8"></script>
+    <!--<script src='../dhtmlxDataProcessor/codebase/dhtmlxdataprocessor.js'></script>-->
+	<script src='../codebase/ext/dhtmlxscheduler_editors.js' type="text/javascript" charset="utf-8"></script>
+	
+	<link rel='stylesheet' type='text/css' href='../codebase/dhtmlxscheduler_flat.css'>
+	
+    <script src="../codebase/locale/locale_cn.js" type="text/javascript"></script>
+    <script src="../codebase/locale/recurring/locale_recurring_cn.js" ></script>
+
+    <style>
+        td{
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
 
@@ -22,7 +38,7 @@
 	   			</a>
 	   		</div>
 	   		<li class="divider"></li>
-    	  	<li><a href="reservation" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-prearrange.svg"></i>預班表</a></li>
+    	  	<li><a href="reservation.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-prearrange.svg"></i>預班表</a></li>
     	  	<li><a href="first-edition.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-first-edition.svg"></i>初版班表</a></li>
     	  	<li><a href="schedule.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-schedule.svg"></i>正式班表</a></li>
     	  	<li><a href="shift.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-exchange.svg"></i>調整班表</a></li>
@@ -31,12 +47,12 @@
 	</nav>
     
 	<header id="header" class="container-fix trans-left-five">
-		<nav id="navbar" class="blue-grey darken-1">
-	    	<div class="nav-wrapper logo-padding-left">
+		<nav id="navbar" class="nav-extended">
+	    	<div class="nav-wrapper blue-grey darken-1 logo-padding-left">
 	    		<a onclick="sideNav()" class="blue-grey darken-1 waves-effect waves-light menu-btn">
 	    			<i class="material-icons menu-icon" valign="middle">menu</i>
 	    		</a>
-			    <p class="brand-logo light">個人資料</p>
+			    <p class="brand-logo light">預班表</p>
 			    <ul class="right">
 			      	<li>
 			      		<a class="dropdown-notification-button" href="#!" data-activates="dropdown-notification">
@@ -49,6 +65,12 @@
 			      	</li>
 			    </ul>
 	    	</div>
+	    	<div class="nav-content blue-grey darken-1">
+                <ul class="tabs1 tabs-transparent">
+                    <li class="tab1"><a href="reservation" class="tab-active">個人</a></li>
+                    <li class="tab1"><a href="reservation-all">查看全部</a></li>
+                </ul>
+            </div>
 	  	</nav>
 		
 		<ul id="dropdown-notification" class="dropdown-content">
@@ -64,83 +86,12 @@
 		</ul>
         
         <a href="#" data-activates="slide-out" class="button-collapse"></a>
+        
 	</header>
+
+
+	@yield('content')
 	
-    <div id="section" class="container-fix trans-left-five">
-        <div class="container-section">
-            <div class="row">
-                <div class="col s4">                 
-                    <div class="card">
-                        <div class="card-action">
-                            <font class="card-title">基本資料</font>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="card-content">
-                            <center>
-                                <img src="../img/boss.png" class="profile-img"/>
-                            </center>
-                            <p>醫生ID：{{ $doctor->doctorID }}</p>
-                            <p>醫生名稱：{{ $doctor->name }}</p>
-                            <p>email：{{ $doctor->email }}</p>
-                            <p>級別： {{ $doctor->level }}</p>
-                            <p>專職：{{ $doctor->major }}</p>
-                            <p>職登院區：{{ $doctor->location }}</p>
-                            <a href="#modal1">更改密碼</a>
-                            
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col s8">
-                    <div class="card">
-                        <div class="card-action">
-                            <font class="card-title">排班歷史紀錄</font>
-                            @foreach($doctorShiftRecords as $record)
-                            <ul>
-                            <li>Schedule 1 name and date: {{ $record[4]}} {{ $record[2]}}</li> 
-                            <li>Schedule 1 doctor: {{ $record[0] }}</li>
-                            <li>Schedule 2 name and date: {{ $record[5]}} {{ $record[3]}}</li> 
-                            <li>Schedule 2 doctor: {{ $record[1] }}</li>
-                            </ul>
-                             @endforeach
-                        </div>
-                        <div class="divider"></div>
-                        <div class="card-content">
-
-                        </div>
-                    </div>	
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div id="modal1" class="modal">
-        <form action="#!" method="post">
-            <div class="modal-content">
-                <center>
-                    <h4>更改密碼</h4>
-                </center>
-                <div class="input-field col s12">
-                    <input id="title" type="password" value="" required>
-                    <label for="title">目前的密碼</label>
-                </div>   
-                <div class="input-field col s12">
-                    <input id="title" type="password" value="" required>
-                    <label for="title">新密碼</label>
-                </div>
-                <div class="input-field col s12">
-                    <input id="title" type="password" value="" required>
-                    <label for="title">重新輸入新密碼</label>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">確認</button>
-                <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel">關閉</button>
-                
-            </div>
-        </form>
-    </div>
-
 	<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="../js/materialize.min.js"></script>
 	<script type="text/javascript">
@@ -195,4 +146,3 @@
 	
 </body>
 </html>
-

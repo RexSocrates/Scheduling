@@ -21,6 +21,10 @@
     <script src="../codebase/locale/locale_cn.js" type="text/javascript"></script>
     <script src="../codebase/locale/recurring/locale_recurring_cn.js" ></script>
 
+    <script src="../codebase/ext/dhtmlxscheduler_collision.js"></script>
+    <script src="../codebase/ext/dhtmlxscheduler_limit.js"></script>
+    <script src="../../codebase/ext/dhtmlxscheduler_serialize.js" type="text/javascript" charset="utf-8"></script>
+
     <style>
         td{
             padding: 0;
@@ -134,12 +138,12 @@
                                 <div class="dhx_cal_next_button">&nbsp;</div>
                                 <div class="dhx_cal_today_button"></div>
                                 <div class="dhx_cal_date"></div>
-        
-<!--                                <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>-->
-<!--                                <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>-->
-<!--                                <div class="dhx_cal_tab" name="timeline_tab" style="right:280px;"></div>-->
-<!--                                <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>-->
-        
+        <!-- 
+                                <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
+                                <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
+                                <div class="dhx_cal_tab" name="timeline_tab" style="right:280px;"></div>
+                                <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
+         -->
                             </div>
                             <div class="dhx_cal_header">
                             </div>
@@ -152,11 +156,18 @@
 
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
                             scheduler.config.api_date="%Y-%m-%d %H:%i";
-                            // scheduler.config.dblclick_create = false;   //雙擊新增
-//                            scheduler.config.readonly = true;   //唯讀，不能修改東西
-//                            scheduler.config.drag_create = false;   //拖拉新增
+                            scheduler.config.dblclick_create = false;   //雙擊新增
+                          //scheduler.config.readonly = true;   //唯讀，不能修改東西
+                          //scheduler.config.drag_create = false;   //拖拉新增
+                            scheduler.config.details_on_create = false;
+                            scheduler.config.details_on_dblclick = true;
+                            scheduler.config.prevent_cache = true;
+                            scheduler.config.show_loading = true;
 
-                            
+                           // scheduler.config.limit_start = new Date(2017,7,1);
+                            //scheduler.config.limit_end = new Date (2017,7,10);
+
+
                             var priorities = [
                                 { key: 1, label: '行政' },
                                 { key: 2, label: '教學' },
@@ -168,19 +179,17 @@
                             ];
                             
                             scheduler.locale.labels.section_priority = 'Priority';
-                            
+                   
                             //彈出視窗的選項
                             scheduler.config.lightbox.sections=[
-                               //{name:"description", height:130, map_to:"text", type:"textarea" , focus:true},
+                                //{name:"description", height:130, map_to:"text", type:"textarea" , focus:true},
                                 //{name:"custom", height:23, type:"select", options:sections, map_to:"section_id" },
                                 {name:"班別名稱", height:180, options:priorities, map_to:"priority", type:"radio", vertical:true},
 //                              {name:"time", height:72, type:"time", map_to:"auto"}
                             ];
 
-
-                            
                             //在Lightbox關掉
-                             scheduler.attachEvent("onBeforeLightbox", function (id){
+                            scheduler.attachEvent("onBeforeLightbox", function (id){
                                 var event = scheduler.getEvent(id);
                                 
                                 if (event.text == "New event"){
@@ -189,9 +198,10 @@
                                 
                                 return true;
                             });
+
+                           
                             
                             //在Lightbox按下save時執行
-                            
                             scheduler.attachEvent("onEventSave",function(id,ev,is_new){
                                  
                                 var event = scheduler.getEvent(id);
@@ -199,16 +209,49 @@
                                 event.text = event.priority;
 
                                 //scheduler = new dhtmlXGridObject('scheduler_here');  
-                                var dp = new dataProcessor("myconnector.php");
+                                //var dp = new dataProcessor("myconnector.php");
                                 // dp.init(scheduler);
-                                
+
                                 return true;
                             
                             });
                             
-                            scheduler.attachEvent("onEventChanged", function(id,e){
-                                var event = scheduler.getEvent(id);
+
+                            scheduler.attachEvent("onEventCollision", function (ev, evs){
+                                  //any custom logic here
+                                var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
+                                if(count>1){
+                                     dhtmlx.message({ type:"error", text:"此日期已選過" });
+                                    return true;
+                                }
+                                else{
+                                    return false;
+
+                                }
+                                // for(var i = 0 ; i<evs.length ; i++){
+                                //     if(ev.start_date != evs[i].start_date){
+                                //         return true;
+                                //     }
+                                //     else{
+                                //         return false;
+                                //     }
+                                // }
                                 
+                                 return true;
+                            });
+
+                            var spanId = scheduler.blockTime(0, "fullday");
+
+                            scheduler.unblockTime(new Date(2017,07,09));
+                            //scheduler.blockTime(0, "fullday");
+                            
+                            scheduler.attachEvent("onLimitViolation", function  (id, obj){
+                                dhtmlx.message({ type:"error", text:"The date is not allowed" });
+                             }); 
+
+                            scheduler.attachEvent("onEventChanged", function(id,e){
+                                console.log("date"+scheduler.templates.month_date_class);
+                                var event = scheduler.getEvent(id);
                                 if(event.priority == 1){
                                     event.text = "行政";
                                 }else if(event.priority == 2){
@@ -226,8 +269,7 @@
                                 }
                                 
                             });
-                            
-
+                          
 
                             
                             //進入畫面後顯示的東西

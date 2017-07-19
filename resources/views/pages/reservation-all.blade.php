@@ -75,8 +75,8 @@
 	    	</div>
 	    	<div class="nav-content blue-grey darken-1">
                <ul class="tabs1 tabs-transparent">
-                    <li class="tab1"><a href="reservation.html">個人</a></li>
-                    <li class="tab1"><a href="reservation-all.html" class="tab-active">查看全部</a></li>
+                    <li class="tab1"><a href="reservation">個人</a></li>
+                    <li class="tab1"><a href="reservation-all" class="tab-active">查看全部</a></li>
                 </ul>
             </div>
 	  	</nav>
