@@ -192,22 +192,10 @@
                             scheduler.attachEvent("onBeforeLightbox", function (id){
                                 var event = scheduler.getEvent(id);
                                 
-                                if(event.priority == 1){
+                                if (event.priority == 1){
                                     event.text = "行政";
-                                }else if(event.priority == 2){
-                                    event.text = "教學";
-                                }else if(event.priority == 3){
-                                    event.text = "台北白班";
-                                }else if(event.priority == 4){
-                                    event.text = "台北夜班";
-                                }else if(event.priority == 5){
-                                    event.text = "淡水白班";
-                                }else if(event.priority == 6){
-                                    event.text = "淡水夜班";
-                                }else if(event.priority == 7){
-                                    event.text = "off";
                                 }
-                            
+                                
                                 return true;
                             });
 
@@ -216,6 +204,19 @@
                             //在Lightbox按下save時執行
                             scheduler.attachEvent("onEventSave",function(id,ev,is_new){
                                  
+                                var event = scheduler.getEvent(id);
+                                
+                                event.text = event.priority;
+
+                                //scheduler = new dhtmlXGridObject('scheduler_here');  
+                                //var dp = new dataProcessor("myconnector.php");
+                                // dp.init(scheduler);
+
+                                return true;
+                            
+                            });
+
+                            scheduler.attachEvent("onEventAdded", function(id,e){
                                 var event = scheduler.getEvent(id);
 
                                 if(event.priority == 1){
@@ -234,18 +235,9 @@
                                     event.text = "off";
                                 }
                                 
-                                //event.text = event.priority;
-
-                                //scheduler = new dhtmlXGridObject('scheduler_here');  
-                                //var dp = new dataProcessor("myconnector.php");
-                                // dp.init(scheduler);
-
-                                return true;
-                            
                             });
 
                             scheduler.attachEvent("onEventChanged", function(id,e){
-                                console.log("date"+scheduler.templates.month_date_class);
                                 var event = scheduler.getEvent(id);
 
                                 if(event.priority == 1){
@@ -302,11 +294,6 @@
 
                             //scheduler.attachEvent("onEventCreated",updateDayStatus);
 
-
-
-
-
-                           
                             
                             //進入畫面後顯示的東西
                             scheduler.init('scheduler_here',new Date(),"month");
