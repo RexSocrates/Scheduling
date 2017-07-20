@@ -166,113 +166,155 @@ class DateTest extends Seeder
         //     'categorySerial' => 7,
         //     'categoryName' => 'off班'
         // ]);
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 1,
-            'schCategoryName' => '行政'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 1,
+        //     'schCategoryName' => '行政'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 2,
-            'schCategoryName' => '教學'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 2,
+        //     'schCategoryName' => '教學'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 3,
-            'schCategoryName' => '北白急救'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 3,
+        //     'schCategoryName' => '北白急救'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 4,
-            'schCategoryName' => '北白發燒'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 4,
+        //     'schCategoryName' => '北白發燒'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 5,
-            'schCategoryName' => '北白內1'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 5,
+        //     'schCategoryName' => '北白內1'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 6,
-            'schCategoryName' => '北白內2'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 6,
+        //     'schCategoryName' => '北白內2'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 7,
-            'schCategoryName' => '北白外1'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 7,
+        //     'schCategoryName' => '北白外1'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 8,
-            'schCategoryName' => '北白外2'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 8,
+        //     'schCategoryName' => '北白外2'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 9,
-            'schCategoryName' => '淡白內1'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 9,
+        //     'schCategoryName' => '淡白內1'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 10,
-            'schCategoryName' => '淡白內2'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 10,
+        //     'schCategoryName' => '淡白內2'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 11,
-            'schCategoryName' => '淡白外1'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 11,
+        //     'schCategoryName' => '淡白外1'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' =>12,
-            'schCategoryName' => '淡白外1'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' =>12,
+        //     'schCategoryName' => '淡白外1'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 13,
-            'schCategoryName' => '北夜急救'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 13,
+        //     'schCategoryName' => '北夜急救'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 14,
-            'schCategoryName' => '北夜發燒'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 14,
+        //     'schCategoryName' => '北夜發燒'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 15,
-            'schCategoryName' => '北夜內1'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 15,
+        //     'schCategoryName' => '北夜內1'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 16,
-            'schCategoryName' => '北夜內2'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 16,
+        //     'schCategoryName' => '北夜內2'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 17,
-            'schCategoryName' => '北夜外1'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 17,
+        //     'schCategoryName' => '北夜外1'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 18,
-            'schCategoryName' => '北夜外2'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 18,
+        //     'schCategoryName' => '北夜外2'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 19,
-            'schCategoryName' => '淡夜內1'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 19,
+        //     'schCategoryName' => '淡夜內1'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 20,
-            'schCategoryName' => '淡夜內2'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 20,
+        //     'schCategoryName' => '淡夜內2'
+        // ]);
         
-        DB::table('ScheduleCategory')->insert([
-            'schCategorySerial' => 21,
-            'schCategoryName' => '淡夜外'
-        ]);
+        // DB::table('ScheduleCategory')->insert([
+        //     'schCategorySerial' => 21,
+        //     'schCategoryName' => '淡夜外'
+        // ]);
 
-    }   
+        //  DB::table('ConfirmStatus')->insert([
+        //     'confirmSerial' => 0,
+        //     'status' => '未確認'
+        // ]);
+        
+        // DB::table('ConfirmStatus')->insert([
+        //     'confirmSerial' => 1,
+        //     'status' => '已確認'
+        // ]);
+        
+        // DB::table('ConfirmStatus')->insert([
+        //     'confirmSerial' => 2,
+        //     'status' => '已拒絕'
+        // ]);
+
+      //     DB::table('Schedule')-> insertGetId([
+      //       'doctorID' => 2,
+      //       'shiftName' =>"3",
+      //       'schCategorySerial' => 5,
+      //       'date' => "2017-06-11",
+      //       'endDate' => "2017-06-12"
+
+      //   ]);   
     
+      //   DB::table('Schedule')-> insertGetId([
+      //       'doctorID' => 3,
+      //       'shiftName' =>"3",
+      //       'schCategorySerial' => 6,
+      //       'date' => "2017-06-14",
+      //       'endDate' => "2017-06-15"
+      //   ]);   
+    
+      //  DB::table('ShiftRecords')-> insertGetId([
+      //       'scheduleID_1' => 3,
+      //       'scheduleID_2' => 4,
+      //       'schID_1_doctor' => 2,
+      //       'schID_2_doctor' => 3,
+      //       'doc2Confirm' => 1, 
+      //       'adminConfirm' => 0,
+      //       'date' => "2017-05-08"
+               
+      // ]);
+
+    }
    
 
 }

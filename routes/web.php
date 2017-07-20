@@ -34,6 +34,12 @@ Route::post('doctorsChart', 'ChartController@getChartPageBySelectedID');
 
 
 // ========================================================================
+Route::get('getExchangeSchedulePage', function() {
+	return view('testPage.exchangeSchedule');
+});
+
+Route::post('exchangeSchedule', 'ShiftRecordsController@adminConfirm');
+
 Route::post('testDateFormat', 'TestController@testDateFormat');
 
 Route::get('testUserInfo', 'TestController@getUserInfo');

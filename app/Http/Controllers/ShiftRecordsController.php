@@ -32,11 +32,10 @@ class ShiftRecordsController extends Controller
     		$scheduleID_2 = Input::get('scheduleID_2');
     		$schID_1_doctor = Input::get('schID_1_doctor');
     		$schID_2_doctor = Input::get('schID_2_doctor');
-            $created_at = date('Y-m-d:h-m-s'); //????
             $doc2Confirm = flase;
             $adminConfirm = flase;
 
-    		$newShiftSerial = $addShifts->addShifts($scheduleID_1,$scheduleID_2,$schID_2_doctor,$schID_2_doctor,$doc2Confirm,$adminConfirm,$created_at);
+    		$newShiftSerial = $addShifts->addShifts($scheduleID_1,$scheduleID_2,$schID_2_doctor,$schID_2_doctor,$doc2Confirm,$adminConfirm);
 
     		 return redirect('schedule-all'); 
 
@@ -54,11 +53,13 @@ class ShiftRecordsController extends Controller
     }
 
     //排班人員確認換班
-    public function adminConfirm($id){
-        $update = new ShiftRecords();
-        $adminConfirm = Input::get('adminConfirm');
+    public function adminConfirm(){
+        $changeSerial = Input::get('changeSerial');
 
-        $updatedDoc2Confirm = $update->doc2Confirm($id,$adminConfirm);
+        $shiftRecord = new ShiftRecords();
+        $adminConfirmNumber = Input::get('adminConfirm');
+
+        $shiftRecord->adminConfirm($changeSerial,$adminConfirmNumber);
 
         return redirect('shiftRecords'); 
 

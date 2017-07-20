@@ -18,7 +18,7 @@ class ShiftRecords extends Model
     }
    
     //查詢 單一換班紀錄
-    public function getShiftRecordByChangSerial($changeSerial){
+    public function getShiftRecordByChangeSerial($changeSerial){
         $shiftRecord=DB::table('ShiftRecords')
         ->where('changeSerial',$changeSerial)
         ->first();

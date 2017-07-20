@@ -210,7 +210,7 @@ class Schedule extends Model
     // 更新班表醫師
     protected function updateDoctorForSchedule($scheduleID, $doctorID) {
         $affectedRows = DB::table('Schedule')
-            ->where('$scheduleID', $scheduleID)
+            ->where('scheduleID', $scheduleID)
             ->update([
                 'doctorID' => $doctorID
             ]);
