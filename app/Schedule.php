@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
+use App\ShiftRecords;
+
 class Schedule extends Model
 {
 	protected $table = 'Schedule';
@@ -26,9 +28,9 @@ class Schedule extends Model
         return $schedule;
     }
 
-    //查看 單一醫生班表資訊
-     public function getScheduleByDoctorID()
-      {
+     //查看目前登入的醫生班表資訊
+    public function getScheduleByCurrentDoctorID()
+    {
         $user = new User();
         $id = $user->getCurrentUserID();
         $doctorData = DB::table('Schedule')->where("doctorID",$id)->get();
@@ -38,11 +40,18 @@ class Schedule extends Model
             $arr[] = $doctorDatum->scheduleID;
             
         }
-         $data=DB::table('Schedule') -> where("scheduleID",$arr)->get();
-         return $data;
-
-     }
+        $data=DB::table('Schedule') -> where("scheduleID",$arr)->get();
+        return $data;
+    }
     
+    //透過醫生ID 取得所有上班資料
+    public function getScheduleByDoctorID($id) {
+        $schedule = DB::table('Schedule')
+            ->where('doctorID', $id)
+            ->get();
+        
+        return $schedule;
+    }
     
     // 新增一比上班資料
     public function addSchedule(array $date) {
@@ -193,5 +202,33 @@ class Schedule extends Model
         }
         
         return $shiftsData;
+    }
+    
+    // 更新班表醫師
+    protected function updateDoctorForSchedule($scheduleID, $doctorID) {
+        $affectedRows = DB::table('Schedule')
+            ->where('$scheduleID', $scheduleID)
+            ->update([
+                'doctorID' => $doctorID
+            ]);
+        
+        return $affectedRows;
+    }
+    
+    // 換班
+    public function exchangeSchedule($changeSerial) {
+        $shiftRecord = new ShiftRecords();
+        
+        $record = $shiftRecord->getShiftRecordByChangeSerial($changeSerial);
+        
+        $scheduleID_1 = $record->scheduleID_1;
+        $scheduleID_2 = $record->scheduleID_2;
+        
+        $doctor1 = $record->schID_1_doctor;
+        $doctor2 = $record->schID_2_doctor;
+        
+        $this->updateDoctorForSchedule($scheduleID_1, $doctor2);
+        $this->updateDoctorForSchedule($scheduleID_2, $doctor1);
+        
     }
 }
