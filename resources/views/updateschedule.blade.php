@@ -4,14 +4,14 @@
         <title>Update Schedule</title>
     </head>
     <body>
-        <form action="updateSchedule" method="post">
+        <form action="updateReservation" method="post">
             <input type="hidden" name="serial" value={{$serial}}>
             
             <label>doctorID:</label>
             <br>
             <input type="text" name="doctorID">
             <br>
-            <label>periodSerial:</label>
+            <label>periodSerial :</label>
             <br>
             <input type="text" name="periodSerial">
             <br>
@@ -31,9 +31,9 @@
             <br>
             <input type="date" name="date">
             <br>
-            <label>confirmed :</label>
+             <label>confirmed:</label>
             <br>
-            <input type="text" name="remark">
+            <input type="text" name="confirmed">
             <br>
             <input type="submit" name="submit" value="Submit">
             {{ csrf_field() }}

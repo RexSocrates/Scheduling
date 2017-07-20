@@ -5,13 +5,11 @@
     </head>
     <body>
         <form action="addReservation" method="post">
-            
-            
             <label>doctorID:</label>
             <br>
             <input type="text" name="doctorID">
             <br>
-            <label>periodSerial:</label>
+            <label>periodSerial :</label>
             <br>
             <input type="text" name="periodSerial">
             <br>
@@ -31,9 +29,9 @@
             <br>
             <input type="date" name="date">
             <br>
-            <label>confirmed :</label>
+             <label>confirmed:</label>
             <br>
-            <input type="text" name="remark">
+            <input type="text" name="confirmed">
             <br>
             <input type="submit" name="submit" value="Submit">
             {{ csrf_field() }}
@@ -41,3 +39,4 @@
         
     </body>
 </html>
+

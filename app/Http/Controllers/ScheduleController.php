@@ -71,7 +71,7 @@ class ScheduleController extends Controller
         $confirmed = Input::get('confirmed');
         $update = $updateSchedule->updateSchedule($doctorID, $periodSerial, $isWeekday, $location, $category, $date, $confirmed);
         
-        return redirect('reservation');
+        return redirect('schedule');
        	
     }
     
