@@ -164,8 +164,7 @@
                             scheduler.config.prevent_cache = true;
                             scheduler.config.show_loading = true;
 
-                           // scheduler.config.limit_start = new Date(2017,7,1);
-                            //scheduler.config.limit_end = new Date (2017,7,10);
+                            
 
 
                             var priorities = [
@@ -282,17 +281,63 @@
                                  return true;
                             });
 
+                            var date = new Date();
+                            var toString =  date.toString();
+                            var res = toString.split(" ");
+                            var month = 0;
+                            
+                            switch(res[1]){
+                                case "Jan":
+                                    month = 1;
+                                    break;
+                                case "Feb":
+                                    month = 2;
+                                    break;
+                                case "Mar":
+                                    month = 3;
+                                    break;
+                                case "Apr":
+                                    month = 4;
+                                    break;
+                                case "May":
+                                    month = 5;
+                                    break;
+                                case "Jun":
+                                    month = 6;
+                                    break;
+                                case "Jul":
+                                    month = 7;
+                                    break;
+                                case "Aug":
+                                    month = 8;
+                                    break;
+                                case "Sep":
+                                    month = 9;
+                                    break;
+                                case "Oct":
+                                    month = 10;
+                                    break;
+                                case "Nov":
+                                    month = 11;
+                                    break;
+                                case "Dec":
+                                    month = 12;
+                                    break;
+                            }
 
                             //鎖定時間
-                            // var spanId = scheduler.blockTime(0, "fullday");
-
-                            // scheduler.unblockTime(new Date(2017,07,09));
+                            var startd =new Date(res[3], month-1, 1); 
+                            var endd = new Date(res[3], month, 1); 
                             
-                            // scheduler.attachEvent("onLimitViolation", function  (id, obj){
-                            //     dhtmlx.message({ type:"error", text:"The date is not allowed" });
-                            
+                            console.log("startd "+startd);
+                            console.log("endd "+endd);
 
-                            //scheduler.attachEvent("onEventCreated",updateDayStatus);
+                            scheduler.config.limit_start = new Date(startd);
+                            scheduler.config.limit_end = new Date(endd);
+
+                            scheduler.attachEvent("onLimitViolation", function  (id, obj){
+                                dhtmlx.message({ type:"error", text:"The date is not allowed" })
+                            });
 
                             
                             //進入畫面後顯示的東西
