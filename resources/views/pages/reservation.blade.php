@@ -240,14 +240,17 @@
                                  return true;
                             });
 
-                            var spanId = scheduler.blockTime(0, "fullday");
 
-                            scheduler.unblockTime(new Date(2017,07,09));
-                            //scheduler.blockTime(0, "fullday");
+                            //鎖定時間
+                            // var spanId = scheduler.blockTime(0, "fullday");
+
+                            // scheduler.unblockTime(new Date(2017,07,09));
                             
-                            scheduler.attachEvent("onLimitViolation", function  (id, obj){
-                                dhtmlx.message({ type:"error", text:"The date is not allowed" });
-                             }); 
+                            // scheduler.attachEvent("onLimitViolation", function  (id, obj){
+                            //     dhtmlx.message({ type:"error", text:"The date is not allowed" });
+                            
+
+                            //scheduler.attachEvent("onEventCreated",updateDayStatus);
 
                             scheduler.attachEvent("onEventChanged", function(id,e){
                                 console.log("date"+scheduler.templates.month_date_class);
@@ -269,11 +272,6 @@
                                 }
                                 
                             });
-<<<<<<< HEAD
-                          
-
-=======
->>>>>>> d328185ebf5e9e1b2c71f4f042251989584c939b
                             
                             //進入畫面後顯示的東西
                             scheduler.init('scheduler_here',new Date(),"month");

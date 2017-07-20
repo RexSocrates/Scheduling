@@ -17,6 +17,15 @@ class ShiftRecords extends Model
          return $shiftRecords;
     }
    
+    //查詢 單一換班紀錄
+    public function getShiftRecordByChangSerial($changeSerial){
+        $shiftRecord=DB::table('ShiftRecords')
+        ->where('changeSerial',$changeSerial)
+        ->first();
+
+        return $shiftRecord;
+
+    }
 
      //查詢 單一醫生換班紀錄
     public function getShiftRecordsByDoctorID(){
@@ -102,6 +111,8 @@ class ShiftRecords extends Model
                 ->update(['adminConfirm' => $adminConfirm]);        
 
     }
+
+
 
     
 }
