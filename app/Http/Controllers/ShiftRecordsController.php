@@ -33,12 +33,12 @@ class ShiftRecordsController extends Controller
     		$schID_1_doctor = Input::get('schID_1_doctor');
     		$schID_2_doctor = Input::get('schID_2_doctor');
             $created_at = date('Y-m-d:h-m-s'); //????
-            $doc2Confirm = 1;
-            $adminConfirm = 1;
+            $doc2Confirm = flase;
+            $adminConfirm = flase;
 
     		$newShiftSerial = $addShifts->addShifts($scheduleID_1,$scheduleID_2,$schID_2_doctor,$schID_2_doctor,$doc2Confirm,$adminConfirm,$created_at);
 
-    		 return redirect('shiftRecords'); 
+    		 return redirect('schedule-all'); 
 
     }
 
