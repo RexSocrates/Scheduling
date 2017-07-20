@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 
 use App\ShiftRecords;
+use App\Reservation;
 
 class Schedule extends Model
 {
@@ -53,8 +54,10 @@ class Schedule extends Model
         return $schedule;
     }
     
-    // 新增一比上班資料
+    // 新增一筆上班資料
     public function addSchedule(array $date) {
+        $reservation = new Reservation();
+        
         $newScheduleID = DB::table('Schedule')->insertGetId([
             'doctorID' => $data['doctorID'],
             'shiftName' => $data['shiftName'],
@@ -62,7 +65,7 @@ class Schedule extends Model
             'isWeekday' => $data['isWeekday'],
             'location' => $data['location'],
             'date' => $data['date'],
-            'endDate' => $data['endDate'],
+            'endDate' => $reservation->date_add($data['date']),
             'confirmed' => $data['confirmed'],
         ]);
         
