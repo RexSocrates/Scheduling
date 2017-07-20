@@ -99,16 +99,19 @@ class ShiftRecords extends Model
             DB::table('shiftRecords')
                 ->where('changeSerial', $id)
                 ->update(['doc2Confirm' => $doc2Confirm]);
-                   
+
 
     }
 
 	// 排班確認
-    public function adminConfirm($id, $adminConfirm){
+    public function adminConfirm($changeSerial, $adminConfirm){
 
             DB::table('shiftRecords')
-                ->where('changeSerial', $id)
-                ->update(['adminConfirm' => $adminConfirm]);        
+                ->where('changeSerial', $changeSerial)
+                ->update(['adminConfirm' => $adminConfirm]); 
+
+            $schedule = new Schedule();
+            $schedule->exchangeSchedule($changeSerial);
 
     }
 
