@@ -5,19 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
-use App\Schedule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+
+// send a request
+use GuzzleHttp\Client;
 
 
 use App\User;
 use App\ScheduleCategory;
 use App\ShiftRecords;
-
-use App\Jobs\GetShiftRecordsInformation;
-
-
-// import the model
+use App\Schedule;
 
 class ScheduleController extends Controller
 {
