@@ -32,6 +32,20 @@ Route::get('getChartPage', 'ChartController@getChartPage');
 
 Route::post('doctorsChart', 'ChartController@getChartPageBySelectedID');
 
+// 列出全部人的預班資訊
+Route::get('/reservation-all', 'ReservationController@reservation');
+
+// 列出個人的預班資訊
+Route::get('/reservation', 'ReservationController@getReservationByID');
+Route::post('/reservation', 'ReservationController@addRemark');
+Route::match(['get', 'post'], '/reservation', "ReservationController@getReservationByID");
+
+//列出全部班表資訊
+Route::get('/schedule-all', 'ScheduleController@schedule');
+
+//列出個人班表資訊
+Route::get('/schedule', 'ScheduleController@getScheduleByDoctorID');
+
 
 // ========================================================================
 Route::get('getExchangeSchedulePage', function() {
@@ -74,21 +88,10 @@ Route::get('getTestPage', 'TestController@getTestPage');
 // ========================================================================
 Route::get('/schedule', 'ScheduleController@schedule');
 
-Route::get('/reservation', 'AccountController@reservation');
+//Route::get('/reservation', 'AccountController@reservation');
 
 
-// 列出全部人的預班資訊
-Route::get('/reservation-all', 'ReservationController@reservation');
 
-// 列出個人的預班資訊
-Route::get('/reservation', 'ReservationController@getReservationByID');
-Route::post('/reservation', 'ReservationController@addRemark');
-
-//列出全部班表資訊
-Route::get('/schedule-all', 'ScheduleController@schedule');
-
-//列出個人班表資訊
-Route::get('/schedule', 'ScheduleController@getScheduleByDoctorID');
 
 // ===========================showReservationByresSerial==============================
 Route::get('/showReservation', 'ReservationController@showReservation');

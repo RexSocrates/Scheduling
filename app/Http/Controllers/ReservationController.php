@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Dhtmlx\Connector\SchedulerConnector;
 
-
 use App\User;
 
 // import the model
@@ -82,15 +81,15 @@ class ReservationController extends Controller
         }
 
         
-        //$connector = new SchedulerConnector('reservation', "PHPLaravel");    
-       // $connector->configure(new reservation(),"event_id",                                                        
-        // "start_date, end_date");                                                          
-       // $connector->render();                                       
+        $connector = new SchedulerConnector(null, "PHPLaravel");    
+        $connector->configure(new reservation(),"resSerial","periodSerial,isWeekday,location,isOn,date, endDate,remark,categorySerial");
+       // $connector->render_sql("insert into Reservation",'resSerial','date,endDate,categorySerial');
+                                         
+        //$connector->render();                                       
                 
       return view('pages.reservation', array('reservations' => $data,'countDay' => $countDay,
                 'countNight' => $countNight ,'doctorDay' =>$doctorDay, 'doctorNight'=> $doctorNight ));
        
-
       }
     //增加備註
     public  function addRemark(){
