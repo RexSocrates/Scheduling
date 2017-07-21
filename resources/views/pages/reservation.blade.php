@@ -13,7 +13,7 @@
    	<script src='../codebase/dhtmlxscheduler.js' type="text/javascript" charset="utf-8"></script>
 	<script src='../codebase/ext/dhtmlxscheduler_timeline.js' type="text/javascript" charset="utf-8"></script>
 	<script src='../codebase/ext/dhtmlxscheduler_container_autoresize.js' type="text/javascript" charset="utf-8"></script>
-    <!--<script src='../dhtmlxDataProcessor/codebase/dhtmlxdataprocessor.js'></script>-->
+
 	<script src='../codebase/ext/dhtmlxscheduler_editors.js' type="text/javascript" charset="utf-8"></script>
 	
 	<link rel='stylesheet' type='text/css' href='../codebase/dhtmlxscheduler_flat.css'>
@@ -164,8 +164,8 @@
                             scheduler.config.prevent_cache = true;
                             scheduler.config.show_loading = true;
 
-                           // scheduler.config.limit_start = new Date(2017,7,1);
-                            //scheduler.config.limit_end = new Date (2017,7,10);
+                           //scheduler.config.limit_start = new Date(2017,7,1);
+                          //scheduler.config.limit_end = new Date (2017,7,10);
 
 
                             var priorities = [
@@ -208,8 +208,9 @@
                                 
                                 event.text = event.priority;
 
-                                //scheduler = new dhtmlXGridObject('scheduler_here');  
-                                //var dp = new dataProcessor("myconnector.php");
+                                //scheduler = new dhtmlXGridObject('scheduler_here');
+
+                                // var dp = new dataProcessor("./reservation");
                                 // dp.init(scheduler);
 
                                 return true;
@@ -233,6 +234,8 @@
                                     event.text = "淡水夜班";
                                 }else if(event.priority == 7){
                                     event.text = "off";
+                                }else if(event.priority == null){
+                                    event.text = "沒選到班";
                                 }
                                 
                             });
@@ -284,12 +287,14 @@
 
 
                             //鎖定時間
-                            // var spanId = scheduler.blockTime(0, "fullday");
+                            scheduler.blockTime(0, "fullday");
 
-                            // scheduler.unblockTime(new Date(2017,07,09));
+                            scheduler.unblockTime(new Date(2017,07,09));
                             
-                            // scheduler.attachEvent("onLimitViolation", function  (id, obj){
-                            //     dhtmlx.message({ type:"error", text:"The date is not allowed" });
+                             scheduler.attachEvent("onLimitViolation", function  (id, obj){
+                                 dhtmlx.message({ type:"error", text:"The date is not allowed" })
+                               
+                                });
                             
 
                             //scheduler.attachEvent("onEventCreated",updateDayStatus);
