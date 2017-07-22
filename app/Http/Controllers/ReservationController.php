@@ -82,7 +82,7 @@ class ReservationController extends Controller
 
         
         $connector = new SchedulerConnector(null, "PHPLaravel");    
-        $connector->configure(new reservation(),"resSerial","periodSerial,isWeekday,location,isOn,date, endDate,remark,categorySerial");
+        $connector->configure(new Reservation(),"resSerial","periodSerial,isWeekday,location,isOn,date, endDate,remark,categorySerial");
        // $connector->render_sql("insert into Reservation",'resSerial','date,endDate,categorySerial');
                                          
         //$connector->render();                                       

@@ -30,7 +30,7 @@ Route::get('profile', 'AccountController@getProfilePage');
 
 Route::get('getChartPage', 'ChartController@getChartPage');
 
-Route::post('doctorsChart', 'ChartController@getChartPageBySelectedID');
+Route::post('doctorsChart', 'ChartController@getChartPageBySelectedID ');
 
 // 列出全部人的預班資訊
 Route::get('/reservation-all', 'ReservationController@reservation');
@@ -46,11 +46,16 @@ Route::get('/schedule-all', 'ScheduleController@schedule');
 //列出個人班表資訊
 Route::get('/schedule', 'ScheduleController@getScheduleByDoctorID');
 
+// 列出所有使用者的資訊以及公假
+Route::get('officialLeave', 'AccountController@getOfficialLeavePage');
+
 
 // ========================================================================
 Route::get('getExchangeSchedulePage', function() {
 	return view('testPage.exchangeSchedule');
 });
+
+Route::get('getOfficialLeavePage', 'AccountController@getOfficialLeavePage');
 
 Route::post('exchangeSchedule', 'ShiftRecordsController@adminConfirm');
 

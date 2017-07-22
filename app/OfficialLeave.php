@@ -26,6 +26,15 @@ class OfficialLeave extends Model
         return $leave;
     }
     
+    // 透過醫生ID 取得公假紀錄
+    public function getLeavesByDoctorID($doctorID) {
+        $leaves = DB::table('OfficialLeave')
+            ->where('doctorID', $doctorID)
+            ->get();
+        
+        return $leaves;
+    }
+    
     // 排班人員加入公假紀錄
     public function addLeave($dataArray) {
         // confirmStatus : 0 hasn't been confirmed
