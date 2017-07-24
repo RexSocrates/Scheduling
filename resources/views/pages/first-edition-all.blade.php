@@ -76,8 +76,8 @@
 	    	</div>
 	    	<div class="nav-content blue-grey darken-1">
                 <ul class="tabs1 tabs-transparent">
-                    <li class="tab1"><a href="first-edition.html">個人</a></li>
-                    <li class="tab1"><a href="first-edition-all.html" class="tab-active">查看全部</a></li>
+                    <li class="tab1"><a href="first-edition">個人</a></li>
+                    <li class="tab1"><a href="first-edition-all" class="tab-active">查看全部</a></li>
                 </ul>
             </div>
 	  	</nav>

@@ -46,19 +46,25 @@ Route::get('/schedule-all', 'ScheduleController@schedule');
 //列出個人班表資訊
 Route::get('/schedule', 'ScheduleController@getScheduleByDoctorID');
 
-<<<<<<< HEAD
-Route::get('/first-edition-all', 'ScheduleController@firstSchedule');
-Route::post('/first-edition-all', 'ShiftRecordsController@addShifts');
-=======
+
+
 // 列出所有使用者的資訊以及公假
 Route::get('officialLeave', 'AccountController@getOfficialLeavePage');
->>>>>>> 76e88afd4ac1b63b453a55d89181bde5c9e65237
+
 
 
 // ========================================================================
 Route::get('getExchangeSchedulePage', function() {
 	return view('testPage.exchangeSchedule');
 });
+
+//初版班表 全部醫生
+Route::get('/first-edition-all', 'ScheduleController@firstSchedule');
+Route::post('/first-edition-all', 'ShiftRecordsController@addShifts');
+
+//初版班表 個人
+Route::get('first-edition', 'ScheduleController@firstEditionSchedule');
+
 
 Route::get('getOfficialLeavePage', 'AccountController@getOfficialLeavePage');
 

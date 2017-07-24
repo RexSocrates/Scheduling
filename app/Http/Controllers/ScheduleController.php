@@ -60,6 +60,22 @@ class ScheduleController extends Controller
         
         return view('pages.schedule-all', array('schedule' => $scheduleData,'shiftRecords'=>$data));
     }
+    // 初版班表 個人
+    public function firstEditionSchedule() {
+        $schedule = new Schedule();
+         $scheduleCategory = new ScheduleCategory();
+         $user = new User();
+
+         $scheduleData = $schedule->getScheduleByDoctorID($user->getCurrentUserID());
+
+         foreach ($scheduleData as $data) {
+            $scheduleName = $scheduleCategory->findScheduleName($data->schCategorySerial);
+            $data->schCategorySerial =  $scheduleName;
+        }
+
+        
+        return view('pages.first-edition', array('schedule' => $scheduleData,'shiftRecords'=>$data));
+    }
 
     //單一月份班表資訊
       public function getScheduleByID() {
