@@ -82,12 +82,22 @@ class ReservationController extends Controller
             array_push($data, array($res, $name));
         }
 
+<<<<<<< HEAD
        
         // $connector = new SchedulerConnector(null, "PHPLaravel");
         // $connector->configure(new Reservation(), "resSerial", "date, endDate, categorySerial");
         // $connector->render();        
         //$connector->render_sql("Select * from Reservation",
         //"resSerial","date, endDate, categorySerial");      
+=======
+        
+        $connector = new SchedulerConnector(null, "PHPLaravel");    
+        $connector->configure(new Reservation(),"resSerial","periodSerial,isWeekday,location,isOn,date, endDate,remark,categorySerial");
+       // $connector->render_sql("insert into Reservation",'resSerial','date,endDate,categorySerial');
+                                         
+        //$connector->render();                                       
+                
+>>>>>>> 76e88afd4ac1b63b453a55d89181bde5c9e65237
       return view('pages.reservation', array('reservations' => $data,'countDay' => $countDay,
                 'countNight' => $countNight ,'doctorDay' =>$doctorDay, 'doctorNight'=> $doctorNight ));
        

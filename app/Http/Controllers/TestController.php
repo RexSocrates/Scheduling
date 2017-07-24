@@ -104,4 +104,8 @@ class TestController extends Controller
     public function getChartPage() {
         return view('pages.chart');
     }
+    
+    public function getOfficialLeavePage() {
+        return view('pages.officialaffair');
+    }
 }
