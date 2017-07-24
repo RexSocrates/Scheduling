@@ -181,7 +181,7 @@
                             };
                             
                             //進入畫面後顯示的東西
-                            scheduler.init('scheduler_here',new Date(2017,5,26),"timeline");
+                            scheduler.init('scheduler_here',new Date(),"timeline");
                            
                             scheduler.parse([
                             @foreach($reservations as $reservation)

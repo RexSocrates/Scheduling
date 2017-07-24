@@ -17,7 +17,7 @@
 	<script src='../codebase/ext/dhtmlxscheduler_editors.js' type="text/javascript" charset="utf-8"></script>
 	
 	<link rel='stylesheet' type='text/css' href='../codebase/dhtmlxscheduler_flat.css'>
-	
+
     <script src="../codebase/locale/locale_cn.js" type="text/javascript"></script>
     <script src="../codebase/locale/recurring/locale_recurring_cn.js" ></script>
 
@@ -26,9 +26,11 @@
     <script src="../../codebase/ext/dhtmlxscheduler_serialize.js" type="text/javascript" charset="utf-8"></script>
 
     <style>
+   
         td{
             padding: 0;
         }
+
     </style>
 </head>
 <body>
@@ -107,7 +109,7 @@
                         <div class="card-content">
                             
                             
-                            <form>
+                            <form action="reservation" method="post">
                                 <div class="row margin-b0">
                                     <div class="col s5">
                                         <p class="information">開放時間: 2017/06/01 - 2017/06/25</p>
@@ -121,7 +123,8 @@
 <!--                                                     data-length="150"-->
                                                 <label for="textarea1">備註:</label>
                                             </div>
-                                            <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right">提交</button>
+                                            <!-- <input type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right">提交</button> -->
+                                            <input type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right" value="提交">
                                             {{ csrf_field() }}
                                         </form>
                                     </div>
@@ -153,7 +156,6 @@
 
                         <script type="text/javascript" charset="utf-8">
                     
-
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
                             scheduler.config.api_date="%Y-%m-%d %H:%i";
                             scheduler.config.dblclick_create = false;   //雙擊新增
@@ -163,8 +165,7 @@
                             scheduler.config.details_on_dblclick = true;
                             scheduler.config.prevent_cache = true;
                             scheduler.config.show_loading = true;
-
-
+                            
 
                             var priorities = [
                                 { key: 1, label: '行政' },
@@ -186,13 +187,11 @@
 //                              {name:"time", height:72, type:"time", map_to:"auto"}
                             ];
 
+
                             //在Lightbox關掉
                             scheduler.attachEvent("onBeforeLightbox", function (id){
                                 var event = scheduler.getEvent(id);
                                 
-                                if (event.priority == 1){
-                                    event.text = "行政";
-                                }
                                 
                                 return true;
                             });
@@ -206,11 +205,7 @@
                                 
                                 event.text = event.priority;
 
-                                //scheduler = new dhtmlXGridObject('scheduler_here');
-
-                                // var dp = new dataProcessor("./reservation");
-                                // dp.init(scheduler);
-
+                                
                                 return true;
                             
                             });
@@ -329,7 +324,6 @@
 
                             //鎖定時間
 
-
                             var startd =new Date(res[3], month-1, 1); 
                             var endd = new Date(res[3], month, 1); 
                             
@@ -340,14 +334,21 @@
                             scheduler.config.limit_end = new Date(endd);
 
                             scheduler.attachEvent("onLimitViolation", function  (id, obj){
-                                dhtmlx.message({ type:"error", text:"此時段無法接受排班" })
+                            dhtmlx.message({ type:"error", text:"此時段無法接受排班" })
                             });
 
                             
                             //進入畫面後顯示的東西
+
+                           
                             scheduler.init('scheduler_here',new Date(),"month");
+                            //scheduler.load("./reservation_data");
+                            // var dp = new dataProcessor("./reservation_data");
+                            //  dp.init(scheduler);
                             
+                              
                             //讀取資料
+
                         	@foreach($reservations as $reservation)
 
 	                            scheduler.parse([

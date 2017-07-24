@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 use App\User;
 use App\ScheduleCategory;
+
 class ShiftRecords extends Model
 {
     protected $table = "ShiftRecords";
@@ -77,7 +78,7 @@ class ShiftRecords extends Model
 
 
     //提出換班
-    public function addShifts($scheduleID_1, $scheduleID_2, $schID_1_doctor, $schID_2_doctor, $doc2Confirm, $adminConfirm, $created_at){
+    public function addShifts($scheduleID_1, $scheduleID_2, $schID_1_doctor, $schID_2_doctor, $doc2Confirm, $adminConfirm){
 
     	$newChangeSerial= DB::table('ShiftRecords')-> insertGetId([
     				'scheduleID_1' => $scheduleID_1,
@@ -86,7 +87,7 @@ class ShiftRecords extends Model
     				'schID_2_doctor' => $schID_2_doctor,
     				'doc2Confirm' => $doc2Confirm,
     				'adminConfirm' => $adminConfirm,
-                    'created_at' => $created_at
+                    'date' => date('Y-m-d')
 
     		]);
 

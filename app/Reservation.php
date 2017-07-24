@@ -8,6 +8,9 @@ use DB;
 use App\User;
 class Reservation extends Model
 {
+
+    public $primaryKey = "resSerial";
+    public $timestamps = false;
     protected $table = 'Reservation';
     //protected $table = 'DoctorAndReservation';
     

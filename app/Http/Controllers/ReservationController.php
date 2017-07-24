@@ -11,7 +11,8 @@ use App\ShiftCategory;
 use App\Remark;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
-use Dhtmlx\Connector\SchedulerConnector;
+//use Dhtmlx\Connector\SchedulerConnector;
+use App\Http\Controllers;
 
 use App\User;
 
@@ -64,6 +65,7 @@ class ReservationController extends Controller
         $reservation = new Reservation();
         $shiftCategory = new ShiftCategory();
         $user = new User();
+        $remark = new Remark();
 
         $data = array();
 
@@ -80,25 +82,36 @@ class ReservationController extends Controller
             array_push($data, array($res, $name));
         }
 
-        
-        $connector = new SchedulerConnector(null, "PHPLaravel");    
-        $connector->configure(new reservation(),"resSerial","periodSerial,isWeekday,location,isOn,date, endDate,remark,categorySerial");
-       // $connector->render_sql("insert into Reservation",'resSerial','date,endDate,categorySerial');
-                                         
-        //$connector->render();                                       
-                
+       
+        // $connector = new SchedulerConnector(null, "PHPLaravel");
+        // $connector->configure(new Reservation(), "resSerial", "date, endDate, categorySerial");
+        // $connector->render();        
+        //$connector->render_sql("Select * from Reservation",
+        //"resSerial","date, endDate, categorySerial");      
       return view('pages.reservation', array('reservations' => $data,'countDay' => $countDay,
                 'countNight' => $countNight ,'doctorDay' =>$doctorDay, 'doctorNight'=> $doctorNight ));
        
       }
+
+      // public function renderData() {
+      //   $connector = new SchedulerConnector($Reservation, "PHPLaravel");
+      //   $connector->configure(new Reservation(), "resSerial", "date, endDate, categorySerial");
+      //   $connector->render();
+      //  // $connector->render_table('DoctorAndReservation','resSerial','doctorID');
+       
+
+      // }
+
+
     //增加備註
     public  function addRemark(){
         $remark = new Remark();
         $user = new User();
         $doctorID = $user->getCurrentUserID();
         $addRemark = Input::get('remark');
-        $remarkData = $remark->addremark($doctorID,$addRemark);
+        $remarkData = $remark->addRemark($doctorID,$addRemark);
 
+        return redirect('reservation');
     }
 
     

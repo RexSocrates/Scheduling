@@ -34,15 +34,9 @@ class Schedule extends Model
     {
         $user = new User();
         $id = $user->getCurrentUserID();
-        $doctorData = DB::table('Schedule')->where("doctorID",$id)->get();
+        $doctorScheduleList = DB::table('Schedule')->where("doctorID",$id)->get();
          
-        $arr = array();
-        foreach ($doctorData as $doctorDatum ) {
-            $arr[] = $doctorDatum->scheduleID;
-            
-        }
-        $data=DB::table('Schedule') -> where("scheduleID",$arr)->get();
-        return $data;
+        return $doctorScheduleList;
     }
     
     //透過醫生ID 取得所有上班資料
