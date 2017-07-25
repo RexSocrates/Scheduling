@@ -212,6 +212,9 @@
                                 // dp.init(scheduler);
 
                                 return true;
+                                
+                                // ajax 測試
+//                                ajaxTest();
                             
                             });
 
@@ -357,7 +360,9 @@
 	                            ],"json");
 							
                             @endforeach
-
+                            
+                            
+                            
                         </script>
 
                     </div>

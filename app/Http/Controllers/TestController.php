@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
 use App\User;
+use App\Remark;
 
 class TestController extends Controller
 {
@@ -107,5 +108,15 @@ class TestController extends Controller
     
     public function getOfficialLeavePage() {
         return view('pages.officialaffair');
+    }
+    
+    public function reservationSave() {
+//        $id = Input::get('field_name');
+        
+        $remark = new Remark();
+        
+        $remark->addRemark(100, 'asdfgh');
+        
+//        echo 'ID : '.$id;
     }
 }

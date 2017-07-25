@@ -55,6 +55,8 @@ Route::get('getExchangeSchedulePage', function() {
 	return view('testPage.exchangeSchedule');
 });
 
+Route::get('reservationSave', 'TestController@reservationSave');
+
 Route::get('getOfficialLeavePage', 'AccountController@getOfficialLeavePage');
 
 Route::post('exchangeSchedule', 'ShiftRecordsController@adminConfirm');
