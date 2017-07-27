@@ -163,8 +163,16 @@ header, main, footer {
     height: 64px !important;
     line-height: 64px !important;
     text-align: center;
-    text-align: center;
     margin-top: -7px;
+}
+
+.arrow_right-icon {
+    display: inline-block !important;
+    float: none !important;
+    line-height: normal !important;
+    margin: 0px 10px 0px 6px !important;
+    position: relative;
+    top: 4px;
 }
 
 .notifications-icon {

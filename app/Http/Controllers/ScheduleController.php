@@ -33,14 +33,15 @@ class ScheduleController extends Controller
             $data->doctorID = $doctorName->name;
         }
 
-        $data = $shiftRecords->getMoreShiftsRecordsInformation(false);
+        $data = $shiftRecords->getMoreCheckShiftsRecordsInformation(false);
 
         $currentDoctorSchedule=$schedule->getScheduleByCurrentDoctorID();
 
-        $doctorName = $user->getDoctorInfoByID(2);
-        $doctorSchedule = $schedule->getScheduleByDoctorID(2); //之後用ajax傳入id
+
+        $doctorName = $user->getDoctorInfoByID(1);
+        $doctorSchedule = $schedule->getScheduleByDoctorID(1); //之後用ajax傳入id
         
-        return view('pages.first-edition-all', array('schedule' => $scheduleData,'shiftRecords'=>$data,'currentDoctor'=>$currentDoctor,'currentDoctorSchedule'=>$currentDoctorSchedule,'doctorName'=>$doctorName ,'doctorSchedule'=>$doctorSchedule));
+        return view('pages.first-edition-all', array('schedule' => $scheduleData));
     }
 
      //查看正式全部班表 
@@ -109,8 +110,8 @@ class ScheduleController extends Controller
     //新增班表
     public function addSchedule(){
     		$addSchedule = new Schedule();
-            $doctorID = Input::get('doctorID');
-            $periodSerial = Input::get('periodSerial');
+        $doctorID = Input::get('doctorID');
+        $periodSerial = Input::get('periodSerial');
     		$isWeekday = Input::get('isWeekday');
     		$location = Input::get('location');
     		$category = Input::get('category');

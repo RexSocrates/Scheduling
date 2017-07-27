@@ -1,24 +1,23 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>馬偕醫院排班系統</title>
+	<meta charset="UTF-8">
+	<title>馬偕醫院排班系統</title>
 
-    <!--Import Google Icon Font-->
+  	<!--Import Google Icon Font-->
     <link type="text/css" rel="stylesheet" href="../css/icon.css" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="../css/materialize.css"  media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="../css/styles.css"/>
-    
-    <script src='../codebase/dhtmlxscheduler.js' type="text/javascript" charset="utf-8"></script>
-    <script src='../codebase/ext/dhtmlxscheduler_timeline.js' type="text/javascript" charset="utf-8"></script>
-    <script src='../codebase/ext/dhtmlxscheduler_container_autoresize.js' type="text/javascript" charset="utf-8"></script>
-    <script src='../codebase/ext/dhtmlxscheduler_editors.js' type="text/javascript" charset="utf-8"></script>
-    
-    <link rel='stylesheet' type='text/css' href='../codebase/dhtmlxscheduler_flat.css'>
-    
-    <style>
+   	
+   	<script src='../codebase/dhtmlxscheduler.js' type="text/javascript" charset="utf-8"></script>
+	<script src='../codebase/ext/dhtmlxscheduler_timeline.js' type="text/javascript" charset="utf-8"></script>
+	<script src='../codebase/ext/dhtmlxscheduler_container_autoresize.js' type="text/javascript" charset="utf-8"></script>
+	<script src='../codebase/ext/dhtmlxscheduler_editors.js' type="text/javascript" charset="utf-8"></script>
+	
+	<link rel='stylesheet' type='text/css' href='../codebase/dhtmlxscheduler_flat.css'>
+   	
+   	<style>
         td{
             padding: 0;
         }
@@ -35,21 +34,21 @@
             background-color:#FF5353;
         }
     </style>
-    
+   	
 </head>
 <body>
 
-    <nav id="slide-out" class="side-nav">
-        <ul>
-            <div class="logo-div">
-                <a href="index.html" class="logo-a">
-                    <img src="../img/logo-mackay.png" class="logo-img">
-                    <font class="logo-p">馬偕醫院排班系統</font>
-                </a>
-            </div>
-            <li class="divider"></li>
-            <li><a href="reservation.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-prearrange.svg"></i>預班表</a></li>
-            <li class="no-padding">
+	<nav id="slide-out" class="side-nav">
+		<ul>
+			<div class="logo-div">
+				<a href="index.html" class="logo-a">
+		    		<img src="../img/logo-mackay.png" class="logo-img">
+		    		<font class="logo-p">馬偕醫院排班系統</font>
+	   			</a>
+	   		</div>
+	   		<li class="divider"></li>
+    	  	<li><a href="reservation.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-prearrange.svg"></i>預班表</a></li>
+    	  	<li class="no-padding">
                 <ul class="collapsible collapsible-accordion">
                     <li>
                         <a class="collapsible-header waves-effect active"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-first-edition.svg"></i>初版班表</a>
@@ -63,53 +62,53 @@
                     </li>
                 </ul>
             </li>
-            <li><a href="schedule.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-schedule.svg"></i>正式班表</a></li>
-            <li><a href="shift.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-exchange.svg"></i>調整班表</a></li>
-            <li><a href="doctor.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
-        </ul>
-    </nav>
+    	  	<li><a href="schedule.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-schedule.svg"></i>正式班表</a></li>
+    	  	<li><a href="shift.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-exchange.svg"></i>調整班表</a></li>
+    	  	<li><a href="doctor.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
+    	</ul>
+	</nav>
     
-    <header id="header" class="container-fix trans-left-five">
-        <nav id="navbar">
-            <div class="nav-wrapper blue-grey darken-1 logo-padding-left">
-                <a onclick="sideNav()" class="blue-grey darken-1 waves-effect waves-light menu-btn">
-                    <i class="material-icons menu-icon" valign="middle">menu</i>
-                </a>
-                <font class="brand-logo light">初版班表 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>查看全部</font>
-                <ul class="right">
-                    <li>
-                        <a class="dropdown-notification-button" href="#!" data-activates="dropdown-notification">
-                            <img src="../img/notifications-button.png" class="notifications-icon">
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-button" href="#!" data-activates="dropdown1">張XX醫生<i class="material-icons right">arrow_drop_down</i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        
-        <ul id="dropdown-notification" class="dropdown-content">
+	<header id="header" class="container-fix trans-left-five">
+		<nav id="navbar">
+	    	<div class="nav-wrapper blue-grey darken-1 logo-padding-left">
+	    		<a onclick="sideNav()" class="blue-grey darken-1 waves-effect waves-light menu-btn">
+	    			<i class="material-icons menu-icon" valign="middle">menu</i>
+	    		</a>
+			    <font class="brand-logo light">初版班表 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>查看全部</font>
+			    <ul class="right">
+			      	<li>
+			      		<a class="dropdown-notification-button" href="#!" data-activates="dropdown-notification">
+			      			<img src="../img/notifications-button.png" class="notifications-icon">
+			      		</a>
+			      	</li>
+			      	<li>
+			      		<a class="dropdown-button" href="#!" data-activates="dropdown1">張XX醫生<i class="material-icons right">arrow_drop_down</i>
+			      		</a>
+			      	</li>
+			    </ul>
+	    	</div>
+	  	</nav>
+		
+		<ul id="dropdown-notification" class="dropdown-content">
             <li><font class="notification">5/12 李XX醫生換班成功<p>2 days ago</p></font></li>
             <li><font class="notification">5/11 系統公告 請去查閱<p>3 days ago</p></font></li>
         </ul>
         
-        <ul id="dropdown1" class="dropdown-content">
-            <li><a href="setting.html">設定</a></li>
-            <li><a href="profile.html">個人資料</a></li>
-            <li class="divider"></li>
-            <li><a href="logout.html">登出</a></li>
-        </ul>
+	  	<ul id="dropdown1" class="dropdown-content">
+		  	<li><a href="setting.html">設定</a></li>
+		  	<li><a href="profile.html">個人資料</a></li>
+		  	<li class="divider"></li>
+		  	<li><a href="logout.html">登出</a></li>
+		</ul>
         
         <a href="#" data-activates="slide-out" class="button-collapse"></a>
-    </header>
+	</header>
 
-    <div id="section" class="container-fix trans-left-five">    <!--     style="background-color:red;"-->
-        <div class="container-section">
-            <div class="row">
+	<div id="section" class="container-fix trans-left-five">    <!--	 style="background-color:red;"-->
+		<div class="container-section">
+			<div class="row">
                 <div class="col s12 m12">
-                    <div class="card border-t">
+      		  	  	<div class="card border-t">
                         <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
                             <div class="dhx_cal_navline">
                                 <div class="dhx_cal_prev_button"></div>
@@ -126,8 +125,9 @@
                             <div class="dhx_cal_header">
                             </div>
                             <div class="dhx_cal_data">
-                            </div>      
+                            </div>		
                         </div>
+
                         <script type="text/javascript" charset="utf-8">
                     
                             scheduler.locale.labels.timeline_tab = "Timeline";
@@ -214,17 +214,50 @@
                             };
                             
                             //進入畫面後顯示的東西
-                            scheduler.init('scheduler_here',new Date(),"timeline");
-                             scheduler.parse([
-                            @foreach($schedule as $data)
-                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}"},
-                            @endforeach
+                            scheduler.init('scheduler_here',new Date(2017,5,26),"timeline");
+
+                            
+                            scheduler.parse([
+                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"王志平", section_id:1},
+                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"黃明源", section_id:2},
+                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"莊錦康", section_id:3},
+                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"簡立仁", section_id:4},
+
+                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"王志平", section_id:1},
+                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"黃明源", section_id:2},
+                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"莊錦康", section_id:3},
+                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"簡立仁", section_id:4},
+                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"陳長志", section_id:5},
+                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"劉良嶸", section_id:6},
+                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"陳楷宏", section_id:7},
+                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"黃明源", section_id:8},
+                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"鄭婓茵", section_id:9},
+                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"劉蕙慈", section_id:10},
+                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"王志平", section_id:11},
+                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"柳志翰", section_id:12},
+                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"蘇柏樺", section_id:13},
+
+                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"王志平", section_id:1},
+                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"黃明源", section_id:2},
+                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"莊錦康", section_id:3},
+                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"簡立仁", section_id:4},
+                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"陳長志", section_id:5},
+                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"劉良嶸", section_id:6},
+                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"陳楷宏", section_id:7},
+                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"黃明源", section_id:8},
+                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"鄭婓茵", section_id:9},
+                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"劉蕙慈", section_id:10},
+                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"王志平", section_id:11},
+                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"柳志翰", section_id:12},
+                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"蘇柏樺", section_id:13}
                             ],"json");
+
                         </script>
                     </div>
                 </div>
       		</div>
-      		
+		</div>
+	</div>
     
 			
 

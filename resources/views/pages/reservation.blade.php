@@ -342,12 +342,12 @@
 
                            
                             scheduler.init('scheduler_here',new Date(),"month");
-                            //scheduler.load("./reservation_data");
-                            // var dp = new dataProcessor("./reservation_data");
-                            //  dp.init(scheduler);
+                            // scheduler.load("./reservation_data");
+                            //  var dp = new dataProcessor("./reservation_data");
+                            //   dp.init(scheduler);
                             
                               
-                            //讀取資料
+                         //    //讀取資料
 
                         	@foreach($reservations as $reservation)
 

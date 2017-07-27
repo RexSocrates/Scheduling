@@ -38,7 +38,7 @@ class AccountController extends Controller
         $user = new User();
         $shiftRecords = new ShiftRecords();
 
-        $data = $shiftRecords->getMoreShiftsRecordsInformation(true); //到shiftrecords modle找資料
+        $data = $shiftRecords->getMoreCheckShiftsRecordsInformation(true); //到shiftrecords modle找資料
 
        
         return view('pages.profile', [
