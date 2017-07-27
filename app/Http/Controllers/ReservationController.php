@@ -12,10 +12,9 @@ use App\Remark;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Dhtmlx\Connector\SchedulerConnector;
+use App\Http\Controllers;
 
 use App\User;
-
-// import the model
 
 class ReservationController extends Controller
 {
@@ -64,6 +63,7 @@ class ReservationController extends Controller
         $reservation = new Reservation();
         $shiftCategory = new ShiftCategory();
         $user = new User();
+        $remark = new Remark();
 
         $data = array();
 
@@ -80,25 +80,47 @@ class ReservationController extends Controller
             array_push($data, array($res, $name));
         }
 
+
+       
+        // $connector = new SchedulerConnector(null, "PHPLaravel");
+        // $connector->configure(new Reservation(), "resSerial", "date, endDate, categorySerial");
+        // $connector->render();        
+        //$connector->render_sql("Select * from Reservation",
+        //"resSerial","date, endDate, categorySerial");      
+
         
-        $connector = new SchedulerConnector(null, "PHPLaravel");    
-        $connector->configure(new Reservation(),"resSerial","periodSerial,isWeekday,location,isOn,date, endDate,remark,categorySerial");
+//        $connector = new SchedulerConnector(null, "PHPLaravel");    
+//        $connector->configure(new Reservation(),"resSerial","periodSerial,isWeekday,location,isOn,date, endDate,remark,categorySerial");
        // $connector->render_sql("insert into Reservation",'resSerial','date,endDate,categorySerial');
                                          
         //$connector->render();                                       
-                
       return view('pages.reservation', array('reservations' => $data,'countDay' => $countDay,
                 'countNight' => $countNight ,'doctorDay' =>$doctorDay, 'doctorNight'=> $doctorNight ));
        
       }
+
+    public function renderData() {
+//        $connector = new SchedulerConnector($Reservation, "PHPLaravel");
+//        $connector->configure(new Reservation(), "resSerial", "date, endDate, categorySerial");
+//        $connector->render();
+        // $connector->render_table('DoctorAndReservation','resSerial','doctorID');
+        
+        $connector = new SchedulerConnector(null, "PHPLaravel");
+//        $connector->configure('Reservation', "resSerial", "date, endDate, categorySerial");
+        $connector->configure(new Reservation(), "resSerial", "periodSerial, isWeekday, location, isOn, date, endDate, categorySerial");
+        $connector->render();
+    }
+
+
     //增加備註
     public  function addRemark(){
         $remark = new Remark();
         $user = new User();
         $doctorID = $user->getCurrentUserID();
         $addRemark = Input::get('remark');
-        $remarkData = $remark->addremark($doctorID,$addRemark);
+        $remarkData = $remark->addRemark($doctorID,$addRemark);
 
+        return redirect('reservation');
     }
 
     

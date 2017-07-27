@@ -32,12 +32,12 @@ class ShiftRecordsController extends Controller
     		$scheduleID_2 = Input::get('scheduleID_2');
     		$schID_1_doctor = Input::get('schID_1_doctor');
     		$schID_2_doctor = Input::get('schID_2_doctor');
-            $doc2Confirm = flase;
-            $adminConfirm = flase;
+            $doc2Confirm = 0;
+            $adminConfirm = 0;
 
-    		$newShiftSerial = $addShifts->addShifts($scheduleID_1,$scheduleID_2,$schID_2_doctor,$schID_2_doctor,$doc2Confirm,$adminConfirm);
+    		$newShiftSerial = $addShifts->addShifts($scheduleID_1,$scheduleID_2,$schID_1_doctor,$schID_2_doctor,$doc2Confirm,$adminConfirm);
 
-    		 return redirect('schedule-all'); 
+    		 return redirect('first-edition-all'); 
 
     }
 

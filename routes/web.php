@@ -38,7 +38,7 @@ Route::get('/reservation-all', 'ReservationController@reservation');
 // 列出個人的預班資訊
 Route::get('/reservation', 'ReservationController@getReservationByID');
 Route::post('/reservation', 'ReservationController@addRemark');
-Route::match(['get', 'post'], '/reservation', "ReservationController@getReservationByID");
+Route::match(['get', 'post'], '/reservation_data', "ReservationController@renderData");
 
 //列出全部班表資訊
 Route::get('/schedule-all', 'ScheduleController@schedule');
@@ -46,8 +46,11 @@ Route::get('/schedule-all', 'ScheduleController@schedule');
 //列出個人班表資訊
 Route::get('/schedule', 'ScheduleController@getScheduleByDoctorID');
 
+
+
 // 列出所有使用者的資訊以及公假
 Route::get('officialLeave', 'AccountController@getOfficialLeavePage');
+
 
 
 // ========================================================================
@@ -55,7 +58,13 @@ Route::get('getExchangeSchedulePage', function() {
 	return view('testPage.exchangeSchedule');
 });
 
-Route::get('reservationSave', 'TestController@reservationSave');
+//初版班表 全部醫生
+Route::get('/first-edition-all', 'ScheduleController@firstSchedule');
+Route::post('/first-edition-all', 'ShiftRecordsController@addShifts');
+
+//初版班表 個人
+Route::get('first-edition', 'ScheduleController@firstEditionSchedule');
+
 
 Route::get('getOfficialLeavePage', 'AccountController@getOfficialLeavePage');
 
@@ -93,7 +102,7 @@ Route::get('exchangingFailedMail', 'MailController@rejectShiftExchanging');
 Route::get('getTestPage', 'TestController@getTestPage');
 
 // ========================================================================
-Route::get('/schedule', 'ScheduleController@schedule');
+//Route::get('/schedule', 'ScheduleController@schedule');
 
 //Route::get('/reservation', 'AccountController@reservation');
 

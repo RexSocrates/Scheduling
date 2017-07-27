@@ -19,7 +19,31 @@ use App\Schedule;
 
 class ScheduleController extends Controller
 {
-    //查看全部班表 所有醫生換班紀錄
+    //查看初版全部班表 所有醫生換班紀錄
+    public function firstSchedule() {
+        $schedule = new Schedule();
+        $user = new User();
+        $shiftRecords = new ShiftRecords(); 
+        $scheduleData = $schedule->getSchedule();
+
+        $currentDoctor = $user->getCurrentUserInfo();
+
+        foreach ($scheduleData as $data) {
+            $doctorName = $user->getDoctorInfoByID($data->doctorID);
+            $data->doctorID = $doctorName->name;
+        }
+
+        $data = $shiftRecords->getMoreShiftsRecordsInformation(false);
+
+        $currentDoctorSchedule=$schedule->getScheduleByCurrentDoctorID();
+
+        $doctorName = $user->getDoctorInfoByID(2);
+        $doctorSchedule = $schedule->getScheduleByDoctorID(2); //之後用ajax傳入id
+        
+        return view('pages.first-edition-all', array('schedule' => $scheduleData,'shiftRecords'=>$data,'currentDoctor'=>$currentDoctor,'currentDoctorSchedule'=>$currentDoctorSchedule,'doctorName'=>$doctorName ,'doctorSchedule'=>$doctorSchedule));
+    }
+
+     //查看正式全部班表 
     public function schedule() {
         $schedule = new Schedule();
         $user = new User();
@@ -36,6 +60,22 @@ class ScheduleController extends Controller
         
         return view('pages.schedule-all', array('schedule' => $scheduleData,'shiftRecords'=>$data));
     }
+    // 初版班表 個人
+    public function firstEditionSchedule() {
+        $schedule = new Schedule();
+         $scheduleCategory = new ScheduleCategory();
+         $user = new User();
+
+         $scheduleData = $schedule->getScheduleByDoctorID($user->getCurrentUserID());
+
+         foreach ($scheduleData as $data) {
+            $scheduleName = $scheduleCategory->findScheduleName($data->schCategorySerial);
+            $data->schCategorySerial =  $scheduleName;
+        }
+
+        
+        return view('pages.first-edition', array('schedule' => $scheduleData,'shiftRecords'=>$data));
+    }
 
     //單一月份班表資訊
       public function getScheduleByID() {
@@ -51,8 +91,9 @@ class ScheduleController extends Controller
 
          $schedule = new Schedule();
          $scheduleCategory = new ScheduleCategory();
+         $user = new User();
 
-         $scheduleData = $schedule->getScheduleByDoctorID();
+         $scheduleData = $schedule->getScheduleByDoctorID($user->getCurrentUserID());
 
          foreach ($scheduleData as $data) {
             $scheduleName = $scheduleCategory->findScheduleName($data->schCategorySerial);

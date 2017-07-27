@@ -8,8 +8,15 @@ use DB;
 use App\User;
 class Reservation extends Model
 {
-    protected $table = 'Reservation';
+
+//    public $primaryKey = "resSerial";
+//    public $timestamps = false;
+//    protected $table = 'Reservation';
     //protected $table = 'DoctorAndReservation';
+    
+    protected $table = "Reservation";
+    public $primaryKey = "resSerial";
+    public $timestamps = false;
     
 
     //查看 預班資訊

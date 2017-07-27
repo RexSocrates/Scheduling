@@ -82,6 +82,14 @@ header, main, footer {
     border-top: 1px solid rgba(160, 160, 160, 0.2);
 }
 
+.td-padding {
+    padding: 15px 5px;
+}
+
+.font-w-b {
+    font-weight: bold;
+}
+
 #navbar {
 /*    height: 64px;*/
     line-height: 64px;
@@ -204,6 +212,11 @@ header, main, footer {
     width: 70px;
 }
 
+.modal-shift {
+    height: 75% !important;
+    max-height: 80%;
+}
+
 .modal-announcement {
 /*    width: 600px;*/
     height: 700px !important;
@@ -224,6 +237,10 @@ header, main, footer {
 
 .modal-content-customize {
     height: calc(100% - 155px) !important;
+}
+
+.modal-content-customize1 {
+    height: calc(100% - 115px) !important;
 }
 
 .btn-save {

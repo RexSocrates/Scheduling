@@ -8,12 +8,12 @@ class Remark extends Model
 {
     //
     public function addRemark($doctorID,$remark){
-    	$remark = DB::table("Remark")-> insertGetId([
+    	$addRemark = DB::table("Remark")-> insertGetId([
                 'doctorID' => $doctorID,
     			'remark' => $remark
                     
     		]);
 
-    	return redirect("reservation");
+    	return $addRemark;
     }
 }
