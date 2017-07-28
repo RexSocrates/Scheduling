@@ -304,13 +304,13 @@ class DateTest extends Seeder
       //   ]);   
     
       //  DB::table('ShiftRecords')-> insertGetId([
-      //       'scheduleID_1' => 3,
-      //       'scheduleID_2' => 4,
+      //       'scheduleID_1' => 5 ,
+      //       'scheduleID_2' => 1 ,
       //       'schID_1_doctor' => 2,
       //       'schID_2_doctor' => 3,
-      //       'doc2Confirm' => 1, 
+      //       'doc2Confirm' => 0, 
       //       'adminConfirm' => 0,
-      //       'date' => "2017-05-08"
+      //       'date' => "2017-07-26"
                
       // ]);
 

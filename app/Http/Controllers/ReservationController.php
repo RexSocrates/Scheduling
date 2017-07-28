@@ -89,15 +89,26 @@ class ReservationController extends Controller
         //"resSerial","date, endDate, categorySerial");      
 
         
+
 //        $connector = new SchedulerConnector(null, "PHPLaravel");    
 //        $connector->configure(new Reservation(),"resSerial","periodSerial,isWeekday,location,isOn,date, endDate,remark,categorySerial");
        // $connector->render_sql("insert into Reservation",'resSerial','date,endDate,categorySerial');
                                          
         //$connector->render();                                       
+
+        //$connector = new SchedulerConnector(null, "PHPLaravel");    
+        //$connector->configure(new Reservation(),"resSerial","periodSerial,isWeekday,location,isOn,date, endDate,remark,categorySerial");
+       // $connector->render_sql("insert into Reservation",'resSerial','date,endDate,categorySerial');
+                                         
+        //$connector->render();                                       
+                
+
+
       return view('pages.reservation', array('reservations' => $data,'countDay' => $countDay,
                 'countNight' => $countNight ,'doctorDay' =>$doctorDay, 'doctorNight'=> $doctorNight ));
        
       }
+
 
     public function renderData() {
 //        $connector = new SchedulerConnector($Reservation, "PHPLaravel");
@@ -110,6 +121,16 @@ class ReservationController extends Controller
         $connector->configure(new Reservation(), "resSerial", "periodSerial, isWeekday, location, isOn, date, endDate, categorySerial");
         $connector->render();
     }
+
+      // public function renderData() {
+      //   $connector = new SchedulerConnector(null, "PHPLaravel");
+      //   $connector->configure(new Reservation(), "resSerial", "date, endDate, categorySerial");
+      //   $connector->render();
+      //  // $connector->render_table('DoctorAndReservation','resSerial','doctorID');
+       
+
+      // }
+
 
 
     //增加備註

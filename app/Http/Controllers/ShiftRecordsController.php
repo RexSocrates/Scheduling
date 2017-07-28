@@ -5,17 +5,54 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\ShiftRecords;
 use Illuminate\Support\Facades\Input;
+use App\Schedule;
+use App\User;
 
 class ShiftRecordsController extends Controller
 {
-    //列出所有換班紀錄
+    //列出 新增換班 所有換班紀錄  醫生確認換班
     public  function  shiftRecords(){
-         $shiftRecords = new ShiftRecords();
-         $shiftRecordsData = $shiftRecords->shiftRecordsList();
+        $shiftRecords = new ShiftRecords();
+        $schedule = new Schedule();
+        $user = new User();
 
-         return view ("shiftRecords",array('shiftRecords' => $shiftRecordsData));
+        $currentDoctor = $user->getCurrentUserInfo();
+
+        
+        $allShiftData = $shiftRecords->getMoreCheckShiftsRecordsInformation(false);  // 列出所有待確認換班資訊
+
+        $shiftDataByDoctorID = $shiftRecords->getMoreUncheckShiftsRecordsInformation(true); //換班待確認
+
+        $currentDoctorSchedule=$schedule->getScheduleByCurrentDoctorID(); //查看目前登入的醫生班表資訊
+
+        //選擇換班醫生
+        $doctorName = $user->getDoctorInfoByID(2);
+        $doctorSchedule = $schedule->getScheduleByDoctorID(2); //之後用ajax傳入id
+
+
+        //換班確認
+
+        return view ("pages.first-edition-shift",array('shiftRecords'=>$allShiftData,'shiftDataByDoctorID'=>$shiftDataByDoctorID,'currentDoctor'=>$currentDoctor,'currentDoctorSchedule'=>$currentDoctorSchedule,'doctorName'=>$doctorName ,'doctorSchedule'=>$doctorSchedule));
 
     } 
+
+    //醫生確認換班
+    public function checkShift($id){
+        $shiftRecords = new ShiftRecords();
+
+        $shiftCheck = $shiftRecords->doc2Confirm($id,1);
+
+        return redirect ('first-edition-shift');
+    }
+
+    //醫生拒絕換班
+    public function rejectShift($id){
+        $shiftRecords = new ShiftRecords();
+
+        $shiftCheck = $shiftRecords->doc2Confirm($id,2);
+
+        return redirect ('first-edition-shift');
+    }
 
     //查詢 單一醫生換班紀錄
     public function getShiftRecordsByDoctorID(){
@@ -37,7 +74,7 @@ class ShiftRecordsController extends Controller
 
     		$newShiftSerial = $addShifts->addShifts($scheduleID_1,$scheduleID_2,$schID_1_doctor,$schID_2_doctor,$doc2Confirm,$adminConfirm);
 
-    		 return redirect('first-edition-all'); 
+    		return redirect('first-edition-shift'); 
 
     }
 

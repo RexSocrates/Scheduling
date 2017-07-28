@@ -46,7 +46,11 @@ Route::get('/schedule-all', 'ScheduleController@schedule');
 //列出個人班表資訊
 Route::get('/schedule', 'ScheduleController@getScheduleByDoctorID');
 
+//初版班表 個人
+Route::get('first-edition', 'ScheduleController@firstEditionSchedule');
 
+//初版班表 全部醫生
+Route::get('/first-edition-all', 'ScheduleController@firstSchedule');
 
 // 列出所有使用者的資訊以及公假
 Route::get('officialLeave', 'AccountController@getOfficialLeavePage');
@@ -58,13 +62,12 @@ Route::get('getExchangeSchedulePage', function() {
 	return view('testPage.exchangeSchedule');
 });
 
-//初版班表 全部醫生
-Route::get('/first-edition-all', 'ScheduleController@firstSchedule');
-Route::post('/first-edition-all', 'ShiftRecordsController@addShifts');
 
-//初版班表 個人
-Route::get('first-edition', 'ScheduleController@firstEditionSchedule');
+Route::get('checkShift/{id}','ShiftRecordsController@checkShift');
+Route::get('rejectShift/{id}','ShiftRecordsController@rejectShift');
 
+Route::get('first-edition-shift','ShiftRecordsController@shiftRecords');
+Route::post('first-edition-shift','ShiftRecordsController@addShifts');
 
 Route::get('getOfficialLeavePage', 'AccountController@getOfficialLeavePage');
 
@@ -148,10 +151,10 @@ Route::get('/shiftRecords/', 'ShiftRecordsController@shiftRecords');
 Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecordsByDoctorID');
 
 //新增換班
-Route::get('/addShifts', function() {
-    return view('addShifts');
-});
-Route::post('/addShifts', 'ShiftRecordsController@addShifts');
+// Route::get('/addShifts', function() {
+//     return view('addShifts');
+// });
+// Route::post('/addShifts', 'ShiftRecordsController@addShifts');
 
 //醫生換班確認
 Route::post('/doctorCheckShift', 'ShiftRecordsController@doc2Confirm');
