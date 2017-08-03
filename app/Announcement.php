@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use DB;
+
 class Announcement extends Model
 {
     //
@@ -30,7 +32,7 @@ class Announcement extends Model
     public function addAnnouncement($data) {
         $currentMonth = date('Y-m-d');
         
-        $newSerial = DB::tabe('Announcement')->insertGetId([
+        $newSerial = DB::table('Announcement')->insertGetId([
             'doctorID' => $data['doctorID'],
             'title' => $data['title'],
             'content' => $data['content'],
