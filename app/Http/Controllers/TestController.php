@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Input;
 
 use App\User;
 use App\Remark;
+use App\Announcement;
 
 class TestController extends Controller
 {
@@ -118,5 +119,23 @@ class TestController extends Controller
         $remark->addRemark(100, 'asdfgh');
         
 //        echo 'ID : '.$id;
+    }
+    
+    //測試 jQuery 的 AJAX 
+    public function postAjaxRequest(Request $request) {
+        $requestedData = $request->all();
+        
+        $annoucement = new Announcement();
+        
+        $data = [
+            'doctorID' => 1,
+//            'title' => 'This is title',
+            'title' => $requestedData['date'],
+//            'title' => $requestedData['number'],
+//            'content' => 'This is content'
+            'content' => $requestedData['content']
+        ];
+        
+        $annoucement->addAnnouncement($data);
     }
 }

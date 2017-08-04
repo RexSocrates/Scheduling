@@ -24,6 +24,29 @@
     <script src="../codebase/ext/dhtmlxscheduler_collision.js"></script>
     <script src="../codebase/ext/dhtmlxscheduler_limit.js"></script>
     <script src="../../codebase/ext/dhtmlxscheduler_serialize.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+    <script>
+        function postRequest(textNum, date) {
+            $.post('postAjaxRequest', {
+                content : textNum,
+                date : date
+            }, function() {
+                alert('Success');
+            });
+        }
+        
+//        $(document).ready(function() {
+//            $("div.dhx_btn_set dhx_left_btn_set dhx_save_btn_set").click(function() {
+//                $.post('postAjaxRequest', {
+//                    content : 'This is content'
+//                }, function() {
+//                    alert('Success');
+//                });
+//            });
+//        });
+    </script>
 
     <style>
    
@@ -195,9 +218,6 @@
                                 
                                 return true;
                             });
-
-                            var dp = new dataProcessor("./reservation_data");
-                            dp.init(scheduler);
                             
                             //在Lightbox按下save時執行
                             scheduler.attachEvent("onEventSave",function(id,ev,is_new){
@@ -205,8 +225,9 @@
                                 var event = scheduler.getEvent(id);
                                 
                                 event.text = event.priority;
-
-//                                dp.sendData();
+                                
+//                                console.log(event.text);
+                                
                                 
                                 return true;
                             });
@@ -231,6 +252,12 @@
                                 }else if(event.priority == null){
                                     event.text = "沒選到班";
                                 }
+                                
+//                                postRequest(event.priority, e.date);
+                                
+                                console.log(event.priority);
+                                console.log(event.start_date);
+                                console.log(event.end_date);
                                 
                             });
 

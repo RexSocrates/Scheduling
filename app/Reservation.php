@@ -84,40 +84,39 @@ class Reservation extends Model
 
 
     //新增預班
-    public function addReservation($periodSerial, $isWeekday, $location, $isOn, $remark, $date){
+    public function addReservation(array $data){
+        // $periodSerial, $isWeekday, $location, $isOn, $remark, $date
         $generatedSerial = 0;
 
         $count = DB::table("Reservation")
-            -> where('periodSerial',$periodSerial) 
-            -> where('isWeekday',$isWeekday)
-            -> where('location',$location) 
-            -> where('isOn',$isOn)
-            -> where('date',$date)
+            ->where('isWeekday',$data['isWeekday'])
+            ->where('location',$data['location']) 
+            ->where('isOn',$data['isOn'])
+            ->where('date',$data['date'])
+            ->where('categorySerial', $data['categorySerial'])
             ->count();
+        
         if($count==0){
-            //新增預班
+            //此資料尚未存在預班表中，新增預班
                    
-    	            $generatedSerial = DB::table('Reservation')-> insertGetId([
-                    'periodSerial' => $periodSerial,
-    				        'isWeekday' => $isWeekday,
-    				        'location' => $location,
-    				        'isOn' => $isOn,
-    				        'remark' => $remark,
-    				        'date' => $date,
-                    'endDate' => date_add($date),
-                    
-    		            ]);
+            $generatedSerial = DB::table('Reservation')->insertGetId([
+                'isWeekday' => $data['isWeekday'],
+                'location' => $data['location'],
+                'isOn' => $data['isOn'],
+                'date' => $date,
+                'endDate' => date_add($date),
+            ]);
 
          }
         else{
-            //得到預班表id
-                $generatedSerial = DB::table("Reservation")
-                -> where('periodSerial',$periodSerial) 
-                -> where('isWeekday',$isWeekday)
-                -> where('location',$location) 
-                -> where('isOn',$isOn)
-                -> where('date',$date)
-                -> value('resSerial');
+            //過去已存入此資料，得到預班編號
+            $generatedSerial = DB::table("Reservation")
+                ->where('periodSerial',$periodSerial) 
+                ->where('isWeekday',$isWeekday)
+                ->where('location',$location) 
+                ->where('isOn',$isOn)
+                ->where('date',$date)
+                ->value('resSerial');
         }
 
         return $generatedSerial;
@@ -138,29 +137,27 @@ class Reservation extends Model
                 ->count();
             if($count==0){
                 //新增預班
-                    $generatedSerial = DB::table('Reservation')-> insertGetId([
+                $generatedSerial = DB::table('Reservation')->insertGetId([
                     'periodSerial' => $periodSerial,
                     'isWeekday' => $isWeekday,
                     'location' => $location,
                     'isOn' => $isOn,
                     'remark' => $remark,
                     'date' => $date,
-                    'endDate' => date_add($date),
-
-                    
-            ]);
+                    'endDate' => date_add($date)
+                ]);
 
             }
             else{
                 //取得預班id
                 $generatedSerial = DB::table("Reservation")
-                -> where('periodSerial',$periodSerial) 
-                -> where('isWeekday',$isWeekday)
-                -> where('location',$location) 
-                -> where('isOn',$isOn)
-                -> where('date',$date)
-                -> where('endDated',date_add($date))
-                -> value('resSerial');
+                    ->where('periodSerial',$periodSerial) 
+                    ->where('isWeekday',$isWeekday)
+                    ->where('location',$location) 
+                    ->where('isOn',$isOn)
+                    ->where('date',$date)
+                    ->where('endDated',date_add($date))
+                    ->value('resSerial');
             }     
 
              return $generatedSerial;     

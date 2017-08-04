@@ -165,22 +165,31 @@ class ReservationController extends Controller
    
   
     //新增預班
-    public function addReservation(){
-    	$addReservation = new Reservation();
-        $addDoctor = new DoctorAndReservation();
-        $periodSerial = Input::get('periodSerial');
-    	$isWeekday = Input::get('isWeekday');
-    	$location = Input::get('location');
-    	$isOn = Input::get('isOn');
-    	$remark = Input::get('remark');
-    	$date = Input::get('date');
-        $doctorID = Input::get('doctorID');
-           
-    	$newResSerial = $addReservation->addReservation($periodSerial,$isWeekday,$location,$isOn,$remark,$date,$doctorID);
-        $addDoctorToTable = $addDoctor->addDoctor($newResSerial); //醫生id
+    public function addReservation(Request $request){
+//    	$addReservation = new Reservation();
+//        $addDoctor = new DoctorAndReservation();
+//        $periodSerial = Input::get('periodSerial');
+//    	$isWeekday = Input::get('isWeekday');
+//    	$location = Input::get('location');
+//    	$isOn = Input::get('isOn');
+//    	$remark = Input::get('remark');
+//    	$date = Input::get('date');
+//        $doctorID = Input::get('doctorID');
+//           
+//    	$newResSerial = $addReservation->addReservation($periodSerial,$isWeekday,$location,$isOn,$remark,$date,$doctorID);
+//        $addDoctorToTable = $addDoctor->addDoctor($newResSerial); 
+        //醫生id
+        
+        
+        //get data
+        $data = $request->all();
+        
+        $resObj = new Reservation();
+        $doctorAndResObj = new DoctorAndReservation();
+        
+        
 
     	return redirect('reservation'); 
-
     }
     
      public function deleteReservation($id){
