@@ -28,24 +28,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     
     <script>
-        function postRequest(textNum, date) {
+        function postRequest(num, date1, date2) {
             $.post('postAjaxRequest', {
-                content : textNum,
-                date : date
+                num : num,
+                date1 : date1,
+                date2 : date2
             }, function() {
                 alert('Success');
             });
         }
         
-//        $(document).ready(function() {
-//            $("div.dhx_btn_set dhx_left_btn_set dhx_save_btn_set").click(function() {
-//                $.post('postAjaxRequest', {
-//                    content : 'This is content'
-//                }, function() {
-//                    alert('Success');
-//                });
-//            });
-//        });
+        function sendReservation(categorySerial, startDate, endDate) {
+            $.post('sendReservation', {
+                shiftCategory : categorySerial,
+                startDate : startDate,
+                endDate : endDate
+            });
+        }
     </script>
 
     <style>
@@ -253,11 +252,14 @@
                                     event.text = "沒選到班";
                                 }
                                 
-//                                postRequest(event.priority, e.date);
+                                postRequest(event.priority, event.start_date, event.end_date);
                                 
-                                console.log(event.priority);
-                                console.log(event.start_date);
-                                console.log(event.end_date);
+                                // call ajax function
+//                                sendReservation(event.priority, event.start_date, event.end_date);
+                                
+//                                console.log(event.priority);
+//                                console.log(event.start_date);
+//                                console.log(event.end_date);
                                 
                             });
 

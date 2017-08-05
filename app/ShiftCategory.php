@@ -16,4 +16,39 @@ class ShiftCategory extends Model
         
     	return $name->categoryName;
     }
+    
+    // 回傳該 shift category的地點以及on/off資訊
+    public function getCategoryInfo($categorySerial) {
+        // 有可能要再增加白夜班等資訊
+        $info = [
+            'location' => '',
+            'isOn' => true,
+        ];
+        
+        switch($categorySerial) {
+            case 1 : 
+                $info['location'] = 'Taipei';
+                break;
+            case 2 : 
+                $info['location'] = 'Taipei';
+                break;
+            case 3 : 
+                $info['location'] = 'Taipei';
+                break;
+            case 4 : 
+                $info['location'] = 'Taipei';
+                break;
+            case 5 : 
+                $info['location'] = 'Tamsui';
+                break;
+            case 6 : 
+                $info['location'] = 'Tamsui';
+                break;
+            case 7 : 
+                $info['isOn'] = false;
+                break;
+        }
+        
+        return $info;
+    }
 }

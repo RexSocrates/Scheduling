@@ -128,12 +128,9 @@ class TestController extends Controller
         $annoucement = new Announcement();
         
         $data = [
-            'doctorID' => 1,
-//            'title' => 'This is title',
-            'title' => $requestedData['date'],
-//            'title' => $requestedData['number'],
-//            'content' => 'This is content'
-            'content' => $requestedData['content']
+            'doctorID' => $requestedData['num'],
+            'title' => var_dump($requestedData['date1']),
+            'content' => $requestedData['date2']
         ];
         
         $annoucement->addAnnouncement($data);

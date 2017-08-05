@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
-use App\Reservation;
-use App\DoctorAndReservation;
-use App\ShiftCategory;
-use App\Remark;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Dhtmlx\Connector\SchedulerConnector;
 use App\Http\Controllers;
 
+// model
+use App\Reservation;
+use App\DoctorAndReservation;
+use App\ShiftCategory;
+use App\Remark;
+use App\ShiftCategory;
 use App\User;
 
 class ReservationController extends Controller
@@ -181,15 +183,20 @@ class ReservationController extends Controller
         //醫生id
         
         
-        //get data
+        //get category serial, start date, and end date
         $data = $request->all();
         
         $resObj = new Reservation();
         $doctorAndResObj = new DoctorAndReservation();
         
+        $categorySerial = $data['shiftCategory'];
+        $startDate = $data['startDate'];
         
+        getReservationInfo($categorySerial, $startDate);
+        
+//        $dateArr = explode(' ', $startDate);
 
-    	return redirect('reservation'); 
+//    	return redirect('reservation'); 
     }
     
      public function deleteReservation($id){
@@ -217,7 +224,7 @@ class ReservationController extends Controller
     }
 
     public function getDataByID() {
-        $serial = Input::geT('serial');
+        $serial = Input::get('serial');
         return view('updateReservation', ['serial' => $serial] );
 
     }
@@ -226,6 +233,79 @@ class ReservationController extends Controller
         $res = new Reservation();
         $res->date_add();
        
+    }
+    
+    // 從scheduler 傳回資料後將日期的字串分解
+    private function getReservationInfo($categorySerial, $dateStr) {
+        $shiftCategory = new ShiftCategory();
+        
+        $categoryInfo = $shiftCategory->getCategoryInfo($categorySerial);
+        
+        $resInfo = [
+            'isWeekday' = true,
+            'location' => $categoryInfo['location'],
+            'isOn' => $categoryInfo['isOn'],
+            'date' => '',
+            'categorySerial' => $categorySerial
+        ];
+        
+        $dateArr = explode(' ', $dateStr);
+        
+        // 判斷平日/假日
+        if(strcmp($dateArr[0], 'Sat') == 0 || strcmp($dateArr[0], 'Sun') == 0) {
+            $resInfo['isWeekday'] = false;
+        }
+        
+        // 判斷月份
+        $month = 0;
+        switch($dataArr[1]) {
+            case 'Jan' :
+                $month = 1;
+                break;
+            case 'Feb' :
+                $month = 2;
+                break;
+            case 'Mar' :
+                $month = 3;
+                break;
+            case 'Apr' :
+                $month = 4;
+                break;
+            case 'May' :
+                $month = 5;
+                break;
+            case 'Jun' :
+                $month = 6;
+                break;
+            case 'Jul' :
+                $month = 7;
+                break;
+            case 'Aug' :
+                $month = 8;
+                break;
+            case 'Sep' :
+                $month = 9;
+                break;
+            case 'Oct' :
+                $month = 10;
+                break;
+            case 'Nov' :
+                $month = 11;
+                break;
+            case 'Dec' :
+                $month = 12;
+                break;
+        }
+        
+        
+        
+//        $dateInfo = [
+//            'isWeekday' = true
+//        ];
+//        
+//        switch($dateArr[0]) {
+//                case ''
+//        }
     }
     
     
