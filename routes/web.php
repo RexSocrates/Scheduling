@@ -55,13 +55,17 @@ Route::get('/first-edition-all', 'ScheduleController@firstSchedule');
 // 列出所有使用者的資訊以及公假
 Route::get('officialLeave', 'AccountController@getOfficialLeavePage');
 
-
+// 新增預班
+//Route::post('sendReservation', 'TestController@testDateString');
+Route::post('sendReservation', 'ReservationController@addReservation');
 
 // ========================================================================
 Route::post('postAjaxRequest', 'TestController@postAjaxRequest');
 //Route::get('postAjaxRequest', 'TestController@postAjaxRequest');
 
-Route::post('sendReservation', 'ReservationController@addReservation');
+Route::get('testDateString', 'TestController@testDateString');
+
+
 
 
 Route::get('getExchangeSchedulePage', function() {

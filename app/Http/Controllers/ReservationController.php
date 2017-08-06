@@ -167,15 +167,107 @@ class ReservationController extends Controller
   
     //新增預班
     public function addReservation(Request $request){
+        
         //get category serial, start date, and end date
+//        $data = $request->all();
+//        
+//        $categorySerial = $data['serial'];
+//        $startDate = $data['date1'];
+//        
+//        $resInfo = $this->getReservationInfo($categorySerial, $startDate);
+//        
+//        $resObj = new Reservation();
+//        
+//        $resSerial = $resObj->addOrUpdateReservation($resInfo);
+        
+        // 將預班編號與目前登入的醫生ID寫入 Doctor and reservation
+//        $doctorAndResObj = new DoctorAndReservation();
+//        $user = new User();
+//        
+//        $doctorAndResData = [
+//            'resSerial' => $resSerial,
+//            'doctorID' => $user->getCurrentUserID(),
+//            'remark' => ''
+//        ];
+//        
+//        $doctorAndResObj->addDoctor($doctorAndResData);
+        
+        
+        
+        
+        
+        
         $data = $request->all();
         
+        $serial = $data['serial'];
+        $str = $data['date1'];
+        
+        $dateArr = explode(' ', $str);
+        
+        $shiftCategory = new ShiftCategory();
+        
+        $categoryInfo = $shiftCategory->getCategoryInfo($serial);
+        
+        $resInfo = [
+            'isWeekday' => true,
+            'location' => $categoryInfo['location'],
+            'isOn' => $categoryInfo['isOn'],
+            'date' => '',
+            'categorySerial' => $serial
+        ];
+        
+        // 判斷平日/假日
+        if(strcmp($dateArr[0],"Sat") == 0 or strcmp($dateArr[0],"Sun") == 0) {
+            $resInfo['isWeekday'] = false;
+        }
+        
+        // 判斷月份
+        $month = '00';
+        switch($dateArr[1]) {
+            case 'Jan' :
+                $month = '01';
+                break;
+            case 'Feb' :
+                $month = '02';
+                break;
+            case 'Mar' :
+                $month = '03';
+                break;
+            case 'Apr' :
+                $month = '04';
+                break;
+            case 'May' :
+                $month = '05';
+                break;
+            case 'Jun' :
+                $month = '06';
+                break;
+            case 'Jul' :
+                $month = '07';
+                break;
+            case 'Aug' :
+                $month = '08';
+                break;
+            case 'Sep' :
+                $month = '09';
+                break;
+            case 'Oct' :
+                $month = '10';
+                break;
+            case 'Nov' :
+                $month = '11';
+                break;
+            case 'Dec' :
+                $month = '12';
+                break;
+        }
+        
+        $day = $dateArr[2];
+        $year = $dateArr[3];
+        
+        $resInfo['date'] = $year.'-'.$month.'-'.$day;
+        
         $resObj = new Reservation();
-        
-        $categorySerial = $data['shiftCategory'];
-        $startDate = $data['startDate'];
-        
-        $resInfo = getReservationInfo($categorySerial, $startDate);
         
         $resSerial = $resObj->addOrUpdateReservation($resInfo);
         
@@ -224,72 +316,83 @@ class ReservationController extends Controller
     
     // 從scheduler 傳回資料後將日期的字串分解
     private function getReservationInfo($categorySerial, $dateStr) {
+        $serial = $categorySerial;
+        $str = $dateStr;
+//        $str = 'Wed Aug 09 2017 00:00:00 GMT+0800 (CST)';
+        
+        $dateArr = explode(' ', $str);
+        
+//        echo print_r($arr).'<br>';
+//        echo strcmp($arr[0],"Wed");
+        
         $shiftCategory = new ShiftCategory();
         
-        $categoryInfo = $shiftCategory->getCategoryInfo($categorySerial);
+        $categoryInfo = $shiftCategory->getCategoryInfo($serial);
         
         $resInfo = [
             'isWeekday' => true,
             'location' => $categoryInfo['location'],
             'isOn' => $categoryInfo['isOn'],
             'date' => '',
-            'categorySerial' => $categorySerial
+            'categorySerial' => $serial
         ];
         
-        $dateArr = explode(' ', $dateStr);
+//        $dateArr = explode(' ', $dateStr);
         
         // 判斷平日/假日
-        if(strcmp($dateArr[0], 'Sat') == 0 || strcmp($dateArr[0], 'Sun') == 0) {
+        if(strcmp($dateArr[0],"Sat") == 0 or strcmp($dateArr[0],"Sun") == 0) {
             $resInfo['isWeekday'] = false;
         }
         
         // 判斷月份
-        $month = 0;
-        switch($dataArr[1]) {
+        $month = '00';
+        switch($dateArr[1]) {
             case 'Jan' :
-                $month = 1;
+                $month = '01';
                 break;
             case 'Feb' :
-                $month = 2;
+                $month = '02';
                 break;
             case 'Mar' :
-                $month = 3;
+                $month = '03';
                 break;
             case 'Apr' :
-                $month = 4;
+                $month = '04';
                 break;
             case 'May' :
-                $month = 5;
+                $month = '05';
                 break;
             case 'Jun' :
-                $month = 6;
+                $month = '06';
                 break;
             case 'Jul' :
-                $month = 7;
+                $month = '07';
                 break;
             case 'Aug' :
-                $month = 8;
+                $month = '08';
                 break;
             case 'Sep' :
-                $month = 9;
+                $month = '09';
                 break;
             case 'Oct' :
-                $month = 10;
+                $month = '10';
                 break;
             case 'Nov' :
-                $month = 11;
+                $month = '11';
                 break;
             case 'Dec' :
-                $month = 12;
+                $month = '12';
                 break;
         }
         
-        $day = $dataArr[2];
-        $year = $dataArr[3];
+        $day = $dateArr[2];
+        $year = $dateArr[3];
         
         $resInfo['date'] = $year.'-'.$month.'-'.$day;
         
-        return $resInfo;
+//        $resObj = new Reservation();
+//        
+//        $resObj->addOrUpdateReservation($resInfo);
     }
     
     

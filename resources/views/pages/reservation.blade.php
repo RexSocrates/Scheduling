@@ -28,21 +28,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     
     <script>
-        function postRequest(num, date1, date2) {
-            $.post('postAjaxRequest', {
-                num : num,
-                date1 : date1,
-                date2 : date2
-            }, function() {
-                alert('Success');
-            });
-        }
+//        function postRequest(num, date1, date2) {
+//            $.post('postAjaxRequest', {
+//                num : num,
+//                date1 : date1,
+//                date2 : date2
+//            }, function() {
+//                alert('Success');
+//            });
+//        }
         
         function sendNewReservation(categorySerial, startDate, endDate) {
             $.post('sendReservation', {
-                shiftCategory : categorySerial,
-                startDate : startDate,
-                endDate : endDate
+                serial : categorySerial,
+                date1 : startDate,
+                date2 : endDate
+            }, function() {
+                alert('預約成功');
             });
         }
         
@@ -262,11 +264,13 @@
                                 }
                                 
                                 // call ajax function
+//                                postRequest(event.priority, 'Sun Aug 08 2017', 'Mon Aug 09 2017');
+//                                postRequest(event.priority, event.start_date, event.end_date);
                                 sendNewReservation(event.priority, event.start_date, event.end_date);
                                 
-//                                console.log(event.priority);
-//                                console.log(event.start_date);
-//                                console.log(event.end_date);
+                                console.log(event.priority);
+                                console.log(event.start_date);
+                                console.log(event.end_date);
                                 
                             });
 
@@ -289,7 +293,7 @@
                                     event.text = "off";
                                 }
                                 
-                                updateReservation(id, event.priority, event.start_date, event.end_date);
+//                                updateReservation(id, event.priority, event.start_date, event.end_date);
                                 
                             });
                             

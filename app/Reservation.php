@@ -87,15 +87,15 @@ class Reservation extends Model
         $generatedSerial = 0;
 
         // 檢查是否有相同資料
-        $count = reservationExist($data);
+        $count = $this->reservationExist($data);
         
         if($count==0){
             //資料庫中沒有相同資料，新增預班
-            $generatedSerial = addReservation($data);
+            $generatedSerial = $this->addReservation($data);
          }
         else{
             //資料庫有相同資料，得到預班編號
-            $generatedSerial = getReservationSerial($data);
+            $generatedSerial = $this->getReservationSerial($data);
         }
 
         return $generatedSerial;
@@ -148,7 +148,8 @@ class Reservation extends Model
             'location' => $data['location'],
             'isOn' => $data['isOn'],
             'date' => $data['date'],
-            'endDate' => date_add($data['date']),
+            'endDate' => $this->date_add($data['date']),
+            'categorySerial' => $data['categorySerial']
         ]);
         
         return $generatedSerial;
