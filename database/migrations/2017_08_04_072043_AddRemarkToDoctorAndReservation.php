@@ -15,7 +15,7 @@ class AddRemarkToDoctorAndReservation extends Migration
     {
         Schema::table('DoctorAndReservation', function (Blueprint $table) {
             //
-            $table->string('remark', 200)->after('doctorID');
+            $table->string('remark', 200)->nullable()->after('doctorID');
         });
     }
 

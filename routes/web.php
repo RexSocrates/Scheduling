@@ -61,6 +61,8 @@ Route::get('officialLeave', 'AccountController@getOfficialLeavePage');
 Route::post('postAjaxRequest', 'TestController@postAjaxRequest');
 //Route::get('postAjaxRequest', 'TestController@postAjaxRequest');
 
+Route::post('sendReservation', 'ReservationController@addReservation');
+
 
 Route::get('getExchangeSchedulePage', function() {
 	return view('testPage.exchangeSchedule');

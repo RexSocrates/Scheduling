@@ -38,8 +38,17 @@
             });
         }
         
-        function sendReservation(categorySerial, startDate, endDate) {
+        function sendNewReservation(categorySerial, startDate, endDate) {
             $.post('sendReservation', {
+                shiftCategory : categorySerial,
+                startDate : startDate,
+                endDate : endDate
+            });
+        }
+        
+        function updateReservation(originalSerial, categorySerial, startDate, endDate) {
+            $.post('sendReservationUpdate', {
+                originalSerial : originalSerial,
                 shiftCategory : categorySerial,
                 startDate : startDate,
                 endDate : endDate
@@ -252,10 +261,8 @@
                                     event.text = "沒選到班";
                                 }
                                 
-                                postRequest(event.priority, event.start_date, event.end_date);
-                                
                                 // call ajax function
-//                                sendReservation(event.priority, event.start_date, event.end_date);
+                                sendNewReservation(event.priority, event.start_date, event.end_date);
                                 
 //                                console.log(event.priority);
 //                                console.log(event.start_date);
@@ -281,6 +288,8 @@
                                 }else if(event.priority == 7){
                                     event.text = "off";
                                 }
+                                
+                                updateReservation(id, event.priority, event.start_date, event.end_date);
                                 
                             });
                             

@@ -15,7 +15,6 @@ use App\Reservation;
 use App\DoctorAndReservation;
 use App\ShiftCategory;
 use App\Remark;
-use App\ShiftCategory;
 use App\User;
 
 class ReservationController extends Controller
@@ -168,35 +167,29 @@ class ReservationController extends Controller
   
     //新增預班
     public function addReservation(Request $request){
-//    	$addReservation = new Reservation();
-//        $addDoctor = new DoctorAndReservation();
-//        $periodSerial = Input::get('periodSerial');
-//    	$isWeekday = Input::get('isWeekday');
-//    	$location = Input::get('location');
-//    	$isOn = Input::get('isOn');
-//    	$remark = Input::get('remark');
-//    	$date = Input::get('date');
-//        $doctorID = Input::get('doctorID');
-//           
-//    	$newResSerial = $addReservation->addReservation($periodSerial,$isWeekday,$location,$isOn,$remark,$date,$doctorID);
-//        $addDoctorToTable = $addDoctor->addDoctor($newResSerial); 
-        //醫生id
-        
-        
         //get category serial, start date, and end date
         $data = $request->all();
         
         $resObj = new Reservation();
-        $doctorAndResObj = new DoctorAndReservation();
         
         $categorySerial = $data['shiftCategory'];
         $startDate = $data['startDate'];
         
-        getReservationInfo($categorySerial, $startDate);
+        $resInfo = getReservationInfo($categorySerial, $startDate);
         
-//        $dateArr = explode(' ', $startDate);
-
-//    	return redirect('reservation'); 
+        $resSerial = $resObj->addOrUpdateReservation($resInfo);
+        
+        // 將預班編號與目前登入的醫生ID寫入 Doctor and reservation
+        $doctorAndResObj = new DoctorAndReservation();
+        $user = new User();
+        
+        $doctorAndResData = [
+            'resSerial' => $resSerial,
+            'doctorID' => $user->getCurrentUserID(),
+            'remark' => ''
+        ];
+        
+        $doctorAndResObj->addDoctor($doctorAndResData);
     }
     
      public function deleteReservation($id){
@@ -228,12 +221,6 @@ class ReservationController extends Controller
         return view('updateReservation', ['serial' => $serial] );
 
     }
-
-    public function getdateAdd(){
-        $res = new Reservation();
-        $res->date_add();
-       
-    }
     
     // 從scheduler 傳回資料後將日期的字串分解
     private function getReservationInfo($categorySerial, $dateStr) {
@@ -242,7 +229,7 @@ class ReservationController extends Controller
         $categoryInfo = $shiftCategory->getCategoryInfo($categorySerial);
         
         $resInfo = [
-            'isWeekday' = true,
+            'isWeekday' => true,
             'location' => $categoryInfo['location'],
             'isOn' => $categoryInfo['isOn'],
             'date' => '',
@@ -297,15 +284,12 @@ class ReservationController extends Controller
                 break;
         }
         
+        $day = $dataArr[2];
+        $year = $dataArr[3];
         
+        $resInfo['date'] = $year.'-'.$month.'-'.$day;
         
-//        $dateInfo = [
-//            'isWeekday' = true
-//        ];
-//        
-//        switch($dateArr[0]) {
-//                case ''
-//        }
+        return $resInfo;
     }
     
     
