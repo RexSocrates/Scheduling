@@ -30,7 +30,7 @@ Route::get('profile', 'AccountController@getProfilePage');
 
 Route::get('getChartPage', 'ChartController@getChartPage');
 
-Route::post('doctorsChart', 'ChartController@getChartPageBySelectedID ');
+Route::post('doctorsChart', 'ChartController@getChartPageBySelectedID');
 
 // 列出全部人的預班資訊
 Route::get('/reservation-all', 'ReservationController@reservation');

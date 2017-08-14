@@ -211,34 +211,6 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                    
-                                    <tr>
-                                        <td class="td-padding">簡定國</td>
-                                        <td class="td-padding">2017/07/19</td>
-                                        <td class="td-padding">8/11 <font class="font-w-b">簡定國 北白內1</font> 與 8/14 <font class="font-w-b">張XX 淡白內1</font> 互換</td>
-                                        <td class="td-padding">
-                                            <a class="waves-effect waves-light btn">允許</a>
-                                            <a class="waves-effect waves-light btn deep-orange darken-3">拒絕</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding">邱毓惠</td>
-                                        <td class="td-padding">2017/07/21</td>
-                                        <td class="td-padding">8/16 <font class="font-w-b">邱毓惠 北白內1</font> 與 8/14 <font class="font-w-b">張XX 淡白內1</font> 互換</td>
-                                        <td class="td-padding">
-                                            <a class="waves-effect waves-light btn">允許</a>
-                                            <a class="waves-effect waves-light btn deep-orange darken-3">拒絕</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding">馮嚴毅</td>
-                                        <td class="td-padding">2017/07/24</td>
-                                        <td class="td-padding">8/20 <font class="font-w-b">馮嚴毅 北白內1</font> 與 8/14 <font class="font-w-b">張XX 淡白內1</font> 互換</td>
-                                        <td class="td-padding">
-                                            <a class="waves-effect waves-light btn">允許</a>
-                                            <a class="waves-effect waves-light btn deep-orange darken-3">拒絕</a>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>

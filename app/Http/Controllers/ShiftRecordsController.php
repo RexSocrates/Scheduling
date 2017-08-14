@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Input;
 use App\ShiftRecords;
 use App\Schedule;
 use App\User;
+use App\ScheduleCategory;
 
 // import jobs
 use App\Jobs\SendAgreeShiftExchangeMail;
@@ -126,9 +127,9 @@ class ShiftRecordsController extends Controller
         
         $displayConfirmedArr = [];
         
-        for($confirmedRecords as $record) {
+        foreach($confirmedRecords as $record) {
             $recordDic = [
-                'changeSerial' => 0,
+                'changeSerial' => $record->changeSerial,
                 'applier' => '',
                 'receiver' => '',
                 'applyDate' => '',
@@ -137,8 +138,6 @@ class ShiftRecordsController extends Controller
                 'sch1Content' => '',
                 'sch2Content' => ''
             ];
-            
-            $recordDic['changeSerial'] => $record->changeSerial;
             
             $recordDic['applier'] = $userObj->getDoctorInfoByID($record->schID_1_doctor)->name;
             $recordDic['receiver'] = $userObj->getDoctorInfoByID($record->schID_2_doctor)->name;
@@ -163,9 +162,9 @@ class ShiftRecordsController extends Controller
         
         $displayUnconfirmedRecords = $shiftRecordObj->getUncheckShiftRecordsList();
         
-        for($unconfirmedRecords as $record) {
+        foreach($displayUnconfirmedRecords as $record) {
             $recordDic = [
-                'changeSerial' => 0,
+                'changeSerial' => $record->changeSerial,
                 'applier' => '',
                 'receiver' => '',
                 'applyDate' => '',
@@ -174,8 +173,6 @@ class ShiftRecordsController extends Controller
                 'sch1Content' => '',
                 'sch2Content' => ''
             ];
-            
-            $recordDic['changeSerial'] => $record->changeSerial;
             
             $recordDic['applier'] = $userObj->getDoctorInfoByID($record->schID_1_doctor)->name;
             $recordDic['receiver'] = $userObj->getDoctorInfoByID($record->schID_2_doctor)->name;
@@ -196,7 +193,7 @@ class ShiftRecordsController extends Controller
             array_push($displayUnconfirmedRecords, $recordDic);
         }
         
-        return view('schedule-shift-info', [
+        return view('pages.schedule-shift-info', [
             'confirmedArr' => $displayConfirmedArr,
             'unconfirmedArr' => $displayUnconfirmedRecords
         ]);
