@@ -26,6 +26,18 @@
         td{
             padding: 0;
         }
+        .white_cell{
+            background-color:white;
+        }
+        .green_cell{
+            background-color:#95FF95;
+        }
+        .yellow_cell{
+            background-color:#FFFF79;
+        }
+        .red_cell{
+            background-color:#FF5353;
+        }
     </style>
 </head>
 <body>
@@ -39,11 +51,62 @@
 	   			</a>
 	   		</div>
 	   		<li class="divider"></li>
-    	  	<li><a href="reservation.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-prearrange.svg"></i>預班表</a></li>
-    	  	<li><a href="first-edition.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-first-edition.svg"></i>初版班表</a></li>
-    	  	<li><a href="schedule.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-schedule.svg"></i>正式班表</a></li>
-    	  	<li><a href="shift.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-exchange.svg"></i>調整班表</a></li>
-    	  	<li><a href="doctor.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
+    	  	<li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-prearrange.svg"></i>預班表</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="reservation">個人</a></li>
+                                <li><a href="reservation-all">查看全部</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+    	  	<li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-first-edition.svg"></i>初版班表</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="first-edition">個人</a></li>
+                                <li><a href="first-edition-all">查看全部</a></li>
+                                <li><a href="first-edition-shift-info">換班資訊</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header waves-effect active"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-schedule.svg"></i>正式班表</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="schedule">個人</a></li>
+                                <li><a href="schedule-all">查看全部</a></li>
+                                <li><a href="schedule-shift-info">換班資訊</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+    	  	<li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-exchange.svg"></i>調整班表</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="shift-first-edition">初版班表</a></li>
+                                <li><a href="shift-scheduler">正式班表</a></li>
+                                <li><a href="shift-info">換班資訊</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+    	  	<li><a href="doctor" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
     	</ul>
 	</nav>
     
@@ -53,7 +116,7 @@
 	    		<a onclick="sideNav()" class="blue-grey darken-1 waves-effect waves-light menu-btn">
 	    			<i class="material-icons menu-icon" valign="middle">menu</i>
 	    		</a>
-			    <p class="brand-logo light">正式班表</p>
+			    <font class="brand-logo light">正式班表 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>個人</font>
 			    <ul class="right">
 			      	<li>
 			      		<a class="dropdown-notification-button" href="#!" data-activates="dropdown-notification">
@@ -66,12 +129,6 @@
 			      	</li>
 			    </ul>
 	    	</div>
-	    	<div class="nav-content blue-grey darken-1">
-                <ul class="tabs1 tabs-transparent">
-                    <li class="tab1"><a href="schedule" class="tab-active">個人</a></li>
-                    <li class="tab1"><a href="schedule-all">查看全部</a></li>
-                </ul>
-            </div>
 	  	</nav>
 		
 		<ul id="dropdown-notification" class="dropdown-content">
