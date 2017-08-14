@@ -30,6 +30,16 @@ class ShiftRecords extends Model
 
          return $shiftRecords;
     }
+    
+    //查看 全部換班確認申請(排班人員尚未確認)
+    public function shiftRecordsList() {
+        $records = DB::table('ShiftRecords')
+            ->where('doc2Confirm',1)
+            ->where('adminConfirm',0)
+            ->get();
+        
+        return $records;
+    }
    
     //查詢 單一換班紀錄
     public function getShiftRecordByChangeSerial($changeSerial){
@@ -155,28 +165,20 @@ class ShiftRecords extends Model
     }
 
     // 醫生確認
-    public function doc2Confirm($id, $doc2Confirm){
-
-            DB::table('shiftRecords')
-                ->where('changeSerial', $id)
-                ->update(['doc2Confirm' => $doc2Confirm]);
-
-
+    public function doc2Confirm($serial, $doc2Confirm){
+        DB::table('shiftRecords')
+            ->where('changeSerial', $serial)
+            ->update(['doc2Confirm' => $doc2Confirm]);
     }
 
-	// 排班確認
+	// 排班人員確認
     public function adminConfirm($changeSerial, $adminConfirm){
-
-            DB::table('shiftRecords')
-                ->where('changeSerial', $changeSerial)
-                ->update(['adminConfirm' => $adminConfirm]); 
-
-            $schedule = new Schedule();
-            $schedule->exchangeSchedule($changeSerial);
-
+       DB::table('shiftRecords')
+            ->where('changeSerial', $changeSerial)
+            ->update(['adminConfirm' => $adminConfirm]); 
+        $schedule = new Schedule();
+        $schedule->exchangeSchedule($changeSerial);
     }
-
-
 
     
 }

@@ -56,14 +56,22 @@ Route::get('/first-edition-all', 'ScheduleController@firstSchedule');
 Route::get('officialLeave', 'AccountController@getOfficialLeavePage');
 
 // 新增預班
-//Route::post('sendReservation', 'TestController@testDateString');
 Route::post('sendReservation', 'ReservationController@addReservation');
 
+// 列出正式班表的換班資訊
+Route::get('schedule-shift-info', 'ShiftRecordsController@getShiftRecords');
+
+// 醫生2同意或拒絕換班
+Route::get('doctor2AgreeShiftRecord/{serial}', 'ShiftRecordsController@doctor2AgreeShiftRecord');
+Route::get('doctor2DenyShiftRecord/{serial}', 'ShiftRecordsController@doctor2DenyShiftRecord');
+
 // ========================================================================
-Route::post('postAjaxRequest', 'TestController@postAjaxRequest');
+//Route::post('postAjaxRequest', 'TestController@postAjaxRequest');
 //Route::get('postAjaxRequest', 'TestController@postAjaxRequest');
 
 Route::get('testDateString', 'TestController@testDateString');
+
+Route::get('addDoctorAndResTest', 'TestController@addDoctorAndResTest');
 
 
 
@@ -167,8 +175,8 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 // Route::post('/addShifts', 'ShiftRecordsController@addShifts');
 
 //醫生換班確認
-Route::post('/doctorCheckShift', 'ShiftRecordsController@doc2Confirm');
-Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
+//Route::post('/doctorCheckShift', 'ShiftRecordsController@doc2Confirm');
+//Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
 Route::get('/dateadd', 'ReservationController@getdateAdd');

@@ -10,6 +10,7 @@ use App\Remark;
 use App\Announcement;
 use App\ShiftCategory;
 use App\Reservation;
+use App\DoctorAndReservation;
 
 class TestController extends Controller
 {
@@ -143,10 +144,10 @@ class TestController extends Controller
     public function testDateString(Request $request) {
         $data = $request->all();
         
-//        $serial = 5;
+//        $serial = 3;
         $serial = $data['serial'];
         $str = $data['date1'];
-//        $str = 'Wed Aug 09 2017 00:00:00 GMT+0800 (CST)';
+//        $str = 'Tue Aug 15 2017 00:00:00 GMT+0800 (CST)';
         
         $dateArr = explode(' ', $str);
         
@@ -162,7 +163,7 @@ class TestController extends Controller
             'location' => $categoryInfo['location'],
             'isOn' => $categoryInfo['isOn'],
             'date' => '',
-            'categorySerial' => $serial
+            'categorySerial' => 3
         ];
         
 //        $dateArr = explode(' ', $dateStr);
@@ -220,9 +221,32 @@ class TestController extends Controller
         
         $resObj = new Reservation();
         
-        $resObj->addOrUpdateReservation($resInfo);
+        $newSerial = $resObj->addOrUpdateReservation($resInfo);
         
-//        echo print_r($resInfo);
+        echo print_r($resInfo).'<br>';
+        echo 'Serial : '.$newSerial;
         
+        $docAndRes = new DoctorAndReservation();
+        $user = new User();
+        
+        $darData = [
+            'resSerial' => $newSerial,
+            'doctorID' => $user->getCurrentUserID(),
+            'remark' => ''
+        ];
+        $docAndRes->addDoctor($darData);
+    }
+    
+    public function addDoctorAndResTest() {
+        $docAndResObj = new DoctorAndReservation();
+        $user = new User();
+        
+        $data = [
+            'resSerial' => 2,
+            'doctorID' => $user->getCurrentUserID(),
+            'remark' => ''
+        ];
+        
+        $docAndResObj->addDoctor($data);
     }
 }

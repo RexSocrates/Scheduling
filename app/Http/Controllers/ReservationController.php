@@ -167,42 +167,13 @@ class ReservationController extends Controller
   
     //新增預班
     public function addReservation(Request $request){
-        
-        //get category serial, start date, and end date
-//        $data = $request->all();
-//        
-//        $categorySerial = $data['serial'];
-//        $startDate = $data['date1'];
-//        
-//        $resInfo = $this->getReservationInfo($categorySerial, $startDate);
-//        
-//        $resObj = new Reservation();
-//        
-//        $resSerial = $resObj->addOrUpdateReservation($resInfo);
-        
-        // 將預班編號與目前登入的醫生ID寫入 Doctor and reservation
-//        $doctorAndResObj = new DoctorAndReservation();
-//        $user = new User();
-//        
-//        $doctorAndResData = [
-//            'resSerial' => $resSerial,
-//            'doctorID' => $user->getCurrentUserID(),
-//            'remark' => ''
-//        ];
-//        
-//        $doctorAndResObj->addDoctor($doctorAndResData);
-        
-        
-        
-        
-        
-        
         $data = $request->all();
         
         $serial = $data['serial'];
         $str = $data['date1'];
         
         $dateArr = explode(' ', $str);
+        
         
         $shiftCategory = new ShiftCategory();
         
@@ -213,7 +184,7 @@ class ReservationController extends Controller
             'location' => $categoryInfo['location'],
             'isOn' => $categoryInfo['isOn'],
             'date' => '',
-            'categorySerial' => $serial
+            'categorySerial' => 3
         ];
         
         // 判斷平日/假日
@@ -269,19 +240,18 @@ class ReservationController extends Controller
         
         $resObj = new Reservation();
         
-        $resSerial = $resObj->addOrUpdateReservation($resInfo);
+        $newSerial = $resObj->addOrUpdateReservation($resInfo);
         
-        // 將預班編號與目前登入的醫生ID寫入 Doctor and reservation
-        $doctorAndResObj = new DoctorAndReservation();
+        
+        $docAndRes = new DoctorAndReservation();
         $user = new User();
         
-        $doctorAndResData = [
-            'resSerial' => $resSerial,
+        $darData = [
+            'resSerial' => $newSerial,
             'doctorID' => $user->getCurrentUserID(),
             'remark' => ''
         ];
-        
-        $doctorAndResObj->addDoctor($doctorAndResData);
+        $docAndRes->addDoctor($darData);
     }
     
      public function deleteReservation($id){

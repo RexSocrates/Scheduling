@@ -11,6 +11,10 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Mail;
 use App\Mail\AgreeShiftExchange;
 
+// import model
+use App\User;
+use App\Schedule;
+
 class SendAgreeShiftExchangeMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -28,14 +32,16 @@ class SendAgreeShiftExchangeMail implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($applicant, $receiver, $applicantShift, $receiverShift, $admin)
+    public function __construct($applicantID, $receiverID, $applicantShiftSerial, $receiverShiftSerial, $admin)
     {
-        //
-        $this->applicant = $applicant;
-        $this->receiver = $receiver;
-        $this->applicantShift = $applicantShift;
-        $this->receiverShift = $receiverShift;
-        $this->admin = $admin;
+        $userObj = new User();
+        $scheduleObj = new Schedule();
+        
+        $this->applicant = $userObj->getDoctorInfoByID($applicantID);
+        $this->receiver = $userObj->getDoctorInfoByID($receiverID);
+        $this->applicantShift = $scheduleObj->getScheduleDataByID($applicantShiftSerial);
+        $this->receiverShift = $scheduleObj->getScheduleDataByID($receiverShiftSerial);
+        $this->admin = $userObj->getAdminList()[0];
     }
 
     /**
@@ -47,6 +53,6 @@ class SendAgreeShiftExchangeMail implements ShouldQueue
     {
         //
         Mail::to($this->applicant->email)
-            ->send(new AgreeShiftExchange());
+            ->send(new AgreeShiftExchange($applicant, $receiver, $applicantShift, $receiverShift, $admin));
     }
 }

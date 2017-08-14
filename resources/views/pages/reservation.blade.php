@@ -54,6 +54,8 @@
                 shiftCategory : categorySerial,
                 startDate : startDate,
                 endDate : endDate
+            }, function() {
+                alert('預約修改成功');
             });
         }
     </script>
@@ -264,8 +266,6 @@
                                 }
                                 
                                 // call ajax function
-//                                postRequest(event.priority, 'Sun Aug 08 2017', 'Mon Aug 09 2017');
-//                                postRequest(event.priority, event.start_date, event.end_date);
                                 sendNewReservation(event.priority, event.start_date, event.end_date);
                                 
                                 console.log(event.priority);
@@ -295,6 +295,16 @@
                                 
 //                                updateReservation(id, event.priority, event.start_date, event.end_date);
                                 
+                                console.log(event.priority);
+                                console.log(event.start_date);
+                                console.log(event.end_date);
+                                console.log(id);
+                                
+                            });
+                            
+                            scheduler.attachEvent("onBeforeDrag", function (id, mode, e){
+                                console.log(id);
+                                return true;
                             });
                             
 

@@ -12,12 +12,12 @@ class DoctorAndReservation extends Model
     protected $table = 'DoctorAndReservation';
 
     //醫生新增預班
-    public function addDoctor(array $data){
-    	 $generatedSerial = DB::table('DoctorAndReservation')-> insert([
-             'resSerial' => $data['resSerial'],
-             'doctorID' => $data['doctorID'],
-             'remark' => $data['remark']
-         ]);
+    public function addDoctor($data){
+        DB::table('DoctorAndReservation')->insert([
+            'resSerial' => $data['resSerial'],
+            'doctorID' => $data['doctorID'],
+            'remark' => $data['remark']
+        ]);
     }
 
     //更新醫生預班資訊

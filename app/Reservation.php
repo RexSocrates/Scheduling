@@ -157,14 +157,15 @@ class Reservation extends Model
     
     // 回傳預班編號
     public function getReservationSerial(array $data) {
-        $serial = DB::table("Reservation")
+        $res = DB::table("Reservation")
             ->where('isWeekday',$data['isWeekday'])
             ->where('location',$data['location']) 
             ->where('isOn',$data['isOn'])
             ->where('date',$data['date'])
-            ->value('resSerial');
+            ->where('categorySerial', $data['categorySerial'])
+            ->first();
         
-        return $serial;
+        return $res->resSerial;
     }
 
    //  public function getReservationBySerial($serial) {

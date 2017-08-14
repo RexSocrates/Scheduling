@@ -15,7 +15,6 @@ class ScheduleCategory extends Model
     	$name = DB::table('ScheduleCategory')->where("schCategorySerial",$serial)->first();
 
     	return $name->schCategoryName;
-    
 	}
 
 }
