@@ -15,7 +15,8 @@ header, main, footer {
 
 @media only screen and (max-width : 992px) {
     body {
-        position: relative;
+/*        position: relative; 之後確認要不要改回去*/ 
+/*        position: relative;*/
         float: left;
     }
     
@@ -40,7 +41,7 @@ header, main, footer {
 
 #header {
     position: fixed;
-    z-index: 10;
+    z-index: 10002;
     top: 0;
     left: 0;
     right: 0;
@@ -78,6 +79,10 @@ header, main, footer {
     padding-bottom: 0px !important;
 }
 
+.padding-b10 {
+    padding-bottom: 10px !important;
+}
+
 .border-t {
     border-top: 1px solid rgba(160, 160, 160, 0.2);
 }
@@ -91,8 +96,12 @@ header, main, footer {
 }
 
 #navbar {
-/*    height: 64px;*/
+    height: 64px;
     line-height: 64px;
+}
+
+.pad-btn {
+    padding: 0px 23px;
 }
 
 .waves-effect.waves-brown .waves-ripple {
@@ -221,8 +230,17 @@ header, main, footer {
 }
 
 .modal-shift {
-    height: 75% !important;
+    height: 76% !important;
     max-height: 80%;
+}
+
+.modal-btn {
+    float: right;
+    margin: 6px 0;
+}
+
+.modal-btn1 {
+    margin: 6px 0;
 }
 
 .modal-announcement {
@@ -506,7 +524,24 @@ header, main, footer {
     background-color: red;
 }
 
+input.select-dropdown {
+    margin-bottom: 0px !important;
+}
 
+.card1 {
+    height: 69px;
+    padding-top: 11px !important;
+}
 
+.title1 {
+    top: 6px;
+    position: relative;
+    padding-left: 0px !important;
+    float: left;
+}
+
+.card-action.card1 .input-field {
+	margin-top: 0px !important;
+}
 
 

@@ -5549,6 +5549,7 @@ button.btn-floating {
 .side-nav.fixed .collapsible-body {
   border: 0;
   background-color: #fff;
+  padding: 0; /*加*/
 }
 
 .side-nav .collapsible-body li a,

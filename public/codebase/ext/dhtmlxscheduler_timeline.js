@@ -1,6 +1,10 @@
 /*
-This software is allowed to use under GPL or you need to obtain Commercial or Enterise License
-to use it in non-GPL project. Please contact sales@dhtmlx.com for details
+@license
+dhtmlxScheduler v.4.4.0 Stardard
+
+This software is covered by GPL license. You also can obtain Commercial or Enterprise license to use it in non-GPL project - please contact sales@dhtmlx.com. Usage without proper license is prohibited.
+
+(c) Dinamenta, UAB.
 */
 (scheduler._temp_matrix_scope=function(){function H(){for(var a=scheduler.get_visible_events(),c=[],b=0;b<this.y_unit.length;b++)c[b]=[];c[d]||(c[d]=[]);for(b=0;b<a.length;b++){for(var d=this.order[a[b][this.y_property]],h=0;this._trace_x[h+1]&&a[b].start_date>=this._trace_x[h+1];)h++;for(;this._trace_x[h]&&a[b].end_date>this._trace_x[h];)c[d][h]||(c[d][h]=[]),c[d][h].push(a[b]),h++}return c}function w(a,c,b){var d=0,h=b._step,e=b.round_position,l=0,f=c?a.end_date:a.start_date;if(f.valueOf()>scheduler._max_date.valueOf())f=
 scheduler._max_date;var k=f-scheduler._min_date_timeline;if(k>0){var m=scheduler._get_date_index(b,f);scheduler._ignores[m]&&(e=!0);for(var i=0;i<m;i++)d+=scheduler._cols[i];var p=scheduler.date.add(scheduler._min_date_timeline,scheduler.matrix[scheduler._mode].x_step*m,scheduler.matrix[scheduler._mode].x_unit);e?+f>+p&&c&&(l=scheduler._cols[m]):(k=f-p,b.first_hour||b.last_hour?(k-=b._start_correction,k<0&&(k=0),l=Math.round(k/h),l>scheduler._cols[m]&&(l=scheduler._cols[m])):l=Math.round(k/h))}d+=

@@ -69,7 +69,19 @@
 	   			</a>
 	   		</div>
 	   		<li class="divider"></li>
-    	  	<li><a href="reservation.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-prearrange.svg"></i>預班表</a></li>
+            <li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header waves-effect active"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-prearrange.svg"></i>預班表</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="reservation">個人</a></li>
+                                <li><a href="reservation-all">查看全部</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
     	  	<li><a href="first-edition.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-first-edition.svg"></i>初版班表</a></li>
     	  	<li><a href="schedule.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-schedule.svg"></i>正式班表</a></li>
     	  	<li><a href="shift.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-exchange.svg"></i>調整班表</a></li>
@@ -83,7 +95,7 @@
 	    		<a onclick="sideNav()" class="blue-grey darken-1 waves-effect waves-light menu-btn">
 	    			<i class="material-icons menu-icon" valign="middle">menu</i>
 	    		</a>
-			    <p class="brand-logo light">預班表</p>
+			    <font class="brand-logo light">預班表 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>個人</font>
 			    <ul class="right">
 			      	<li>
 			      		<a class="dropdown-notification-button" href="#!" data-activates="dropdown-notification">
@@ -96,12 +108,6 @@
 			      	</li>
 			    </ul>
 	    	</div>
-	    	<div class="nav-content blue-grey darken-1">
-                <ul class="tabs1 tabs-transparent">
-                    <li class="tab1"><a href="reservation" class="tab-active">個人</a></li>
-                    <li class="tab1"><a href="reservation-all">查看全部</a></li>
-                </ul>
-            </div>
 	  	</nav>
 		
 		<ul id="dropdown-notification" class="dropdown-content">
@@ -122,7 +128,7 @@
 
 	<div id="section" class="container-fix trans-left-five">
 	    
-		<div class="container-section2">
+		<div class="container-section">
 			<div class="row">
                 <div id="self" class="col s12">
                     <div class="card">
@@ -204,19 +210,39 @@
                             
                             scheduler.locale.labels.section_priority = 'Priority';
                    
+                            scheduler.form_blocks["hidden"] = {
+                                render:function(sns) {
+                                    return "<div class='dhx_cal_ltext'><input type='hidden'></div>";
+                                },
+                                set_value:function(node, value, ev) {
+                                    node.childNodes[0].value = value || "";
+                                },
+                                get_value:function(node, ev) {
+                                    return node.childNodes[0].value;
+                                },
+                                focus:function(node) {
+                                    var a = node.childNodes[0];
+                                    a.select();
+                                    a.focus();
+                                }
+                            };
+                            
                             //彈出視窗的選項
                             scheduler.config.lightbox.sections=[
-                                //{name:"description", height:130, map_to:"text", type:"textarea" , focus:true},
-                                //{name:"custom", height:23, type:"select", options:sections, map_to:"section_id" },
                                 {name:"班別名稱", height:180, options:priorities, map_to:"priority", type:"radio", vertical:true},
-//                              {name:"time", height:72, type:"time", map_to:"auto"}
+                                {name:"hidden", height:400, map_to:"hidden", type:"hidden" , focus:true}
                             ];
+                            
+                            //打開lightbox時執行
+                            scheduler.attachEvent("onLightbox", function (id){
+                                document.getElementsByClassName("dhx_cal_light")[0].style.height = "285px";
+                                document.getElementsByClassName("dhx_cal_larea")[0].style.height = "195px";
+                            });
 
 
                             //在Lightbox關掉
                             scheduler.attachEvent("onBeforeLightbox", function (id){
                                 var event = scheduler.getEvent(id);
-                                
                                 
                                 return true;
                             });
@@ -229,7 +255,6 @@
                                 event.text = event.priority;
                                 
 //                                console.log(event.text);
-                                
                                 
                                 return true;
                             });

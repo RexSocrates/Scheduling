@@ -35,7 +35,23 @@
 	   			</a>
 	   		</div>
 	   		<li class="divider"></li>
+<<<<<<< HEAD
     	  	<li><a href="reservation.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-prearrange.svg"></i>預班表</a></li>
+=======
+    	  	<li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-prearrange.svg"></i>預班表</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="reservation.html">個人</a></li>
+                                <li><a href="reservation-all.html">查看全部</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+>>>>>>> 9580f1b3c15562726130e1d7e8fd34cc9b2e32ab
     	  	<li class="no-padding">
                 <ul class="collapsible collapsible-accordion">
                     <li>
@@ -188,13 +204,18 @@
                             <table class="centered striped highlight">
                                 <thead>
                                     <tr>
+<<<<<<< HEAD
                                         <th>提出人</th>
+=======
+                                        <th>申請人</th>
+>>>>>>> 9580f1b3c15562726130e1d7e8fd34cc9b2e32ab
                                         <th>申請日期</th>
                                         <th>備註內容</th>
                                     </tr>
                                 </thead>
 
                                <tbody>
+<<<<<<< HEAD
                                    @foreach($remarks as $remark)
                                         <tr>
                                             <td class="td-padding">{{ $remark['author'] }}</td>
@@ -202,6 +223,33 @@
                                             <td class="td-padding">{{ $remark['content'] }}</td>
                                         </tr>
                                    @endforeach
+=======
+                                    <tr>
+                                        <td class="td-padding">簡定國</td>
+                                        <td class="td-padding">2017/07/19</td>
+                                        <td class="td-padding">請幫忙上>兩班假日班</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding">邱毓惠</td>
+                                        <td class="td-padding">2017/07/21</td>
+                                        <td class="td-padding">10-11-12忘年會 13-22出國</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding">馮嚴毅</td>
+                                        <td class="td-padding">2017/07/24</td>
+                                        <td class="td-padding">全夜班</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding">邱毓惠</td>
+                                        <td class="td-padding">2017/07/21</td>
+                                        <td class="td-padding">1月可全夜班,3號淡水夜班,13~20出國</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding">馮嚴毅</td>
+                                        <td class="td-padding">2017/07/24</td>
+                                        <td class="td-padding">1/13至1/18出國請排OFF，謝謝</td>
+                                    </tr>
+>>>>>>> 9580f1b3c15562726130e1d7e8fd34cc9b2e32ab
                                 </tbody>
                                
                             </table>
