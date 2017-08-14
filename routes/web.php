@@ -19,17 +19,18 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/resign/{id}', 'TestController@resign');
-
 // 正式路由
 Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
 
 Route::get('resign/{id}', 'AccountController@resign');
 
+// 取得個人頁面
 Route::get('profile', 'AccountController@getProfilePage');
 
+// 統計圖表頁面
 Route::get('getChartPage', 'ChartController@getChartPage');
 
+// 單一醫生上班紀錄的統計圖表
 Route::post('doctorsChart', 'ChartController@getChartPageBySelectedID');
 
 // 列出全部人的預班資訊
@@ -37,7 +38,9 @@ Route::get('/reservation-all', 'ReservationController@reservation');
 
 // 列出個人的預班資訊
 Route::get('/reservation', 'ReservationController@getReservationByID');
-Route::post('/reservation', 'ReservationController@addRemark');
+
+// 新增備註
+Route::post('/addRemark', 'ReservationController@addRemark');
 Route::match(['get', 'post'], '/reservation_data', "ReservationController@renderData");
 
 //列出全部班表資訊
@@ -64,6 +67,33 @@ Route::get('schedule-shift-info', 'ShiftRecordsController@getShiftRecords');
 // 醫生2同意或拒絕換班
 Route::get('doctor2AgreeShiftRecord/{serial}', 'ShiftRecordsController@doctor2AgreeShiftRecord');
 Route::get('doctor2DenyShiftRecord/{serial}', 'ShiftRecordsController@doctor2DenyShiftRecord');
+
+// 調整班表的換班資訊
+Route::get('shift-info', 'ShiftRecordsController@adminShiftRecords');
+
+// 排班人員確認換班
+Route::get('adminAgreeShiftRecord/{serial}', 'ShiftRecordsController@adminAgreeShiftRecord');
+
+
+
+
+
+
+
+
+
+Route::group(['middleware' => ['admin']], function () {
+    // 給排班人員的路由
+});
+
+Route::group(['middleware' => ['auth']], function () {
+    // 給一般醫生(登入後的使用者)的路由
+});
+
+
+
+
+
 
 // ========================================================================
 //Route::post('postAjaxRequest', 'TestController@postAjaxRequest');

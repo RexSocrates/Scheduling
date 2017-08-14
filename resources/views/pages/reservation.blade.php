@@ -28,16 +28,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     
     <script>
-//        function postRequest(num, date1, date2) {
-//            $.post('postAjaxRequest', {
-//                num : num,
-//                date1 : date1,
-//                date2 : date2
-//            }, function() {
-//                alert('Success');
-//            });
-//        }
-        
         function sendNewReservation(categorySerial, startDate, endDate) {
             $.post('sendReservation', {
                 serial : categorySerial,
@@ -152,7 +142,7 @@
                                         <p class="information">尚需排班數: 白班:{{$countDay}} 夜班:{{$countNight}}</p>    
                                     </div>
                                     <div class="col s7">
-                                        <form action="reservation" method="post" class="col s6">
+                                        <form action="addRemark" method="post" class="col s6">
                                             <div class="input-field">
                                                 <textarea id="textarea1" class="materialize-textarea"  name="remark"placeholder="請輸入XXXXX"></textarea>
 <!--                                                     data-length="150"-->

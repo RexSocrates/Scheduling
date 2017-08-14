@@ -48,7 +48,6 @@ class ShiftRecords extends Model
         ->first();
 
         return $shiftRecord;
-
     }
 
     //查詢 單一醫生換班紀錄(已確認)
@@ -76,6 +75,15 @@ class ShiftRecords extends Model
         ->get();
 
         return $shiftRecords;
+    }
+    
+    // 依照申請日期取出所有換班紀錄
+    public function getRecordsOrderByDate() {
+        $records = DB::table('ShiftRecords')
+            ->orderBy('date')
+            ->get();
+        
+        return $records;
     }
 
     // 更多資訊的換班紀錄(已確認)

@@ -10,6 +10,7 @@ use App\ShiftRecords;
 use App\Schedule;
 use App\User;
 use App\ScheduleCategory;
+use App\Remark;
 
 // import jobs
 use App\Jobs\SendAgreeShiftExchangeMail;
@@ -204,16 +205,94 @@ class ShiftRecordsController extends Controller
     public function doctor2AgreeShiftRecord($changeSerial) {
         $shiftRecordObj = new ShiftRecords();
         
+        $record = $shiftRecordObj->getShiftRecordByChangeSerial($changeSerial);
+        
         $shiftRecordObj->doc2Confirm($changeSerial, 1);
         
-        $job = new SendAgreeShiftExchangeMail();
+        $job = new SendAgreeShiftExchangeMail($record->schID_1_doctor, $record->schID_2_doctor, $record->scheduleID_1, $record->scheduleID_2);
+        
+        dispatch($job);
     }
     
     // 醫生2拒絕換班
     public function doctor2DenyShiftRecord($changeSerial) {
         $shiftRecordObj = new ShiftRecords();
+        $record = $shiftRecordObj->getShiftRecordByChangeSerial($changeSerial);
         
         $shiftRecordObj->doc2Confirm($changeSerial, 2);
+        
+        $job = new SendDenyShiftExchangeMail($record->schID_1_doctor, $record->schID_2_doctor);
+        
+        dispatch($job);
+    }
+    
+    // 取得調整班表的換班資訊頁面
+    public function adminShiftRecords() {
+        $shiftRecordObj = new ShiftRecords();
+        
+        $shiftRecords = $shiftRecordObj->getRecordsOrderByDate();
+        
+        $displayArr = [];
+        
+        foreach($shiftRecords as $record) {
+            $recordDic = [
+                'changeSerial' => $record->changeSerial,
+                'applier' => '',
+                'receiver' => '',
+                'applyDate' => '',
+                'sch1Date' => '',
+                'sch2Date' => '',
+                'sch1Content' => '',
+                'sch2Content' => '',
+                'adminConfirm' => $record->adminConfirm
+            ];
+            
+            $recordDic['applier'] = $userObj->getDoctorInfoByID($record->schID_1_doctor)->name;
+            $recordDic['receiver'] = $userObj->getDoctorInfoByID($record->schID_2_doctor)->name;
+            $recordDic['applyDate'] = $record->date;
+            
+            
+            $schedule1 = $sheduleObj->getScheduleDataByID($record->scheduleID_1);
+            $schedule2 = $sheduleObj->getScheduleDataByID($record->scheduleID_2);
+            $sch1Name = $schCateObj->findScheduleName($schedule1->schCategorySerial);
+            $sch2Name = $schCateObj->findScheduleName($schedule2->schCategorySerial);
+            
+            $recordDic['sch1Date'] = $schedule1.date;
+            $recordDic['sch2Date'] = $schedule2.date;
+            $recordDic['sch1Content'] = $recordDic['applier'].' '.$sch1Name;
+            $recordDic['sch2Content'] = $recordDic['receiver'].' '.$sch2Name;
+            
+            array_push($displayArr, $recordDic);
+        }
+        
+        $remarkObj = new Remark();
+        $userObj = new User();
+        
+        $remarks = $remarkObj->getRemarks();
+        
+        $displayRemarksArr = [];
+        
+        foreach($remarks as $remark) {
+            $remarkDic = [
+                'author' => '',
+                'date' => $remark->date,
+                'content' => $remark->remark
+            ];
+            
+            $remarkDic['author'] = $userObj->getDoctorInfoByID()->name;
+            
+            array_push($displayRemarksArr, $remarkDic);
+        }
+        
+        return view('pages.shift-info', [
+            'shiftRecords' => $displayArr,
+            'remarks' => $displayRemarksArr
+        ]);
+    }
+    
+    // 排班人員確認換班
+    public function adminAgreeShiftRecord($serial) {
+        $shiftRecordObj = new ShiftRecords();
     }
 
 

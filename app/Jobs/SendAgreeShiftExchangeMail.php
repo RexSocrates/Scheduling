@@ -32,7 +32,7 @@ class SendAgreeShiftExchangeMail implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($applicantID, $receiverID, $applicantShiftSerial, $receiverShiftSerial, $admin)
+    public function __construct($applicantID, $receiverID, $applicantShiftSerial, $receiverShiftSerial)
     {
         $userObj = new User();
         $scheduleObj = new Schedule();
@@ -53,6 +53,6 @@ class SendAgreeShiftExchangeMail implements ShouldQueue
     {
         //
         Mail::to($this->applicant->email)
-            ->send(new AgreeShiftExchange($applicant, $receiver, $applicantShift, $receiverShift, $admin));
+            ->send(new AgreeShiftExchange($this->applicant, $this->receiver, $this->applicantShift, $this->receiverShift, $this->admin));
     }
 }

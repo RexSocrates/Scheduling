@@ -80,34 +80,13 @@ class ReservationController extends Controller
             //$res->categorySerial = $name;
             array_push($data, array($res, $name));
         }
-
-
-       
-        // $connector = new SchedulerConnector(null, "PHPLaravel");
-        // $connector->configure(new Reservation(), "resSerial", "date, endDate, categorySerial");
-        // $connector->render();        
-        //$connector->render_sql("Select * from Reservation",
-        //"resSerial","date, endDate, categorySerial");      
-
-        
-
-//        $connector = new SchedulerConnector(null, "PHPLaravel");    
-//        $connector->configure(new Reservation(),"resSerial","periodSerial,isWeekday,location,isOn,date, endDate,remark,categorySerial");
-       // $connector->render_sql("insert into Reservation",'resSerial','date,endDate,categorySerial');
-                                         
-        //$connector->render();                                       
-
-        //$connector = new SchedulerConnector(null, "PHPLaravel");    
-        //$connector->configure(new Reservation(),"resSerial","periodSerial,isWeekday,location,isOn,date, endDate,remark,categorySerial");
-       // $connector->render_sql("insert into Reservation",'resSerial','date,endDate,categorySerial');
-                                         
-        //$connector->render();                                       
-                
-
-
-      return view('pages.reservation', array('reservations' => $data,'countDay' => $countDay,
-                'countNight' => $countNight ,'doctorDay' =>$doctorDay, 'doctorNight'=> $doctorNight ));
-       
+        return view('pages.reservation', [
+            'reservations' => $data,
+            'countDay' => $countDay,
+            'countNight' => $countNight,
+            'doctorDay' =>$doctorDay,
+            'doctorNight'=> $doctorNight
+        ]);
       }
 
 
