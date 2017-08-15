@@ -232,16 +232,17 @@ class ReservationController extends Controller
         $docAndRes->addDoctor($darData);
     }
     
-     public function deleteReservation($id){
-       	$deletereservation= DB::table('Reservation')->where('resSerial',$id)->delete();
-       
-        return redirect('reservation'); 
-     		
+    public function deleteReservation(Request $request){
+        $data = $request->all();
+        
+        $docAndRes = new DoctorAndReservation();
+        $userObj = new User();
+        
+        $docAndRes->deleteReservation($data['resSerial'], $userObj->getCurrentUserID());
     }
     
     //更新預班
     public function updateReservation(Request $request){
-        // 使用者拖動event
         $data = $request->all();
         
         $resSerial = $data['resSerial'];

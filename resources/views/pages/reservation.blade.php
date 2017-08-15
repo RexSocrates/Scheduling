@@ -29,7 +29,7 @@
     
     <script>
         function sendNewReservation(categorySerial, startDate, endDate) {
-            $.post('sendReservation', {
+            $.post('sendReservationAdd', {
                 serial : categorySerial,
                 date1 : startDate,
                 date2 : endDate
@@ -46,6 +46,14 @@
                 endDate : endDate
             }, function() {
                 alert('預約修改成功');
+            });
+        }
+        
+        function deleteReservation(resSerial) {
+            $.post('sendReservationDelete', {
+                resSerial : resSerial,
+            }, function() {
+                alert('預約刪除成功');
             });
         }
     </script>
@@ -318,8 +326,22 @@
                                 
                             });
                             
+                            scheduler.attachEvent("onBeforeEventDelete", function(id,e){
+                                var event = scheduler.getEvent(id);
+                                
+                                
+                                deleteReservation(event.hidden);
+                                console.log(event.hidden);
+                                console.log(id);
+                                return true;
+                            });
+                            
                             scheduler.attachEvent("onEventDeleted", function(id){
                                 // 按下刪除之後
+                                var event = scheduler.getEvent(id);
+                                
+                                
+//                                console.log(event.hidden);
                                 console.log(id);
                             });
                             

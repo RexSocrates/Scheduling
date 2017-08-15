@@ -59,10 +59,13 @@ Route::get('/first-edition-all', 'ScheduleController@firstSchedule');
 Route::get('officialLeave', 'AccountController@getOfficialLeavePage');
 
 // 新增預班
-Route::post('sendReservation', 'ReservationController@addReservation');
+Route::post('sendReservationAdd', 'ReservationController@addReservation');
 
 // 更新預班
 Route::post('sendReservationUpdate', 'ReservationController@updateReservation');
+
+// 刪除預班
+Route::post('sendReservationDelete', 'ReservationController@deleteReservation');
 
 // 列出正式班表的換班資訊
 Route::get('schedule-shift-info', 'ShiftRecordsController@getShiftRecords');

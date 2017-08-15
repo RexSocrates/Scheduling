@@ -52,5 +52,13 @@ class DoctorAndReservation extends Model
             ->count();
 
         return $count;
-    }        
+    }
+    
+    // 刪除 單一預班
+    public function deleteReservation($resSerial, $doctorID) {
+        DB::table('DoctorAndReservation')
+            ->where('resSerial', $resSerial)
+            ->where('doctorID', $doctorID)
+            ->delete();
+    }
 }
