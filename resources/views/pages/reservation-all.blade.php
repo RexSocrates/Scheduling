@@ -135,6 +135,6 @@
 <!--
 @section('script')
 
-@stop
+@endsection
 -->
 

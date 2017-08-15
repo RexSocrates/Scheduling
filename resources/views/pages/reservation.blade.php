@@ -384,7 +384,7 @@
 <!--
 @section('script')
 
-@stop
+@endsection
 -->
 
 <!-- 還要不要? -->

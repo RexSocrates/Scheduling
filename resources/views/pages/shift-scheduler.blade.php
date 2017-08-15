@@ -184,6 +184,6 @@
 <!--
 @section('script')
 
-@stop
+@endsection
 -->
 

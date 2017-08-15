@@ -155,5 +155,5 @@
             $('select').material_select();
         });
     </script>
-@stop
+@endsection
 

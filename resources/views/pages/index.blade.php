@@ -149,4 +149,4 @@
             stopPropagation: false // Stops event propagation
         });
     </script>
-@stop
+@endsection

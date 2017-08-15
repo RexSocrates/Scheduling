@@ -209,5 +209,5 @@
             $('.collapsible').collapsible();
   		});
     </script>
-@stop
+@endsection
 

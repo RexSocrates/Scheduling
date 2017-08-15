@@ -125,7 +125,7 @@
 
 @section('script')
 
-@stop
+@endsection
 -->
 
 

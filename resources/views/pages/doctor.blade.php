@@ -357,4 +357,4 @@
             selectYears: 200 // Creates a dropdown of 15 years to control year
         });
     </script>
-@stop
+@endsection
