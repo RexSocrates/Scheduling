@@ -163,7 +163,7 @@ class ReservationController extends Controller
             'location' => $categoryInfo['location'],
             'isOn' => $categoryInfo['isOn'],
             'date' => '',
-            'categorySerial' => 3
+            'categorySerial' => $serial
         ];
         
         // 判斷平日/假日
@@ -228,7 +228,6 @@ class ReservationController extends Controller
         $darData = [
             'resSerial' => $newSerial,
             'doctorID' => $user->getCurrentUserID(),
-            'remark' => ''
         ];
         $docAndRes->addDoctor($darData);
     }
@@ -241,20 +240,86 @@ class ReservationController extends Controller
     }
     
     //更新預班
-    public function updateReservation(){
-        $serial = Input::get('serial');
-       	$updateReservation = new Reservation();
-        $updateDoctorReservation = new DoctorAndReservation();
-        $periodSerial = Input::get('periodSerial');
-        $isWeekday = Input::get('isWeekday');
-        $location = Input::get('location');
-        $isOn = Input::get('isOn');
-        $remark = Input::get('remark');
-        $date = Input::get('date');
-        $update = $updateReservation->updateReservation($serial,$periodSerial,$isWeekday,$location,$isOn,$remark,$date);
-        $updateDoctorReservationToTable = $updateDoctorReservation->doctorUpdateReservation($serial,$update);
-
-        return redirect('reservation');
+    public function updateReservation(Request $request){
+        // 使用者拖動event
+        $data = $request->all();
+        
+        $resSerial = $data['resSerial'];
+        $categorySerial = $data['categorySerial'];
+        $startDateStr = $data['startDate'];
+        
+        $dateArr = explode(' ', $startDateStr);
+        
+        $shiftCategory = new ShiftCategory();
+        
+        $categoryInfo = $shiftCategory->getCategoryInfo($categorySerial);
+        
+        $resInfo = [
+            'isWeekday' => true,
+            'location' => $categoryInfo['location'],
+            'isOn' => $categoryInfo['isOn'],
+            'date' => '',
+            'categorySerial' => $categorySerial
+        ];
+        
+        // 判斷平日/假日
+        if(strcmp($dateArr[0],"Sat") == 0 or strcmp($dateArr[0],"Sun") == 0) {
+            $resInfo['isWeekday'] = false;
+        }
+        
+        // 判斷月份
+        $month = '00';
+        switch($dateArr[1]) {
+            case 'Jan' :
+                $month = '01';
+                break;
+            case 'Feb' :
+                $month = '02';
+                break;
+            case 'Mar' :
+                $month = '03';
+                break;
+            case 'Apr' :
+                $month = '04';
+                break;
+            case 'May' :
+                $month = '05';
+                break;
+            case 'Jun' :
+                $month = '06';
+                break;
+            case 'Jul' :
+                $month = '07';
+                break;
+            case 'Aug' :
+                $month = '08';
+                break;
+            case 'Sep' :
+                $month = '09';
+                break;
+            case 'Oct' :
+                $month = '10';
+                break;
+            case 'Nov' :
+                $month = '11';
+                break;
+            case 'Dec' :
+                $month = '12';
+                break;
+        }
+        $day = $dateArr[2];
+        $year = $dateArr[3];
+        
+        $resInfo['date'] = $year.'-'.$month.'-'.$day;
+        
+        $resObj = new Reservation();
+        
+        $newSerial = $resObj->addOrUpdateReservation($resInfo);
+        
+        // Doctor and reservation 的資料更新
+        $docAndResObj = new DoctorAndReservation();
+        $userObj = new User();
+        $docAndResObj->doctorUpdateReservation($resSerial, $newSerial, $userObj->getCurrentUserID());
     }
 
     public function getDataByID() {

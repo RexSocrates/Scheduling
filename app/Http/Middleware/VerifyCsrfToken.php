@@ -15,7 +15,8 @@ class VerifyCsrfToken extends BaseVerifier
     protected $except = [
         'reservation_data',
         'postAjaxRequest',
-        'sendReservation'
+        'sendReservation',
+        'sendReservationUpdate'
     ];
 
 }

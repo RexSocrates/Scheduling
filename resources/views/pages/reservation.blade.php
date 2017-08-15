@@ -38,10 +38,10 @@
             });
         }
         
-        function updateReservation(originalSerial, categorySerial, startDate, endDate) {
+        function updateReservation(resSerial, categorySerial, startDate, endDate) {
             $.post('sendReservationUpdate', {
-                originalSerial : originalSerial,
-                shiftCategory : categorySerial,
+                resSerial : resSerial,
+                categorySerial : categorySerial,
                 startDate : startDate,
                 endDate : endDate
             }, function() {
@@ -308,18 +308,19 @@
                                     event.text = "off";
                                 }
                                 
-//                                updateReservation(id, event.priority, event.start_date, event.end_date);
+                                updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
                                 
                                 console.log(event.priority);
                                 console.log(event.start_date);
                                 console.log(event.end_date);
                                 console.log(id);
+                                console.log(event.hidden);
                                 
                             });
                             
-                            scheduler.attachEvent("onBeforeDrag", function (id, mode, e){
+                            scheduler.attachEvent("onEventDeleted", function(id){
+                                // 按下刪除之後
                                 console.log(id);
-                                return true;
                             });
                             
 
@@ -427,7 +428,7 @@
 
 	                            scheduler.parse([
 	                            	
-	                            { start_date: "{{ $reservation[0]->date }} 00:00", end_date: "{{$reservation[0]->endDate}} 00:00", text: "{{ $reservation[1] }}", priority:"{{ $reservation[0]->categorySerial}}", eventID:"{{ $reservation[0]->resSerial}}"},
+	                            { start_date: "{{ $reservation[0]->date }} 00:00", end_date: "{{$reservation[0]->endDate}} 00:00", text: "{{ $reservation[1] }}", priority:"{{ $reservation[0]->categorySerial}}", hidden:"{{ $reservation[0]->resSerial}}"},
 	                                
 	                            ],"json");
 							
