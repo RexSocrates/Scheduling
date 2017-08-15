@@ -406,10 +406,15 @@
                             dhtmlx.message({ type:"error", text:"此時段無法接受排班" })
                             });
 
+                            scheduler.templates.lightbox_header = function(start, end, event){
+                                if (event.text == "New") {
+                                    return "預班";
+                                } else {
+                                    return "預班 " + event.text;
+                                }
+                            }
                             
                             //進入畫面後顯示的東西
-
-                           
                             scheduler.init('scheduler_here',new Date(),"month");
 
                             scheduler.load("./reservation_data");
