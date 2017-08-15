@@ -544,4 +544,41 @@ input.select-dropdown {
 	margin-top: 0px !important;
 }
 
+#my_form {
+    -webkit-transform: translate(-50%,0%);
+    transform: translate(-50%,0%);
+    position: absolute;
+    top: 0% !important;
+    left: 50% !important;
+    z-index: 10001;
+    display: none;
+    background-color: white;
+    /*border: 2px outset gray;*/
+    /*border-radius: 2px;*/
+    /*padding: 20px;*/
+    font-family: Tahoma;
+    font-size: 10pt;
+    width: 700px;
+    height: 530px;
+    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.3);
+}
 
+.lightbox {
+    padding: 24px;
+    position: absolute;
+    height: calc(100% - 56px);
+    max-height: 100%;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.lightbox-footer {
+    border-radius: 0 0 2px 2px;
+    background-color: #fafafa;
+    padding: 4px 6px;
+    height: 56px;
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    position: absolute;
+    bottom: 0;
+}
