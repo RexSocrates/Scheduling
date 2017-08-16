@@ -1,26 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>馬偕醫院排班系統</title>
+@extends("layouts.app2")
 
-  	<!--Import Google Icon Font-->
-    <link type="text/css" rel="stylesheet" href="../css/icon.css" rel="stylesheet">
-    <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="../css/materialize.css"  media="screen,projection"/>
-    <link type="text/css" rel="stylesheet" href="../css/styles.css"/>
-    
-    <script src='../codebase/dhtmlxscheduler.js' type="text/javascript" charset="utf-8"></script>
-	<script src='../codebase/ext/dhtmlxscheduler_timeline.js' type="text/javascript" charset="utf-8"></script>
-	<script src='../codebase/ext/dhtmlxscheduler_container_autoresize.js' type="text/javascript" charset="utf-8"></script>
-	<script src='../codebase/ext/dhtmlxscheduler_editors.js' type="text/javascript" charset="utf-8"></script>
-	
-	<link rel='stylesheet' type='text/css' href='../codebase/dhtmlxscheduler_flat.css'>
-      
-    <script src="../codebase/locale/locale_cn.js" type="text/javascript"></script>
-    <script src="../codebase/locale/recurring/locale_recurring_cn.js" ></script>
-   	
-   	<style>
+@section('head')
+    <style>
         td{
             padding: 0;
         }
@@ -36,156 +17,15 @@
         .red_cell{
             background-color:#FF5353;
         }
-        
-        #my_form {
-            -webkit-transform: translate(-50%,0%);
-            transform: translate(-50%,0%);
-			position: absolute;
-			top: 0% !important;
-			left: 50% !important;
-			z-index: 10001;
-			display: none;
-			background-color: white;
-/*			border: 2px outset gray;*/
-/*            border-radius: 2px;*/
-/*			padding: 20px;*/
-			font-family: Tahoma;
-			font-size: 10pt;
-            width: 700px;
-            height: 530px;
-            box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.3);
-		}
-        
-        .modal11 {
-            padding: 24px;
-            position: absolute;
-            height: calc(100% - 56px);
-            max-height: 100%;
-            width: 100%;
-            overflow-y: auto;
-        }
-        
-        .modal-footer1 {
-            border-radius: 0 0 2px 2px;
-            background-color: #fafafa;
-            padding: 4px 6px;
-            height: 56px;
-            width: 100%;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            position: absolute;
-            bottom: 0;
-        }
-        
     </style>
-   	
-</head>
-<body>
+@endsection
 
-	<nav id="slide-out" class="side-nav">
-		<ul>
-			<div class="logo-div">
-				<a href="index.html" class="logo-a">
-		    		<img src="../img/logo-mackay.png" class="logo-img">
-		    		<font class="logo-p">馬偕醫院排班系統</font>
-	   			</a>
-	   		</div>
-	   		<li class="divider"></li>
-    	  	<li class="no-padding">
-                <ul class="collapsible collapsible-accordion">
-                    <li>
-                        <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-prearrange.svg"></i>預班表</a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="reservation.html">個人</a></li>
-                                <li><a href="reservation-all.html">查看全部</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-    	  	<li class="no-padding">
-                <ul class="collapsible collapsible-accordion">
-                    <li>
-                        <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-first-edition.svg"></i>初版班表</a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="first-edition.html">個人</a></li>
-                                <li><a href="first-edition-all.html">查看全部</a></li>
-                                <li><a href="first-edition-shift-info.html">換班資訊</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-    	  	<li class="no-padding">
-                <ul class="collapsible collapsible-accordion">
-                    <li>
-                        <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-schedule.svg"></i>正式班表</a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="schedule.html">個人</a></li>
-                                <li><a href="schedule-all.html">查看全部</a></li>
-                                <li><a href="schedule-shift-info.html">換班資訊</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-    	  	<li class="no-padding">
-                <ul class="collapsible collapsible-accordion">
-                    <li>
-                        <a class="collapsible-header waves-effect active"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-exchange.svg"></i>調整班表</a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="shift-first-edition.html">初版班表</a></li>
-                                <li><a href="shift-scheduler.html">正式班表</a></li>
-                                <li><a href="shift-info.html">換班資訊</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-    	  	<li><a href="doctor.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
-    	</ul>
-	</nav>
-    
-	<header id="header" class="container-fix trans-left-five">
-		<nav id="navbar">
-	    	<div class="nav-wrapper blue-grey darken-1 logo-padding-left">
-	    		<a onclick="sideNav()" class="blue-grey darken-1 waves-effect waves-light menu-btn">
-	    			<i class="material-icons menu-icon" valign="middle">menu</i>
-	    		</a>
-			    <font class="brand-logo light">調整班表 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>初版班表</font>
-			    <ul class="right">
-			      	<li>
-			      		<a class="dropdown-notification-button" href="#!" data-activates="dropdown-notification">
-			      			<img src="../img/notifications-button.png" class="notifications-icon">
-			      		</a>
-			      	</li>
-			      	<li>
-			      		<a class="dropdown-button" href="#!" data-activates="dropdown1">張XX醫生<i class="material-icons right">arrow_drop_down</i>
-			      		</a>
-			      	</li>
-			    </ul>
-	    	</div>
-	  	</nav>
-		
-		<ul id="dropdown-notification" class="dropdown-content">
-            <li><font class="notification">5/12 李XX醫生換班成功<p>2 days ago</p></font></li>
-            <li><font class="notification">5/11 系統公告 請去查閱<p>3 days ago</p></font></li>
-        </ul>
-        
-	  	<ul id="dropdown1" class="dropdown-content">
-		  	<li><a href="setting.html">設定</a></li>
-		  	<li><a href="profile.html">個人資料</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="logout.html">登出</a></li>
-		</ul>
-        
-        <a href="#" data-activates="slide-out" class="button-collapse"></a>
-	</header>
+@section('navbar')
+    <font class="brand-logo light">調整班表 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>初版班表</font>
+@endsection
 
-	<div id="section" class="container-fix trans-left-five">    <!--	 style="background-color:red;"-->
+@section('content')
+    <div id="section" class="container-fix trans-left-five">    <!--	 style="background-color:red;"-->
 		<div class="container-section">
 		    <div class="row">
                 <div class="col s12 m12">
@@ -196,7 +36,7 @@
                             <div class="modal-header">
                                 <h5 class="modal-announcement-title">換班調整</h5>
                             </div>
-                            <div class="modal11">
+                            <div class="lightbox">
                                 <div class="row margin-b0">
                                     <div class="col s12 center padding-b10">
                                         <img src="../img/exchange.svg" style="height: 220px;width: 220px;">
@@ -282,7 +122,7 @@
                                 </div>
                             </div>
                             
-                            <div class="modal-footer1">
+                            <div class="lightbox-footer">
                                 <button class="modal-action waves-effect waves-light btn-flat modal-btn1" onclick="delete_event()">Delete</button>
                                 <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn" onclick="save_form()">Save</button>
                                 <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel modal-btn" onclick="close_form()">Cancel</button>
@@ -516,71 +356,12 @@
       		
 		</div>
 	</div>
-	
-<!--
-	<div id="my_form">
-        <label for="description">Event text </label><input type="text" name="description" value="" id="description"><br>
-        <label for="custom1">Custom 1 </label><input type="text" name="custom1" value="" id="custom1"><br>
-        <label for="custom2">Custom 2 </label><input type="text" name="custom2" value="" id="custom2"><br><br>
-        <input type="button" name="save" value="Save" id="save" style='width:100px;' onclick="save_form()">
-        <input type="button" name="close" value="Close" id="close" style='width:100px;' onclick="close_form()">
-        <input type="button" name="delete" value="Delete" id="delete" style='width:100px;' onclick="delete_event()">
-    </div>
--->
+@endsection
 
-
-	<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="../js/materialize.min.js"></script>
-	<script type="text/javascript">
-		var sideNav = (function() {
-		  	var first = true;
-		  	return function() {
-		  	  	first ? slideToLeft() : slideToRight();
-		  	  	first = !first;
-		  	}
-		})();
-		
-		function slideToLeft() {
-		  	document.getElementById("slide-out").style.width = "0";
-		    document.getElementById("header").style.marginLeft = "0";
-		    document.getElementById("section").style.marginLeft = "0";
-		};
-		function slideToRight() {
-			document.getElementById("slide-out").style.width = "250px";
-		    document.getElementById("header").style.marginLeft = "250px";
-		  	document.getElementById("section").style.marginLeft = "250px";
-		};
-        
-//        查看side-nav現在是處於哪一頁
-		$(".side-nav>ul>li").each(function() {
-		    var navItem = $(this);
-		    var href = window.location.href;
-			var filename = href.replace(/^.*[\\\/]/, '')
-
-		    if (navItem.find("a").attr("href") == filename) {
-		      	navItem.addClass("active");
-		    }
-		});
-
-		$(document).ready(function(){
-  		  	// the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-  		  	$('.modal').modal();
+@section('script')
+    <script>
+        $(document).ready(function(){
             $('select').material_select();
   		});
-        
-        $('.dropdown-notification-button').dropdown({
-            inDuration: 300,
-            outDuration: 225,
-            constrainWidth: false, // Does not change width of dropdown to that of the activator
-            hover: true, // Activate on hover
-            gutter: 0, // Spacing from edge
-            belowOrigin: true, // Displays dropdown below the button
-            alignment: 'right', // Displays dropdown with edge aligned to the left of button
-            stopPropagation: false // Stops event propagation
-        });
-        
     </script>
-
-	
-</body>
-</html>
+@endsection

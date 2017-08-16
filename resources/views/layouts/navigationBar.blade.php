@@ -13,13 +13,15 @@
    	<script src='../codebase/dhtmlxscheduler.js' type="text/javascript" charset="utf-8"></script>
 	<script src='../codebase/ext/dhtmlxscheduler_timeline.js' type="text/javascript" charset="utf-8"></script>
 	<script src='../codebase/ext/dhtmlxscheduler_container_autoresize.js' type="text/javascript" charset="utf-8"></script>
-    <!--<script src='../dhtmlxDataProcessor/codebase/dhtmlxdataprocessor.js'></script>-->
+    
 	<script src='../codebase/ext/dhtmlxscheduler_editors.js' type="text/javascript" charset="utf-8"></script>
 	
 	<link rel='stylesheet' type='text/css' href='../codebase/dhtmlxscheduler_flat.css'>
 	
     <script src="../codebase/locale/locale_cn.js" type="text/javascript"></script>
     <script src="../codebase/locale/recurring/locale_recurring_cn.js" ></script>
+	
+	
 
     <style>
         td{
@@ -38,10 +40,61 @@
 	   			</a>
 	   		</div>
 	   		<li class="divider"></li>
-    	  	<li><a href="reservation.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-prearrange.svg"></i>預班表</a></li>
-    	  	<li><a href="first-edition.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-first-edition.svg"></i>初版班表</a></li>
-    	  	<li><a href="schedule.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-schedule.svg"></i>正式班表</a></li>
-    	  	<li><a href="shift.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-exchange.svg"></i>調整班表</a></li>
+    	  	<li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-prearrange.svg"></i>預班表</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="reservation.html">個人</a></li>
+                                <li><a href="reservation-all.html">查看全部</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+    	  	<li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-first-edition.svg"></i>初版班表</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="first-edition.html">個人</a></li>
+                                <li><a href="first-edition-all.html">查看全部</a></li>
+                                <li><a href="first-edition-shift-info.html">換班資訊</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+    	  	<li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-schedule.svg"></i>正式班表</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="schedule.html">個人</a></li>
+                                <li><a href="schedule-all.html">查看全部</a></li>
+                                <li><a href="schedule-shift-info.html">換班資訊</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+    	  	<li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-exchange.svg"></i>調整班表</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="shift-first-edition.html">初版班表</a></li>
+                                <li><a href="shift-scheduler.html">正式班表</a></li>
+                                <li><a href="shift-info.html">換班資訊</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
     	  	<li><a href="doctor.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
     	</ul>
 	</nav>

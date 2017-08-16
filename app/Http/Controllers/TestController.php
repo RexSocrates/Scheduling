@@ -141,13 +141,14 @@ class TestController extends Controller
         $annoucement->addAnnouncement($data);
     }
     
-    public function testDateString(Request $request) {
-        $data = $request->all();
+    public function testDateString() {
+        //Request $request
+//        $data = $request->all();
         
-//        $serial = 3;
-        $serial = $data['serial'];
-        $str = $data['date1'];
-//        $str = 'Tue Aug 15 2017 00:00:00 GMT+0800 (CST)';
+        $serial = 5;
+//        $serial = $data['serial'];
+//        $str = $data['date1'];
+        $str = 'Tue Aug 15 2017 00:00:00 GMT+0800 (CST)';
         
         $dateArr = explode(' ', $str);
         
@@ -162,16 +163,47 @@ class TestController extends Controller
             'isWeekday' => true,
             'location' => $categoryInfo['location'],
             'isOn' => $categoryInfo['isOn'],
-            'date' => '',
-            'categorySerial' => 3
+            'date' => $this->processDateStr($str),
+            'categorySerial' => $serial
         ];
-        
-//        $dateArr = explode(' ', $dateStr);
         
         // 判斷平日/假日
         if(strcmp($dateArr[0],"Sat") == 0 or strcmp($dateArr[0],"Sun") == 0) {
             $resInfo['isWeekday'] = false;
         }
+        
+        $resObj = new Reservation();
+        
+        $newSerial = $resObj->addOrUpdateReservation($resInfo);
+        
+        echo print_r($resInfo).'<br>';
+        echo 'Serial : '.$newSerial;
+        
+        $docAndRes = new DoctorAndReservation();
+        $user = new User();
+        
+        $darData = [
+            'resSerial' => $newSerial,
+            'doctorID' => $user->getCurrentUserID(),
+        ];
+        $docAndRes->addDoctor($darData);
+    }
+    
+    public function addDoctorAndResTest() {
+        $docAndResObj = new DoctorAndReservation();
+        $user = new User();
+        
+        $data = [
+            'resSerial' => 2,
+            'doctorID' => $user->getCurrentUserID(),
+            'remark' => ''
+        ];
+        
+        $docAndResObj->addDoctor($data);
+    }
+    
+    public function processDateStr($dateStr) {
+        $dateArr = explode(' ', $dateStr);
         
         // 判斷月份
         $month = '00';
@@ -217,36 +249,6 @@ class TestController extends Controller
         $day = $dateArr[2];
         $year = $dateArr[3];
         
-        $resInfo['date'] = $year.'-'.$month.'-'.$day;
-        
-        $resObj = new Reservation();
-        
-        $newSerial = $resObj->addOrUpdateReservation($resInfo);
-        
-        echo print_r($resInfo).'<br>';
-        echo 'Serial : '.$newSerial;
-        
-        $docAndRes = new DoctorAndReservation();
-        $user = new User();
-        
-        $darData = [
-            'resSerial' => $newSerial,
-            'doctorID' => $user->getCurrentUserID(),
-            'remark' => ''
-        ];
-        $docAndRes->addDoctor($darData);
-    }
-    
-    public function addDoctorAndResTest() {
-        $docAndResObj = new DoctorAndReservation();
-        $user = new User();
-        
-        $data = [
-            'resSerial' => 2,
-            'doctorID' => $user->getCurrentUserID(),
-            'remark' => ''
-        ];
-        
-        $docAndResObj->addDoctor($data);
+        return $year.'-'.$month.'-'.$day;
     }
 }
