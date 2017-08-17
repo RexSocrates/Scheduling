@@ -60,22 +60,12 @@
                                         </select>
                                     </div>
                                     <div class="col s6">
-                                        <label>醫生:</label>
-                                        <select class="browser-default" required>
-                                            <option value="" disabled selected>請選擇醫生</option>
-                                            <option value="1">王志平</option>
-                                            <option value="2">黃明源</option>
-                                            <option value="3">莊錦康</option>
-                                            <option value="4">簡立仁</option>
-                                            <option value="5">陳長志</option>
-                                            <option value="6">劉良嶸</option>
-                                            <option value="7">陳楷宏</option>
-                                            <option value="8">黃明源</option>
-                                            <option value="9">鄭婓茵</option>
-                                            <option value="10">劉蕙慈</option>
-                                            <option value="11">柳志翰</option>
-                                            <option value="12">蘇柏樺</option>
-                                        </select>
+                                    <label>醫生:</label>
+                                    <select name= 'schID_2_doctor' class="browser-default" required>
+                                        <option value="" disabled selected>請選擇醫生</option>
+                                        <option value="{{$doctorName->doctorID}}">{{$doctorName->name}}</option>
+                                   
+                                    </select>
                                     </div>
                                     <div class="col s6">
                                         <label>日期:</label>
@@ -100,23 +90,12 @@
                                     </div>
                                     <div class="col s6">
                                         <label>日期:</label>
-                                        <select class="browser-default" required>
+                                        <select  name='scheduleID_2' class="browser-default" required>
                                             <option value="" disabled selected>請選擇日期</option>
-                                            <option value="1">2017/08/05</option>
-                                            <option value="2">2017/08/17</option>
-                                            <option value="3">2017/08/26</option>
-                                            <option value="4">2017/08/05</option>
-                                            <option value="5">2017/08/17</option>
-                                            <option value="6">2017/08/26</option>
-                                            <option value="7">2017/08/05</option>
-                                            <option value="8">2017/08/17</option>
-                                            <option value="9">2017/08/26</option>
-                                            <option value="10">2017/08/05</option>
-                                            <option value="12">2017/08/17</option>
-                                            <option value="13">2017/08/26</option>
-                                            <option value="14">2017/08/05</option>
-                                            <option value="15">2017/08/17</option>
-                                            <option value="16">2017/08/26</option>
+                                            @foreach($doctorSchedule as $data)
+                                            <option value='{{$data->scheduleID}}'>{{$data->date}}</option>
+                                            @endforeach
+                                   
                                         </select>
                                     </div>
                                 </div>
@@ -264,8 +243,8 @@
                             scheduler.showLightbox = function(id) {
                                 var ev = scheduler.getEvent(id);
                                 scheduler.startLightbox(id, html("my_form"));
-                                var doctorID = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
-                                var doctorName = ["王志平", "黃明源", "莊錦康", "簡立仁", "陳長志", "劉良嶸", "陳楷宏", "黃明源", "鄭婓茵", "劉蕙慈", "柳志翰", "蘇柏樺"];
+                                var doctorID = [{{$doctorName->doctorID}}];
+                                var doctorName = [{{$doctorName->name}}];
                                 var array = doctorName.indexOf(ev.text);
                                 
                                 if (ev.text == "New" || ev.text == "") {
@@ -312,42 +291,17 @@
                                 scheduler.deleteEvent(event_id);
                             }
 
-
-                            
+                          
+                            scheduler.init('scheduler_here',new Date(),"timeline");
+                           
                             scheduler.parse([
-                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"王志平", section_id:1},
-                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"黃明源", section_id:2},
-                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"莊錦康", section_id:3},
-                                { start_date: "2017-06-30 00:00", end_date: "2017-07-01 00:00", text:"簡立仁", section_id:4},
 
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"王志平", section_id:1},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"黃明源", section_id:2},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"莊錦康", section_id:3},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"簡立仁", section_id:4},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"陳長志", section_id:5},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"劉良嶸", section_id:6},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"陳楷宏", section_id:7},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"黃明源", section_id:8},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"鄭婓茵", section_id:9},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"劉蕙慈", section_id:10},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"王志平", section_id:11},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"柳志翰", section_id:12},
-                                { start_date: "2017-07-02 00:00", end_date: "2017-07-03 00:00", text:"蘇柏樺", section_id:13},
-
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"王志平", section_id:1},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"黃明源", section_id:2},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"莊錦康", section_id:3},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"簡立仁", section_id:4},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"陳長志", section_id:5},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"劉良嶸", section_id:6},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"陳楷宏", section_id:7},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"黃明源", section_id:8},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"鄭婓茵", section_id:9},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"劉蕙慈", section_id:10},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"王志平", section_id:11},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"柳志翰", section_id:12},
-                                { start_date: "2017-07-03 00:00", end_date: "2017-07-04 00:00", text:"蘇柏樺", section_id:13}
-                            ],"json");
+                                @foreach($schedule as $data)
+                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}"},
+                               
+                                @endforeach
+                                ],"json");
+                           
 
                         </script>
                     </div>

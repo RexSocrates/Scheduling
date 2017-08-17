@@ -57,10 +57,10 @@ class ScheduleController extends Controller
             $data->doctorID = $doctorName->name;
         }
 
-        $data = $shiftRecords->getMoreShiftsRecordsInformation(false);
+       // $data = $shiftRecords->getMoreCheckShiftsRecordsInformation(false); 
 
         
-        return view('pages.schedule-all', array('schedule' => $scheduleData,'shiftRecords'=>$data));
+        return view('pages.schedule-all', array('schedule' => $scheduleData));
     }
     // 初版班表 個人
     public function firstEditionSchedule() {

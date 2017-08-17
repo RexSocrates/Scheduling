@@ -39,7 +39,6 @@ class ShiftRecordsController extends Controller
 
 
         //換班確認
-
         return view ("pages.first-edition-shift",array('shiftRecords'=>$allShiftData,'shiftDataByDoctorID'=>$shiftDataByDoctorID,'currentDoctor'=>$currentDoctor,'currentDoctorSchedule'=>$currentDoctorSchedule,'doctorName'=>$doctorName ,'doctorSchedule'=>$doctorSchedule));
 
     } 
@@ -295,5 +294,23 @@ class ShiftRecordsController extends Controller
         $shiftRecordObj = new ShiftRecords();
     }
 
+    // 調整班表 換班確認 顯示初版班表 調整換班
+    public function shiftFirstEdition(){
+        $schedule = new Schedule();
+        $user = new User();
+        $shiftRecords = new ShiftRecords(); 
+        $scheduleData = $schedule->getSchedule();
+
+        $doctorName = $user->getDoctorInfoByID(2);
+        $doctorSchedule = $schedule->getScheduleByDoctorID(2); //之後用ajax傳入id
+
+        foreach ($scheduleData as $data) {
+            $doctorName = $user->getDoctorInfoByID($data->doctorID);
+            $data->doctorID = $doctorName->name;
+        }
+
+        return view('pages.shift-first-edition',array('schedule' => $scheduleData,'doctorName'=>$doctorName ,'doctorSchedule'=>$doctorSchedule));
+
+    }
 
 }

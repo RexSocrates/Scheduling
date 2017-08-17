@@ -30,7 +30,8 @@ class Remark extends Model
     public function addRemark($doctorID,$remark){
     	$addRemark = DB::table("Remark")-> insertGetId([
                 'doctorID' => $doctorID,
-    			'remark' => $remark
+    			'remark' => $remark,
+                'date' => date('Y-m-d')
                     
     		]);
 

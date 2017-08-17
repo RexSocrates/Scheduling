@@ -41,6 +41,7 @@ Route::get('/reservation', 'ReservationController@getReservationByID');
 
 // 新增備註
 Route::post('/addRemark', 'ReservationController@addRemark');
+
 Route::match(['get', 'post'], '/reservation_data', "ReservationController@renderData");
 
 //列出全部班表資訊
@@ -54,6 +55,14 @@ Route::get('first-edition', 'ScheduleController@firstEditionSchedule');
 
 //初版班表 全部醫生
 Route::get('/first-edition-all', 'ScheduleController@firstSchedule');
+
+//初版班表->換班資訊
+Route::get('first-edition-shift-info','ShiftRecordsController@shiftRecords');
+Route::post('first-edition-shift-info','ShiftRecordsController@addShifts');
+
+//初版班表->換班資訊 換班確認
+Route::get('checkShift/{id}','ShiftRecordsController@checkShift');
+Route::get('rejectShift/{id}','ShiftRecordsController@rejectShift');
 
 // 列出所有使用者的資訊以及公假
 Route::get('officialLeave', 'AccountController@getOfficialLeavePage');
@@ -73,6 +82,9 @@ Route::get('schedule-shift-info', 'ShiftRecordsController@getShiftRecords');
 // 醫生2同意或拒絕換班
 Route::get('doctor2AgreeShiftRecord/{serial}', 'ShiftRecordsController@doctor2AgreeShiftRecord');
 Route::get('doctor2DenyShiftRecord/{serial}', 'ShiftRecordsController@doctor2DenyShiftRecord');
+
+//調整班表->初版班表
+Route::get('/shift-first-edition','ShiftRecordsController@shiftFirstEdition');
 
 // 調整班表的換班資訊
 Route::get('shift-info', 'ShiftRecordsController@adminShiftRecords');
@@ -105,6 +117,15 @@ Route::group(['middleware' => ['auth']], function () {
 //Route::post('postAjaxRequest', 'TestController@postAjaxRequest');
 //Route::get('postAjaxRequest', 'TestController@postAjaxRequest');
 
+
+
+
+//調整班表->正式班表
+Route::get('shift-scheduler', function() {
+	return view('pages.shift-scheduler');
+});
+
+
 Route::get('testDateString', 'TestController@testDateString');
 
 Route::get('addDoctorAndResTest', 'TestController@addDoctorAndResTest');
@@ -115,13 +136,6 @@ Route::get('addDoctorAndResTest', 'TestController@addDoctorAndResTest');
 Route::get('getExchangeSchedulePage', function() {
 	return view('testPage.exchangeSchedule');
 });
-
-
-Route::get('checkShift/{id}','ShiftRecordsController@checkShift');
-Route::get('rejectShift/{id}','ShiftRecordsController@rejectShift');
-
-Route::get('first-edition-shift','ShiftRecordsController@shiftRecords');
-Route::post('first-edition-shift','ShiftRecordsController@addShifts');
 
 Route::get('getOfficialLeavePage', 'AccountController@getOfficialLeavePage');
 

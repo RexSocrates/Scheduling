@@ -119,6 +119,7 @@ class ReservationController extends Controller
         $user = new User();
         $doctorID = $user->getCurrentUserID();
         $addRemark = Input::get('remark');
+
         $remarkData = $remark->addRemark($doctorID,$addRemark);
 
         return redirect('reservation');

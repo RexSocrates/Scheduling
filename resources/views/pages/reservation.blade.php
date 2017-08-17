@@ -5,7 +5,7 @@
     <script src="../codebase/ext/dhtmlxscheduler_limit.js"></script>
     <script src="../../codebase/ext/dhtmlxscheduler_serialize.js" type="text/javascript" charset="utf-8"></script>
 
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <script>
         function sendNewReservation(categorySerial, startDate, endDate) {
@@ -63,7 +63,7 @@
                         <div class="card-content">
 
 
-                            <form action="reservation" method="post">
+                            <form action="addRemark" method="post">
                                 <div class="row margin-b0">
                                     <div class="col s5">
                                         <p class="information">開放時間: 2017/06/01 - 2017/06/25</p>
@@ -73,7 +73,7 @@
                                     <div class="col s7">
                                         <form action="addRemark" method="post" class="col s6">
                                             <div class="input-field">
-                                                <textarea id="textarea1" class="materialize-textarea"  name="remark"placeholder="請輸入XXXXX"></textarea>
+                                                <textarea id="textarea1" class="materialize-textarea" name="remark"placeholder="請輸入XXXXX"></textarea>
     <!--                                                     data-length="150"-->
                                                 <label for="textarea1">備註:</label>
                                             </div>
@@ -330,8 +330,8 @@
 
                             //鎖定時間
 
-                            var startd =new Date(res[3], month-1, 1); 
-                            var endd = new Date(res[3], month, 1); 
+                            var startd =new Date(res[3], month, 1); 
+                            var endd = new Date(res[3], month+1, 1); 
 
                             console.log("startd "+startd);
                             console.log("endd "+endd);
@@ -362,7 +362,7 @@
                             //  var dp = new dataProcessor("./reservation_data");
                             //   dp.init(scheduler);
 
-                         //    //讀取資料
+                           //讀取資料
 
                             @foreach($reservations as $reservation)
 

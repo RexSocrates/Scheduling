@@ -125,7 +125,7 @@
                             };
                             
                             //進入畫面後顯示的東西
-                            scheduler.init('scheduler_here',new Date(),"timeline");
+                         scheduler.init('scheduler_here',new Date(),"timeline");
                            
                            scheduler.parse([
                             @foreach($schedule as $data)
@@ -136,13 +136,7 @@
                            
 
                         </script>
-                             @foreach($shiftRecords as $record)
-                            <ul>
-                            <li>申請人: {{ $record[0]}}</li> 
-                            <li>日期: {{ $record[6] }}</li>
-                            <li>換班內容: {{ $record[2] }} {{ $record[4]}} {{ $record[0]}} {{ $record[1]}} {{ $record[3]}} {{ $record[5]}} </li> 
-                            </ul>
-                             @endforeach
+                        
 
                     </div>
                 </div>
