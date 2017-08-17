@@ -16,7 +16,6 @@ class DoctorAndReservation extends Model
         DB::table('DoctorAndReservation')->insert([
             'resSerial' => $data['resSerial'],
             'doctorID' => $data['doctorID'],
-            'remark' => $data['remark']
         ]);
     }
 

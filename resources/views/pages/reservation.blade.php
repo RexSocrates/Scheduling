@@ -242,6 +242,7 @@
                             });
 
                             scheduler.attachEvent("onBeforeEventDelete", function(id,e){
+                                // 刪除 reservation
                                 var event = scheduler.getEvent(id);
 
 
@@ -250,16 +251,6 @@
                                 console.log(id);
                                 return true;
                             });
-
-                            scheduler.attachEvent("onEventDeleted", function(id){
-                                // 按下刪除之後
-                                var event = scheduler.getEvent(id);
-
-
-    //                                console.log(event.hidden);
-                                console.log(id);
-                            });
-
 
                             scheduler.attachEvent("onEventCollision", function (ev, evs){
                                   //any custom logic here
