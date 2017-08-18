@@ -23,6 +23,7 @@ class ShiftCategory extends Model
         $info = [
             'location' => '',
             'isOn' => true,
+            'dayOrNight' => 'day'
         ];
         
         switch($categorySerial) {
@@ -37,12 +38,14 @@ class ShiftCategory extends Model
                 break;
             case 4 : 
                 $info['location'] = 'Taipei';
+                $info['dayOrNight'] = 'night';
                 break;
             case 5 : 
                 $info['location'] = 'Tamsui';
                 break;
             case 6 : 
                 $info['location'] = 'Tamsui';
+                $info['dayOrNight'] = 'night';
                 break;
             case 7 : 
                 $info['isOn'] = false;

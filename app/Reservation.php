@@ -26,6 +26,24 @@ class Reservation extends Model
 
     	return $reservation;
     }
+    
+    // 取得 on班 預班資訊
+    public function getOnReservation() {
+        $reservationList = DB::table('Reservation')
+            ->whereIn('categorySerial', [1, 2, 3, 4, 5, 6])
+            ->get();
+        
+        return $reservationList;
+    }
+    
+    // 取得 off班 預班資訊
+    public function getOffReservation() {
+        $reservationList = DB::table('Reservation')
+            ->where('categorySerial', 0)
+            ->get();
+        
+        return $reservationList;
+    }
 
     //查看 單一醫生預班資訊
     public function getReservationByID()
