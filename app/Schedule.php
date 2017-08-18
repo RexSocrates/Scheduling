@@ -54,8 +54,7 @@ class Schedule extends Model
         
         $newScheduleID = DB::table('Schedule')->insertGetId([
             'doctorID' => $data['doctorID'],
-            'shiftName' => $data['shiftName'],
-            'categorySerial' => $data['categorySerial'],
+            'schCategorySerial' => $data['categorySerial'],
             'isWeekday' => $data['isWeekday'],
             'location' => $data['location'],
             'date' => $data['date'],
@@ -84,8 +83,7 @@ class Schedule extends Model
             ->where('scheduleID', $scheduleID)
             ->update([
                 'doctorID' => $data['doctorID'],
-                'shiftName' => $data['shiftName'],
-                'categorySerial' => $data['categorySerial'],
+                'schCategorySerial' => $data['categorySerial'],
                 'isWeekday' => $data['isWeekday'],
                 'location' => $data['location'],
                 'date' => $data['date'],

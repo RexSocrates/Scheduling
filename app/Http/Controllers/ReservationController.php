@@ -199,11 +199,11 @@ class ReservationController extends Controller
     public function updateReservation(Request $request){
         $data = $request->all();
         
-        $resSerial = $data['resSerial'];
-        $categorySerial = $data['categorySerial'];
+        $resSerial = (int)$data['resSerial'];
+        $categorySerial = (int)$data['categorySerial'];
         $startDateStr = $data['startDate'];
         
-        $dateArr = explode(' ', $startDateStr);
+        
         
         $shiftCategory = new ShiftCategory();
         
@@ -213,59 +213,16 @@ class ReservationController extends Controller
             'isWeekday' => true,
             'location' => $categoryInfo['location'],
             'isOn' => $categoryInfo['isOn'],
-            'date' => '',
+            'date' => $this->processDateStr($startDateStr),
             'categorySerial' => $categorySerial
         ];
+        
+        $dateArr = explode(' ', $startDateStr);
         
         // 判斷平日/假日
         if(strcmp($dateArr[0],"Sat") == 0 or strcmp($dateArr[0],"Sun") == 0) {
             $resInfo['isWeekday'] = false;
         }
-        
-        // 判斷月份
-        $month = '00';
-        switch($dateArr[1]) {
-            case 'Jan' :
-                $month = '01';
-                break;
-            case 'Feb' :
-                $month = '02';
-                break;
-            case 'Mar' :
-                $month = '03';
-                break;
-            case 'Apr' :
-                $month = '04';
-                break;
-            case 'May' :
-                $month = '05';
-                break;
-            case 'Jun' :
-                $month = '06';
-                break;
-            case 'Jul' :
-                $month = '07';
-                break;
-            case 'Aug' :
-                $month = '08';
-                break;
-            case 'Sep' :
-                $month = '09';
-                break;
-            case 'Oct' :
-                $month = '10';
-                break;
-            case 'Nov' :
-                $month = '11';
-                break;
-            case 'Dec' :
-                $month = '12';
-                break;
-        }
-        $day = $dateArr[2];
-        $year = $dateArr[3];
-        
-        $resInfo['date'] = $year.'-'.$month.'-'.$day;
         
         $resObj = new Reservation();
         
