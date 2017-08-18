@@ -40,7 +40,7 @@
                                             <td class="td-padding">{{ $record['applyDate'] }}</td>
                                             <td class="td-padding">{{ $record['sch1Date'] }} <font class="font-w-b">{{ $record['sch1Content'] }} </font> 與 {{ $record['sch2Date'] }}  <font class="font-w-b">{{ $record['sch2Content'] }} </font> 互換</td>
                                             
-                                            @if($record['adminConfirm'] == 0)
+                                            @if($record['adminConfirm'] == 1)
                                                 <td class="td-padding"><a class="waves-effect waves-light btn pad-btn disabled">已確認</a></td>
                                             @else
                                                 <td class="td-padding"><a href="adminAgreeShiftRecord/{{ $record['changeSerial'] }}" class="waves-effect waves-light btn">確認</a></td>

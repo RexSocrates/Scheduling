@@ -94,12 +94,6 @@ Route::get('adminAgreeShiftRecord/{serial}', 'ShiftRecordsController@adminAgreeS
 
 
 
-
-
-
-
-
-
 Route::group(['middleware' => ['admin']], function () {
     // 給排班人員的路由
 });

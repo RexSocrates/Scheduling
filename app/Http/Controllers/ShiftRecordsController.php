@@ -127,75 +127,77 @@ class ShiftRecordsController extends Controller
         
         $displayConfirmedArr = [];
         
-        foreach($confirmedRecords as $record) {
-            $recordDic = [
-                'changeSerial' => $record->changeSerial,
-                'applier' => '',
-                'receiver' => '',
-                'applyDate' => '',
-                'sch1Date' => '',
-                'sch2Date' => '',
-                'sch1Content' => '',
-                'sch2Content' => ''
-            ];
+        $allShiftData = $shiftRecordObj->getMoreCheckShiftsRecordsInformation(false);  // 列出所有待確認換班資訊
+
+        // foreach($confirmedRecords as $record) {
+        //     $recordDic = [
+        //         'changeSerial' => $record->changeSerial,
+        //         'applier' => '',
+        //         'receiver' => '',
+        //         'applyDate' => '',
+        //         'sch1Date' => '',
+        //         'sch2Date' => '',
+        //         'sch1Content' => '',
+        //         'sch2Content' => ''
+        //     ];
             
-            $recordDic['applier'] = $userObj->getDoctorInfoByID($record->schID_1_doctor)->name;
-            $recordDic['receiver'] = $userObj->getDoctorInfoByID($record->schID_2_doctor)->name;
-            $recordDic['applyDate'] = $record->date;
+        //     $recordDic['applier'] = $userObj->getDoctorInfoByID($record->schID_1_doctor)->name;
+        //     $recordDic['receiver'] = $userObj->getDoctorInfoByID($record->schID_2_doctor)->name;
+        //     $recordDic['applyDate'] = $record->date;
             
             
-            $schedule1 = $sheduleObj->getScheduleDataByID($record->scheduleID_1);
-            $schedule2 = $sheduleObj->getScheduleDataByID($record->scheduleID_2);
-            $sch1Name = $schCateObj->findScheduleName($schedule1->schCategorySerial);
-            $sch2Name = $schCateObj->findScheduleName($schedule2->schCategorySerial);
+        //     $schedule1 = $sheduleObj->getScheduleDataByID($record->scheduleID_1);
+        //     $schedule2 = $sheduleObj->getScheduleDataByID($record->scheduleID_2);
+        //     $sch1Name = $schCateObj->findScheduleName($schedule1->schCategorySerial);
+        //     $sch2Name = $schCateObj->findScheduleName($schedule2->schCategorySerial);
             
-            $recordDic['sch1Date'] = $schedule1.date;
-            $recordDic['sch2Date'] = $schedule2.date;
-            $recordDic['sch1Content'] = $recordDic['applier'].' '.$sch1Name;
-            $recordDic['sch2Content'] = $recordDic['receiver'].' '.$sch2Name;
+        //     $recordDic['sch1Date'] = $schedule1->date;
+        //     $recordDic['sch2Date'] = $schedule2->date;
+        //     $recordDic['sch1Content'] = $recordDic['applier'].' '.$sch1Name;
+        //     $recordDic['sch2Content'] = $recordDic['receiver'].' '.$sch2Name;
             
-            array_push($displayConfirmedArr, $recordDic);
-        }
+        //     array_push($displayConfirmedArr, $recordDic);
+        // }
         
         // 對方醫師提出申請，但未確認
-        $displayUnconfirmedArr = [];
+         $shiftDataByDoctorID = $shiftRecordObj->getMoreUncheckShiftsRecordsInformation(true); //換班待確認
+        // $displayUnconfirmedArr = [];
         
-        $displayUnconfirmedRecords = $shiftRecordObj->getUncheckShiftRecordsList();
+        // $displayUnconfirmedRecords = $shiftRecordObj->getUncheckShiftRecordsList();
         
-        foreach($displayUnconfirmedRecords as $record) {
-            $recordDic = [
-                'changeSerial' => $record->changeSerial,
-                'applier' => '',
-                'receiver' => '',
-                'applyDate' => '',
-                'sch1Date' => '',
-                'sch2Date' => '',
-                'sch1Content' => '',
-                'sch2Content' => ''
-            ];
+        // foreach($displayUnconfirmedRecords as $record) {
+        //     $recordDic = [
+        //         'changeSerial' => $record->changeSerial,
+        //         'applier' => '',
+        //         'receiver' => '',
+        //         'applyDate' => '',
+        //         'sch1Date' => '',
+        //         'sch2Date' => '',
+        //         'sch1Content' => '',
+        //         'sch2Content' => ''
+        //     ];
             
-            $recordDic['applier'] = $userObj->getDoctorInfoByID($record->schID_1_doctor)->name;
-            $recordDic['receiver'] = $userObj->getDoctorInfoByID($record->schID_2_doctor)->name;
-            $recordDic['applyDate'] = $record->date;
-            
-            
-            $schedule1 = $sheduleObj->getScheduleDataByID($record->scheduleID_1);
-            $schedule2 = $sheduleObj->getScheduleDataByID($record->scheduleID_2);
-            $sch1Name = $schCateObj->findScheduleName($schedule1->schCategorySerial);
-            $sch2Name = $schCateObj->findScheduleName($schedule2->schCategorySerial);
+        //     $recordDic['applier'] = $userObj->getDoctorInfoByID($record->schID_1_doctor)->name;
+        //     $recordDic['receiver'] = $userObj->getDoctorInfoByID($record->schID_2_doctor)->name;
+        //     $recordDic['applyDate'] = $record->date;
             
             
-            $recordDic['sch1Date'] = $schedule1.date;
-            $recordDic['sch2Date'] = $schedule2.date;
-            $recordDic['sch1Content'] = $recordDic['applier'].' '.$sch1Name;
-            $recordDic['sch2Content'] = $recordDic['receiver'].' '.$sch2Name;
+        //     $schedule1 = $sheduleObj->getScheduleDataByID($record->scheduleID_1);
+        //     $schedule2 = $sheduleObj->getScheduleDataByID($record->scheduleID_2);
+        //     $sch1Name = $schCateObj->findScheduleName($schedule1->schCategorySerial);
+        //     $sch2Name = $schCateObj->findScheduleName($schedule2->schCategorySerial);
             
-            array_push($displayUnconfirmedRecords, $recordDic);
-        }
+            
+        //     $recordDic['sch1Date'] = $schedule1->date;
+        //     $recordDic['sch2Date'] = $schedule2->date;
+        //     $recordDic['sch1Content'] = $recordDic['applier'].' '.$sch1Name;
+        //     $recordDic['sch2Content'] = $recordDic['receiver'].' '.$sch2Name;
+            
+        //     array_push($displayUnconfirmedRecords, $recordDic);
+        // }
         
         return view('pages.schedule-shift-info', [
-            'confirmedArr' => $displayConfirmedArr,
-            'unconfirmedArr' => $displayUnconfirmedRecords
+            'shiftRecords'=>$allShiftData,'shiftDataByDoctorID'=>$shiftDataByDoctorID
         ]);
         
     }
@@ -229,6 +231,12 @@ class ShiftRecordsController extends Controller
     public function adminShiftRecords() {
         $shiftRecordObj = new ShiftRecords();
         
+        $userObj = new User();
+
+        $sheduleObj = new Schedule();
+
+        $schCateObj = new ScheduleCategory();
+
         $shiftRecords = $shiftRecordObj->getRecordsOrderByDate();
         
         $displayArr = [];
@@ -256,8 +264,8 @@ class ShiftRecordsController extends Controller
             $sch1Name = $schCateObj->findScheduleName($schedule1->schCategorySerial);
             $sch2Name = $schCateObj->findScheduleName($schedule2->schCategorySerial);
             
-            $recordDic['sch1Date'] = $schedule1.date;
-            $recordDic['sch2Date'] = $schedule2.date;
+            $recordDic['sch1Date'] = $schedule1->date;
+            $recordDic['sch2Date'] = $schedule2->date;
             $recordDic['sch1Content'] = $recordDic['applier'].' '.$sch1Name;
             $recordDic['sch2Content'] = $recordDic['receiver'].' '.$sch2Name;
             
@@ -265,7 +273,7 @@ class ShiftRecordsController extends Controller
         }
         
         $remarkObj = new Remark();
-        $userObj = new User();
+       
         
         $remarks = $remarkObj->getRemarks();
         
@@ -278,7 +286,7 @@ class ShiftRecordsController extends Controller
                 'content' => $remark->remark
             ];
             
-            $remarkDic['author'] = $userObj->getDoctorInfoByID()->name;
+            $remarkDic['author'] = $userObj->getDoctorInfoByID($remark->doctorID)->name;
             
             array_push($displayRemarksArr, $remarkDic);
         }
@@ -292,6 +300,10 @@ class ShiftRecordsController extends Controller
     // 排班人員確認換班
     public function adminAgreeShiftRecord($serial) {
         $shiftRecordObj = new ShiftRecords();
+
+        $shiftRecordObj->adminConfirm($serial,1);
+
+        return redirect('shift-info');
     }
 
     // 調整班表 換班確認 顯示初版班表 調整換班
