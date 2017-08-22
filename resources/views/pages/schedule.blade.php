@@ -27,7 +27,7 @@
 @section('content')
     <div id="section" class="container-fix trans-left-five">
 	    
-		<div class="container-section2">
+		<div class="container-section">
 			<div class="row">
                 <div id="self" class="col s12">
                     <div class="card">

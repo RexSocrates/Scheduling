@@ -38,10 +38,10 @@
                                     <input id="icon_telephone" type="password" class="validate" name="password">
                                     <label for="icon_telephone">Password</label>
                                 </div>
-                                <div class="col s12 margin-top-20">
+                                <div class="col s12 margin-t20">
                                     <button type="submit" class="waves-effect waves-light btn teal lighten-2" style="width: 100%;">login</button>
                                 </div>
-                                <div class="col s12 margin-top-20">
+                                <div class="col s12 margin-t20">
                                     <center>
                                         <a href="http://localhost:8000/password/reset" style="margin-top: 140px;">忘記密碼?</a>
                                     </center>
