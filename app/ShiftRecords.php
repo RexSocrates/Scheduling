@@ -102,7 +102,7 @@ class ShiftRecords extends Model
             $shiftRecordsData = $this->checkShiftRecordsList();
         }
 
-        $dataInschedule = array();
+       $dataInschedule = array();
 
         foreach ($shiftRecordsData as $record) {
 
@@ -115,7 +115,7 @@ class ShiftRecords extends Model
             $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial);
             $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial);
 
-            array_push($dataInschedule, array($doctor1->name, $doctor2->name, $schedule1->date, $schedule2->date, $catName1, $catName2, $record->date));
+            array_push($dataInschedule, array($doctor1->name, $doctor2->name, $schedule1->date, $schedule2->date, $catName1, $catName2, $record->date, $record->changeSerial));
         }
         return $dataInschedule;
     }
@@ -156,15 +156,15 @@ class ShiftRecords extends Model
 
 
     //提出換班
-    public function addShifts($scheduleID_1, $scheduleID_2, $schID_1_doctor, $schID_2_doctor, $doc2Confirm, $adminConfirm){
+    public function addShifts($data){
 
     	$newChangeSerial= DB::table('ShiftRecords')-> insertGetId([
-    				'scheduleID_1' => $scheduleID_1,
-    				'scheduleID_2' => $scheduleID_2,
-    				'schID_1_doctor' => $schID_1_doctor,
-    				'schID_2_doctor' => $schID_2_doctor,
-    				'doc2Confirm' => $doc2Confirm,
-    				'adminConfirm' => $adminConfirm,
+    				'scheduleID_1' => $data['scheduleID_1'],
+    				'scheduleID_2' => $data['scheduleID_2'],
+    				'schID_1_doctor' => $data['schID_1_doctor'],
+    				'schID_2_doctor' => $data['schID_2_doctor'],
+    				'doc2Confirm' => $data['doc2Confirm'],
+    				'adminConfirm' => $data['adminConfirm'],
                     'date' => date('Y-m-d')
 
     		]);
@@ -188,5 +188,14 @@ class ShiftRecords extends Model
         $schedule->exchangeSchedule($changeSerial);
     }
 
-    
+    // 查詢 換班編號
+    public function getChangeSerial($scheduleID_1,$scheduleID_2){
+        $changeSerial=DB::table('shiftRecords')
+        ->where('scheduleID_1',$scheduleID_1)
+        ->where('scheduleID_1',$scheduleID_1)
+        ->first();
+
+        return $changeSerial;
+
+    }
 }

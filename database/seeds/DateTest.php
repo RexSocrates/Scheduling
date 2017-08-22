@@ -313,16 +313,16 @@ class DateTest extends Seeder
       //       'date' => "2017-07-26"
                
       // ]);
-          DB::table('Reservation')-> insertGetId([
-                'isWeekday' => 0,
-                'location' => "taipei",
-                'isOn' => 1,
-                'categorySerial' => 4, 
-                'date' => '2017-09-15',
-                'endDate' => '2017-09-16'
-         ]);
+    //       DB::table('Reservation')-> insertGetId([
+    //             'isWeekday' => 0,
+    //             'location' => "taipei",
+    //             'isOn' => 1,
+    //             'categorySerial' => 4, 
+    //             'date' => '2017-09-15',
+    //             'endDate' => '2017-09-16'
+    //      ]);
 
-    }
+    // }
    
 
 }

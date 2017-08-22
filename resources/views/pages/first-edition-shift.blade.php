@@ -19,6 +19,10 @@
         }
     </style>
 @endsection
+ <script>
+       
+
+</script>
 
 @section('navbar')
     <font class="brand-logo light">初版班表 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>換班資訊</font>
@@ -157,7 +161,7 @@
       		
       		
              <div id="modal1" class="modal modal-fixed-footer modal-shift">
-                <form action='first-edition-shift' method="POST">
+                <form action='first-edition-shift-info' method="POST">
                     <div class="modal-header">
                         <h5 class="modal-announcement-title">換班申請</h5>
                     </div>
@@ -174,12 +178,14 @@
                                     <option value="{{$currentDoctor->doctorID}}" selected>{{$currentDoctor->name}}</option>
                                 </select>
                             </div>
+
                             <div class="col s6">
                                 <label>醫生:</label>
-                                <select name= 'schID_2_doctor' class="browser-default" required>
-                                    <option value="" disabled selected>請選擇醫生</option>
-                                    <option value="{{$doctorName->doctorID}}">{{$doctorName->name}}</option>
-                                   
+                                <select name= 'schID_2_doctor' class="browser-default" id="doctorName"  required>
+                                    <option value="" disabled selected>請選擇醫生</option> 
+                                    @foreach($doctorName as $name)
+                                    <option value="{{$currentDoctor->doctorID}}">{{$name->name}}</option>
+                                   @endforeach
                                 </select>
                             </div>
                             <div class="col s6">
@@ -193,7 +199,7 @@
                             </div>
                             <div class="col s6">
                                 <label>日期:</label>
-                                <select  name='scheduleID_2' class="browser-default" required>
+                                <select  name='scheduleID_2' class="browser-default" onChange="changeDate()" required >
                                     <option value="" disabled selected>請選擇日期</option>
                                     @foreach($doctorSchedule as $data)
                                     <option value='{{$data->scheduleID}}'>{{$data->date}}</option>

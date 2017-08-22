@@ -1,6 +1,9 @@
 @extends("layouts.app2")
 
 @section('head')
+    <script src="../codebase/ext/dhtmlxscheduler_collision.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
     <style>
         td{
             padding: 0;
@@ -18,6 +21,22 @@
             background-color:#FF5353;
         }
     </style>
+
+   
+    <script>
+        
+
+        function updateShift(scheduleID_1, scheduleID_2) {
+            $.post('sendShiftUpdate', {
+                scheduleID_1 : scheduleID_1,
+                scheduleID_2 : scheduleID_2
+            }, function() {
+                alert('換班修改成功');
+            });
+        }
+
+         
+    </script>
 @endsection
 
 @section('navbar')
@@ -148,6 +167,30 @@
                 //            scheduler.config.drag_create = false;   //拖拉新增
                             scheduler.xy.margin_left = -19;
                             scheduler.config.container_autoresize = true;
+                            scheduler.config.collision_limit = 1; 
+                            
+                            scheduler.form_blocks["hidden"] = {
+                                render:function(sns) {
+                                    return "<div class='dhx_cal_ltext'><input type='hidden'></div>";
+                                },
+                                set_value:function(node, value, ev) {
+                                    node.childNodes[0].value = value || "";
+                                },
+                                get_value:function(node, ev) {
+                                    return node.childNodes[0].value;
+                                },
+                                focus:function(node) {
+                                    var a = node.childNodes[0];
+                                    a.select();
+                                    a.focus();
+                                }
+                            };
+
+                            //彈出視窗的選項
+                            scheduler.config.lightbox.sections=[
+                               
+                                {name:"hidden", height:400, map_to:"hidden", type:"hidden" , focus:true}
+                            ];
 
                             //===============
                             //Configuration
@@ -261,11 +304,18 @@
 
                             function save_form() {
                                 var ev = scheduler.getEvent(scheduler.getState().lightbox_id);
+
+                                var evs = scheduler.getEvent(evs[0].id);
+
+                                console.log(ev.hidden);
+                                console.log(evs.hidden);
+
                                 
                                 ev.text = html("doctor").value;
 
                                 scheduler.endLightbox(true, html("my_form"));
-                            }
+
+                            };
                             
 //                            scheduler.attachEvent("onEventAdded", function(id,e){
 //                                console.log("5345");
@@ -291,13 +341,52 @@
                                 scheduler.deleteEvent(event_id);
                             }
 
-                          
+                            
+
+                             scheduler.attachEvent("onEventCollision", function (ev, evs){
+                                  //any custom logic here
+
+                                var ev = scheduler.getEvent(ev.id);
+
+                                var evs = scheduler.getEvent(evs[0].id);
+
+                                //console.log('1'+ev.priority);
+                                // console.log('1'+ev.start_date);
+                                // console.log('1'+ev.end_date);
+                                // console.log('1'+ev.id);
+                                console.log('1 id'+ev.hidden);
+
+                                //console.log("2"+evs.priority);
+                                // console.log("2"+evs.start_date);
+                                // console.log("2"+evs.end_date);
+                                // console.log("2"+evs.id);
+                                console.log("2 id"+evs.hidden);
+                               
+                               if(ev.hidden != evs.hidden){
+                                 updateShift(ev.hidden, evs.hidden);
+                                 return false;
+                               }
+
+                               else{
+                                 return true;
+                               }
+
+                                 return true;
+                            });
+
+                            scheduler.attachEvent("onClick", function (id, e){
+                            //any custom logic here
+                            var ev = scheduler.getEvent(ev.id);
+                            console.log()
+                            return true;
+                            });
+
                             scheduler.init('scheduler_here',new Date(),"timeline");
                            
                             scheduler.parse([
 
                                 @foreach($schedule as $data)
-                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}"},
+                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}"},
                                
                                 @endforeach
                                 ],"json");

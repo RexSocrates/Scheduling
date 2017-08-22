@@ -67,4 +67,11 @@ class AccountController extends Controller
         ]);
         
     }
+
+    public function getDoctorInfoByID($id){
+        $user = new User();
+        $doctor = $user->getDoctorInfoByID($id);
+
+        return $doctor;
+    }
 }

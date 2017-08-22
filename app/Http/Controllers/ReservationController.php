@@ -58,7 +58,7 @@ class ReservationController extends Controller
         return view('showReservation', array('reservations' => $reservationData));
     }
 
-    //單一醫生預班資訊 計算尚須上的白夜班 
+    //單一醫生預班資訊 
       public function getReservationByID() {
 
         $reservation = new Reservation();
@@ -87,6 +87,23 @@ class ReservationController extends Controller
             'doctorDay' =>$doctorDay,
             'doctorNight'=> $doctorNight
         ]);
+      }
+
+      //計算尚須上的白夜班 
+      public function countDay(){
+        $user = new User();
+        $reservation=new Reservation();
+
+        $doctorID = $user->getCurrentUserID();
+        $doctorDay = $user->getDoctorInfoByID($doctorID)->mustOnDutyDayShifts;
+        $doctorNight = $user->getDoctorInfoByID($doctorID)->mustOnDutyNightShifts;        
+        $countDay = $doctorDay-$reservation->amountDayShifts();
+        $countNight = $doctorNight-$reservation->amountNightShifts();
+
+        $array = array($countDay,$countNight);
+
+        return $array;
+
       }
 
 

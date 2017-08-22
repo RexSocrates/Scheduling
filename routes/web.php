@@ -39,6 +39,12 @@ Route::get('/reservation-all', 'ReservationController@reservation');
 // 列出個人的預班資訊
 Route::get('/reservation', 'ReservationController@getReservationByID');
 
+//列出
+Route::get('/countDay','ReservationController@countDay');
+
+//Route::get('alert1','ReservationController@countDay');
+
+//Route::get('count','ReservationController@countDay');
 // 新增備註
 Route::post('/addRemark', 'ReservationController@addRemark');
 
@@ -58,7 +64,13 @@ Route::get('/first-edition-all', 'ScheduleController@firstSchedule');
 
 //初版班表->換班資訊
 Route::get('first-edition-shift-info','ShiftRecordsController@shiftRecords');
-Route::post('first-edition-shift-info','ShiftRecordsController@addShifts');
+Route::post('first-edition-shift-info','ShiftRecordsController@firstEditionShiftAddShifts');
+
+// Route::post('doctorInfo','ShiftRecordsController@doctorInfo');
+// Route::get('doctorInfo',function(){
+// 	return view('pages.first-edition-shift-info');
+// });
+
 
 //初版班表->換班資訊 換班確認
 Route::get('checkShift/{id}','ShiftRecordsController@checkShift');
@@ -83,8 +95,15 @@ Route::get('schedule-shift-info', 'ShiftRecordsController@getShiftRecords');
 Route::get('doctor2AgreeShiftRecord/{serial}', 'ShiftRecordsController@doctor2AgreeShiftRecord');
 Route::get('doctor2DenyShiftRecord/{serial}', 'ShiftRecordsController@doctor2DenyShiftRecord');
 
+
+
 //調整班表->初版班表
 Route::get('/shift-first-edition','ShiftRecordsController@shiftFirstEdition');
+
+// 調整班表->初版班表 新增換班
+Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts');
+
+Route::get('test','TestController@shiftFirstEditionAddShifts');
 
 // 調整班表的換班資訊
 Route::get('shift-info', 'ShiftRecordsController@adminShiftRecords');
@@ -113,18 +132,19 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 
-
+Route::get('testDay','TestController@countDay');
 //調整班表->正式班表
 Route::get('shift-scheduler', function() {
 	return view('pages.shift-scheduler');
 });
 
 
+
 Route::get('testDateString', 'TestController@testDateString');
 
 Route::get('addDoctorAndResTest', 'TestController@addDoctorAndResTest');
 
-
+Route::get('changeDoctor','AccountController@getDoctorInfoByID');
 
 
 Route::get('getExchangeSchedulePage', function() {
