@@ -254,6 +254,7 @@ class TestController extends Controller
         return $year.'-'.$month.'-'.$day;
     }
 
+
      public function shiftFirstEditionAddShifts(Request $request){
             //$data = $request->all();
 
@@ -318,3 +319,75 @@ class TestController extends Controller
 
       }
  }
+
+    
+    
+    
+    // Algorithm Test
+    // 取得 reservation 列表
+    public function getReservations($isOn) {
+        $resObj = new Reservation();
+        
+        $resList = [];
+        if($isOn) {
+            // 取得 on 班預約
+            $resList = $resObj->getOnReservation();
+        }else {
+            // 取得 off 班預約
+            $resList = $resObj->getOffReservation();
+        }
+        
+        
+        $onReservationList = [];
+        foreach($resList as $res) {
+            $resData = $this->getReservationObj($res, $isOn);
+            
+            array_push($onReservationList, $resData);
+        }
+        
+        return $onReservationList;
+    }
+    
+    // Get single reservation On object
+    public function getReservationObj($reservation, $isOn) {
+        // 取得單一reservation 物件
+        $dataDic = [
+            'day' => 0,
+            'location' => '',
+            'dayOrNight' => '',
+            'doctors' => []
+        ];
+        
+        //day
+        $date = $reservation->date;
+        $dateArr = explode('-', $date);
+        $dataDic['day'] = (int)$dateArr[2];
+        
+        //location
+        if($isOn) {
+            $categorySerial = $reservation->categorySerial;
+            $shiftCategoryObj = new ShiftCategory();
+            $cateInfo = $shiftCategoryObj->getCategoryInfo($categorySerial);
+            
+            if(strcmp($cateInfo['location'], 'Taipei')) {
+                $dataDic['location'] = 'T';
+            }else {
+                $dataDic['location'] = 'D';
+            }
+            
+            //dayOrNight
+            $dataDic['dayOrNight'] = $cateInfo['dayOrNight'];
+        }
+        
+        // doctors
+        $docAndResObj = new DoctorAndReservation();
+        $doctors = $docAndResObj->getDoctorsByResSerial($reservation->resSerial);
+        
+        foreach($doctors as $doctor) {
+            array_push($dataDic['doctors'], $doctor->doctorID);
+        }
+        
+        return $dataDic;
+    }
+    
+}

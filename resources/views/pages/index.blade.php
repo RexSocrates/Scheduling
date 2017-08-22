@@ -35,7 +35,7 @@
                                 <li><a href="#!">編輯</a></li>
                                 <li><a href="#!">刪除</a></li>
                             </ul>
-    						<div class="divider margin-bottom-20"></div>
+    						<div class="divider margin-b20"></div>
     						
     						<div class="row">
     						  	<div class="col s2">
@@ -50,7 +50,7 @@
                                 <li><a href="#!">編輯</a></li>
                                 <li><a href="#!">刪除</a></li>
                             </ul>
-    						<div class="divider margin-bottom-20"></div>
+    						<div class="divider margin-b20"></div>
     						
     						
     						<div class="row margin-b0">

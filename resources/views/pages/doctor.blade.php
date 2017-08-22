@@ -85,7 +85,7 @@
                         <label for="email" data-error="wrong" data-success="right">Email</label>
                     </div>
                     <div class="input-field col s12">
-                        <input id="date" type="date" class="datepicker" value="" name="birthday">
+                        <input id="date" type="date" class="datepicker" value="" name="birthday" onchange="dateFormat()">
                         <label for="date">出生日期</label>
                     </div>
                     <div class="input-field col s12">
@@ -207,7 +207,7 @@
                         <label for="email" data-error="wrong" data-success="right">Email</label>
                     </div>
                     <div class="input-field col s12">
-                        <input id="date" type="date" class="datepicker" value="" name="birthday">
+                        <input id="date" type="date" class="datepicker" value="" name="birthday" onchange="dateFormat()">
                         <label for="date">出生日期</label>
                     </div>
                     <div class="input-field col s12">
@@ -304,6 +304,28 @@
     <script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="../js/dataTables.material.min.js"></script>
     <script>
+        function dateFormat() {
+            var dateValue = document.getElementById("date").value;
+            var splitDate = dateValue.split(/(?:,| )+/);
+            var months = {
+                January: 1,
+                February: 2,
+                March: 3,
+                April: 4,
+                May: 5,
+                June: 6,
+                July: 7,
+                August: 8,
+                September: 9,
+                October: 10,
+                November: 11,
+                December: 12,
+            };
+            var monthNumber = months[splitDate[1]];
+            var mysqlDate = splitDate[2] + "-" + monthNumber + "-" + splitDate[0]
+            document.getElementById("date").value = mysqlDate
+        }
+        
         function sleep(milliseconds) {
             var start = new Date().getTime();
             for (var i = 0; i < 1e7; i++) {

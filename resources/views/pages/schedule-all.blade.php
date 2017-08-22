@@ -21,13 +21,13 @@
 @endsection
 
 @section('navbar')
-    <font class="brand-logo light">正式班表 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>個人</font>
+    <font class="brand-logo light">正式班表 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>查看全部</font>
 @endsection
 
 @section('content')
     <div id="section" class="container-fix trans-left-five">
 	    
-		<div class="container-section2">
+		<div class="container-section">
 			<div class="row">
                 <div id="all" class="col s12">
                     <div class="card border-t">
