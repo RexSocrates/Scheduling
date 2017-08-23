@@ -27,6 +27,15 @@ class Reservation extends Model
     	return $reservation;
     }
     
+    // 取得單一 reservation
+    public function getReservationBySerial($serial) {
+        $res = DB::table('Reservation')
+            ->where('resSerial', $serial)
+            ->first();
+        
+        return $res;
+    }
+    
     // 取得 on班 預班資訊
     public function getOnReservation() {
         $reservationList = DB::table('Reservation')

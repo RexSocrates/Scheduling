@@ -22,6 +22,12 @@ Route::get('/home', 'HomeController@index')->name('home');
 // 正式路由
 Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
 
+// 取得公告頁面
+Route::get('announcement', 'AnnouncementController@getAnnouncementPage');
+
+// 新增公告
+Route::post('addAnnouncement', 'AnnouncementController@addAnnouncement');
+
 Route::get('resign/{id}', 'AccountController@resign');
 
 // 取得個人頁面
@@ -117,6 +123,10 @@ Route::group(['middleware' => ['auth']], function () {
 //調整班表->正式班表
 Route::get('shift-scheduler', function() {
 	return view('pages.shift-scheduler');
+});
+
+Route::get('getIndex', function() {
+    return view('pages.index');
 });
 
 
