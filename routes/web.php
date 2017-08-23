@@ -90,6 +90,8 @@ Route::post('sendReservationDelete', 'ReservationController@deleteReservation');
 
 // 列出正式班表的換班資訊
 Route::get('schedule-shift-info', 'ShiftRecordsController@getShiftRecords');
+Route::post('schedule-shift-info','ShiftRecordsController@firstEditionShiftAddShifts');
+
 
 // 醫生2同意或拒絕換班
 Route::get('doctor2AgreeShiftRecord/{serial}', 'ShiftRecordsController@doctor2AgreeShiftRecord');
@@ -243,6 +245,7 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 //Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
+//Route::get("info",'AccountController@getDoctorInfoByID');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 //Route::post('reservation/updateReservation/{id}', 'ReservationController@updateReservation');
 //Route::get('/reservation/updateReservation/{id}', function() {

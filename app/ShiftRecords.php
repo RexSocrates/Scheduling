@@ -40,6 +40,16 @@ class ShiftRecords extends Model
         
         return $records;
     }
+
+    //查看 醫生2確認換班申請
+    public function doc2CheckShifts() {
+        $records = DB::table('ShiftRecords')
+            ->where('doc2Confirm',1)
+            ->orderBy('date','desc')
+            ->get();
+        
+        return $records;
+    }
    
     //查詢 單一換班紀錄
     public function getShiftRecordByChangeSerial($changeSerial){
@@ -80,11 +90,12 @@ class ShiftRecords extends Model
     // 依照申請日期取出所有換班紀錄
     public function getRecordsOrderByDate() {
         $records = DB::table('ShiftRecords')
-            ->orderBy('date')
+            ->orderBy('date', 'desc')
             ->get();
         
         return $records;
     }
+
 
     // 更多資訊的換班紀錄(已確認)
     public function getMoreCheckShiftsRecordsInformation($single){

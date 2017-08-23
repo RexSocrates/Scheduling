@@ -38,12 +38,16 @@
         }
 
         function alert1(){
-            $.get('alert1', {
-              }, function(array) {
-                if(array[0]<0){
-                alert('班數已滿');
-                }
-            });
+            var countDay = document.getElementById("hiddenCountDay").value
+            var countNight = document.getElementById("hiddenCountNight").value
+
+            if(countDay<0){
+                alert('白天班數已滿');
+            }
+            if(countNight<0){
+                alert('夜天班數已滿');
+            }
+
         }
         
 
@@ -51,8 +55,10 @@
             $.get('countDay', {
               }, function(array) {
                 document.getElementById("countDay").innerHTML = "尚需排班數: 白班:"+array[0] +"夜班:"+array[1];
+                //alert1(array);
             });
         }
+
 
        
             
@@ -71,6 +77,9 @@
 @endsection
 
 @section('content')
+<input type="hidden" id='hiddenCountDay' value={{$countDay}}>
+<input type="hidden" id='hiddenCountNight' value={{$countNight}}>
+
     <div id="section" class="container-fix trans-left-five">
         <div class="container-section">
             <div class="row">
@@ -226,8 +235,9 @@
                                     event.text = "沒選到班";
                                 }
 
+
                                 // call ajax function
-                                // if({{$countDay}}<0){
+                                //if({{$countDay}}<0){
                                 //     //dhtmlx.message({ type:"error", text:"白天排班天數已滿" });
                                 //     console.log("新增白班")
                                     
@@ -240,7 +250,7 @@
 
                                 //else{
                                 //alert1();
-
+                               
 
                                 sendNewReservation(event.priority, event.start_date, event.end_date);
                                 countDay();

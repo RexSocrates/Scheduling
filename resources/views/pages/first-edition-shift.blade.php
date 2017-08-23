@@ -20,8 +20,27 @@
     </style>
 @endsection
  <script>
-       
+        function changeDoctor() {
+            $.get('changeDoctor', {
+                id : document.getElementById('doctorName').value
+            }, function(array) {
+                // var selectBox = document.getElementById('doctorName');
+                // var userInput = selectBox.options[selectBox.selectedIndex].value;
+                changeDate(array);
+            });
 
+        }
+    
+
+        function changeDate(array) {
+                var date = "";
+                for(i=0 ; i<array.length ; i++){
+                    date += "<option value="+array[i][0]+">"+array[i][1]+"</option>";
+                    console.log('1'+array[i][0]);
+                }
+                document.getElementById("date").innerHTML  = date;
+        }
+        
 </script>
 
 @section('navbar')
@@ -181,10 +200,10 @@
 
                             <div class="col s6">
                                 <label>醫生:</label>
-                                <select name= 'schID_2_doctor' class="browser-default" id="doctorName"  required>
+                                <select name= 'schID_2_doctor' class="browser-default" id="doctorName" onchange="changeDoctor()" required>
                                     <option value="" disabled selected>請選擇醫生</option> 
                                     @foreach($doctorName as $name)
-                                    <option value="{{$currentDoctor->doctorID}}">{{$name->name}}</option>
+                                    <option value="{{$name->doctorID}}">{{$name->name}}</option>
                                    @endforeach
                                 </select>
                             </div>
@@ -199,12 +218,8 @@
                             </div>
                             <div class="col s6">
                                 <label>日期:</label>
-                                <select  name='scheduleID_2' class="browser-default" onChange="changeDate()" required >
+                                <select  name='scheduleID_2' class="browser-default" id="date" required>
                                     <option value="" disabled selected>請選擇日期</option>
-                                    @foreach($doctorSchedule as $data)
-                                    <option value='{{$data->scheduleID}}'>{{$data->date}}</option>
-                                    @endforeach
-                                   
                                 </select>
                             </div>
                             

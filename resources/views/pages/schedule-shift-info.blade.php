@@ -19,7 +19,29 @@
         }
     </style>
 @endsection
+    <script>
+        function changeDoctor() {
+            $.get('changeDoctor', {
+                id : document.getElementById('doctorName').value
+            }, function(array) {
+                // var selectBox = document.getElementById('doctorName');
+                // var userInput = selectBox.options[selectBox.selectedIndex].value;
+                changeDate(array);
+            });
 
+        }
+    
+        function changeDate(array) {
+                var date = "";
+                for(i=0 ; i<array.length ; i++){
+                    date += "<option value="+array[i][0]+">"+array[i][1]+"</option>";
+                    console.log('1'+array[i][0]);
+                }
+
+                document.getElementById("date").innerHTML  = date;
+                
+        }
+    </script>
 @section('navbar')
     <font class="brand-logo light">正式班表 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>換班資訊</font>
 @endsection
@@ -112,7 +134,7 @@
       		
       		
             <div id="modal1" class="modal modal-fixed-footer modal-shift">
-                <form action="#!" method="POST">
+                <form action="schedule-shift-info" method="POST">
                     <div class="modal-header">
                         <h5 class="modal-announcement-title">換班申請</h5>
                     </div>
@@ -123,77 +145,35 @@
                             </div>
                             
                             <div class="col s6">
-                                <label>醫生:</label>
-                                <select class="browser-default" disabled>
-                                    <option value="1" selected>簡定國</option>
+                               <label>醫生:</label>
+                                <select name= 'schID_1_doctor' class="browser-default" required>
+                                    <option value="{{$currentDoctor->doctorID}}" selected>{{$currentDoctor->name}}</option>
                                 </select>
                             </div>
+
                             <div class="col s6">
                                 <label>醫生:</label>
-                                <select class="browser-default">
-                                    <option value="" disabled selected>請選擇醫生</option>
-                                    <option value="1">邱毓惠</option>
-                                    <option value="2">馮嚴毅</option>
-                                    <option value="3">陳心堂</option>
-                                    <option value="1">邱毓惠</option>
-                                    <option value="2">馮嚴毅</option>
-                                    <option value="3">陳心堂</option>
-                                    <option value="1">邱毓惠</option>
-                                    <option value="2">馮嚴毅</option>
-                                    <option value="3">陳心堂</option>
-                                    <option value="1">邱毓惠</option>
-                                    <option value="2">馮嚴毅</option>
-                                    <option value="3">陳心堂</option>
-                                    <option value="1">邱毓惠</option>
-                                    <option value="2">馮嚴毅</option>
-                                    <option value="3">陳心堂</option>
-                                    <option value="1">邱毓惠</option>
-                                    <option value="2">馮嚴毅</option>
-                                    <option value="3">陳心堂</option>
-                                    <option value="1">邱毓惠</option>
-                                    <option value="2">馮嚴毅</option>
-                                    <option value="3">陳心堂</option>
+                                <select name= 'schID_2_doctor' class="browser-default" id="doctorName" onchange="changeDoctor()" required>
+                                    <option value="" disabled selected>請選擇醫生</option> 
+                                    @foreach($doctorName as $name)
+                                    <option value="{{$name->doctorID}}">{{$name->name}}</option>
+                                   @endforeach
                                 </select>
                             </div>
                             <div class="col s6">
                                 <label>日期:</label>
-                                <select class="browser-default">
+                                <select name="scheduleID_1" class="browser-default" required>
                                     <option value="" disabled selected>請選擇日期</option>
-                                    <option value="1">2017/08/05</option>
-                                    <option value="2">2017/08/17</option>
-                                    <option value="3">2017/08/26</option>
-                                    <option value="1">2017/08/05</option>
-                                    <option value="2">2017/08/17</option>
-                                    <option value="3">2017/08/26</option>
-                                    <option value="1">2017/08/05</option>
-                                    <option value="2">2017/08/17</option>
-                                    <option value="3">2017/08/26</option>
-                                    <option value="1">2017/08/05</option>
-                                    <option value="2">2017/08/17</option>
-                                    <option value="3">2017/08/26</option>
-                                    <option value="1">2017/08/05</option>
-                                    <option value="2">2017/08/17</option>
-                                    <option value="3">2017/08/26</option>
+                                    @foreach($currentDoctorSchedule as $data)
+                                    <option value= '{{$data->scheduleID}}' >{{$data->date}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col s6">
                                 <label>日期:</label>
-                                <select class="browser-default">
+                                <select  name='scheduleID_2' class="browser-default" id="date" required>
                                     <option value="" disabled selected>請選擇日期</option>
-                                    <option value="1">2017/08/06</option>
-                                    <option value="2">2017/08/09</option>
-                                    <option value="3">2017/08/14</option>
-                                    <option value="1">2017/08/06</option>
-                                    <option value="2">2017/08/09</option>
-                                    <option value="1">2017/08/06</option>
-                                    <option value="2">2017/08/09</option>
-                                    <option value="3">2017/08/14</option>
-                                    <option value="1">2017/08/06</option>
-                                    <option value="2">2017/08/09</option>
-                                    <option value="3">2017/08/14</option>
-                                    <option value="1">2017/08/06</option>
-                                    <option value="2">2017/08/09</option>
-                                    <option value="3">2017/08/14</option>
+                                    
                                 </select>
                             </div>
                             
@@ -203,6 +183,7 @@
                     <div class="modal-footer">
                         <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">Save</button>
                         <button class="modal-action modal-close  waves-effect waves-light btn-flat btn-cancel">Cancel</button>
+                        {{ csrf_field() }}
                     </div>
                 </form>
             </div>
