@@ -89,7 +89,7 @@
                     </li>
                 </ul>
             </li>
-            <li><a href="doctor" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
+            <li><a href="doctors" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
         </ul>
     </nav>
     
@@ -107,7 +107,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-button" href="#!" data-activates="dropdown1">張XX醫生<i class="material-icons right">arrow_drop_down</i>
+                        <a class="dropdown-button" href="#!" data-activates="dropdown1">{{ Auth::user()->name }}<i class="material-icons right">arrow_drop_down</i>
                         </a>
                     </li>
                 </ul>
@@ -121,9 +121,18 @@
         
         <ul id="dropdown1" class="dropdown-content">
             <li><a href="setting.html">設定</a></li>
-            <li><a href="profile.html">個人資料</a></li>
+            <li><a href="profile">個人資料</a></li>
             <li class="divider"></li>
-            <li><a href="logout.html">登出</a></li>
+            <li>
+                <a href="{{ route('logout') }}"
+                   onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();">
+                    登出
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                </form>
+            </li>
         </ul>
         
         <a href="#" data-activates="slide-out" class="button-collapse"></a>

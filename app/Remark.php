@@ -28,11 +28,11 @@ class Remark extends Model
     
     // 新增備註
     public function addRemark($doctorID,$remark){
-    	$addRemark = DB::table("Remark")-> insertGetId([
+    	$addRemark = DB::table("Remark")->insertGetId([
             'doctorID' => $doctorID,
     		'remark' => $remark,
             'date' => date('Y-m-d')
-        ])
+        ]);
 
     	return $addRemark;
     }

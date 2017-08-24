@@ -111,8 +111,6 @@ Route::get('/shift-first-edition','ShiftRecordsController@shiftFirstEdition');
 // 調整班表->初版班表 新增換班
 Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts');
 
-Route::get('test','TestController@shiftFirstEditionAddShifts');
-
 // 調整班表的換班資訊
 Route::get('shift-info', 'ShiftRecordsController@adminShiftRecords');
 
@@ -138,7 +136,7 @@ Route::group(['middleware' => ['auth']], function () {
 //Route::post('postAjaxRequest', 'TestController@postAjaxRequest');
 //Route::get('postAjaxRequest', 'TestController@postAjaxRequest');
 
-
+Route::get('test','TestController@shiftFirstEditionAddShifts');
 
 Route::get('testDay','TestController@countDay');
 //調整班表->正式班表
