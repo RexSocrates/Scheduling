@@ -38,8 +38,6 @@
                                 </ul>
     						  <div class="divider margin-bottom-20"></div>
                             @endforeach
-      		  	  	  	
-      		  	  	  		
       		  	  	  	</div>
       		  	  	  	
       		  	  	</div>

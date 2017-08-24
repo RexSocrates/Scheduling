@@ -19,7 +19,7 @@ use App\Jobs\SendDenyShiftExchangeMail;
 class ShiftRecordsController extends Controller
 {
     //列出 新增換班 所有換班紀錄  醫生確認換班
-    public  function  shiftRecords(){
+    public  function  shiftRecords(Request $request){
         $shiftRecords = new ShiftRecords();
         $schedule = new Schedule();
         $user = new User();
@@ -33,15 +33,28 @@ class ShiftRecordsController extends Controller
 
         $currentDoctorSchedule=$schedule->getScheduleByCurrentDoctorID(); //查看目前登入的醫生班表資訊
 
+         
         //選擇換班醫生
-        $doctorName = $user->getDoctorInfoByID(2);
-        $doctorSchedule = $schedule->getScheduleByDoctorID(2); //之後用ajax傳入id
-
-
-        //換班確認
-        return view ("pages.first-edition-shift",array('shiftRecords'=>$allShiftData,'shiftDataByDoctorID'=>$shiftDataByDoctorID,'currentDoctor'=>$currentDoctor,'currentDoctorSchedule'=>$currentDoctorSchedule,'doctorName'=>$doctorName ,'doctorSchedule'=>$doctorSchedule));
+        $doctorName = $user->getAtWorkDoctors();
+    
+        
+        return view ("pages.first-edition-shift",array('shiftRecords'=>$allShiftData,'shiftDataByDoctorID'=>$shiftDataByDoctorID,'currentDoctor'=>$currentDoctor,'currentDoctorSchedule'=>$currentDoctorSchedule,'doctorName'=>$doctorName));
 
     } 
+
+    public function doctorInfo(Request $request){
+        $data = $request->all();
+
+        $user = new User();
+
+        $doctorID = $data['doctorID'];
+
+        $doctorName = $user->getDoctorInfoByID($doctorID);
+        $doctorSchedule = $schedule->getScheduleByDoctorID($doctorID); //之後用ajax傳入id
+
+        return array('doctorName'=>$doctorName,'doctorSchedule'=>$doctorSchedule);
+
+    }
 
     //醫生確認換班
     public function checkShift($id){
@@ -66,11 +79,13 @@ class ShiftRecordsController extends Controller
         $shiftRecords = new ShiftRecords();
         $data = $shiftRecords ->getShiftRecordsByDoctorID();
 
+
+
         return view ("getShiftRecordsByDoctorID",array('data' => $data));
     }
 
-    //新增換班
-    public function addShifts(){
+    // 初版班表->換班資訊 新增換班
+    public function firstEditionShiftAddShifts(){
     		$addShifts = new ShiftRecords();
     		$scheduleID_1 = Input::get('scheduleID_1');
     		$scheduleID_2 = Input::get('scheduleID_2');
@@ -79,9 +94,97 @@ class ShiftRecordsController extends Controller
             $doc2Confirm = 0;
             $adminConfirm = 0;
 
-    		$newShiftSerial = $addShifts->addShifts($scheduleID_1,$scheduleID_2,$schID_1_doctor,$schID_2_doctor,$doc2Confirm,$adminConfirm);
+            $data = [
+            'scheduleID_1' => $scheduleID_1,
+            'scheduleID_2' => $scheduleID_2,
+            'schID_1_doctor' => $schID_1_doctor,
+            'schID_2_doctor' => $schID_2_doctor,
+            'doc2Confirm' => '0',
+            'adminConfirm' => '0',
+            'date' => date('Y-m-d')
+        ];
 
-    		return redirect('first-edition-shift'); 
+    		$newShiftSerial = $addShifts->addShifts($data);
+
+    		return redirect('first-edition-shift-info'); 
+
+    }
+
+     // 正式班表->換班資訊 新增換班
+    public function scheduleEditionShiftAddShifts(){
+            $addShifts = new ShiftRecords();
+            $scheduleID_1 = Input::get('scheduleID_1');
+            $scheduleID_2 = Input::get('scheduleID_2');
+            $schID_1_doctor = Input::get('schID_1_doctor');
+            $schID_2_doctor = Input::get('schID_2_doctor');
+            $doc2Confirm = 0;
+            $adminConfirm = 0;
+
+            $data = [
+            'scheduleID_1' => $scheduleID_1,
+            'scheduleID_2' => $scheduleID_2,
+            'schID_1_doctor' => $schID_1_doctor,
+            'schID_2_doctor' => $schID_2_doctor,
+            'doc2Confirm' => '0',
+            'adminConfirm' => '0',
+            'date' => date('Y-m-d')
+        ];
+
+            $newShiftSerial = $addShifts->addShifts($data);
+
+            return redirect('schedule-shift-info'); 
+
+    }
+
+
+    //調整班表->初版班表 新增換班
+   
+     public function shiftFirstEditionAddShifts(Request $request){
+            $data = $request->all();
+
+            $scheduleID1 = $data['scheduleID_1'];
+            $scheduleID2 = $data['scheduleID_2'];
+
+            $scheduleID1=6;
+            $scheduleID2=1;
+
+            $schedule = new Schedule();
+
+            $schedule_1_Info = $schedule->getScheduleDataByID($scheduleID1);
+            $schedule_2_Info = $schedule->getScheduleDataByID($scheduleID2);
+
+            $shiftInfo = [
+            'scheduleID_1' => $schedule_1_Info->scheduleID,
+            'scheduleID_2' => $schedule_2_Info->scheduleID,
+            'schID_1_doctor' => $schedule_1_Info->doctorID,
+            'schID_2_doctor' => $schedule_2_Info->doctorID,
+            'doc2Confirm' => '1',
+            'adminConfirm' => '1',
+            'date' => date('Y-m-d')
+        ];
+
+            $shiftRecords = new ShiftRecords();
+
+            $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
+
+            echo "newChangeSerial" .$newChangeSerial;
+
+            //$changeSerial = $shiftRecords->getChangeSerial($scheduleID1,$scheduleID2);
+
+            //$confrimShiftRecord = $schedule->exchangeSchedule($changeSerial); 
+            $shiftRecords->doc2Confirm($newChangeSerial,1);
+            $shiftRecords->adminConfirm($newChangeSerial,1);
+
+
+            // $addShifts = new ShiftRecords();
+            // $scheduleID_1 = Input::get('scheduleID_1');
+            // $scheduleID_2 = Input::get('scheduleID_2');
+            // $schID_1_doctor = Input::get('schID_1_doctor');
+            // $schID_2_doctor = Input::get('schID_2_doctor');
+            // $doc2Confirm = 0;
+            // $adminConfirm = 0;
+
+            // $newShiftSerial = $addShifts->addShifts($scheduleID_1,$scheduleID_2,$schID_1_doctor,$schID_2_doctor,$doc2Confirm,$adminConfirm);
 
     }
 
@@ -128,6 +231,13 @@ class ShiftRecordsController extends Controller
         $displayConfirmedArr = [];
         
         $allShiftData = $shiftRecordObj->getMoreCheckShiftsRecordsInformation(false);  // 列出所有待確認換班資訊
+
+        $currentDoctor = $userObj->getCurrentUserInfo();
+
+        $currentDoctorSchedule=$sheduleObj->getScheduleByCurrentDoctorID(); //查看目前登入的醫生班表資訊
+
+         //選擇換班醫生
+        $doctorName = $userObj->getAtWorkDoctors();
 
         // foreach($confirmedRecords as $record) {
         //     $recordDic = [
@@ -197,7 +307,7 @@ class ShiftRecordsController extends Controller
         // }
         
         return view('pages.schedule-shift-info', [
-            'shiftRecords'=>$allShiftData,'shiftDataByDoctorID'=>$shiftDataByDoctorID
+            'shiftRecords'=>$allShiftData,'shiftDataByDoctorID'=>$shiftDataByDoctorID,'currentDoctor'=>$currentDoctor,'currentDoctorSchedule'=>$currentDoctorSchedule,'doctorName'=>$doctorName
         ]);
         
     }
@@ -237,7 +347,7 @@ class ShiftRecordsController extends Controller
 
         $schCateObj = new ScheduleCategory();
 
-        $shiftRecords = $shiftRecordObj->getRecordsOrderByDate();
+        $shiftRecords = $shiftRecordObj->doc2CheckShifts();
         
         $displayArr = [];
         
@@ -321,7 +431,7 @@ class ShiftRecordsController extends Controller
             $data->doctorID = $doctorName->name;
         }
 
-        return view('pages.shift-first-edition',array('schedule' => $scheduleData,'doctorName'=>$doctorName ,'doctorSchedule'=>$doctorSchedule));
+        return view('pages.shift-first-edition',array('schedule' => $scheduleData,'doctorName' => $doctorName,'doctorSchedule'=>$doctorSchedule));
 
     }
 

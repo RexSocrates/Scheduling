@@ -36,6 +36,33 @@
                 alert('預約刪除成功');
             });
         }
+
+        function alert1(){
+            var countDay = document.getElementById("hiddenCountDay").value
+            var countNight = document.getElementById("hiddenCountNight").value
+
+            if(countDay<0){
+                alert('白天班數已滿');
+            }
+            if(countNight<0){
+                alert('夜天班數已滿');
+            }
+
+        }
+        
+
+        function countDay(){
+            $.get('countDay', {
+              }, function(array) {
+                document.getElementById("countDay").innerHTML = "尚需排班數: 白班:"+array[0] +"夜班:"+array[1];
+                //alert1(array);
+            });
+        }
+
+
+       
+            
+        
     </script>
 
     <style>
@@ -50,6 +77,9 @@
 @endsection
 
 @section('content')
+<input type="hidden" id='hiddenCountDay' value={{$countDay}}>
+<input type="hidden" id='hiddenCountNight' value={{$countNight}}>
+
     <div id="section" class="container-fix trans-left-five">
         <div class="container-section">
             <div class="row">
@@ -57,7 +87,6 @@
                     <div class="card">
                         <div class="card-action">
                             <font class="card-title">排班資訊</font>
-
                         </div>
                         <div class="divider"></div>
                         <div class="card-content">
@@ -67,9 +96,12 @@
                                 <div class="row margin-b0">
                                     <div class="col s5">
                                         <p class="information">開放時間: 2017/06/01 - 2017/06/25</p>
+                                        
                                         <p class="information">可排天班數: 白班:{{$doctorDay}} 夜班:{{$doctorNight}}</p>
-                                        <p class="information">尚需排班數: 白班:{{$countDay}} 夜班:{{$countNight}}</p>    
+                                        <p class="information" id='countDay'>尚需排班數: 白班:{{$countDay}} 夜班:{{$countNight}}</p> 
+                                        
                                     </div>
+
                                     <div class="col s7">
                                         <form action="addRemark" method="post" class="col s6">
                                             <div class="input-field">
@@ -203,12 +235,33 @@
                                     event.text = "沒選到班";
                                 }
 
+
                                 // call ajax function
+                                //if({{$countDay}}<0){
+                                //     //dhtmlx.message({ type:"error", text:"白天排班天數已滿" });
+                                //     console.log("新增白班")
+                                    
+                                // }
+
+                                // else if({{$countNight}}<0){
+                                //     dhtmlx.message({ type:"error", text:"夜晚排班天數已滿" });
+                                //     console.log("新增夜班")
+                                // }
+
+                                //else{
+                                //alert1();
+                               
+
                                 sendNewReservation(event.priority, event.start_date, event.end_date);
+                                countDay();
+                                
+                               
+                                //}
 
                                 console.log(event.priority);
                                 console.log(event.start_date);
                                 console.log(event.end_date);
+                                
 
                             });
 
@@ -231,13 +284,24 @@
                                     event.text = "off";
                                 }
 
+                                if({{$countDay}} < 0){
+                                    dhtmlx.message({ type:"error", text:"白天排班天數已滿" });
+                                    console.log("更改白班"+{{$countDay}});
+                                }
+                                if({{$countNight}}<0){
+                                    dhtmlx.message({ type:"error", text:"夜晚排班天數已滿" });
+                                    console.log("更改夜班"+{{$countNight}});
+                                }
+                                else{
                                 updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
-
+                                countDay();
+                                }
+                            
                                 console.log(event.priority);
                                 console.log(event.start_date);
                                 console.log(event.end_date);
                                 console.log(id);
-                                console.log(event.hidden);
+                                console.log("hidden"+event.hidden);
 
                             });
 
@@ -247,6 +311,7 @@
 
 
                                 deleteReservation(event.hidden);
+                                countDay();
                                 console.log(event.hidden);
                                 console.log(id);
                                 return true;
@@ -256,24 +321,17 @@
                                   //any custom logic here
                                 var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
                                 if(count>1){
-                                     dhtmlx.message({ type:"error", text:"此日期已選過" });
+                                    dhtmlx.message({ type:"error", text:"此日期已選過" });
                                     return true;
                                 }
                                 else{
                                     return false;
 
                                 }
-                                // for(var i = 0 ; i<evs.length ; i++){
-                                //     if(ev.start_date != evs[i].start_date){
-                                //         return true;
-                                //     }
-                                //     else{
-                                //         return false;
-                                //     }
-                                // }
 
                                  return true;
                             });
+
 
                             var date = new Date();
                             var toString =  date.toString();

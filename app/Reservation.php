@@ -76,7 +76,8 @@ class Reservation extends Model
      //計算醫生白天上班總數
     public function amountDayShifts()
       {
-        $doctorData = DB::table('DoctorAndReservation')->where("doctorID","1")->get();
+        $user = new User();
+        $doctorData = DB::table('DoctorAndReservation')->where("doctorID",$user->getCurrentUserID())->get();
            //$date=DB::table('Reservation') -> whereIn("resSerial",)->date;
 
         $arr = array();
@@ -94,7 +95,8 @@ class Reservation extends Model
      //計算醫生夜班上班總數
     public function amountNightShifts()
       {
-        $doctorData = DB::table('DoctorAndReservation')->where("doctorID","1")->get();
+        $user = new User();
+        $doctorData = DB::table('DoctorAndReservation')->where("doctorID",$user->getCurrentUserID())->get();
            //$date=DB::table('Reservation') -> whereIn("resSerial",)->date;
 
         $arr = array();

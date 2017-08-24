@@ -67,4 +67,22 @@ class AccountController extends Controller
         ]);
         
     }
+
+    public function getDoctorInfoByID(Request $request){
+        $data = $request->all();
+
+        $Schedule = new Schedule();
+        
+        $doctor = $Schedule->getScheduleByDoctorID($data['id']);
+
+        $array = array();
+
+        foreach ($doctor as $data) {
+            $id = $data->scheduleID;
+            $date = $data->date;
+            array_push($array, array($id,$date));
+        }
+
+        return $array;
+    }
 }

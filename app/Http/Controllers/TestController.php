@@ -11,6 +11,8 @@ use App\Announcement;
 use App\ShiftCategory;
 use App\Reservation;
 use App\DoctorAndReservation;
+use App\Schedule;
+use App\ShiftRecords;
 
 class TestController extends Controller
 {
@@ -251,6 +253,73 @@ class TestController extends Controller
         
         return $year.'-'.$month.'-'.$day;
     }
+
+
+     public function shiftFirstEditionAddShifts(Request $request){
+            //$data = $request->all();
+
+            //$scheduleID1 = $data['scheduleID_1'];
+            //$scheduleID2 = $data['scheduleID_2'];
+
+            $scheduleID1=6;
+            $scheduleID2=1;
+
+            $schedule = new Schedule();
+
+            $schedule_1_Info = $schedule->getScheduleDataByID($scheduleID1);
+            $schedule_2_Info = $schedule->getScheduleDataByID($scheduleID2);
+
+            $shiftInfo = [
+            'scheduleID_1' => $schedule_1_Info->scheduleID,
+            'scheduleID_2' => $schedule_2_Info->scheduleID,
+            'schID_1_doctor' => $schedule_1_Info->doctorID,
+            'schID_2_doctor' => $schedule_2_Info->doctorID,
+            'doc2Confirm' => '1',
+            'adminConfirm' => '1',
+            'date' => date('Y-m-d')
+        ];
+
+            $shiftRecords = new ShiftRecords();
+
+            $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
+
+            echo "newChangeSerial" .$newChangeSerial;
+
+            //$changeSerial = $shiftRecords->getChangeSerial($scheduleID1,$scheduleID2);
+
+            //$confrimShiftRecord = $schedule->exchangeSchedule($changeSerial); 
+            $shiftRecords->doc2Confirm($newChangeSerial,1);
+            $shiftRecords->adminConfirm($newChangeSerial,1);
+
+
+            // $addShifts = new ShiftRecords();
+            // $scheduleID_1 = Input::get('scheduleID_1');
+            // $scheduleID_2 = Input::get('scheduleID_2');
+            // $schID_1_doctor = Input::get('schID_1_doctor');
+            // $schID_2_doctor = Input::get('schID_2_doctor');
+            // $doc2Confirm = 0;
+            // $adminConfirm = 0;
+
+            // $newShiftSerial = $addShifts->addShifts($scheduleID_1,$scheduleID_2,$schID_1_doctor,$schID_2_doctor,$doc2Confirm,$adminConfirm);
+
+    }
+    public function countDay(){
+        $user = new User();
+        $reservation=new Reservation();
+
+        $doctorID = $user->getCurrentUserID();
+        $doctorDay = $user->getDoctorInfoByID($doctorID)->mustOnDutyDayShifts;
+        $doctorNight = $user->getDoctorInfoByID($doctorID)->mustOnDutyNightShifts;        
+        $countDay = $doctorDay-$reservation->amountDayShifts();
+        $countNight = $doctorNight-$reservation->amountNightShifts();
+
+        $array = array('doctorDay'=>$doctorDay,'doctorNight'=>$doctorNight,'countDay'=>$countDay,'countNight'=>$countNight);
+
+        echo print_r($array);
+
+      }
+ }
+
     
     
     
@@ -347,3 +416,4 @@ class TestController extends Controller
     }
     
 }
+
