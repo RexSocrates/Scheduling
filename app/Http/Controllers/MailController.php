@@ -11,6 +11,7 @@ use App\Jobs\SendApplyShiftExchangeMail;
 use App\Jobs\SendDenyShiftExchangeMail;
 use App\Jobs\SendShiftExchangeMail;
 use App\Jobs\SendShiftExchangingInformMail;
+use App\Jobs\SendRandomNotificationMail;
 
 // 僅供信件發送測試用
 class MailController extends Controller
