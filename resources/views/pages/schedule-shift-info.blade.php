@@ -19,29 +19,7 @@
         }
     </style>
 @endsection
-    <script>
-        function changeDoctor() {
-            $.get('changeDoctor', {
-                id : document.getElementById('doctorName').value
-            }, function(array) {
-                // var selectBox = document.getElementById('doctorName');
-                // var userInput = selectBox.options[selectBox.selectedIndex].value;
-                changeDate(array);
-            });
-
-        }
     
-        function changeDate(array) {
-                var date = "";
-                for(i=0 ; i<array.length ; i++){
-                    date += "<option value="+array[i][0]+">"+array[i][1]+"</option>";
-                    console.log('1'+array[i][0]);
-                }
-
-                document.getElementById("date").innerHTML  = date;
-                
-        }
-    </script>
 @section('navbar')
     <font class="brand-logo light">正式班表 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>換班資訊</font>
 @endsection
@@ -198,6 +176,28 @@
             $('select').material_select();
             $('.collapsible').collapsible();
   		});
+    </script>
+    
+    <script>
+        function changeDoctor() {
+            $.get('changeDoctor', {
+                id : document.getElementById('doctorName').value
+            }, function(array) {
+                // var selectBox = document.getElementById('doctorName');
+                // var userInput = selectBox.options[selectBox.selectedIndex].value;
+                changeDate(array);
+            });
+
+        }
+    
+        function changeDate(array) {
+                var date = "";
+                for(i=0 ; i<array.length ; i++){
+                    date += "<option value="+array[i][0]+">"+array[i][1]+"</option>";
+                    console.log('1'+array[i][0]);
+                }
+                document.getElementById("date").innerHTML  = date;
+        }
     </script>
 @endsection
 
