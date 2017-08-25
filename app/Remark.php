@@ -45,7 +45,7 @@ class Remark extends Model
             ->first();
         
         return $remark;
-
+    }
     
     // 修改備註
     public function modifyRemark($serial, $newRemark) {

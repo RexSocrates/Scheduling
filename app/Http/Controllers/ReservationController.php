@@ -220,7 +220,26 @@ class ReservationController extends Controller
 
         $count = $docAndRes->amountInResserial($newSerial);
 
-        
+        if($serial==3){     //台北白班
+            if($count>=2){
+
+            }
+        }
+        if($serial==4){     //台北夜班
+            if($count>=2){
+                
+            }
+        }
+        if($serial==5){     //淡水白班
+            if($count>=2){
+                
+            }
+        }
+        if($serial==3){     //淡水夜班
+            if($count>=2){
+                
+            }
+        }
         
     }
     
@@ -272,6 +291,27 @@ class ReservationController extends Controller
         $docAndResObj->doctorUpdateReservation($resSerial, $newSerial, $userObj->getCurrentUserID());
 
         $count = $docAndRes->amountInResserial($newSerial);
+
+        if($serial==3){     //台北白班
+            if($count>=2){
+
+            }
+        }
+        if($serial==4){     //台北夜班
+            if($count>=2){
+                
+            }
+        }
+        if($serial==5){     //淡水白班
+            if($count>=2){
+                
+            }
+        }
+        if($serial==3){     //淡水夜班
+            if($count>=2){
+                
+            }
+        }
 
     }
 
