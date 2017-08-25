@@ -62,9 +62,10 @@
                                     <option value="" disabled selected>請選擇醫生</option> 
                                     @foreach($doctorName as $name)
                                     <option value="{{$name->doctorID}}">{{$name->name}}</option>
-                                   @endforeach
+                                    @endforeach
                                 </select>
                             </div>
+
                             <div class="col s6">
                                 <label>日期:</label>
                                 <select name="scheduleID_1" class="browser-default" id="date1" required>
@@ -74,6 +75,7 @@
                                         
                                 </select>
                             </div>
+
                             <div class="col s6">
                                 <label>日期:</label>
                                 <select  name='scheduleID_2' class="browser-default" id="date2" required>
@@ -87,10 +89,11 @@
                             <div class="lightbox-footer">
 
                                 <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn">Save</button>
-                                <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel modal-btn">Cancel</button>
+                                <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel modal-btn" onclick="close_form()">Cancel</button>
                                 {{ csrf_field() }}
                             </div>
-                                </form>
+
+                        </form>
 <!--
                             <label for="description">Event text </label><input type="text" name="description" value="" id="description"><br>
                             <label for="custom1">Custom 1 </label><input type="text" name="custom1" value="" id="custom1"><br>
@@ -284,7 +287,9 @@
 //                                
 //                                ev.text = name;
 //                            }
-                            
+                            function close_form() {
+                                scheduler.endLightbox(false, html("my_form"));
+                            }
 
                              scheduler.attachEvent("onEventCollision", function (ev, evs){
                                   //any custom logic here
@@ -312,7 +317,7 @@
                                     return true;
                                 }
                                 else{
-                                    
+
                                     return false;
 
                                 }
