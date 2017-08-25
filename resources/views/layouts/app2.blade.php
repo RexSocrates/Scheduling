@@ -75,21 +75,24 @@
                     </li>
                 </ul>
             </li>
-            <li class="no-padding">
-                <ul class="collapsible collapsible-accordion">
-                    <li>
-                        <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-exchange.svg"></i>調整班表</a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="shift-first-edition">初版班表</a></li>
-                                <li><a href="shift-scheduler">正式班表</a></li>
-                                <li><a href="shift-info">換班資訊</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-            <li><a href="doctors" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
+            @if(Auth::user()->identity == 'Admin')
+                <li class="no-padding">
+                    <ul class="collapsible collapsible-accordion">
+                        <li>
+                            <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-exchange.svg"></i>調整班表</a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a href="shift-first-edition">初版班表</a></li>
+                                    <li><a href="shift-scheduler">正式班表</a></li>
+                                    <li><a href="shift-info">換班資訊</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="doctors" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
+            @endif
+            
         </ul>
     </nav>
     
@@ -120,7 +123,7 @@
         </ul>
         
         <ul id="dropdown1" class="dropdown-content">
-            <li><a href="setting.html">設定</a></li>
+            <li><a href="setting">設定</a></li>
             <li><a href="profile">個人資料</a></li>
             <li class="divider"></li>
             <li>

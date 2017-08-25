@@ -50,7 +50,7 @@
               			<h3 class="blue-grey-text text-darken-3">開放預班中</h3>
       		  	  		<p class="blue-grey-text text-darken-3" style="font-weight: 500;">01/05/2017 ~ 20/05/2017</p>
       		  	  	  	<div class="card-action center">
-      		  	  	  	  	<a href="reservation.html" class="margin-r0">前往預班表</a>
+      		  	  	  	  	<a href="reservation" class="margin-r0">前往預班表</a>
       		  	  	  	</div>
       		  	  	</div>
       		  	</div>

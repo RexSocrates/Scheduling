@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('login');
 });
 
 Auth::routes();
@@ -25,6 +25,9 @@ Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
 // 取得公告頁面
 Route::get('index', 'AnnouncementController@getAnnouncementPage');
 
+// 設定頁面
+Route::get('setting', 'AccountController@getSettingPage');
+
 // 新增公告
 Route::post('addAnnouncement', 'AnnouncementController@addAnnouncement');
 
@@ -34,7 +37,6 @@ Route::get('resign/{id}', 'AccountController@resign');
 Route::get('profile', 'AccountController@getProfilePage');
 
 // 統計圖表頁面
-Route::get('getChartPage', 'ChartController@getChartPage');
 
 // 單一醫生上班紀錄的統計圖表
 Route::post('doctorsChart', 'ChartController@getChartPageBySelectedID');
