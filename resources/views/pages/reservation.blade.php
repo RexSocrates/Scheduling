@@ -405,7 +405,7 @@
                             }
 
                             //進入畫面後顯示的東西
-                            scheduler.init('scheduler_here',new Date(),"month");
+                            scheduler.init('scheduler_here',new Date(res[3],month),"month");
 
 //                            scheduler.load("./reservation_data");
     //                            var dp = new dataProcessor("./reservation_data");
