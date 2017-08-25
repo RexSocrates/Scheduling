@@ -93,6 +93,7 @@ class ReservationController extends Controller
         else{
             $doctorRemark=$getDoctorRemark->remark;
         }
+
         return view('pages.reservation', [
             'reservations' => $data,
             'countDay' => $countDay,
@@ -152,7 +153,9 @@ class ReservationController extends Controller
         $doctorID = $user->getCurrentUserID();
         $addRemark = Input::get('remark');
         
-        $remarkData = $remark->addRemark($doctorID,$addRemark);
+        $remarkData = $remark->modifyRemarkByDoctorID($doctorID,$addRemark);
+
+        
 
         return redirect('reservation');
     }
@@ -220,24 +223,23 @@ class ReservationController extends Controller
 
         $count = $docAndRes->amountInResserial($newSerial);
 
-        if($serial==3){     //台北白班
-            if($count>=2){
+        $job = new SendRandomNotificationMail($newSerial);
+        
 
+        if($serial==3 || $serial==4){   //台北白班 台北夜班
+            if($count>=6){
+                dispatch($job);
             }
         }
-        if($serial==4){     //台北夜班
-            if($count>=2){
-                
-            }
-        }
+        
         if($serial==5){     //淡水白班
-            if($count>=2){
-                
+            if($count>=4){
+                dispatch($job);
             }
         }
-        if($serial==3){     //淡水夜班
-            if($count>=2){
-                
+        if($serial==6){     //淡水夜班
+            if($count>=3){
+                dispatch($job);
             }
         }
         
@@ -307,7 +309,7 @@ class ReservationController extends Controller
                 
             }
         }
-        if($serial==3){     //淡水夜班
+        if($serial==6){     //淡水夜班
             if($count>=2){
                 
             }

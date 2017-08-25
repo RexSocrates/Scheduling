@@ -56,4 +56,27 @@ class Remark extends Model
             ]);
 
     }
+    // 透過醫生id修改備註
+    public function modifyRemarkByDoctorID($doctorID, $newRemark) {
+        if($this->haveRemark($doctorID)>0){
+            DB::table('Remark')
+                ->where('doctorID', $doctorID)
+                ->update([
+                    'remark' => $newRemark
+                ]);
+        }
+        else{
+           $this->addRemark($doctorID,$newRemark);
+        }
+
+    }
+
+    //判斷醫生有沒有備註
+    public function haveRemark($doctorID){
+        $amountRemark=DB::table('Remark')
+            ->where('doctorID', $doctorID)
+            ->count();
+
+        return $amountRemark;
+    }
 }

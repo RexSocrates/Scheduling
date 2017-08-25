@@ -50,13 +50,16 @@
 
         }
         
-
         function countDay(){
             $.get('countDay', {
               }, function(array) {
                 document.getElementById("countDay").innerHTML = "尚需排班數: 白班:"+array[0] +"夜班:"+array[1];
                 //alert1(array);
             });
+        }
+
+        function alert2(){
+            alert("備註送出完成");
         }
 
 
@@ -111,7 +114,7 @@
 
                                             </div>
                                             <!-- <input type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right">提交</button> -->
-                                            <input type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right" value="提交">
+                                            <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right" value="提交" onclick="alert2()">提交</button>
                                             {{ csrf_field() }}
                                         </form>
                                     </div>
