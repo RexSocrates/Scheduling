@@ -23,7 +23,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
 
 // 取得公告頁面
-Route::get('announcement', 'AnnouncementController@getAnnouncementPage');
+Route::get('index', 'AnnouncementController@getAnnouncementPage');
 
 // 新增公告
 Route::post('addAnnouncement', 'AnnouncementController@addAnnouncement');

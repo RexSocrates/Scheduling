@@ -13,6 +13,7 @@ use App\Mail\RandomNotification;
 
 // import model
 use App\Reservation;
+use App\DoctorAndReservation;
 use App\USer;
 
 class SendRandomNotificationMail implements ShouldQueue
@@ -27,18 +28,22 @@ class SendRandomNotificationMail implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($resSerial, $receiversID)
+    public function __construct($resSerial)
     {
         //
         $resObj = new Reservation();
         
         $this->reservation; = $resObj->getReservationBySerial($resSerial);
         
+        // 取得單一預班的人
+        $resAndDoctorObj = new DoctorAndReservation();
+        $doctorsID = $resAndDoctorObj->getDoctorsByResSerial();
+        
         // 取得list 當中的使用者的email
         $receiversEmail = [];
         $userObj = new User();
         
-        foreach($receiversID as $ID) {
+        foreach($doctorsID as $ID) {
             $email = $userObj->getDoctorInfoByID($ID)->email;
             
             array_push($receiversEmail, $email);
