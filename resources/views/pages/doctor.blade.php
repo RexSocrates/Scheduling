@@ -88,7 +88,7 @@
                         <input id="date" type="date" class="datepicker" value="" name="birthday" onchange="dateFormat()">
                         <label for="date">出生日期</label>
                     </div>
-                    <div class="input-field col s12">
+                    <div class="input-field col s12 margin-b20">
                         <select name="major" required>
                             <option value="" disabled>選擇專科</option>
                             <option value="All">All</option>
@@ -97,7 +97,7 @@
                         </select>
                         <label>專職科別</label>
                     </div>
-                    <div class="input-field col s12">
+                    <div class="input-field col s12 margin-b20">
                         <select name="level" required>
                             <option value="" disabled>選擇級別</option>
                             <option value="A1">A1</option>
