@@ -17,6 +17,8 @@ use App\ShiftCategory;
 use App\Remark;
 use App\User;
 
+use App\Jobs\SendRandomNotificationMail;
+
 class ReservationController extends Controller
 {
     //查看全部醫師預班班表
@@ -74,19 +76,32 @@ class ReservationController extends Controller
         $doctorNight = $user->getDoctorInfoByID($doctorID)->mustOnDutyNightShifts;        
         $countDay = $doctorDay-$reservation->amountDayShifts();
         $countNight = $doctorNight-$reservation->amountNightShifts();
+        
+        $getDoctorRemark=$remark->getRemarkByDoctorID($doctorID);
+       
 
         foreach ($reservationData as $res) {
             $name = $shiftCategory->findName($res->categorySerial);
             //$res->categorySerial = $name;
             array_push($data, array($res, $name));
         }
+        $doctorRemark="";
+
+        if($getDoctorRemark==null){
+            $doctorRemark="";
+        }
+        else{
+            $doctorRemark=$getDoctorRemark->remark;
+        }
         return view('pages.reservation', [
             'reservations' => $data,
             'countDay' => $countDay,
             'countNight' => $countNight,
             'doctorDay' =>$doctorDay,
-            'doctorNight'=> $doctorNight
+            'doctorNight'=> $doctorNight,
+            'remark'=> $doctorRemark
         ]);
+        
       }
 
       //計算尚須上的白夜班 
@@ -136,7 +151,7 @@ class ReservationController extends Controller
         $user = new User();
         $doctorID = $user->getCurrentUserID();
         $addRemark = Input::get('remark');
-
+        
         $remarkData = $remark->addRemark($doctorID,$addRemark);
 
         return redirect('reservation');
@@ -200,7 +215,13 @@ class ReservationController extends Controller
             'resSerial' => $newSerial,
             'doctorID' => $user->getCurrentUserID(),
         ];
+
         $docAndRes->addDoctor($darData);
+
+        $count = $docAndRes->amountInResserial($newSerial);
+
+        
+        
     }
     
     public function deleteReservation(Request $request){
@@ -249,6 +270,9 @@ class ReservationController extends Controller
         $docAndResObj = new DoctorAndReservation();
         $userObj = new User();
         $docAndResObj->doctorUpdateReservation($resSerial, $newSerial, $userObj->getCurrentUserID());
+
+        $count = $docAndRes->amountInResserial($newSerial);
+
     }
 
     public function getDataByID() {

@@ -323,6 +323,46 @@ class DateTest extends Seeder
     //      ]);
 
     // }
+   //  DB::table('Reservation')-> insertGetId([
+   //          'isWeekday' => 0,
+   //          'location' => "Taipei",
+   //          'isOn' => 1,
+   //          'categorySerial' => 3,
+   //          'date' => '2017-09-03',
+   //          'endDate' => '2017-09-04'
+   //  ]);
+   // }
+   // DB::table('Schedule')-> insertGetId([
+   //          'doctorID' => 2,
+   //          'schCategorySerial' =>3,
+   //          'isWeekday' => 1,
+   //          'location' => 'Taipei',
+   //          'date' => "2017-08-24",
+   //          'endDate' => '2017-08-25'
+   //      ]);
+    
+
    
+    
+
+   //  DB::table('Schedule')-> insertGetId([
+   //          'doctorID' => 3,
+   //          'schCategorySerial' =>3,
+   //          'isWeekday' => 1,
+   //          'location' => 'Taipei',
+   //          'date' => "2017-08-30",
+   //          'endDate' => '2017-08-31'
+   //     ]);
+
+     DB::table('Remark')-> insertGetId([
+            'doctorID' => 3,
+            'remark' =>'1111',
+            'date'=>'2017-08-24'
+           
+       ]);
+
+    } 
+
+     
 
 }

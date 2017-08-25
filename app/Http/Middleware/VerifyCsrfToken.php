@@ -17,7 +17,8 @@ class VerifyCsrfToken extends BaseVerifier
         'postAjaxRequest',
         'sendReservationAdd',
         'sendReservationUpdate',
-        'sendReservationDelete'
+        'sendReservationDelete',
+        'sendShiftUpdate'
     ];
 
 }

@@ -71,16 +71,19 @@ class AccountController extends Controller
     public function getDoctorInfoByID(Request $request){
         $data = $request->all();
 
-        $Schedule = new Schedule();
+        $schedule = new Schedule();
+        $user = new User();
         
-        $doctor = $Schedule->getScheduleByDoctorID($data['id']);
+        $doctor = $schedule->getScheduleByDoctorID($data['id']);
 
         $array = array();
 
         foreach ($doctor as $data) {
             $id = $data->scheduleID;
             $date = $data->date;
-            array_push($array, array($id,$date));
+            $name = $user->getDoctorInfoByID($data->doctorID)->name;
+            
+            array_push($array, array($id,$name,$date));
         }
 
         return $array;

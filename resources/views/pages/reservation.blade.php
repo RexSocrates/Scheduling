@@ -105,9 +105,10 @@
                                     <div class="col s7">
                                         <form action="addRemark" method="post" class="col s6">
                                             <div class="input-field">
-                                                <textarea id="textarea1" class="materialize-textarea" name="remark"placeholder="請輸入XXXXX"></textarea>
+                                                <textarea id="textarea1" class="materialize-textarea" name="remark"placeholder="請輸入XXXXX">{{$remark}}</textarea>
     <!--                                                     data-length="150"-->
                                                 <label for="textarea1">備註:</label>
+
                                             </div>
                                             <!-- <input type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right">提交</button> -->
                                             <input type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right" value="提交">
@@ -284,18 +285,18 @@
                                     event.text = "off";
                                 }
 
-                                if({{$countDay}} < 0){
-                                    dhtmlx.message({ type:"error", text:"白天排班天數已滿" });
-                                    console.log("更改白班"+{{$countDay}});
-                                }
-                                if({{$countNight}}<0){
-                                    dhtmlx.message({ type:"error", text:"夜晚排班天數已滿" });
-                                    console.log("更改夜班"+{{$countNight}});
-                                }
-                                else{
+                                // if({{$countDay}} < 0){
+                                //     dhtmlx.message({ type:"error", text:"白天排班天數已滿" });
+                                //     console.log("更改白班"+{{$countDay}});
+                                // }
+                                // if({{$countNight}}<0){
+                                //     dhtmlx.message({ type:"error", text:"夜晚排班天數已滿" });
+                                //     console.log("更改夜班"+{{$countNight}});
+                                // }
+                                // else{
                                 updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
                                 countDay();
-                                }
+                                //}
                             
                                 console.log(event.priority);
                                 console.log(event.start_date);

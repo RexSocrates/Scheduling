@@ -18,7 +18,7 @@ class Remark extends Model
     
     // 透過備註編號取得單一備註
     public function getRemarkBySerial($serial) {
-        $remark = DB::table('Remarks')
+        $remark = DB::table('Remark')
             ->where('remarkSerial', $serial)
             ->first();
         
@@ -36,5 +36,14 @@ class Remark extends Model
     		]);
 
     	return $addRemark;
+    }
+
+    //透過醫生編號找備註
+    public function getRemarkByDoctorID($doctorID){
+        $remark = DB::table('Remark')
+            ->where('doctorID', $doctorID)
+            ->first();
+        
+        return $remark;
     }
 }

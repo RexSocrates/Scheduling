@@ -147,5 +147,23 @@ class ScheduleController extends Controller
         return redirect('reservation');
        	
     }
-    
+
+    public function getDoctorInfoByScheduleID(Request $request){
+      $data = $request->all();
+
+      $schedule = new Schedule();
+      $user = new User();
+
+      $doctor = $schedule->getScheduleDataByID($data['id']);
+
+     
+      $id = $doctor->scheduleID;
+      $name = $user->getDoctorInfoByID($doctor->doctorID)->name;
+      $date = $doctor->date;
+
+      $array = array($id,$name,$date);
+
+      return $array;
+      
+    }
 }

@@ -142,11 +142,8 @@ class ShiftRecordsController extends Controller
      public function shiftFirstEditionAddShifts(Request $request){
             $data = $request->all();
 
-            $scheduleID1 = $data['scheduleID_1'];
-            $scheduleID2 = $data['scheduleID_2'];
-
-            $scheduleID1=6;
-            $scheduleID2=1;
+            $scheduleID1 = (int)$data['scheduleID_1'];
+            $scheduleID2 = (int)$data['scheduleID_2'];
 
             $schedule = new Schedule();
 
@@ -158,8 +155,8 @@ class ShiftRecordsController extends Controller
             'scheduleID_2' => $schedule_2_Info->scheduleID,
             'schID_1_doctor' => $schedule_1_Info->doctorID,
             'schID_2_doctor' => $schedule_2_Info->doctorID,
-            'doc2Confirm' => '1',
-            'adminConfirm' => '1',
+            'doc2Confirm' => 1,
+            'adminConfirm' => 1,
             'date' => date('Y-m-d')
         ];
 
@@ -167,24 +164,11 @@ class ShiftRecordsController extends Controller
 
             $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
 
-            echo "newChangeSerial" .$newChangeSerial;
-
-            //$changeSerial = $shiftRecords->getChangeSerial($scheduleID1,$scheduleID2);
-
-            //$confrimShiftRecord = $schedule->exchangeSchedule($changeSerial); 
             $shiftRecords->doc2Confirm($newChangeSerial,1);
             $shiftRecords->adminConfirm($newChangeSerial,1);
+            //$schedule->$exchangeSchedule($newChangeSerial);
 
-
-            // $addShifts = new ShiftRecords();
-            // $scheduleID_1 = Input::get('scheduleID_1');
-            // $scheduleID_2 = Input::get('scheduleID_2');
-            // $schID_1_doctor = Input::get('schID_1_doctor');
-            // $schID_2_doctor = Input::get('schID_2_doctor');
-            // $doc2Confirm = 0;
-            // $adminConfirm = 0;
-
-            // $newShiftSerial = $addShifts->addShifts($scheduleID_1,$scheduleID_2,$schID_1_doctor,$schID_2_doctor,$doc2Confirm,$adminConfirm);
+            return redirect('shift-first-edition');
 
     }
 
@@ -420,18 +404,19 @@ class ShiftRecordsController extends Controller
     public function shiftFirstEdition(){
         $schedule = new Schedule();
         $user = new User();
-        $shiftRecords = new ShiftRecords(); 
+
         $scheduleData = $schedule->getSchedule();
 
-        $doctorName = $user->getDoctorInfoByID(2);
-        $doctorSchedule = $schedule->getScheduleByDoctorID(2); //之後用ajax傳入id
+
+        $doctor = $user->getAtWorkDoctors();
+        //$doctorSchedule = $schedule->getScheduleByDoctorID($doctor->doctorID); //之後用ajax傳入id
 
         foreach ($scheduleData as $data) {
             $doctorName = $user->getDoctorInfoByID($data->doctorID);
             $data->doctorID = $doctorName->name;
         }
 
-        return view('pages.shift-first-edition',array('schedule' => $scheduleData,'doctorName' => $doctorName,'doctorSchedule'=>$doctorSchedule));
+        return view('pages.shift-first-edition',array('schedule' => $scheduleData,'doctorName' => $doctor));
 
     }
 

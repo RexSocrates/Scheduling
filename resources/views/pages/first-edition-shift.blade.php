@@ -28,14 +28,12 @@
                 // var userInput = selectBox.options[selectBox.selectedIndex].value;
                 changeDate(array);
             });
-
         }
     
-
         function changeDate(array) {
                 var date = "";
                 for(i=0 ; i<array.length ; i++){
-                    date += "<option value="+array[i][0]+">"+array[i][1]+"</option>";
+                    date += "<option value="+array[i][0]+">"+array[i][2]+"</option>";
                     console.log('1'+array[i][0]);
                 }
                 document.getElementById("date").innerHTML  = date;
@@ -48,20 +46,20 @@
 @endsection
 
 @section('content')
-    <div id="section" class="container-fix trans-left-five">    <!--	 style="background-color:red;"-->
-		<div class="container-section">
-		    <div class="row">
+    <div id="section" class="container-fix trans-left-five">    <!--     style="background-color:red;"-->
+        <div class="container-section">
+            <div class="row">
                 <div class="col s12 m12">
                     <div class="card">
                         <div class="card-action">
-      		  	  			<!-- <img src="../img/announcement.png" class="logo-img"> -->
-      		  	  			<font class="card-title">換班資訊區</font>
-      		  	  			<a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1"><i class="material-icons">add</i></a>
-      		  	  			<!-- <a class="btn-floating halfway-fab waves-effect waves-light blue-grey darken-1"><i class="material-icons">add</i></a> -->
-      		  	  		</div>
-      		  	  		<div class="divider"></div>
-      		  	  	  	
-      		  	  	  	<div class="card-content">
+                            <!-- <img src="../img/announcement.png" class="logo-img"> -->
+                            <font class="card-title">換班資訊區</font>
+                            <a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1"><i class="material-icons">add</i></a>
+                            <!-- <a class="btn-floating halfway-fab waves-effect waves-light blue-grey darken-1"><i class="material-icons">add</i></a> -->
+                        </div>
+                        <div class="divider"></div>
+                        
+                        <div class="card-content">
                             <table class="centered striped highlight">
                                 <thead>
                                     <tr>
@@ -140,15 +138,15 @@
                     </div>
                 </div>
             </div>
-			<div class="row">
+            <div class="row">
                 <div class="col s12 m12">
-      		  	  	<div class="card">
+                    <div class="card">
                         <div class="card-action">
-      		  	  			<font class="card-title">換班待確認</font>
-      		  	  		</div>
-      		  	  		<div class="divider"></div>
-      		  	  	  	
-      		  	  	  	<div class="card-content">
+                            <font class="card-title">換班待確認</font>
+                        </div>
+                        <div class="divider"></div>
+                        
+                        <div class="card-content">
                             <table class="responsive-table striped highlight">
                                 <thead>
                                     <tr>
@@ -176,9 +174,9 @@
                         </div>
                     </div>
                 </div>
-      		</div>
-      		
-      		
+            </div>
+            
+            
              <div id="modal1" class="modal modal-fixed-footer modal-shift">
                 <form action='first-edition-shift-info' method="POST">
                     <div class="modal-header">
@@ -246,4 +244,3 @@
         });
     </script>
 @endsection
-

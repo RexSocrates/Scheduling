@@ -255,14 +255,14 @@ class TestController extends Controller
     }
 
 
-     public function shiftFirstEditionAddShifts(Request $request){
+     public function shiftFirstEditionAddShifts(){
             //$data = $request->all();
 
             //$scheduleID1 = $data['scheduleID_1'];
             //$scheduleID2 = $data['scheduleID_2'];
 
-            $scheduleID1=6;
-            $scheduleID2=1;
+            $scheduleID1=7;
+            $scheduleID2=9;
 
             $schedule = new Schedule();
 
@@ -290,6 +290,7 @@ class TestController extends Controller
             //$confrimShiftRecord = $schedule->exchangeSchedule($changeSerial); 
             $shiftRecords->doc2Confirm($newChangeSerial,1);
             $shiftRecords->adminConfirm($newChangeSerial,1);
+            $schedule->exchangeSchedule($newChangeSerial);
 
 
             // $addShifts = new ShiftRecords();
@@ -318,7 +319,7 @@ class TestController extends Controller
         echo print_r($array);
 
       }
- }
+ 
 
     
     
@@ -389,5 +390,81 @@ class TestController extends Controller
         
         return $dataDic;
     }
+
+    //新增預班
+    public function addReservation(){
+        //$data = $request->all();
+        
+       // $serial = (int)$data['serial'];
+        //$str = $data['date1'];
+        
+        $shiftCategory = new ShiftCategory();
+        
+        //$categoryInfo = $shiftCategory->getCategoryInfo($serial);
+        
+        $resInfo = [
+            'isWeekday' => 1,
+            'location' => 'Taipei',
+            'isOn' => 1,
+            'date' => '2017-09-03',
+            'categorySerial' =>3
+        ];
+        
+        
+        //$dateArr = explode(' ', $str);
+        // 判斷平日/假日
+        // if(strcmp($dateArr[0],"Sat") == 0 or strcmp($dateArr[0],"Sun") == 0) {
+        //     $resInfo['isWeekday'] = false;
+        // }
+        
+        $resObj = new Reservation();
+        
+        $newSerial = $resObj->addOrUpdateReservation($resInfo);
+        
+        echo $newSerial;
+        
+        $docAndRes = new DoctorAndReservation();
+        $user = new User();
     
+        $darData = [
+            'resSerial' => $newSerial,
+            'doctorID' => 2,
+        ];
+        $docAndRes->addDoctor($darData);
+        $count = $docAndRes->amountInResserial($newSerial);
+
+        echo $count;
+
+        if($count>=2 ){
+           echo "超過";
+
+        }
+
+        else{
+            echo "nothing";
+        }
+
+    }
+    
+
+    public function getDoctorInfoByScheduleID(){
+      //$data = $request->all();
+
+      $schedule = new Schedule();
+      $user = new User();
+
+      $doctor = $schedule->getScheduleDataByID(7);
+
+     
+      $id = $doctor->scheduleID;
+      $name = $user->getDoctorInfoByID($doctor->doctorID)->name;
+      $date = $doctor->date;
+
+      $array = array($id,$name,$date);
+
+      echo $array[0];
+      echo $array[1];
+      echo $array[2];
+      
+    }
 }

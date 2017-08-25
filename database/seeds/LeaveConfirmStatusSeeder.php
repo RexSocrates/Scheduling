@@ -27,5 +27,6 @@ class LeaveConfirmStatusSeeder extends Seeder
         //      'serial' => 2,
         //      'status' => '已拒絕'
         //  ]);
+        
      }
 }

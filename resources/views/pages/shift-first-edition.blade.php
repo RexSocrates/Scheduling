@@ -1,8 +1,10 @@
 @extends("layouts.app2")
 
 @section('head')
-    <script src="../codebase/ext/dhtmlxscheduler_collision.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+     <script src="../codebase/ext/dhtmlxscheduler_collision.js"></script>
+    <script src="../codebase/ext/dhtmlxscheduler_limit.js"></script>
+    <script src="../../codebase/ext/dhtmlxscheduler_serialize.js" type="text/javascript" charset="utf-8"></script>
+
 
     <style>
         td{
@@ -22,21 +24,6 @@
         }
     </style>
 
-   
-    <script>
-        
-
-        function updateShift(scheduleID_1, scheduleID_2) {
-            $.post('sendShiftUpdate', {
-                scheduleID_1 : scheduleID_1,
-                scheduleID_2 : scheduleID_2
-            }, function() {
-                alert('換班修改成功');
-            });
-        }
-
-         
-    </script>
 @endsection
 
 @section('navbar')
@@ -51,8 +38,8 @@
       		  	  	<div class="card border-t">
                        
                         <div id="my_form">
-<!--                            <form action="!#">-->
-                            <div class="modal-header">
+                            <form action="change-shift-first-edition" method="post" >
+                             <div class="modal-header">
                                 <h5 class="modal-announcement-title">換班調整</h5>
                             </div>
                             <div class="lightbox">
@@ -60,72 +47,50 @@
                                     <div class="col s12 center padding-b10">
                                         <img src="../img/exchange.svg" style="height: 220px;width: 220px;">
                                     </div>
-                                    <div class="col s6">
-                                        <label>醫生:</label>
-                                        <select name="doctor" class="browser-default" id="doctor" required>
-                                            <option value="" disabled selected>請選擇醫生</option>
-                                            <option value="1">王志平</option>
-                                            <option value="2">黃明源</option>
-                                            <option value="3">莊錦康</option>
-                                            <option value="4">簡立仁</option>
-                                            <option value="5">陳長志</option>
-                                            <option value="6">劉良嶸</option>
-                                            <option value="7">陳楷宏</option>
-                                            <option value="8">黃明源</option>
-                                            <option value="9">鄭婓茵</option>
-                                            <option value="10">劉蕙慈</option>
-                                            <option value="11">柳志翰</option>
-                                            <option value="12">蘇柏樺</option>
-                                        </select>
-                                    </div>
-                                    <div class="col s6">
-                                    <label>醫生:</label>
-                                    <select name= 'schID_2_doctor' class="browser-default" required>
-                                        <option value="" disabled selected>請選擇醫生</option>
-                                        <option value="{{$doctorName->doctorID}}">{{$doctorName->name}}</option>
-                                   
-                                    </select>
-                                    </div>
-                                    <div class="col s6">
-                                        <label>日期:</label>
-                                        <select class="browser-default" required>
-                                            <option value="" disabled selected>請選擇日期</option>
-                                            <option value="1">2017/08/05</option>
-                                            <option value="2">2017/08/17</option>
-                                            <option value="3">2017/08/26</option>
-                                            <option value="4">2017/08/05</option>
-                                            <option value="5">2017/08/17</option>
-                                            <option value="6">2017/08/26</option>
-                                            <option value="7">2017/08/05</option>
-                                            <option value="8">2017/08/17</option>
-                                            <option value="9">2017/08/26</option>
-                                            <option value="10">2017/08/05</option>
-                                            <option value="12">2017/08/17</option>
-                                            <option value="13">2017/08/26</option>
-                                            <option value="14">2017/08/05</option>
-                                            <option value="15">2017/08/17</option>
-                                            <option value="16">2017/08/26</option>
-                                        </select>
-                                    </div>
-                                    <div class="col s6">
-                                        <label>日期:</label>
-                                        <select  name='scheduleID_2' class="browser-default" required>
-                                            <option value="" disabled selected>請選擇日期</option>
-                                            @foreach($doctorSchedule as $data)
-                                            <option value='{{$data->scheduleID}}'>{{$data->date}}</option>
-                                            @endforeach
-                                   
-                                        </select>
+                                     <div class="col s6">
+                                <label>醫生:</label>
+                                <select name= 'schID_1_doctor' class="browser-default" id="schID_1_doctor" onchange="changeDoctor_1()" required>
+                                    <option  disabled selected>請選擇醫生</option>
+                                        <option disabled value=""></option>
+                                    
+                                </select>
+                            </div>
+
+                            <div class="col s6">
+                                <label>醫生:</label>
+                                <select name= 'schID_2_doctor' class="browser-default" id="schID_2_doctor" onchange="changeDoctor()" required>
+                                    <option value="" disabled selected>請選擇醫生</option> 
+                                    @foreach($doctorName as $name)
+                                    <option value="{{$name->doctorID}}">{{$name->name}}</option>
+                                   @endforeach
+                                </select>
+                            </div>
+                            <div class="col s6">
+                                <label>日期:</label>
+                                <select name="scheduleID_1" class="browser-default" id="date1" required>
+                                    <option value="" disabled selected>請選擇日期</option>
+                                       
+                                    <option value= '' ></option>
+                                        
+                                </select>
+                            </div>
+                            <div class="col s6">
+                                <label>日期:</label>
+                                <select  name='scheduleID_2' class="browser-default" id="date2" required>
+                                    <option value="" disabled selected>請選擇日期</option>
+                                    <option value= '' ></option>
+                                </select>
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="lightbox-footer">
-                                <button class="modal-action waves-effect waves-light btn-flat modal-btn1" onclick="delete_event()">Delete</button>
-                                <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn" onclick="save_form()">Save</button>
-                                <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel modal-btn" onclick="close_form()">Cancel</button>
+
+                                <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn">Save</button>
+                                <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel modal-btn">Cancel</button>
+                                {{ csrf_field() }}
                             </div>
-<!--                            </form>-->
+                                </form>
 <!--
                             <label for="description">Event text </label><input type="text" name="description" value="" id="description"><br>
                             <label for="custom1">Custom 1 </label><input type="text" name="custom1" value="" id="custom1"><br>
@@ -286,36 +251,25 @@
                             scheduler.showLightbox = function(id) {
                                 var ev = scheduler.getEvent(id);
                                 scheduler.startLightbox(id, html("my_form"));
-                                var doctorID = [{{$doctorName->doctorID}}];
-                                var doctorName = [{{$doctorName->name}}];
-                                var array = doctorName.indexOf(ev.text);
+                
+                                // var doctorID = ["1"];
+                                // var doctorName = ["張國頌"];
+
+                                // var array = doctorName.indexOf(ev.text);
                                 
-                                if (ev.text == "New" || ev.text == "") {
-                                    var id = "";
-                                } else {
-                                    var id = doctorID[array];
-                                }
+                                // if (ev.text == "New" || ev.text == "") {
+                                //     var id = "";
+                                // } else {
+                                //     var id = doctorID[array];
+                                // }
                                 
-                                html("doctor").focus();
-                                html("doctor").value = id;
-//                                html("custom1").value = ev.custom1 || "";
-//                                html("custom2").value = ev.custom2 || "";
+                                    html("schID_2_doctor").focus();
+                                    html("schID_2_doctor").value = id;
+//                                  html("custom1").value = ev.custom1 || "";
+//                                  html("custom2").value = ev.custom2 || "";
                             };
 
-                            function save_form() {
-                                var ev = scheduler.getEvent(scheduler.getState().lightbox_id);
-
-                                var evs = scheduler.getEvent(evs[0].id);
-
-                                console.log(ev.hidden);
-                                console.log(evs.hidden);
-
-                                
-                                ev.text = html("doctor").value;
-
-                                scheduler.endLightbox(true, html("my_form"));
-
-                            };
+                           
                             
 //                            scheduler.attachEvent("onEventAdded", function(id,e){
 //                                console.log("5345");
@@ -331,17 +285,6 @@
 //                                ev.text = name;
 //                            }
                             
-                            function close_form() {
-                                scheduler.endLightbox(false, html("my_form"));
-                            }
-
-                            function delete_event() {
-                                var event_id = scheduler.getState().lightbox_id;
-                                scheduler.endLightbox(false, html("my_form"));
-                                scheduler.deleteEvent(event_id);
-                            }
-
-                            
 
                              scheduler.attachEvent("onEventCollision", function (ev, evs){
                                   //any custom logic here
@@ -350,34 +293,51 @@
 
                                 var evs = scheduler.getEvent(evs[0].id);
 
+                                var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
+
                                 //console.log('1'+ev.priority);
                                 // console.log('1'+ev.start_date);
                                 // console.log('1'+ev.end_date);
                                 // console.log('1'+ev.id);
-                                console.log('1 id'+ev.hidden);
+                                //console.log('1 id'+ev.hidden);
 
                                 //console.log("2"+evs.priority);
                                 // console.log("2"+evs.start_date);
                                 // console.log("2"+evs.end_date);
                                 // console.log("2"+evs.id);
-                                console.log("2 id"+evs.hidden);
+                                //console.log("2 id"+evs.hidden);
+
+                                if(count>2){
+                                    dhtmlx.message({ type:"error", text:"此日期已選過" });
+                                    return true;
+                                }
+                                else{
+                                    
+                                    return false;
+
+                                }
                                
-                               if(ev.hidden != evs.hidden){
-                                 updateShift(ev.hidden, evs.hidden);
-                                 return false;
-                               }
-
-                               else{
-                                 return true;
-                               }
-
-                                 return true;
+                        
                             });
+
+                             scheduler.attachEvent("onEventDrag", function (id, mode,e){
+                                //any custom logic here
+                                var event = scheduler.getEvent(id);
+                                console.log("1111");
+                                console.log(event.hidden);
+                                console.log(event.start_date);
+                            });
+
+
 
                             scheduler.attachEvent("onClick", function (id, e){
                             //any custom logic here
-                            var ev = scheduler.getEvent(ev.id);
-                            console.log()
+                            var event = scheduler.getEvent(id);
+                            
+                            changeDoctor_1(event.hidden);
+
+                            console.log("id"+event.hidden);
+
                             return true;
                             });
 
@@ -406,5 +366,44 @@
         $(document).ready(function(){
             $('select').material_select();
   		});
+    
+    function changeDoctor_1(id){
+            $.get('changeDoctor1',{
+                id : id
+            }, function(array){
+
+                document.getElementById("schID_1_doctor").innerHTML= "<option value="+array[0]+">"+array[1]+"</option>";
+
+                changeDate1(array);
+            });
+
+        }
+        function changeDoctor() {
+            $.get('changeDoctor', {
+                id : document.getElementById('schID_2_doctor').value
+            }, function(array) {
+                // var selectBox = document.getElementById('doctorName');
+                // var userInput = selectBox.options[selectBox.selectedIndex].value;
+                changeDate2(array);
+            });
+
+        }
+        function changeDate1(array) {
+                document.getElementById("date1").innerHTML= "<option value="+array[0]+">"+array[2]+"</option>"     
+        }
+
+        function changeDate2(array) {
+                var date = "";
+                for(i=0 ; i<array.length ; i++){
+                    date += "<option value="+array[i][0]+">"+array[i][2]+"</option>";
+                    console.log('1'+array[i][0]);
+                }
+                document.getElementById("date2").innerHTML  = date;
+        }
+
+        function alert1() {
+                alert("不可選擇相同醫生相同時段");
+        }
+
     </script>
 @endsection
