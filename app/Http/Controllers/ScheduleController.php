@@ -65,18 +65,27 @@ class ScheduleController extends Controller
     // 初版班表 個人
     public function firstEditionSchedule() {
         $schedule = new Schedule();
-         $scheduleCategory = new ScheduleCategory();
-         $user = new User();
+        $scheduleCategory = new ScheduleCategory();
+        $user = new User();
 
-         $scheduleData = $schedule->getScheduleByDoctorID($user->getCurrentUserID());
+        $scheduleData = $schedule->getScheduleByDoctorID($user->getCurrentUserID());
+        
+        $displayData = [];
 
-         foreach ($scheduleData as $data) {
-            $scheduleName = $scheduleCategory->findScheduleName($data->schCategorySerial);
-            $data->schCategorySerial =  $scheduleName;
+        foreach ($scheduleData as $data) {
+            $singleData = [
+                'date' => $data->date,
+                'endDate' => $data->endDate,
+                'categoryName' => $scheduleCategory->findScheduleName($data->schCategorySerial)
+            ];
+            
+            array_push($displayData, $singleData);
         }
 
         
-        return view('pages.first-edition', array('schedule' => $scheduleData,'shiftRecords'=>$data));
+        return view('pages.first-edition', [
+            'schedule' => $displayData
+        ]);
     }
 
     //單一月份班表資訊

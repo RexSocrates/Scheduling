@@ -120,7 +120,7 @@
         </ul>
         
         <ul id="dropdown1" class="dropdown-content">
-            <li><a href="setting.html">設定</a></li>
+            <li><a href="setting">設定</a></li>
             <li><a href="profile">個人資料</a></li>
             <li class="divider"></li>
             <li>

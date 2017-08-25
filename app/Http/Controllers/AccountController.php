@@ -88,4 +88,8 @@ class AccountController extends Controller
 
         return $array;
     }
+    
+    public function getSettingPage() {
+        return view('pages.setting');
+    }
 }

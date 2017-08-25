@@ -111,7 +111,7 @@
 
                                 scheduler.parse([
                                     
-                                { start_date: "{{ $data->date }} 00:00", end_date: "{{$data->endDate}} 00:00", text: "{{ $data->schCategorySerial }}"},    
+                                { start_date: "{{ $data['date'] }} 00:00", end_date: "{{$data['endDate']}} 00:00", text: "{{ $data['categoryName'] }}"},    
                                 ],"json");
                             
                             @endforeach
