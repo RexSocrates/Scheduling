@@ -426,6 +426,7 @@ class TestController extends Controller
         $docAndRes = new DoctorAndReservation();
         $user = new User();
     
+
         $darData = [
             'resSerial' => $newSerial,
             'doctorID' => 2,
@@ -467,4 +468,31 @@ class TestController extends Controller
       echo $array[2];
       
     }
+
+    // Doctors data
+    public function getDoctors() {
+        $userObj = new User();
+        
+        $doctors = $userObj->getDoctorList();
+        
+        $doctorSchData = [];
+        
+        foreach($doctors as $doctor) {
+//            $doctorData = [
+//                'doctorID' => $doctor->doctorID,
+//                'major' => '',
+//                'totalShift' => 0,
+//                'dayShift' => 0,
+//                'nightShift' => 0,
+//                'holidayShift' => 0,
+//                'location' => '',
+//                'maxTaipeiShifts' => 0,
+//                'maxDamsuiShifts' => 0,
+//                'surgicalShifts' => 0,
+//                'medicalShifts' => 0,
+//            ];
+        }
+    }
+    
 }
+

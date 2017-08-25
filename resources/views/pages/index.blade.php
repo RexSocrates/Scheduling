@@ -21,51 +21,23 @@
       		  	  		<div class="divider"></div>
       		  	  	  	
       		  	  	  	<div class="card-content">
-      		  	  	  	
-      		  	  	  		<div class="row">
-    						  	<div class="col s2">
-    						  		<img src="../img/user.png" class="boss-img">
-    						  	</div>
-    						  	<div class="col s10">
-    						  		<span class="card-title">Card Title<a class="dropdown-edit-button right" href="#!" data-activates='dropdown-announcement'><i class="material-icons">more_vert</i></a></span>
-    						  		<p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.I am a very simple card. I am good at... <a href="#modal-more">more</a></p>
-    						  	</div>
-    						</div>
-    						<ul id='dropdown-announcement' class='dropdown-content'>
-                                <li><a href="#!">編輯</a></li>
-                                <li><a href="#!">刪除</a></li>
-                            </ul>
-    						<div class="divider margin-b20"></div>
-    						
-    						<div class="row">
-    						  	<div class="col s2">
-    						  		<img src="../img/user.png" class="boss-img">
-    						  	</div>
-    						  	<div class="col s10">
-    						  		<span class="card-title">Card Title<a class="dropdown-edit-button right" href="#!" data-activates='dropdown-announcement'><i class="material-icons">more_vert</i></a></span>
-    						  		<p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.I am a very simple card. I am good at... <a href="#modal-more">more</a></p>
-    						  	</div>
-    						</div>
-    						<ul id='dropdown-announcement' class='dropdown-content'>
-                                <li><a href="#!">編輯</a></li>
-                                <li><a href="#!">刪除</a></li>
-                            </ul>
-    						<div class="divider margin-b20"></div>
-    						
-    						
-    						<div class="row margin-b0">
-    						  	<div class="col s2">
-    						  		<img src="../img/user.png" class="boss-img">
-    						  	</div>
-    						  	<div class="col s10">
-    						  		<span class="card-title">Card Title<a class="dropdown-edit-button right" href="#!" data-activates='dropdown-announcement'><i class="material-icons">more_vert</i></a></span>
-    						  		<p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.I am a very simple card. I am good at... <a href="#modal-more">more</a></p>
-    						  	</div>
-    						</div>
-                            <ul id='dropdown-announcement' class='dropdown-content'>
-                                <li><a href="#!">編輯</a></li>
-                                <li><a href="#!">刪除</a></li>
-                            </ul>
+                            
+                            @foreach($announcements as $announcement)
+                                <div class="row">
+    						    	<div class="col s2">
+    						    		<img src="../img/user.png" class="boss-img">
+    						    	</div>
+    						    	<div class="col s10">
+    						    		<span class="card-title">{{ $announcement->title }}<a class="dropdown-edit-button right" href="#!" data-activates='dropdown-announcement'><i class="material-icons">more_vert</i></a></span>
+    						    		<p>{{ $announcement->content }}<a href="#modal-more">more</a></p>
+    						    	</div>
+    						  </div>
+    						  <ul id='dropdown-announcement' class='dropdown-content'>
+                                    <li><a href="#!">編輯</a></li>
+                                    <li><a href="#!">刪除</a></li>
+                                </ul>
+    						  <div class="divider margin-bottom-20"></div>
+                            @endforeach
       		  	  	  	</div>
       		  	  	  	
       		  	  	</div>
@@ -88,7 +60,8 @@
 			
 			<!-- Modal Structure -->
             <div id="modal1" class="modal modal-fixed-footer modal-announcement">
-                <form action="#!" method="POST">
+                <form action="addAnnouncement" method="POST">
+                    {{ csrf_field() }}
                     <div class="modal-header">
                         <h5 class="modal-announcement-title">公告</h5>
                     </div>
@@ -96,13 +69,13 @@
                         <div class="row margin-b0">
                             <div class="input-field col s12">
                                 <i class="material-icons prefix modal-icons">chat_bubble</i>
-                                <input id="title" type="text">
+                                <input id="title" type="text" name="title">
                                 <label for="title">標題</label>
                             </div>
                         
                             <div class="input-field col s12">
                                 <i class="material-icons prefix modal-icons">mode_edit</i>
-                                <textarea id="textarea1" class="materialize-textarea margin-b0" type="text"></textarea>
+                                <textarea id="textarea1" class="materialize-textarea margin-b0" type="text" name="content"></textarea>
                                 <label for="textarea1">內容</label>
                             </div>
                         </div>

@@ -22,6 +22,12 @@ Route::get('/home', 'HomeController@index')->name('home');
 // 正式路由
 Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
 
+// 取得公告頁面
+Route::get('announcement', 'AnnouncementController@getAnnouncementPage');
+
+// 新增公告
+Route::post('addAnnouncement', 'AnnouncementController@addAnnouncement');
+
 Route::get('resign/{id}', 'AccountController@resign');
 
 // 取得個人頁面
@@ -107,7 +113,9 @@ Route::post('change-shift-first-edition','ShiftRecordsController@shiftFirstEditi
 // 調整班表->初版班表 新增換班
 Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts');
 
+
 Route::get('test','TestController@shiftFirstEditionAddShifts');
+
 
 
 // 調整班表的換班資訊
@@ -128,19 +136,20 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 
-
-
-
 // ========================================================================
 //Route::post('postAjaxRequest', 'TestController@postAjaxRequest');
 //Route::get('postAjaxRequest', 'TestController@postAjaxRequest');
 
-
+Route::get('test','TestController@shiftFirstEditionAddShifts');
 
 Route::get('testDay','TestController@countDay');
 //調整班表->正式班表
 Route::get('shift-scheduler', function() {
 	return view('pages.shift-scheduler');
+});
+
+Route::get('getIndex', function() {
+    return view('pages.index');
 });
 
 

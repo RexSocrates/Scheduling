@@ -28,15 +28,15 @@ class Remark extends Model
     
     // 新增備註
     public function addRemark($doctorID,$remark){
-    	$addRemark = DB::table("Remark")-> insertGetId([
-                'doctorID' => $doctorID,
-    			'remark' => $remark,
-                'date' => date('Y-m-d')
-                    
-    		]);
+    	$addRemark = DB::table("Remark")->insertGetId([
+            'doctorID' => $doctorID,
+    		'remark' => $remark,
+            'date' => date('Y-m-d')
+        ]);
 
     	return $addRemark;
     }
+
 
     //透過醫生編號找備註
     public function getRemarkByDoctorID($doctorID){
@@ -45,5 +45,15 @@ class Remark extends Model
             ->first();
         
         return $remark;
+
+    
+    // 修改備註
+    public function modifyRemark($serial, $newRemark) {
+        DB::table('Remark')
+            ->where('remarkSerial', $seriaL)
+            ->update([
+                'remark' => $newRemark
+            ]);
+
     }
 }

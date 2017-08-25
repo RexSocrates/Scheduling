@@ -404,7 +404,7 @@
                             //進入畫面後顯示的東西
                             scheduler.init('scheduler_here',new Date(),"month");
 
-                            scheduler.load("./reservation_data");
+//                            scheduler.load("./reservation_data");
     //                            var dp = new dataProcessor("./reservation_data");
     //                            dp.init(scheduler);
 
@@ -436,6 +436,3 @@
 
 @endsection
 -->
-
-<!-- 還要不要? -->
-<!-- {{ csrf_field() }}-->
