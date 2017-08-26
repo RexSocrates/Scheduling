@@ -50,7 +50,7 @@ Route::get('/reservation', 'ReservationController@getReservationByID');
 //列出
 Route::get('/countDay','ReservationController@countDay');
 
-Route::get('alert1');
+Route::get('/alert1','ReservationController@countDay');
 
 
 //Route::get('count','ReservationController@countDay');
@@ -109,11 +109,13 @@ Route::get('doctor2DenyShiftRecord/{serial}', 'ShiftRecordsController@doctor2Den
 
 
 //調整班表->初版班表
-Route::get('/shift-first-edition','ShiftRecordsController@shiftFirstEdition');
+Route::get('/shift-first-edition','ShiftRecordsController@shiftFirstEdition');//->name('shift-first-edition/{date?}');
 Route::post('change-shift-first-edition','ShiftRecordsController@shiftFirstEditionAddShifts');
 
 // 調整班表->初版班表 新增換班
 Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts');
+
+Route::post('getSiftInfo',"ShiftRecordsController@shiftFirstEditionShowShifts");
 
 
 Route::get('test','TestController@shiftFirstEditionAddShifts');

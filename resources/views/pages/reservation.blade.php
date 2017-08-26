@@ -36,35 +36,28 @@
                 alert('預約刪除成功');
             });
         }
-
-        function alert1(){
-            var countDay = document.getElementById("hiddenCountDay").value
-            var countNight = document.getElementById("hiddenCountNight").value
-
-            if(countDay<0){
-                alert('白天班數已滿');
-            }
-            if(countNight<0){
-                alert('夜天班數已滿');
-            }
-
-        }
         
         function countDay(){
             $.get('countDay', {
               }, function(array) {
                 document.getElementById("countDay").innerHTML = "尚需排班數: 白班:"+array[0] +"夜班:"+array[1];
-                //alert1(array);
+                
             });
         }
+
+       function refresh() {
+            location.reload();
+        }
+
+        // function alert1(countDay,countNight){
+        //     var countDay=countDay;
+        //     alert("countDay"+countDay);
+        //     return countNight;
+        // }
 
         function alert2(){
             alert("備註送出完成");
         }
-
-
-       
-            
         
     </script>
 
@@ -155,7 +148,7 @@
                             scheduler.config.details_on_dblclick = true;
                             scheduler.config.prevent_cache = true;
                             scheduler.config.show_loading = true;
-
+                            
 
                             var priorities = [
                                 { key: 1, label: '行政' },
@@ -208,66 +201,36 @@
 
                             //在Lightbox按下save時執行
                             scheduler.attachEvent("onEventSave",function(id,ev,is_new){
-
-                                var event = scheduler.getEvent(id);
-
-                                event.text = event.priority;
-
-    //                                console.log(event.text);
-
+                               
                                 return true;
                             });
 
-                            scheduler.attachEvent("onEventAdded", function(id,e){
-                                var event = scheduler.getEvent(id);
-
-                                if(event.priority == 1){
-                                    event.text = "行政";
-                                }else if(event.priority == 2){
-                                    event.text = "教學";
-                                }else if(event.priority == 3){
-                                    event.text = "台北白班";
-                                }else if(event.priority == 4){
-                                    event.text = "台北夜班";
-                                }else if(event.priority == 5){
-                                    event.text = "淡水白班";
-                                }else if(event.priority == 6){
-                                    event.text = "淡水夜班";
-                                }else if(event.priority == 7){
-                                    event.text = "off";
-                                }else if(event.priority == null){
-                                    event.text = "沒選到班";
-                                }
-
-
-                                // call ajax function
-                                //if({{$countDay}}<0){
-                                //     //dhtmlx.message({ type:"error", text:"白天排班天數已滿" });
-                                //     console.log("新增白班")
+                          scheduler.attachEvent("onEventAdded", function(id,e){
+                                    var event = scheduler.getEvent(id);
                                     
-                                // }
+                                    if(event.priority == 1){
+                                        event.text = "行政";
+                                    }else if(event.priority == 2){
+                                        event.text = "教學";
+                                    }else if(event.priority == 3){
+                                        event.text = "台北白班";
+                                    }else if(event.priority == 4){
+                                        event.text = "台北夜班";
+                                    }else if(event.priority == 5){
+                                        event.text = "淡水白班";
+                                    }else if(event.priority == 6){
+                                        event.text = "淡水夜班";
+                                    }else if(event.priority == 7){
+                                        event.text = "off";
+                                    }else if(event.priority == null){
+                                        event.text = "沒選到班";
+                                    }
+                                    sendNewReservation(event.priority, event.start_date, event.end_date);
+                                    countDay();
+                                    console.log("新增");
+                                        
+                                });
 
-                                // else if({{$countNight}}<0){
-                                //     dhtmlx.message({ type:"error", text:"夜晚排班天數已滿" });
-                                //     console.log("新增夜班")
-                                // }
-
-                                //else{
-                                //alert1();
-                               
-
-                                sendNewReservation(event.priority, event.start_date, event.end_date);
-                                countDay();
-                                
-                               
-                                //}
-
-                                console.log(event.priority);
-                                console.log(event.start_date);
-                                console.log(event.end_date);
-                                
-
-                            });
 
                             scheduler.attachEvent("onEventChanged", function(id,e){
                                 var event = scheduler.getEvent(id);
@@ -288,18 +251,9 @@
                                     event.text = "off";
                                 }
 
-                                // if({{$countDay}} < 0){
-                                //     dhtmlx.message({ type:"error", text:"白天排班天數已滿" });
-                                //     console.log("更改白班"+{{$countDay}});
-                                // }
-                                // if({{$countNight}}<0){
-                                //     dhtmlx.message({ type:"error", text:"夜晚排班天數已滿" });
-                                //     console.log("更改夜班"+{{$countNight}});
-                                // }
-                                // else{
                                 updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
                                 countDay();
-                                //}
+                                
                             
                                 console.log(event.priority);
                                 console.log(event.start_date);

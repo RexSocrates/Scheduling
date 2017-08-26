@@ -292,26 +292,24 @@ class ReservationController extends Controller
         $userObj = new User();
         $docAndResObj->doctorUpdateReservation($resSerial, $newSerial, $userObj->getCurrentUserID());
 
-        $count = $docAndRes->amountInResserial($newSerial);
+        $count = $docAndResObj->amountInResserial($newSerial);
 
-        if($serial==3){     //台北白班
-            if($count>=2){
+        $job = new SendRandomNotificationMail($newSerial);
 
+       if($serial==3 || $serial==4){   //台北白班 台北夜班
+            if($count>=6){
+                dispatch($job);
             }
         }
-        if($serial==4){     //台北夜班
-            if($count>=2){
-                
-            }
-        }
+        
         if($serial==5){     //淡水白班
-            if($count>=2){
-                
+            if($count>=4){
+                dispatch($job);
             }
         }
         if($serial==6){     //淡水夜班
-            if($count>=2){
-                
+            if($count>=3){
+                dispatch($job);
             }
         }
 

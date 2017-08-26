@@ -160,6 +160,8 @@ class ShiftRecordsController extends Controller
             'date' => date('Y-m-d')
         ];
 
+            $schedule_1_Date = $schedule_1_Info->date;
+
             $shiftRecords = new ShiftRecords();
 
             $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
@@ -167,10 +169,49 @@ class ShiftRecordsController extends Controller
             $shiftRecords->doc2Confirm($newChangeSerial,1);
             $shiftRecords->adminConfirm($newChangeSerial,1);
             //$schedule->$exchangeSchedule($newChangeSerial);
-
             return redirect('shift-first-edition');
+            // return redirect()->action(
+            //     'ShiftRecordsController@shiftFirstEdition', ['date' => $schedule_1_Date]
+            // );
 
     }
+
+    //調整班表->初版班表 顯示換班換班
+   
+     public function shiftFirstEditionShowShifts(Request $request){
+            $data = $request->all();
+
+            $scheduleID1 = (int)$data['scheduleID_1'];
+            $scheduleID2 = (int)$data['scheduleID_2'];
+
+            $schedule = new Schedule();
+
+            $schedule_1_Info = $schedule->getScheduleDataByID($scheduleID1);
+            $schedule_2_Info = $schedule->getScheduleDataByID($scheduleID2);
+
+            $shiftInfo = [
+            'scheduleID_1' => $schedule_1_Info->scheduleID,
+            'scheduleID_2' => $schedule_2_Info->scheduleID,
+            'schID_1_doctor' => $schedule_1_Info->doctorID,
+            'schID_2_doctor' => $schedule_2_Info->doctorID,
+            'doc2Confirm' => 1,
+            'adminConfirm' => 1,
+            'date' => date('Y-m-d')
+        ];
+
+            $schedule_1_Date = $schedule_1_Info->date;
+
+            $shiftRecords = new ShiftRecords();
+
+            $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
+
+            $shiftRecords->doc2Confirm($newChangeSerial,1);
+            $shiftRecords->adminConfirm($newChangeSerial,1);
+           
+            return redirect('shift-first-edition');
+    }
+
+
 
     //醫生確認換班
     public function doc2Confirm(){
@@ -401,12 +442,11 @@ class ShiftRecordsController extends Controller
     }
 
     // 調整班表 換班確認 顯示初版班表 調整換班
-    public function shiftFirstEdition(){
+    public function shiftFirstEdition($date=null){
         $schedule = new Schedule();
         $user = new User();
 
         $scheduleData = $schedule->getSchedule();
-
 
         $doctor = $user->getAtWorkDoctors();
         //$doctorSchedule = $schedule->getScheduleByDoctorID($doctor->doctorID); //之後用ajax傳入id
@@ -416,7 +456,19 @@ class ShiftRecordsController extends Controller
             $data->doctorID = $doctorName->name;
         }
 
-        return view('pages.shift-first-edition',array('schedule' => $scheduleData,'doctorName' => $doctor));
+        if($date==null){
+            $date=date('Y-m-d');
+        }
+
+        $dateArr = explode('-', $date);
+
+        return view('pages.shift-first-edition',array(
+            'schedule' => $scheduleData,
+            'doctorName' => $doctor,
+            'year' => (int)$dateArr[0],
+            'month' => (int)$dateArr[1],
+            'day' => (int)$dateArr[2],
+            ));
 
     }
 
