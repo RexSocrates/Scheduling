@@ -32,7 +32,7 @@ class RandomNotification extends Mailable
     public function build()
     {
         return $this->markdown('emails.randomNitification', [
-            'reservation' => $this->reservation
+            'res' => $this->reservation
         ]);
     }
 }

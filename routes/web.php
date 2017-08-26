@@ -144,6 +144,8 @@ Route::group(['middleware' => ['auth']], function () {
 //Route::post('postAjaxRequest', 'TestController@postAjaxRequest');
 //Route::get('postAjaxRequest', 'TestController@postAjaxRequest');
 
+Route::get('checkResAmount', 'ReservationController@checkResAmount');
+
 Route::get('test','TestController@shiftFirstEditionAddShifts');
 
 Route::get('testDay','TestController@countDay');
@@ -195,13 +197,15 @@ Route::post('getDoctorShifts/updateShifts', 'TestController@updateDoctorShifts')
 
 
 // push mail-sending work on the queue
-Route::get('shiftExchangeMail', 'MailController@shiftExchange');
+Route::get('shiftExchangeMail', 'MailController@sendShiftExchangeMail');
 
 Route::get('applyShiftExchangeMail', 'MailController@applyShiftExchanging');
 
 Route::get('exchangingSuccessMail', 'MailController@agreeShiftExchanging');
 
 Route::get('exchangingFailedMail', 'MailController@rejectShiftExchanging');
+
+Route::get('sendRandomNotificationMail', 'MailController@sendRandomNotificationMail');
 
 Route::get('getTestPage', 'TestController@getTestPage');
 

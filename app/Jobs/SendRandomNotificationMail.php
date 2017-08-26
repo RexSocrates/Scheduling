@@ -9,19 +9,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
 // import mail
+use Mail;
 use App\Mail\RandomNotification;
 
 // import model
 use App\Reservation;
 use App\DoctorAndReservation;
-use App\USer;
+use App\User;
 
 class SendRandomNotificationMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     
     protected $reservation;
-    protected $emails;
+    protected $emails = [];
 
     /**
      * Create a new job instance.
@@ -33,20 +34,18 @@ class SendRandomNotificationMail implements ShouldQueue
         //
         $resObj = new Reservation();
         
-        $this->reservation; = $resObj->getReservationBySerial($resSerial);
+        $this->reservation = $resObj->getReservationBySerial($resSerial);
         
         // 取得單一預班的人
         $resAndDoctorObj = new DoctorAndReservation();
-        $doctorsID = $resAndDoctorObj->getDoctorsByResSerial();
+        $doctorsID = $resAndDoctorObj->getDoctorsByResSerial($resSerial);
         
         // 取得list 當中的使用者的email
         $receiversEmail = [];
         $userObj = new User();
         
         foreach($doctorsID as $ID) {
-            $email = $userObj->getDoctorInfoByID($ID)->email;
-            
-            array_push($receiversEmail, $email);
+            array_push($receiversEmail, $userObj->getDoctorInfoByID($ID->doctorID)->email);
         }
         
         $this->emails = $receiversEmail;
@@ -62,7 +61,7 @@ class SendRandomNotificationMail implements ShouldQueue
     {
         //
         foreach($this->emails as $email) {
-            Mail::to($email)->send(new RandomNotification());
+            Mail::to($email)->send(new RandomNotification($this->reservation));
         }
         
     }
