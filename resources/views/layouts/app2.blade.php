@@ -55,7 +55,6 @@
                             <ul>
                                 <li><a href="first-edition">個人</a></li>
                                 <li><a href="first-edition-all">查看全部</a></li>
-                                <li><a href="first-edition-shift-info">換班資訊</a></li>
                             </ul>
                         </div>
                     </li>
@@ -69,12 +68,12 @@
                             <ul>
                                 <li><a href="schedule">個人</a></li>
                                 <li><a href="schedule-all">查看全部</a></li>
-                                <li><a href="schedule-shift-info">換班資訊</a></li>
                             </ul>
                         </div>
                     </li>
                 </ul>
             </li>
+            <li><a href="schedule-shift-info" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/file.svg"></i>換班資訊</a></li>
             @if(Auth::user()->identity == 'Admin')
                 <li class="no-padding">
                     <ul class="collapsible collapsible-accordion">

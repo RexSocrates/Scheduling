@@ -39,6 +39,10 @@
             height: 330px;
         }
 
+        table.area3 tbody {
+            height: 260px;
+        }
+
         tbody td:last-child, thead th:last-child {
             border-right: none;
         }
@@ -46,7 +50,7 @@
 @endsection
     
 @section('navbar')
-    <font class="brand-logo light">正式班表 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>換班資訊</font>
+    <p class="brand-logo light">換班資訊</p>
 @endsection
 
 @section('content')
@@ -139,6 +143,85 @@
                     </div>
                 </div>
       		</div>
+            <div class="row">
+                <div class="col s12 m12">
+                    <div class="card">
+                       
+                        <div class="card-action card1">
+                            <div class="title1">
+                                <font class="card-title">備註</font>
+                            </div>
+                            <div class="right">
+                                時間：
+                                <div class="input-field inline">
+                                    <select>
+                                        <option value="" disabled selected>請選擇月份</option>
+                                        <option value="1">2017年8月</option>
+                                        <option value="2">2017年7月</option>
+                                        <option value="3">2017年6月</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        <div class="card-content padding-t5">
+                            <table class="centered striped scroll area3">
+                                <thead>
+                                    <tr>
+                                        <th class="td-w-5">申請人</th>
+                                        <th class="td-w-5">申請日期</th>
+                                        <th class="td-w-20">備註內容</th>
+                                    </tr>
+                                </thead>
+
+                               <tbody>
+                                    <tr>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">2017/07/19</td>
+                                        <td class="td-padding td-w-20">請幫忙上>兩班假日班</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">邱毓惠</td>
+                                        <td class="td-padding td-w-5">2017/07/21</td>
+                                        <td class="td-padding td-w-20">10-11-12忘年會 13-22出國</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">馮嚴毅</td>
+                                        <td class="td-padding td-w-5">2017/07/24</td>
+                                        <td class="td-padding td-w-20">全夜班</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">邱毓惠</td>
+                                        <td class="td-padding td-w-5">2017/07/21</td>
+                                        <td class="td-padding td-w-20">1月可全夜班,3號淡水夜班,13~20出國</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">馮嚴毅</td>
+                                        <td class="td-padding td-w-5">2017/07/24</td>
+                                        <td class="td-padding td-w-20">1/13至1/18出國請排OFF，謝謝</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">馮嚴毅</td>
+                                        <td class="td-padding td-w-5">2017/07/24</td>
+                                        <td class="td-padding td-w-20">1/13至1/18出國請排OFF，謝謝</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">馮嚴毅</td>
+                                        <td class="td-padding td-w-5">2017/07/24</td>
+                                        <td class="td-padding td-w-20">1/13至1/18出國請排OFF，謝謝</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">馮嚴毅</td>
+                                        <td class="td-padding td-w-5">2017/07/24</td>
+                                        <td class="td-padding td-w-20">1/13至1/18出國請排OFF，謝謝</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
       		
       		
             <div id="modal1" class="modal modal-fixed-footer modal-shift">
@@ -217,7 +300,6 @@
                 // var userInput = selectBox.options[selectBox.selectedIndex].value;
                 changeDate(array);
             });
-
         }
     
         function changeDate(array) {
