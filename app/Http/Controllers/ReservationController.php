@@ -17,6 +17,7 @@ use App\ShiftCategory;
 use App\Remark;
 use App\User;
 
+// jobs
 use App\Jobs\SendRandomNotificationMail;
 
 class ReservationController extends Controller
@@ -220,7 +221,8 @@ class ReservationController extends Controller
         ];
 
         $docAndRes->addDoctor($darData);
-
+        
+        // 遇同一份預班有過多的人時寄送通知信件
         $count = $docAndRes->amountInResserial($newSerial);
 
         $job = new SendRandomNotificationMail($newSerial);
@@ -292,26 +294,27 @@ class ReservationController extends Controller
         $userObj = new User();
         $docAndResObj->doctorUpdateReservation($resSerial, $newSerial, $userObj->getCurrentUserID());
 
-        $count = $docAndResObj->amountInResserial($newSerial);
-
-        $job = new SendRandomNotificationMail($newSerial);
-
-       if($serial==3 || $serial==4){   //台北白班 台北夜班
-            if($count>=6){
-                dispatch($job);
-            }
-        }
-        
-        if($serial==5){     //淡水白班
-            if($count>=4){
-                dispatch($job);
-            }
-        }
-        if($serial==6){     //淡水夜班
-            if($count>=3){
-                dispatch($job);
-            }
-        }
+        // 遇同一份預班有過多的人時寄送通知信件
+//        $count = $docAndResObj->amountInResserial($newSerial);
+//
+//        $job = new SendRandomNotificationMail($newSerial);
+//
+//        if($serial==3 || $serial==4){   //台北白班 台北夜班
+//            if($count>=6){
+//                dispatch($job);
+//            }
+//        }
+//        
+//        if($serial==5){     //淡水白班
+//            if($count>=4){
+//                dispatch($job);
+//            }
+//        }
+//        if($serial==6){     //淡水夜班
+//            if($count>=3){
+//                dispatch($job);
+//            }
+//        }
 
     }
 
@@ -372,5 +375,20 @@ class ReservationController extends Controller
         return $year.'-'.$month.'-'.$day;
     }
     
-    
+    // 預約人數過多時寄送通知信件
+    public function checkResAmount() {
+        $resSerial = 31;
+        
+        $docAndResObj = new DoctorAndReservation();
+        
+        $countPeople = $docAndResObj->amountInResserial($resSerial);
+        
+        echo 'The amount : '.$countPeople.'<br>';
+        
+        $job = new SendRandomNotificationMail($resSerial);
+        
+        dispatch($job);
+        
+        echo '工作已放入佇列<br>';
+    }
 }
