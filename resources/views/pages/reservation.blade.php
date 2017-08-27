@@ -6,7 +6,7 @@
     <script src="../../codebase/ext/dhtmlxscheduler_serialize.js" type="text/javascript" charset="utf-8"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+    
     <script>
         function sendNewReservation(categorySerial, startDate, endDate) {
             $.post('sendReservationAdd', {
@@ -347,7 +347,7 @@
                             scheduler.config.limit_end = new Date(endd);
 
                             scheduler.attachEvent("onLimitViolation", function  (id, obj){
-                            dhtmlx.message({ type:"error", text:"此時段無法接受排班" })
+                                dhtmlx.message({ type:"error", text:"此時段無法接受排班", expire:-1 })
                             });
 
                             scheduler.templates.lightbox_header = function(start, end, event){

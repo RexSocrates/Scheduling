@@ -613,3 +613,15 @@ input.select-dropdown {
     position: absolute;
     bottom: 0;
 }
+
+.dhtmlx-error {
+    border-radius: 0px !important;
+    border: 0px !important;
+}
+
+.dhtmlx-error div {
+    padding: 13px 9px 13px 18px !important;
+    background-color: #e53935 !important;
+    
+}
+
