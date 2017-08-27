@@ -4,6 +4,7 @@
      <script src="../codebase/ext/dhtmlxscheduler_collision.js"></script>
     <script src="../codebase/ext/dhtmlxscheduler_limit.js"></script>
     <script src="../../codebase/ext/dhtmlxscheduler_serialize.js" type="text/javascript" charset="utf-8"></script>
+    <script src='../../codebase/ext/dhtmlxscheduler_timeline.js' type="text/javascript" charset="utf-8"></script>
 
 
     <style>
@@ -22,6 +23,12 @@
         .red_cell{
             background-color:#FF5353;
         }
+        .block_section {
+            background-color: white;
+            opacity: 0;
+            filter: alpha(opacity = 0);
+        }
+
     </style>
 
 @endsection
@@ -131,7 +138,7 @@
                             scheduler.config.details_on_dblclick = true;
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
 //                            scheduler.config.readonly = true;   //唯讀，不能修改東西
-                //            scheduler.config.dblclick_create = false;   //雙擊新增
+                          scheduler.config.dblclick_create = false;   //雙擊新增
                 //            scheduler.config.drag_create = false;   //拖拉新增
                             scheduler.xy.margin_left = -19;
                             scheduler.config.container_autoresize = true;
@@ -284,48 +291,121 @@
                             function close_form() {
                                 scheduler.endLightbox(false, html("my_form"));
                             }
+                            
+                            var date = new Date();
+                            var toString =  date.toString();
+                            var res = toString.split(" ");
+                            var month = 0;
+
+                            switch(res[1]){
+                                case "Jan":
+                                    month = 1;
+                                    break;
+                                case "Feb":
+                                    month = 2;
+                                    break;
+                                case "Mar":
+                                    month = 3;
+                                    break;
+                                case "Apr":
+                                    month = 4;
+                                    break;
+                                case "May":
+                                    month = 5;
+                                    break;
+                                case "Jun":
+                                    month = 6;
+                                    break;
+                                case "Jul":
+                                    month = 7;
+                                    break;
+                                case "Aug":
+                                    month = 8;
+                                    break;
+                                case "Sep":
+                                    month = 9;
+                                    break;
+                                case "Oct":
+                                    month = 10;
+                                    break;
+                                case "Nov":
+                                    month = 11;
+                                    break;
+                                case "Dec":
+                                    month = 12;
+                                    break;
+                            }
+
+                             //鎖定時間
+
+                            var startd =new Date(res[3], month, 1); 
+                            var endd = new Date(res[3], month+1, 1); 
+
+                            var block_startd =new Date(res[3], month-1, 1); 
+                            var block_endd = new Date(res[3], month, 1); 
+
+                            console.log("startd "+startd);
+                            console.log("endd "+endd);
+
+                            scheduler.config.limit_start = new Date(startd);
+                            scheduler.config.limit_end = new Date(endd);
+
+
+                            scheduler.attachEvent("onLimitViolation", function  (id, obj){
+                            dhtmlx.message({ type:"error", text:"此時段無法接受換班" })
+
+                            });
+
+                            //限制非當月利用點擊視窗換班
+                            scheduler.addMarkedTimespan({  
+                                start_date: block_startd,
+                                end_date: block_endd,
+                                zones: "fullday", 
+                                css: "block_section", 
+                                type: "dhx_time_block"
+                            
+                            });
+                            //scheduler.updateView();
+
                              scheduler.attachEvent("onEventCollision", function (ev, evs){
                                   //any custom logic here
                                 var ev = scheduler.getEvent(ev.id);
                                 var evs = scheduler.getEvent(evs[0].id);
                                 var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
-                                //console.log('1'+ev.priority);
-                                // console.log('1'+ev.start_date);
-                                // console.log('1'+ev.end_date);
-                                // console.log('1'+ev.id);
-                                //console.log('1 id'+ev.hidden);
-                                //console.log("2"+evs.priority);
-                                // console.log("2"+evs.start_date);
-                                // console.log("2"+evs.end_date);
-                                // console.log("2"+evs.id);
-                                //console.log("2 id"+evs.hidden);
-                                 if(count>=1){
-                                    updateShift(ev.hidden,evs.hidden,ev.text,evs.text);
-                                    //showShift(ev.hidden,evs.hidden);
-                                    //dhtmlx.message({ type:"error", text:"此日期已選過" });
-                                    return true;
+                                //限制非當月拖拉換班
+                                if(ev.start_date < startd || evs.start_date < startd ){
+                                    console.log("No");
+                                    //dhtmlx.message({ type:"error", text:"此日期無法換班" });
                                 }
+
                                 else{
-                                    return false;
-                                }
-                               
-                        
+
+                                    if(count>=1){
+                                        updateShift(ev.hidden,evs.hidden,ev.text,evs.text);
+                                        //showShift(ev.hidden,evs.hidden);
+                                        //dhtmlx.message({ type:"error", text:"此日期已選過" });
+                                        return true;
+                                    }
+
+                                    else{
+                                        return false;
+                                    }
+                               }
+                            
                             });
-                             scheduler.attachEvent("onEventDrag", function (id, mode,e){
-                                //any custom logic here
-                                var event = scheduler.getEvent(id);
-                                console.log("1111");
-                                console.log(event.hidden);
-                                console.log(event.start_date);
-                            });
+
+                            
+ 
                             scheduler.attachEvent("onClick", function (id, e){
                             //any custom logic here
-                            var event = scheduler.getEvent(id);
+                                var event = scheduler.getEvent(id);
                             
-                            changeDoctor_1(event.hidden);
-                            console.log("id"+event.hidden);
-                            return true;
+                                changeDoctor_1(event.hidden);
+                                console.log("id"+event.hidden);
+
+                                return true;
                             });
+
                             scheduler.init('scheduler_here',new Date({{$year}},{{$month}}-1,{{$day}}),"timeline");
                            
                             scheduler.parse([

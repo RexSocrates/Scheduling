@@ -354,13 +354,39 @@ class DateTest extends Seeder
    //          'endDate' => '2017-08-31'
    //     ]);
 
-     DB::table('Remark')-> insertGetId([
-            'doctorID' => 3,
-            'remark' =>'1111',
-            'date'=>'2017-08-24'
+     // DB::table('Remark')-> insertGetId([
+     //        'doctorID' => 3,
+     //        'remark' =>'1111',
+     //        'date'=>'2017-08-24'
            
+     //   ]);
+
+    DB::table('Schedule')-> insertGetId([
+            'doctorID' => 3,
+            'schCategorySerial' =>3,
+            'isWeekday' => 1,
+            'location' => 'Taipei',
+            'date' => "2017-09-01",
+            'endDate' => '2017-09-02'
        ]);
 
+    DB::table('Schedule')-> insertGetId([
+            'doctorID' => 1,
+            'schCategorySerial' =>3,
+            'isWeekday' => 1,
+            'location' => 'Taipei',
+            'date' => "2017-09-04",
+            'endDate' => '2017-09-05'
+       ]);
+
+    DB::table('Schedule')-> insertGetId([
+            'doctorID' => 2,
+            'schCategorySerial' =>3,
+            'isWeekday' => 1,
+            'location' => 'Taipei',
+            'date' => "2017-09-07",
+            'endDate' => '2017-09-08'
+       ]);
     } 
 
      
