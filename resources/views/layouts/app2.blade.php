@@ -171,11 +171,21 @@
             var navItem = $(this);
             var href = window.location.href;
             var filename = href.replace(/^.*[\\\/]/, '')
-
             if (navItem.find("a").attr("href") == filename) {
                 navItem.addClass("active");
             }
         });
+        
+        $(".collapsible-body>ul>li").each(function() {
+		    var navItem = $(this);
+		    var href = window.location.href;
+			var filename = href.replace(/^.*[\\\/]/, '')
+
+		    if (navItem.find("a").attr("href") == filename) {
+		      	navItem.addClass("active");
+                navItem.parents().eq(2).find("a").addClass("active");
+		    }
+		});
 
         $(document).ready(function(){
             // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
