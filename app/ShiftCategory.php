@@ -54,4 +54,30 @@ class ShiftCategory extends Model
         
         return $info;
     }
+    
+    // 回傳該時間、院區的預約人數是否超過缺額
+    public function exceedLimit($numberOfPeople, $categorySerial) {
+        if($categorySerial == 3 or $categorySerial == 4){   //台北白班 台北夜班
+            if($numberOfPeople >= 6){
+                return true;
+            }else {
+                return false;
+            }
+        }
+        
+        if($categorySerial == 5){     //淡水白班
+            if($numberOfPeople >= 4){
+                return true;
+            }else {
+                return false;
+            }
+        }
+        if($categorySerial == 6){     //淡水夜班
+            if($numberOfPeople >= 2){
+                return true;
+            }else {
+                return false;
+            }
+        }
+    }
 }

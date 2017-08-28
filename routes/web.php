@@ -142,8 +142,6 @@ Route::group(['middleware' => ['auth']], function () {
 //Route::post('postAjaxRequest', 'TestController@postAjaxRequest');
 //Route::get('postAjaxRequest', 'TestController@postAjaxRequest');
 
-Route::get('checkResAmount', 'ReservationController@checkResAmount');
-
 Route::get('test','TestController@shiftFirstEditionAddShifts');
 
 Route::get('testDay','TestController@countDay');

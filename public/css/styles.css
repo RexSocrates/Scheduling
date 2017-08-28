@@ -83,12 +83,36 @@ header, main, footer {
     padding-bottom: 10px !important;
 }
 
+.padding-t5 {
+    padding-top: 5px !important;
+}
+
 .border-t {
     border-top: 1px solid rgba(160, 160, 160, 0.2);
 }
 
 .td-padding {
     padding: 15px 5px;
+}
+
+.td-w-5 {
+    width: 5%;
+}
+
+.td-w-10 {
+    width: 10%;
+}
+
+.td-w-13 {
+    width: 13%;
+}
+
+.td-w-20 {
+    width: 20%;
+}
+
+.td-w-25 {
+    width: 25%;
 }
 
 .font-w-b {
@@ -215,8 +239,14 @@ header, main, footer {
     margin-left: 250px;
 }
 
-.side-nav li.active a {
-    color: #37474f;
+.collapsible-body li.active a {
+    background-color: #fff;
+    color: #ff5b62 !important;
+    font-weight: 500;
+}
+
+.collapsible-body ul li a {
+    font-weight: 400;
 }
 
 .solar-system {
@@ -583,3 +613,15 @@ input.select-dropdown {
     position: absolute;
     bottom: 0;
 }
+
+.dhtmlx-error {
+    border-radius: 0px !important;
+    border: 0px !important;
+}
+
+.dhtmlx-error div {
+    padding: 13px 9px 13px 18px !important;
+    background-color: #e53935 !important;
+    
+}
+
