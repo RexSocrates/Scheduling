@@ -223,26 +223,10 @@ class ReservationController extends Controller
         $docAndRes->addDoctor($darData);
         
         // 遇同一份預班有過多的人時寄送通知信件
-        $count = $docAndRes->amountInResserial($newSerial);
-
-        $job = new SendRandomNotificationMail($newSerial);
+        $count = $docAndResObj->amountInResserial($newSerial);
         
-
-        if($serial==3 || $serial==4){   //台北白班 台北夜班
-            if($count>=6){
-                dispatch($job);
-            }
-        }
-        
-        if($serial==5){     //淡水白班
-            if($count>=4){
-                dispatch($job);
-            }
-        }
-        if($serial==6){     //淡水夜班
-            if($count>=3){
-                dispatch($job);
-            }
+        if($shiftCategory->exceedLimit($count, $serial)) {
+            $this->sendRandomNotificationMail($newSerial);
         }
         
     }
@@ -263,8 +247,6 @@ class ReservationController extends Controller
         $resSerial = (int)$data['resSerial'];
         $categorySerial = (int)$data['categorySerial'];
         $startDateStr = $data['startDate'];
-        
-        
         
         $shiftCategory = new ShiftCategory();
         
@@ -295,26 +277,11 @@ class ReservationController extends Controller
         $docAndResObj->doctorUpdateReservation($resSerial, $newSerial, $userObj->getCurrentUserID());
 
         // 遇同一份預班有過多的人時寄送通知信件
-//        $count = $docAndResObj->amountInResserial($newSerial);
-//
-//        $job = new SendRandomNotificationMail($newSerial);
-//
-//        if($serial==3 || $serial==4){   //台北白班 台北夜班
-//            if($count>=6){
-//                dispatch($job);
-//            }
-//        }
-//        
-//        if($serial==5){     //淡水白班
-//            if($count>=4){
-//                dispatch($job);
-//            }
-//        }
-//        if($serial==6){     //淡水夜班
-//            if($count>=3){
-//                dispatch($job);
-//            }
-//        }
+        $count = $docAndResObj->amountInResserial($newSerial);
+        
+        if($shiftCategory->exceedLimit($count, $categorySerial)) {
+            $this->sendRandomNotificationMail($newSerial);
+        }
 
     }
 
@@ -376,19 +343,9 @@ class ReservationController extends Controller
     }
     
     // 預約人數過多時寄送通知信件
-    public function checkResAmount() {
-        $resSerial = 31;
-        
-        $docAndResObj = new DoctorAndReservation();
-        
-        $countPeople = $docAndResObj->amountInResserial($resSerial);
-        
-        echo 'The amount : '.$countPeople.'<br>';
-        
+    public function sendRandomNotificationMail($resSerial) {
         $job = new SendRandomNotificationMail($resSerial);
         
         dispatch($job);
-        
-        echo '工作已放入佇列<br>';
     }
 }

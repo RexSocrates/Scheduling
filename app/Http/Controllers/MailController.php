@@ -70,16 +70,18 @@ class MailController extends Controller
     
     // 預班人數過多
     public function sendRandomNotificationMail() {
-//        $job = new SendRandomNotificationMail();
-//        
-//        dispatch($job);
-//        
-//        echo '工作已放入佇列';
+        $resSerial = 31;
         
-        $resObj = new Reservation();
+        $job = new SendRandomNotificationMail($resSerial);
         
-        Mail::to('georgelesliemackay0@gmail.com')->send(new RandomNotification($resObj->getReservationBySerial(31)));
+        dispatch($job);
         
-        echo '郵件已送出';
+        echo '工作已放入佇列';
+        
+        
+        
+//        Mail::to('georgelesliemackay0@gmail.com')->send(new RandomNotification($resObj->getReservationBySerial(31)));
+        
+//        echo '郵件已送出';
     }
 }
