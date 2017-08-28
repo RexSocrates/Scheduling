@@ -52,8 +52,6 @@ Route::get('/countDay','ReservationController@countDay');
 
 Route::get('/alert1','ReservationController@countDay');
 
-
-//Route::get('count','ReservationController@countDay');
 // 新增備註
 Route::post('/addRemark', 'ReservationController@addRemark');
 
