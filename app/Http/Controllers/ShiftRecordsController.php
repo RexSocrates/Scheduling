@@ -138,7 +138,6 @@ class ShiftRecordsController extends Controller
 
 
     //調整班表->初版班表 新增換班
-   
      public function shiftFirstEditionAddShifts(Request $request){
             $data = $request->all();
 
@@ -169,7 +168,7 @@ class ShiftRecordsController extends Controller
             $shiftRecords->doc2Confirm($newChangeSerial,1);
             $shiftRecords->adminConfirm($newChangeSerial,1);
             //$schedule->$exchangeSchedule($newChangeSerial);
-            return redirect('shift-first-edition');
+            //return redirect('shift-first-edition');
             // return redirect()->action(
             //     'ShiftRecordsController@shiftFirstEdition', ['date' => $schedule_1_Date]
             // );

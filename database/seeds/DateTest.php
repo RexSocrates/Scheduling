@@ -404,7 +404,7 @@ class DateTest extends Seeder
             'scheduleID_2' => 2 ,
             'schID_1_doctor' => 1,
             'schID_2_doctor' => 3,
-            'doc2Confirm' => 0, 
+            'doc2Confirm' => 1, 
             'adminConfirm' => 0,
             'date' => "2017-08-28"
            ]);   
