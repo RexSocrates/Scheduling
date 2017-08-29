@@ -373,7 +373,7 @@
                                 }
                                 else{
                                     if(count>=1){
-                                        updateShift(ev.hidden,evs.hidden,ev.text,evs.text);
+                                        updateShift(ev.hidden,evs.hidden);
                                         //showShift(ev.hidden,evs.hidden);
                                         //dhtmlx.message({ type:"error", text:"此日期已選過" });
                                         return true;
@@ -392,7 +392,7 @@
                             
                                 changeDoctor_1(event.hidden);
                                 console.log("id"+event.hidden);
-                                
+
                                 return true;
                             });
                             scheduler.init('scheduler_here',new Date(res[3], month),"timeline");
@@ -427,6 +427,7 @@
                 changeDate1(array);
             });
         }
+
         function changeDoctor() {
             $.get('changeDoctor', {
                 id : document.getElementById('schID_2_doctor').value
@@ -436,9 +437,11 @@
                 changeDate2(array);
             });
         }
+
         function changeDate1(array) {
                 document.getElementById("date1").innerHTML= "<option value="+array[0]+">"+array[2]+"</option>"     
         }
+
         function changeDate2(array) {
                 var date = "";
                 for(i=0 ; i<array.length ; i++){
@@ -447,20 +450,30 @@
                 }
                 document.getElementById("date2").innerHTML  = date;
         }
+
         function alert1() {
                 alert("不可選擇相同醫生相同時段");
         }
-        function updateShift(scheduleID_1,scheduleID_2,schedule_1,schedule_2){
+
+         function showInfo(scheduleID_1,scheduleID_2) {
+            $.get('showInfo', {
+                id : scheduleID_1,
+                id2 : scheduleID_2
+            }, function (array){
+                alert(array[2]+array[1]+"和"+array[0]+array[3]+"換班成功");
+            });
+        }
+
+        function updateShift(scheduleID_1,scheduleID_2){
             $.post('sendShiftUpdate',{
                 scheduleID_1:scheduleID_1,
                 scheduleID_2:scheduleID_2,
             }, function(){
                 //alert("換班成功");
                 myFunction();
-                
+                showInfo(scheduleID_1,scheduleID_2);   
             });
-            alert(schedule_1+"和"+schedule_2+"換班成功");
-            
+            //alert(schedule_1+"和"+schedule_2+"換班成功");
         }
         
         function myFunction() {

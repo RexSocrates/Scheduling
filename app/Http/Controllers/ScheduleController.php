@@ -153,19 +153,35 @@ class ScheduleController extends Controller
     }
 
     public function getDoctorInfoByScheduleID(Request $request){
+
+      $data = $request->all();
+      $schedule = new Schedule();
+      $user = new User();
+      $doctor = $schedule->getScheduleDataByID($data['id']);
+     
+      $id = $doctor->scheduleID;
+      $name = $user->getDoctorInfoByID($doctor->doctorID)->name;
+      $date = $doctor->date;
+      $array = array($id,$name,$date);
+      return $array;
+      
+    }
+     public function getDoctorInfoByScheduleIDWhenExchange(Request $request){
       $data = $request->all();
 
       $schedule = new Schedule();
       $user = new User();
 
       $doctor = $schedule->getScheduleDataByID($data['id']);
+      $doctor2 = $schedule->getScheduleDataByID($data['id2']);
 
-     
-      $id = $doctor->scheduleID;
       $name = $user->getDoctorInfoByID($doctor->doctorID)->name;
       $date = $doctor->date;
 
-      $array = array($id,$name,$date);
+      $name2 = $user->getDoctorInfoByID($doctor2->doctorID)->name;
+      $date2 = $doctor2->date;
+
+      $array = array($name,$date,$name2,$date2);
 
       return $array;
       

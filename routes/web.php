@@ -160,9 +160,12 @@ Route::get('testDateString', 'TestController@testDateString');
 
 Route::get('addDoctorAndResTest', 'TestController@addDoctorAndResTest');
 
+//調整班表->彈出視窗醫生1資訊
 Route::get('changeDoctor','AccountController@getDoctorInfoByID');
+//調整班表->彈出視窗醫生2資訊
 Route::get('changeDoctor1','ScheduleController@getDoctorInfoByScheduleID');
-
+//拖拉換班顯示資訊
+Route::get('showInfo','ScheduleController@getDoctorInfoByScheduleIDWhenExchange');
 
 Route::get('getExchangeSchedulePage', function() {
 	return view('testPage.exchangeSchedule');
