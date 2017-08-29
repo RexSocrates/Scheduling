@@ -204,55 +204,55 @@ class TestController extends Controller
         $docAndResObj->addDoctor($data);
     }
     
-    public function processDateStr($dateStr) {
-        $dateArr = explode(' ', $dateStr);
+    // public function processDateStr($dateStr) {
+    //     $dateArr = explode('-', $dateStr);
         
-        // 判斷月份
-        $month = '00';
-        switch($dateArr[1]) {
-            case 'Jan' :
-                $month = '01';
-                break;
-            case 'Feb' :
-                $month = '02';
-                break;
-            case 'Mar' :
-                $month = '03';
-                break;
-            case 'Apr' :
-                $month = '04';
-                break;
-            case 'May' :
-                $month = '05';
-                break;
-            case 'Jun' :
-                $month = '06';
-                break;
-            case 'Jul' :
-                $month = '07';
-                break;
-            case 'Aug' :
-                $month = '08';
-                break;
-            case 'Sep' :
-                $month = '09';
-                break;
-            case 'Oct' :
-                $month = '10';
-                break;
-            case 'Nov' :
-                $month = '11';
-                break;
-            case 'Dec' :
-                $month = '12';
-                break;
-        }
+    //     // 判斷月份
+    //     $month = '00';
+    //     switch($dateArr[1]) {
+    //         case 'Jan' :
+    //             $month = '01';
+    //             break;
+    //         case 'Feb' :
+    //             $month = '02';
+    //             break;
+    //         case 'Mar' :
+    //             $month = '03';
+    //             break;
+    //         case 'Apr' :
+    //             $month = '04';
+    //             break;
+    //         case 'May' :
+    //             $month = '05';
+    //             break;
+    //         case 'Jun' :
+    //             $month = '06';
+    //             break;
+    //         case 'Jul' :
+    //             $month = '07';
+    //             break;
+    //         case 'Aug' :
+    //             $month = '08';
+    //             break;
+    //         case 'Sep' :
+    //             $month = '09';
+    //             break;
+    //         case 'Oct' :
+    //             $month = '10';
+    //             break;
+    //         case 'Nov' :
+    //             $month = '11';
+    //             break;
+    //         case 'Dec' :
+    //             $month = '12';
+    //             break;
+    //     }
         
-        $day = $dateArr[2];
-        $year = $dateArr[3];
+    //     $day = $dateArr[2];
+    //     $year = $dateArr[3];
         
-        return $year.'-'.$month.'-'.$day;
-    }
+    //     return $year.'-'.$month.'-'.$day;
+    // }
 
 
      public function shiftFirstEditionAddShifts(){
@@ -391,60 +391,70 @@ class TestController extends Controller
         return $dataDic;
     }
 
-    //新增預班
+ //新增預班
     public function addReservation(){
         //$data = $request->all();
         
-       // $serial = (int)$data['serial'];
-        //$str = $data['date1'];
+        $serial = 8;
+        $str = '2017-09-01';
+        $end = '2017-09-03';
         
+        $dateArr = explode('-', $str);
+        $endDateArr = explode('-', $end);
+       
+
+        $countDay = ($endDateArr[2]-$dateArr[2])+1;
+      
+
         $shiftCategory = new ShiftCategory();
         
-        //$categoryInfo = $shiftCategory->getCategoryInfo($serial);
+        $categoryInfo = $shiftCategory->getCategoryInfo($serial);
         
-        $resInfo = [
-            'isWeekday' => 1,
-            'location' => 'Taipei',
-            'isOn' => 1,
-            'date' => '2017-09-03',
-            'categorySerial' =>3
-        ];
-        
-        
-        //$dateArr = explode(' ', $str);
-        // 判斷平日/假日
-        // if(strcmp($dateArr[0],"Sat") == 0 or strcmp($dateArr[0],"Sun") == 0) {
-        //     $resInfo['isWeekday'] = false;
-        // }
-        
+       
         $resObj = new Reservation();
-        
-        $newSerial = $resObj->addOrUpdateReservation($resInfo);
-        
-        echo $newSerial;
-        
         $docAndRes = new DoctorAndReservation();
         $user = new User();
-    
+       
 
-        $darData = [
+        for($i = 1; $i <= $countDay; $i++){
+
+            $day = $dateArr[2];
+
+            $resInfo = [
+                'isWeekday' => true,
+                'location' => $categoryInfo['location'],
+                'isOn' => $categoryInfo['isOn'],
+                'date' => $str,
+                'categorySerial' => $serial
+            ];
+
+            if(strcmp($dateArr[0],"Sat") == 0 or strcmp($dateArr[0],"Sun") == 0) {
+                $resInfo['isWeekday'] = false;
+            }
+
+            $newSerial = $resObj->addOrUpdateReservation($resInfo);
+
+            $darData = [
             'resSerial' => $newSerial,
-            'doctorID' => 2,
-        ];
-        $docAndRes->addDoctor($darData);
-        $count = $docAndRes->amountInResserial($newSerial);
+            'doctorID' => 3,
+            ];
 
-        echo $count;
+            $docAndRes->addDoctor($darData);
 
-        if($count>=2 ){
-           echo "超過";
+            // 遇同一份預班有過多的人時寄送通知信件
+            $count = $docAndRes->amountInResserial($newSerial);
+        
+            if($shiftCategory->exceedLimit($count, $serial)) {
+            $this->sendRandomNotificationMail($newSerial);
+            }
 
+           $str=date("Y-m-d",strtotime($str."+1 day"));
+
+           
         }
-
-        else{
-            echo "nothing";
-        }
-
+    
+    
+        
     }
     
 

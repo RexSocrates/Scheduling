@@ -187,46 +187,54 @@ class ReservationController extends Controller
         
         $serial = (int)$data['serial'];
         $str = $data['date1'];
+        $end = $data['date2'];
         
+        $dateArr = explode(' ', $str);
+        $endDateArr = explode(' ', $end);
+
+        $countDay = $endDateArr[2]-$dateArr[2];
+
         $shiftCategory = new ShiftCategory();
         
         $categoryInfo = $shiftCategory->getCategoryInfo($serial);
         
-        $resInfo = [
-            'isWeekday' => true,
-            'location' => $categoryInfo['location'],
-            'isOn' => $categoryInfo['isOn'],
-            'date' => $this->processDateStr($str),
-            'categorySerial' => $serial
-        ];
-        
-        
-        $dateArr = explode(' ', $str);
-        // 判斷平日/假日
-        if(strcmp($dateArr[0],"Sat") == 0 or strcmp($dateArr[0],"Sun") == 0) {
-            $resInfo['isWeekday'] = false;
-        }
-        
         $resObj = new Reservation();
-        
-        $newSerial = $resObj->addOrUpdateReservation($resInfo);
-        
-        
         $docAndRes = new DoctorAndReservation();
         $user = new User();
-        
-        $darData = [
-            'resSerial' => $newSerial,
-            'doctorID' => $user->getCurrentUserID(),
-        ];
 
-        $docAndRes->addDoctor($darData);
+        $date = $this->processDateStr($str);
+
+        for($i = 1; $i <= $countDay; $i++){
+
+            $resInfo = [
+                'isWeekday' => true,
+                'location' => $categoryInfo['location'],
+                'isOn' => $categoryInfo['isOn'],
+                'date' => $date,
+                'categorySerial' => $serial
+            ];
+
+            if(strcmp($dateArr[0],"Sat") == 0 or strcmp($dateArr[0],"Sun") == 0) {
+                $resInfo['isWeekday'] = false;
+            }
+
+            $newSerial = $resObj->addOrUpdateReservation($resInfo);
+
+            $darData = [
+            'resSerial' => $newSerial,
+            'doctorID' =>  $user->getCurrentUserID(),
+            ];
+
+            $docAndRes->addDoctor($darData);
+
+            // 遇同一份預班有過多的人時寄送通知信件
+            $count = $docAndRes->amountInResserial($newSerial);
         
-        // 遇同一份預班有過多的人時寄送通知信件
-        $count = $docAndResObj->amountInResserial($newSerial);
-        
-        if($shiftCategory->exceedLimit($count, $serial)) {
+            if($shiftCategory->exceedLimit($count, $serial)) {
             $this->sendRandomNotificationMail($newSerial);
+            }
+
+           $date=date("Y-m-d",strtotime($date."+1 day"));
         }
         
     }

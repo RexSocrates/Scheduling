@@ -361,34 +361,53 @@ class DateTest extends Seeder
            
      //   ]);
 
-    DB::table('Schedule')-> insertGetId([
-            'doctorID' => 3,
-            'schCategorySerial' =>3,
-            'isWeekday' => 1,
-            'location' => 'Taipei',
-            'date' => "2017-09-01",
-            'endDate' => '2017-09-02'
-       ]);
+    // DB::table('Schedule')-> insertGetId([
+    //         'doctorID' => 3,
+    //         'schCategorySerial' =>3,
+    //         'isWeekday' => 1,
+    //         'location' => 'Taipei',
+    //         'date' => "2017-09-01",
+    //         'endDate' => '2017-09-02'
+    //    ]);
 
-    DB::table('Schedule')-> insertGetId([
-            'doctorID' => 1,
-            'schCategorySerial' =>3,
-            'isWeekday' => 1,
-            'location' => 'Taipei',
-            'date' => "2017-09-04",
-            'endDate' => '2017-09-05'
-       ]);
+    // DB::table('Schedule')-> insertGetId([
+    //         'doctorID' => 1,
+    //         'schCategorySerial' =>3,
+    //         'isWeekday' => 1,
+    //         'location' => 'Taipei',
+    //         'date' => "2017-09-04",
+    //         'endDate' => '2017-09-05'
+    //    ]);
 
-    DB::table('Schedule')-> insertGetId([
-            'doctorID' => 2,
-            'schCategorySerial' =>3,
-            'isWeekday' => 1,
-            'location' => 'Taipei',
-            'date' => "2017-09-07",
-            'endDate' => '2017-09-08'
-       ]);
-    } 
-
+    // DB::table('Schedule')-> insertGetId([
+    //         'doctorID' => 2,
+    //         'schCategorySerial' =>3,
+    //         'isWeekday' => 1,
+    //         'location' => 'Taipei',
+    //         'date' => "2017-09-07",
+    //         'endDate' => '2017-09-08'
+    //    ]);
+    // } 
+  // DB::table('ShiftRecords')-> insertGetId([
+  //           'scheduleID_1' => 8 ,
+  //           'scheduleID_2' => 9 ,
+  //           'schID_1_doctor' => 2,
+  //           'schID_2_doctor' => 3,
+  //           'doc2Confirm' => 0, 
+  //           'adminConfirm' => 0,
+  //           'date' => "2017-08-28"
+  //          ]);   
      
-
+  // }
+  DB::table('ShiftRecords')-> insertGetId([
+            'scheduleID_1' => 1 ,
+            'scheduleID_2' => 2 ,
+            'schID_1_doctor' => 1,
+            'schID_2_doctor' => 3,
+            'doc2Confirm' => 0, 
+            'adminConfirm' => 0,
+            'date' => "2017-08-28"
+           ]);   
+     
+  }
 }

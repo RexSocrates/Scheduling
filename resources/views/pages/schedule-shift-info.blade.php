@@ -174,48 +174,16 @@
                                         <th class="td-w-20">備註內容</th>
                                     </tr>
                                 </thead>
+                                   
 
                                <tbody>
+                                 @foreach($remarks as $remark)
                                     <tr>
-                                        <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">2017/07/19</td>
-                                        <td class="td-padding td-w-20">請幫忙上>兩班假日班</td>
+                                        <td class="td-padding td-w-5">{{ $remark['author'] }}</td>
+                                        <td class="td-padding td-w-5">{{ $remark['date'] }}</td>
+                                        <td class="td-padding td-w-20">{{ $remark['content'] }}</td>
                                     </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">邱毓惠</td>
-                                        <td class="td-padding td-w-5">2017/07/21</td>
-                                        <td class="td-padding td-w-20">10-11-12忘年會 13-22出國</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">馮嚴毅</td>
-                                        <td class="td-padding td-w-5">2017/07/24</td>
-                                        <td class="td-padding td-w-20">全夜班</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">邱毓惠</td>
-                                        <td class="td-padding td-w-5">2017/07/21</td>
-                                        <td class="td-padding td-w-20">1月可全夜班,3號淡水夜班,13~20出國</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">馮嚴毅</td>
-                                        <td class="td-padding td-w-5">2017/07/24</td>
-                                        <td class="td-padding td-w-20">1/13至1/18出國請排OFF，謝謝</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">馮嚴毅</td>
-                                        <td class="td-padding td-w-5">2017/07/24</td>
-                                        <td class="td-padding td-w-20">1/13至1/18出國請排OFF，謝謝</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">馮嚴毅</td>
-                                        <td class="td-padding td-w-5">2017/07/24</td>
-                                        <td class="td-padding td-w-20">1/13至1/18出國請排OFF，謝謝</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">馮嚴毅</td>
-                                        <td class="td-padding td-w-5">2017/07/24</td>
-                                        <td class="td-padding td-w-20">1/13至1/18出國請排OFF，謝謝</td>
-                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

@@ -62,7 +62,7 @@ class ShiftRecordsController extends Controller
 
         $shiftCheck = $shiftRecords->doc2Confirm($id,1);
 
-        return redirect ('first-edition-shift');
+        return redirect ('schedule-shift-info');
     }
 
     //醫生拒絕換班
@@ -71,7 +71,7 @@ class ShiftRecordsController extends Controller
 
         $shiftCheck = $shiftRecords->doc2Confirm($id,2);
 
-        return redirect ('first-edition-shift');
+        return redirect ('schedule-shift-info');
     }
 
     //查詢 單一醫生換班紀錄
@@ -255,7 +255,7 @@ class ShiftRecordsController extends Controller
         
         $displayConfirmedArr = [];
         
-        $allShiftData = $shiftRecordObj->getMoreCheckShiftsRecordsInformation(false);  // 列出所有待確認換班資訊
+        $allShiftData = $shiftRecordObj->getMoreCheckShiftsRecordsInformation(true);  // 列出與自己相關的確認換班資訊
 
         $currentDoctor = $userObj->getCurrentUserInfo();
 
@@ -331,8 +331,25 @@ class ShiftRecordsController extends Controller
         //     array_push($displayUnconfirmedRecords, $recordDic);
         // }
         
+        $remarkObj = new Remark();   
+        
+        $remarks = $remarkObj->getRemarks();
+        
+        $displayRemarksArr = [];
+        
+        foreach($remarks as $remark) {
+            $remarkDic = [
+                'author' => '',
+                'date' => $remark->date,
+                'content' => $remark->remark
+            ];
+            
+            $remarkDic['author'] = $userObj->getDoctorInfoByID($remark->doctorID)->name;
+            
+            array_push($displayRemarksArr, $remarkDic);
+        }
         return view('pages.schedule-shift-info', [
-            'shiftRecords'=>$allShiftData,'shiftDataByDoctorID'=>$shiftDataByDoctorID,'currentDoctor'=>$currentDoctor,'currentDoctorSchedule'=>$currentDoctorSchedule,'doctorName'=>$doctorName
+            'shiftRecords'=>$allShiftData,'shiftDataByDoctorID'=>$shiftDataByDoctorID,'currentDoctor'=>$currentDoctor,'currentDoctorSchedule'=>$currentDoctorSchedule,'doctorName'=>$doctorName,'remarks'=>$displayRemarksArr
         ]);
         
     }

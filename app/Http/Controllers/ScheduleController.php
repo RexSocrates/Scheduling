@@ -20,7 +20,7 @@ use App\Schedule;
 
 class ScheduleController extends Controller
 {
-    //查看初版全部班表 所有醫生換班紀錄
+    //查看初版全部班表 
     public function firstSchedule() {
         $schedule = new Schedule();
         $user = new User();
@@ -34,13 +34,8 @@ class ScheduleController extends Controller
             $data->doctorID = $doctorName->name;
         }
 
-        $data = $shiftRecords->getMoreCheckShiftsRecordsInformation(false);
-
         $currentDoctorSchedule=$schedule->getScheduleByCurrentDoctorID();
 
-
-        $doctorName = $user->getDoctorInfoByID(1);
-        $doctorSchedule = $schedule->getScheduleByDoctorID(1); //之後用ajax傳入id
         
         return view('pages.first-edition-all', array('schedule' => $scheduleData));
     }

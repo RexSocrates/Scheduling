@@ -28,7 +28,6 @@
             opacity: 0;
             filter: alpha(opacity = 0);
         }
-
     </style>
 
 @endsection
@@ -202,6 +201,8 @@
                                 render:"bar",
                                 round_position:true,    //有點像磁石
                                 event_dy: 46,
+                                first_hour:'0',
+
                             });
                             
                             //===============
@@ -249,8 +250,7 @@
                                 return "width-200";
                             };
                             
-                            //進入畫面後顯示的東西
-                            scheduler.init('scheduler_here',new Date(2017,5,26),"timeline");
+                           
                             
                             //彈出客制化的lightbox
                             var html = function(id) { return document.getElementById(id); }; //just a helper
@@ -296,7 +296,6 @@
                             var toString =  date.toString();
                             var res = toString.split(" ");
                             var month = 0;
-
                             switch(res[1]){
                                 case "Jan":
                                     month = 1;
@@ -335,30 +334,25 @@
                                     month = 12;
                                     break;
                             }
-
                              //鎖定時間
-
                             var startd =new Date(res[3], month, 1); 
                             var endd = new Date(res[3], month+1, 1); 
 
                             var block_startd =new Date(res[3], month-1, 1); 
                             var block_endd = new Date(res[3], month, 1); 
-
                             console.log("startd "+startd);
                             console.log("endd "+endd);
 
                             scheduler.config.limit_start = new Date(startd);
                             scheduler.config.limit_end = new Date(endd);
 
-
                             scheduler.attachEvent("onLimitViolation", function  (id, obj){
                             dhtmlx.message({ type:"error", text:"此時段無法接受換班" })
-
                             });
 
                             //限制非當月利用點擊視窗換班
                             scheduler.addMarkedTimespan({  
-                                start_date: block_startd,
+                                start_date: '1900-1-1',
                                 end_date: block_endd,
                                 zones: "fullday", 
                                 css: "block_section", 
@@ -366,34 +360,30 @@
                             
                             });
                             //scheduler.updateView();
-
                              scheduler.attachEvent("onEventCollision", function (ev, evs){
                                   //any custom logic here
                                 var ev = scheduler.getEvent(ev.id);
                                 var evs = scheduler.getEvent(evs[0].id);
                                 var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
+                               
                                 //限制非當月拖拉換班
                                 if(ev.start_date < startd || evs.start_date < startd ){
                                     console.log("No");
                                     //dhtmlx.message({ type:"error", text:"此日期無法換班" });
                                 }
-
                                 else{
-
                                     if(count>=1){
                                         updateShift(ev.hidden,evs.hidden,ev.text,evs.text);
                                         //showShift(ev.hidden,evs.hidden);
                                         //dhtmlx.message({ type:"error", text:"此日期已選過" });
                                         return true;
                                     }
-
                                     else{
                                         return false;
                                     }
                                }
                             
                             });
-
                             
  
                             scheduler.attachEvent("onClick", function (id, e){
@@ -402,11 +392,10 @@
                             
                                 changeDoctor_1(event.hidden);
                                 console.log("id"+event.hidden);
-
+                                
                                 return true;
                             });
-
-                            scheduler.init('scheduler_here',new Date({{$year}},{{$month}}-1,{{$day}}),"timeline");
+                            scheduler.init('scheduler_here',new Date(res[3], month),"timeline");
                            
                             scheduler.parse([
                                 @foreach($schedule as $data)
@@ -470,14 +459,12 @@
                 myFunction();
                 
             });
-            alert(schedule_1+schedule_2+"換班成功");
+            alert(schedule_1+"和"+schedule_2+"換班成功");
             
         }
-
         
         function myFunction() {
             location.reload();
         }
-
     </script>
 @endsection

@@ -15,6 +15,7 @@
                 date2 : endDate
             }, function() {
                 alert('預約成功');
+                refresh();
             });
         }
 
@@ -26,6 +27,7 @@
                 endDate : endDate
             }, function() {
                 alert('預約修改成功');
+
             });
         }
 
