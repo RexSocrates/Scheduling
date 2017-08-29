@@ -31,15 +31,31 @@ class Announcement extends Model
     
     // 新增公告
     public function addAnnouncement($data) {
-        $currentMonth = date('Y-m-d');
-        
         $newSerial = DB::table('Announcement')->insertGetId([
             'doctorID' => $data['doctorID'],
             'title' => $data['title'],
             'content' => $data['content'],
-            'date' => $currentMonth
+            'date' => date('Y-m-d')
         ]);
         
         return $newSerial;
+    }
+    
+    // 更新公告
+    public function updateAccouncement($data) {
+        DB::table('Announcement')
+            ->where('announcementSerial', $data['announcementSerial'])
+            ->update([
+                'title' => $data['title'],
+                'content' => $data['content'],
+                'date' => date('Y-m-d')
+            ]);
+    }
+    
+    // 刪除公告
+    public function deleteAnnouncement($serial) {
+        DB::table('Announcement')
+            ->where('announcementSerial', $serial)
+            ->delete();
     }
 }
