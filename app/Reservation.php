@@ -56,7 +56,7 @@ class Reservation extends Model
 
     //查看 單一醫生預班資訊
     public function getReservationByID()
-      {
+    {
         $user = new User();
         $id = $user->getCurrentUserID();
         
@@ -75,7 +75,7 @@ class Reservation extends Model
 
      //計算醫生白天上班總數
     public function amountDayShifts()
-      {
+    {
         $user = new User();
         $doctorData = DB::table('DoctorAndReservation')->where("doctorID",$user->getCurrentUserID())->get();
            //$date=DB::table('Reservation') -> whereIn("resSerial",)->date;
@@ -94,21 +94,21 @@ class Reservation extends Model
 
      //計算醫生夜班上班總數
     public function amountNightShifts()
-      {
+    {
         $user = new User();
         $doctorData = DB::table('DoctorAndReservation')->where("doctorID",$user->getCurrentUserID())->get();
-           //$date=DB::table('Reservation') -> whereIn("resSerial",)->date;
+        //$date=DB::table('Reservation') -> whereIn("resSerial",)->date;
 
         $arr = array();
         foreach ($doctorData as $doctorDatum ) {
             $arr[] = $doctorDatum->resSerial;
         }
-         $data=DB::table('Reservation') -> whereIn("resSerial",$arr)->whereIn('categorySerial',[4,6])->count();
+        $data=DB::table('Reservation') -> whereIn("resSerial",$arr)->whereIn('categorySerial',[4,6])->count();
 
 
-         return $data;
+        return $data;
 
-     }
+    }
 
 
     // 新增或更新資料庫資料
@@ -130,25 +130,6 @@ class Reservation extends Model
         return $generatedSerial;
 
     }
-
-//    //更新預班
-//    public function addAndUpdateReservation(array $data){
-//        // $periodSerial, $isWeekday, $location, $isOn, $remark, $date
-//        $generatedSerial ＝ 0;
-//
-//        $count = reservationExist($data);
-//        
-//        if($count==0){
-//            // 更新後的資料不存在，因此新增一筆資料
-//            $generatedSerial = addReservation($data);
-//         }
-//        else{
-//            //更新後的資料以存在資料庫，得到預班編號
-//            $generatedSerial = getReservationSerial($data);
-//        }   
-//
-//        return $generatedSerial;     
-//    }
     
     //日期加一
     public function date_add($date){
@@ -196,13 +177,4 @@ class Reservation extends Model
         
         return $res->resSerial;
     }
-
-   //  public function getReservationBySerial($serial) {
-   //      $data = DB::table('Reservation')->where('resSerial', $serial)->first();
-
-   //      return $data;
-      
-   // }
-
-   
 }

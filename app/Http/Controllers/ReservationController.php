@@ -54,7 +54,7 @@ class ReservationController extends Controller
     }
 
     //為了做查看醫生而做的
-     public function showReservation() {
+    public function showReservation() {
         $reservation = new Reservation();
         $reservationData = $reservation->reservationList();
        
@@ -62,8 +62,7 @@ class ReservationController extends Controller
     }
 
     //單一醫生預班資訊 
-      public function getReservationByID() {
-
+    public function getReservationByID() {
         $reservation = new Reservation();
         $shiftCategory = new ShiftCategory();
         $user = new User();
@@ -79,7 +78,6 @@ class ReservationController extends Controller
         $countNight = $doctorNight-$reservation->amountNightShifts();
         
         $getDoctorRemark=$remark->getRemarkByDoctorID($doctorID);
-       
 
         foreach ($reservationData as $res) {
             $name = $shiftCategory->findName($res->categorySerial);
@@ -94,6 +92,12 @@ class ReservationController extends Controller
         else{
             $doctorRemark=$getDoctorRemark->remark;
         }
+        
+        // 取得醫生預約的on班與off班數量
+        $docAndResObj = new DoctorAndReservation();
+        $onResAmount = $docAndResObj->getOnResAmount($user->getCurrentUserID);
+        $offResAmount = $docAndResObj->getOffResAmount($user->getCurrentUserID);
+        
 
         return view('pages.reservation', [
             'reservations' => $data,
@@ -101,13 +105,15 @@ class ReservationController extends Controller
             'countNight' => $countNight,
             'doctorDay' =>$doctorDay,
             'doctorNight'=> $doctorNight,
+            'onAmount' => $onResAmount,
+            'offAmount' => $offResAmount,
             'remark'=> $doctorRemark
         ]);
         
-      }
+    }
 
-      //計算尚須上的白夜班 
-      public function countDay(){
+    //計算尚須上的白夜班 
+    public function countDay(){
         $user = new User();
         $reservation=new Reservation();
 
@@ -121,7 +127,7 @@ class ReservationController extends Controller
 
         return $array;
 
-      }
+    }
 
 
     public function renderData() {
@@ -136,17 +142,6 @@ class ReservationController extends Controller
         $connector->render();
     }
 
-      // public function renderData() {
-      //   $connector = new SchedulerConnector(null, "PHPLaravel");
-      //   $connector->configure(new Reservation(), "resSerial", "date, endDate, categorySerial");
-      //   $connector->render();
-      //  // $connector->render_table('DoctorAndReservation','resSerial','doctorID');
-       
-
-      // }
-
-
-
     //增加備註
     public  function addRemark(){
         $remark = new Remark();
@@ -160,15 +155,13 @@ class ReservationController extends Controller
 
         return redirect('reservation');
     }
-
     
 
-     //查詢 所有醫生指定時段的班數
-     public function getDataByResSerial() {
+    //查詢 所有醫生指定時段的班數
+    public function getDataByResSerial() {
         $serial = Input::get('serial');
         $dAndR = new DoctorAndReservation();
         $doctors = $dAndR->getDoctorsByResSerial($serial);
-
         return view('getReseverationByPeriodSerial', ['doctors' => $doctors]);
     }
 
@@ -231,6 +224,7 @@ class ReservationController extends Controller
         
     }
     
+    // 刪除預班
     public function deleteReservation(Request $request){
         $data = $request->all();
         

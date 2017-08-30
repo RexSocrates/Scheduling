@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     
     <script>
+        // 送出新增預班的request
         function sendNewReservation(categorySerial, startDate, endDate) {
             $.post('sendReservationAdd', {
                 serial : categorySerial,
@@ -18,6 +19,7 @@
             });
         }
 
+        // 送出更新預班的request
         function updateReservation(resSerial, categorySerial, startDate, endDate) {
             $.post('sendReservationUpdate', {
                 resSerial : resSerial,
@@ -29,6 +31,7 @@
             });
         }
 
+        // 送出刪除預班的request
         function deleteReservation(resSerial) {
             $.post('sendReservationDelete', {
                 resSerial : resSerial,
@@ -59,6 +62,11 @@
             alert("備註送出完成");
         }
         
+        // 確認是否可預班或預off班
+        function checkReservationAmount() {
+            
+        }
+        
     </script>
 
     <style>
@@ -75,6 +83,8 @@
 @section('content')
 <input type="hidden" id='hiddenCountDay' value={{$countDay}}>
 <input type="hidden" id='hiddenCountNight' value={{$countNight}}>
+<input type="hidden" id='hiddenCountOn' value={{$onAmount}}>
+<input type="hidden" id='hiddenCountOff' value={{$offAmount}}>
 
     <div id="section" class="container-fix trans-left-five">
         <div class="container-section">

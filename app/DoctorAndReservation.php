@@ -60,4 +60,44 @@ class DoctorAndReservation extends Model
             ->where('doctorID', $doctorID)
             ->delete();
     }
+    
+    // 回傳單一醫生on班數量
+    public function getOnResAmount($doctorID) {
+        $resSerials = DB::table('DoctorAndReservation')
+            ->where('doctorID', $doctorID)
+            ->get();
+        
+        $serials = [];
+        foreach($resSerials as $serial) {
+            array_push($serials, $serial);
+        }
+        
+        $amount = DB::table('Reservation')
+            ->whereIn('resSerial', $serial)
+            ->whereIn('categorySerial', [1, 2, 3, 4, 5, 6])
+            ->count();
+        
+        return $amount;
+    }
+    
+    
+    // 回傳單一醫生off班數量
+    public function getOffResAmount($doctorID) {
+        $resSerials = DB::table('DoctorAndReservation')
+            ->where('doctorID', $doctorID)
+            ->get();
+        
+        $serials = [];
+        foreach($resSerials as $serial) {
+            array_push($serials, $serial);
+        }
+        
+        $amount = DB::table('Reservation')
+            ->whereIn('resSerial', $serial)
+            ->where('categorySerial', 0)
+            ->count();
+        
+        return $amount;
+    }
+    
 }
