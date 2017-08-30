@@ -106,7 +106,7 @@
 									        <thead>
 									            <tr>
 									                <th>醫生名字</th>
-									                <th>{{$currentUser->name}}</th>
+									                <th>{{$currentUser}}</th>
 									             </tr>
 									        </thead>
 									        <tbody>
