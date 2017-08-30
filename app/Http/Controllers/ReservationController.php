@@ -100,7 +100,6 @@ class ReservationController extends Controller
         $docAndResObj = new DoctorAndReservation();
         $onResAmount = $resLimit - $docAndResObj->getOnResAmount($user->getCurrentUserID());
         $offResAmount = $resLimit - $docAndResObj->getOffResAmount($user->getCurrentUserID());
-        
 
         return view('pages.reservation', [
             'reservations' => $data,
@@ -108,8 +107,8 @@ class ReservationController extends Controller
             'countNight' => $countNight,
             'doctorDay' =>$doctorDay,
             'doctorNight'=> $doctorNight,
-            'onAmount' => $onResAmount,
-            'offAmount' => $offResAmount,
+            'onAmount' => $totalShifts-$onResAmount,
+            'offAmount' => $totalShifts-$offResAmount,
             'remark'=> $doctorRemark
         ]);
         

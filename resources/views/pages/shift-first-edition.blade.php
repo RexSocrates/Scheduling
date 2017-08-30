@@ -4,8 +4,7 @@
      <script src="../codebase/ext/dhtmlxscheduler_collision.js"></script>
     <script src="../codebase/ext/dhtmlxscheduler_limit.js"></script>
     <script src="../../codebase/ext/dhtmlxscheduler_serialize.js" type="text/javascript" charset="utf-8"></script>
-    <script src='../../codebase/ext/dhtmlxscheduler_timeline.js' type="text/javascript" charset="utf-8"></script>
-
+  
 
     <style>
         td{
@@ -141,7 +140,7 @@
                             scheduler.xy.margin_left = -19;
                             scheduler.config.container_autoresize = true;
                             scheduler.config.collision_limit = 1; 
-                            scheduler.config.drag_resize= false;
+                            //scheduler.config.drag_resize= false;
 
                             scheduler.form_blocks["hidden"] = {
                                 render:function(sns) {

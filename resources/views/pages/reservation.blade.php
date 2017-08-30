@@ -121,8 +121,8 @@
                                         <p class="information">開放時間: 2017/06/01 - 2017/06/25</p>
                                         
                                         <p class="information">可排天班數: on班:{{$onAmount}} off班:{{$offAmount}}</p>
-<!--                                        <p class="information" id='countDay'>尚需排班數: 白班:{{$countDay}} 夜班:{{$countNight}}</p> -->
-                                        
+                                        <!-- <p class="information" id='countDay'>尚需排班數: 白班:{{$countDay}} 夜班:{{$countNight}}</p> 
+                                         -->
                                     </div>
 
                                     <div class="col s7">

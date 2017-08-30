@@ -16,17 +16,17 @@ class ChartController extends Controller
         
         $doctors = $user->getAtWorkDoctors();
         
-        $currentUser = $user->getCurrentUserInfo();
+        //$currentUser = $user->getCurrentUserInfo();
         
         $schedule = new Schedule();
         
-        $shifts = $schedule->getCurrentMonthShiftsByID($user->getCurrentUserID());
+        $shifts = $schedule->getCurrentMonthShiftsByID(3);
         
         $shiftsData = $schedule->countScheduleCategory($shifts);
         
         return view('pages.chart', [
             'doctors' => $doctors,
-            'currentUser' => $currentUser,
+            'currentUser' => "張瑋翎",
             'totalShift' => count($shifts),
             'shiftsData' => $shiftsData
         ]);

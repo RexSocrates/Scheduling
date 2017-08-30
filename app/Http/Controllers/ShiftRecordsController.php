@@ -173,6 +173,7 @@ class ShiftRecordsController extends Controller
               // return redirect()->action(
               //    'ShiftRecordsController@shiftFirstEdition', ['date' => $schedule_1_Date]
               // );
+            
 
     }
 
