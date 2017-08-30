@@ -393,8 +393,9 @@
                                 return true;
                             });
 
-                            scheduler.init('scheduler_here',new Date(res[3], month),"timeline");
                            
+                            scheduler.init('scheduler_here',new Date(res[3], month),"timeline");
+
                             scheduler.parse([
                                 @foreach($schedule as $data)
                                  { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}"},
@@ -470,7 +471,8 @@
                 id : scheduleID_1,
                 id2 : scheduleID_2
             }, function (array){
-                alert(array[2]+array[1]+"和"+array[0]+array[3]+"換班成功");
+                 dhtmlx.message({ type:"error", text: array[2]+array[1]+"和"+array[0]+array[3]+"換班成功" })
+                //alert(array[2]+array[1]+"和"+array[0]+array[3]+"換班成功");
             });
         }
 

@@ -14,7 +14,8 @@
                 date1 : startDate,
                 date2 : endDate
             }, function() {
-                alert('預約成功');
+               // alert('預約成功');
+                dhtmlx.message({ type:"error", text:"預約成功"});
                 refresh();
             });
         }
@@ -26,8 +27,7 @@
                 startDate : startDate,
                 endDate : endDate
             }, function() {
-                alert('預約修改成功');
-
+                dhtmlx.message({ type:"error", text:"預約修改成功" });
             });
         }
 
@@ -35,7 +35,7 @@
             $.post('sendReservationDelete', {
                 resSerial : resSerial,
             }, function() {
-                alert('預約刪除成功');
+                dhtmlx.message({ type:"error", text:"預約刪除成功" });
             });
         }
         
