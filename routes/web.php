@@ -59,8 +59,6 @@ Route::get('/countDay','ReservationController@countDay');
 
 Route::get('/alert1','ReservationController@countDay');
 
-
-//Route::get('count','ReservationController@countDay');
 // 新增備註
 Route::post('/addRemark', 'ReservationController@addRemark');
 
@@ -116,8 +114,8 @@ Route::get('doctor2DenyShiftRecord/{serial}', 'ShiftRecordsController@doctor2Den
 
 
 //調整班表->初版班表
-Route::get('/shift-first-edition','ShiftRecordsController@shiftFirstEdition');//->name('shift-first-edition/{date?}');
-Route::post('change-shift-first-edition','ShiftRecordsController@shiftFirstEditionAddShifts');
+Route::get('/shift-first-edition','ShiftRecordsController@shiftFirstEdition');//->name('shift-first-edition');
+Route::get('change-shift-first-edition','ShiftRecordsController@shiftFirstEditionAddShifts');
 
 // 調整班表->初版班表 新增換班
 Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts');
@@ -167,9 +165,14 @@ Route::get('testDateString', 'TestController@testDateString');
 
 Route::get('addDoctorAndResTest', 'TestController@addDoctorAndResTest');
 
+//調整班表->彈出視窗醫生1資訊
 Route::get('changeDoctor','AccountController@getDoctorInfoByID');
+
+//調整班表->彈出視窗醫生2資訊
 Route::get('changeDoctor1','ScheduleController@getDoctorInfoByScheduleID');
 
+//拖拉換班顯示資訊
+Route::get('showInfo','ScheduleController@getDoctorInfoByScheduleIDWhenExchange');
 
 Route::get('getExchangeSchedulePage', function() {
 	return view('testPage.exchangeSchedule');
@@ -269,7 +272,7 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 //Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
-Route::get("info",'TestController@getDoctorInfoByScheduleID');
+Route::get("info",'TestController@addReservation');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 //Route::post('reservation/updateReservation/{id}', 'ReservationController@updateReservation');
 //Route::get('/reservation/updateReservation/{id}', function() {
