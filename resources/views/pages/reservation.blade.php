@@ -15,9 +15,8 @@
                 date1 : startDate,
                 date2 : endDate
             }, function() {
-               // alert('預約成功');
+                // alert('預約成功');
                 dhtmlx.message({ type:"error", text:"預約成功"});
-                refresh();
             });
         }
 
@@ -64,9 +63,25 @@
             alert("備註送出完成");
         }
         
-        // 確認是否可預班或預off班
-        function checkReservationAmount() {
+        // 確認是否可預on班或預off班
+        function checkResAmount(isOnRes) {
+            var resAmount = 0;
             
+            if(isOnRes) {
+                // 檢查on班預約
+                resAmount = document.getElementById('hiddenCountOn').value;
+            }else {
+                // 檢查off班預約
+                resAmount = document.getElementById('hiddenCountOff').value;
+            }
+            
+            if(resAmount <= 0) {
+                // 剩餘可預約班數為0，無法預班
+                dhtmlx.message({ type:"error", text:"班數已滿，無法預班"});
+                return false;
+            }else {
+                return true;
+            }
         }
         
     </script>
@@ -105,8 +120,8 @@
                                     <div class="col s5">
                                         <p class="information">開放時間: 2017/06/01 - 2017/06/25</p>
                                         
-                                        <p class="information">可排天班數: 白班:{{$doctorDay}} 夜班:{{$doctorNight}}</p>
-                                        <p class="information" id='countDay'>尚需排班數: 白班:{{$countDay}} 夜班:{{$countNight}}</p> 
+                                        <p class="information">可排天班數: on班:{{$onAmount}} off班:{{$offAmount}}</p>
+<!--                                        <p class="information" id='countDay'>尚需排班數: 白班:{{$countDay}} 夜班:{{$countNight}}</p> -->
                                         
                                     </div>
 
@@ -218,30 +233,51 @@
                             });
 
                           scheduler.attachEvent("onEventAdded", function(id,e){
-                                    var event = scheduler.getEvent(id);
-                                    
-                                    if(event.priority == 1){
-                                        event.text = "行政";
-                                    }else if(event.priority == 2){
-                                        event.text = "教學";
-                                    }else if(event.priority == 3){
-                                        event.text = "台北白班";
-                                    }else if(event.priority == 4){
-                                        event.text = "台北夜班";
-                                    }else if(event.priority == 5){
-                                        event.text = "淡水白班";
-                                    }else if(event.priority == 6){
-                                        event.text = "淡水夜班";
-                                    }else if(event.priority == 7){
-                                        event.text = "off";
-                                    }else if(event.priority == null){
-                                        event.text = "沒選到班";
-                                    }
-                                    sendNewReservation(event.priority, event.start_date, event.end_date);
-                                    countDay();
-                                    console.log("新增");
+                              var event = scheduler.getEvent(id);
+                              var isOnShift = true;
+                              var hasSelected = true;
+                              
+                              
+                              if(event.priority == 1){
+                                  event.text = "行政";
+                              }else if(event.priority == 2){
+                                  event.text = "教學";
+                              }else if(event.priority == 3){
+                                  event.text = "台北白班";
+                              }else if(event.priority == 4){
+                                  event.text = "台北夜班";
+                              }else if(event.priority == 5){
+                                  event.text = "淡水白班";
+                              }else if(event.priority == 6){
+                                  event.text = "淡水夜班";
+                              }else if(event.priority == 7){
+                                  event.text = "off班";
+                                  isOnShift = false;
+                              }else if(event.priority == null){
+                                  event.text = "沒選到班";
+                                  hasSelected = false;
+                              }
+                              
+                              if(hasSelected) {
+                                  console.log("新增");
+                                  
+                                  // 假設只能夠選一天的班
+                                  if(isOnShift) {
+                                      // 預約on班
+                                      if(checkResAmount(true)) {
+                                          sendNewReservation(event.priority, event.start_date, event.end_date);
+                                      }
+                                  }else {
+                                      // 預約off班
+                                      if(checkResAmount(false)) {
+                                          sendNewReservation(event.priority, event.start_date, event.end_date);
+                                      }
+                                  }
+                              }
+//                              countDay();
+                              location.reload();
                                         
-                                });
+                            });
 
 
                             scheduler.attachEvent("onEventChanged", function(id,e){
@@ -281,9 +317,10 @@
 
 
                                 deleteReservation(event.hidden);
-                                countDay();
+//                                countDay();
                                 console.log(event.hidden);
                                 console.log(id);
+                                location.reload();
                                 return true;
                             });
 

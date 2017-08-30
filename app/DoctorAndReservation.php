@@ -68,13 +68,13 @@ class DoctorAndReservation extends Model
             ->get();
         
         $serials = [];
-        foreach($resSerials as $serial) {
-            array_push($serials, $serial);
+        foreach($resSerials as $resSerial) {
+            array_push($serials, $resSerial->resSerial);
         }
         
         $amount = DB::table('Reservation')
-            ->whereIn('resSerial', $serial)
-            ->whereIn('categorySerial', [1, 2, 3, 4, 5, 6])
+            ->whereIn('resSerial', $serials)
+            ->whereIn('categorySerial', [3, 4, 5, 6])
             ->count();
         
         return $amount;
@@ -88,13 +88,13 @@ class DoctorAndReservation extends Model
             ->get();
         
         $serials = [];
-        foreach($resSerials as $serial) {
-            array_push($serials, $serial);
+        foreach($resSerials as $resSerial) {
+            array_push($serials, $resSerial->resSerial);
         }
         
         $amount = DB::table('Reservation')
-            ->whereIn('resSerial', $serial)
-            ->where('categorySerial', 0)
+            ->whereIn('resSerial', $serials)
+            ->where('categorySerial', 7)
             ->count();
         
         return $amount;
