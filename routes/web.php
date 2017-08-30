@@ -25,12 +25,19 @@ Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
 // 取得公告頁面
 Route::get('index', 'AnnouncementController@getAnnouncementPage');
 
+// 透過 AJAX 顯示單一公告
+Route::get('getAnnouncement', 'AnnouncementController@getAnnouncement');
+
+// 刪除公告
+Route::get('deleteAnnouncement/{serial}', 'AnnouncementController@deleteAnnouncement');
+
 // 設定頁面
 Route::get('setting', 'AccountController@getSettingPage');
 
 // 新增公告
-Route::post('addAnnouncement', 'AnnouncementController@addAnnouncement');
+Route::post('addAnnouncement', 'AnnouncementController@addOrUpdateAnnouncement');
 
+// 醫生離職
 Route::get('resign/{id}', 'AccountController@resign');
 
 // 取得個人頁面
@@ -39,7 +46,7 @@ Route::get('profile', 'AccountController@getProfilePage');
 // 統計圖表頁面
 
 // 單一醫生上班紀錄的統計圖表
-Route::post('doctorsChart', 'ChartController@getChartPageBySelectedID');
+Route::get('doctorsChart', 'ChartController@getChartPageBySelectedID');
 
 // 列出全部人的預班資訊
 Route::get('/reservation-all', 'ReservationController@reservation');
@@ -116,9 +123,6 @@ Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts
 Route::post('getSiftInfo',"ShiftRecordsController@shiftFirstEditionShowShifts");
 
 
-Route::get('test','TestController@shiftFirstEditionAddShifts');
-
-
 
 // 調整班表的換班資訊
 Route::get('shift-info', 'ShiftRecordsController@adminShiftRecords');
@@ -141,6 +145,7 @@ Route::group(['middleware' => ['auth']], function () {
 // ========================================================================
 //Route::post('postAjaxRequest', 'TestController@postAjaxRequest');
 //Route::get('postAjaxRequest', 'TestController@postAjaxRequest');
+Route::get('test','TestController@shiftFirstEditionAddShifts');
 
 Route::get('test','TestController@shiftFirstEditionAddShifts');
 

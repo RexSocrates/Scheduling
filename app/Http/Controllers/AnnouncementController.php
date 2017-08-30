@@ -16,26 +16,68 @@ class AnnouncementController extends Controller
         
         $announcements = $announcementObj->getAnnouncements();
         
+//        foreach($announcements as $obj) {
+//            echo 'Serial : '.$obj->announcementSerial.'<br>';
+//            echo 'Title : '.$obj->title.'<br>';
+//            echo 'Content : '.$obj->content.'<br>';
+//            echo '<br>';
+//        }
+        
         return view('pages.index', [
             'announcements' => $announcements
         ]);
     }
     
     // 新增公告
-    public function addAnnouncement(Request $request) {
+    public function addOrUpdateAnnouncement(Request $request) {
         $data = $request->all();
         
         $announcementObj = new Announcement();
         $userObj = new User();
         
-        $announcementData = [
-            'doctorID' => $userObj->getCurrentUserID(),
-            'title' => $data['title'],
-            'content' => $data['content']
-        ];
+        $announcementSerial = $data['hiddenSerial'];
         
-        $announcementObj->addAnnouncement($announcementData);
+        if($announcementSerial == -1) {
+            // 新增公告
+            $announcementData = [
+                'doctorID' => $userObj->getCurrentUserID(),
+                'title' => $data['title'],
+                'content' => $data['content']
+            ];
+            
+            $announcementObj->addAnnouncement($announcementData);
+        }else {
+            // 更新公告
+            $announcementData = [
+                'announcementSerial' => $announcementSerial,
+                'title' => $data['title'],
+                'content' => $data['content']
+            ];
+            
+            $announcementObj->updateAccouncement($announcementData);
+        }
         
-        return redirect('announcement');
+        
+        
+        return redirect('index');
+    }
+    
+    // 刪除公告
+    public function deleteAnnouncement($serial) {
+        $announcementObj = new Announcement();
+        
+        $announcementObj->deleteAnnouncement($serial);
+        
+        return redirect('index');
+    }
+    
+    // 接收AJAX的request，取得單一公告
+    public function getAnnouncement(Request $request) {
+        $data = $request->all();
+        
+        $announcementObj = new Announcement();
+        $announcement = $announcementObj->getAnnouncement($data['serial']);
+        
+        return [$announcement->announcementSerial, $announcement->title, $announcement->content];
     }
 }
