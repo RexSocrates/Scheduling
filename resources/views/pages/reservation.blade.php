@@ -64,7 +64,7 @@
         }
         
         // 確認是否可預on班或預off班
-        function checkResAmount(isOnRes) {
+        function checkResAmount(isOnRes, startDate, endDate) {
             var resAmount = 0;
             
             if(isOnRes) {
@@ -75,9 +75,14 @@
                 resAmount = document.getElementById('hiddenCountOff').value;
             }
             
-            if(resAmount <= 0) {
+            var startArr = startDate.split(" ");
+            var endArr = endDate.split(" ");
+            
+            var days = parseInt(endArr[2]) - parseInt(startArr[2]);
+            
+            if(resAmount <= 0 || resAmount < days) {
                 // 剩餘可預約班數為0，無法預班
-                dhtmlx.message({ type:"error", text:"班數已滿，無法預班"});
+                dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
                 return false;
             }else {
                 return true;
@@ -257,6 +262,7 @@
                                   event.text = "沒選到班";
                                   hasSelected = false;
                               }
+//                              console.log("TYPE : " + typeof event.start_date);
                               
                               if(hasSelected) {
                                   console.log("新增");
@@ -264,12 +270,12 @@
                                   // 假設只能夠選一天的班
                                   if(isOnShift) {
                                       // 預約on班
-                                      if(checkResAmount(true)) {
+                                      if(checkResAmount(true, String(event.start_date), String(event.end_date))) {
                                           sendNewReservation(event.priority, event.start_date, event.end_date);
                                       }
                                   }else {
                                       // 預約off班
-                                      if(checkResAmount(false)) {
+                                      if(checkResAmount(false, String(event.start_date), String(event.end_date))) {
                                           sendNewReservation(event.priority, event.start_date, event.end_date);
                                       }
                                   }
@@ -282,6 +288,7 @@
 
                             scheduler.attachEvent("onEventChanged", function(id,e){
                                 var event = scheduler.getEvent(id);
+                                var isOnShift = true;
 
                                 if(event.priority == 1){
                                     event.text = "行政";
@@ -296,11 +303,25 @@
                                 }else if(event.priority == 6){
                                     event.text = "淡水夜班";
                                 }else if(event.priority == 7){
-                                    event.text = "off";
+                                    event.text = "off班";
+                                    isOnShift = false;
+                                }
+                                
+                                // 一次只能夠改一天的預班
+                                if(isOnShift) {
+                                    // 預約on班
+                                    if(checkResAmount(true, String(event.start_date), String(event.end_date))) {
+                                        updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
+                                    }
+                                }else {
+                                    // 預約off班
+                                    if(checkResAmount(false, String(event.start_date), String(event.end_date))) {
+                                        updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
+                                    }
                                 }
 
-                                updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
-                                countDay();
+                                location.reload();
+//                                countDay();
                                 
                             
                                 console.log(event.priority);

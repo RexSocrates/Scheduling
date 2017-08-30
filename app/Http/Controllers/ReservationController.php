@@ -107,8 +107,8 @@ class ReservationController extends Controller
             'countNight' => $countNight,
             'doctorDay' =>$doctorDay,
             'doctorNight'=> $doctorNight,
-            'onAmount' => $totalShifts-$onResAmount,
-            'offAmount' => $totalShifts-$offResAmount,
+            'onAmount' => $onResAmount,
+            'offAmount' => $offResAmount,
             'remark'=> $doctorRemark
         ]);
         
