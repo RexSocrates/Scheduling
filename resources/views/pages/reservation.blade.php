@@ -15,7 +15,6 @@
                 date1 : startDate,
                 date2 : endDate
             }, function() {
-               // alert('預約成功');
                 dhtmlx.message({ type:"error", text:"預約成功"});
                 refresh();
             });
@@ -278,7 +277,6 @@
                             scheduler.attachEvent("onBeforeEventDelete", function(id,e){
                                 // 刪除 reservation
                                 var event = scheduler.getEvent(id);
-
 
                                 deleteReservation(event.hidden);
                                 countDay();
