@@ -417,7 +417,7 @@
                             scheduler.config.limit_end = new Date(endd);
 
                             scheduler.attachEvent("onLimitViolation", function  (id, obj){
-                                dhtmlx.message({ type:"error", text:"此時段無法接受排班", expire:-1 })
+                                dhtmlx.message({ type:"error", text:"此時段無法接受排班" })
                             });
 
                             scheduler.templates.lightbox_header = function(start, end, event){
