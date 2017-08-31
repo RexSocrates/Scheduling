@@ -364,8 +364,8 @@
                                 console.log("evs "+evs.start_date);
                                 //限制非當月拖拉換班
                                 if(ev.start_date < startd || evs.start_date < startd ){
-                                    console.log("No");
-                                    //dhtmlx.message({ type:"error", text:"此日期無法換班" });
+                                    //console.log("No");
+                                    dhtmlx.message({ type:"error", text:"此日期無法換班" });
                                 }
                                 else{
                                     if(count>=1){
@@ -374,10 +374,11 @@
                                         return true;
                                     }
                                     else{
+                                        
                                         return false;
                                     }
                                }
-                            
+                                return true;
                             });
                             
  

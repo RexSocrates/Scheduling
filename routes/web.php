@@ -167,10 +167,10 @@ Route::get('testDateString', 'TestController@testDateString');
 
 Route::get('addDoctorAndResTest', 'TestController@addDoctorAndResTest');
 
-//調整班表->彈出視窗醫生1資訊
+//調整班表->彈出視窗醫生2資訊
 Route::get('changeDoctor','AccountController@getDoctorInfoByID');
 
-//調整班表->彈出視窗醫生2資訊
+//調整班表->彈出視窗醫生1資訊
 Route::get('changeDoctor1','ScheduleController@getDoctorInfoByScheduleID');
 
 //拖拉換班顯示資訊
@@ -274,7 +274,7 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 //Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
-Route::get("info",'TestController@addReservation');
+Route::get("info",'TestController@getDoctorInfoByID');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 //Route::post('reservation/updateReservation/{id}', 'ReservationController@updateReservation');
 //Route::get('/reservation/updateReservation/{id}', function() {

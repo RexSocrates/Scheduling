@@ -518,6 +518,27 @@ class TestController extends Controller
         echo $onResAmount.'<br>';
         echo $offResAmount;
     }
-    
+    public function getDoctorInfoByID(){
+        //$data = $request->all();
+        $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+        echo $nextMonth;
+        // $schedule = new Schedule();
+        // $user = new User();
+        
+        // $doctor = $schedule->getScheduleByDoctorID($data['id']);
+
+        // $array = array();
+
+        // foreach ($doctor as $data) {
+        //     $id = $data->scheduleID;
+        //     $date = $data->date;
+        //     $name = $user->getDoctorInfoByID($data->doctorID)->name;
+            
+        //     array_push($array, array($id,$name,$date));
+        // }
+
+        // return $array;
+    }
 }
 

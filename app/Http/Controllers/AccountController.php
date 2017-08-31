@@ -74,7 +74,7 @@ class AccountController extends Controller
         $schedule = new Schedule();
         $user = new User();
         
-        $doctor = $schedule->getScheduleByDoctorID($data['id']);
+        $doctor = $schedule->getNextMonthShiftsByID($data['id']);
 
         $array = array();
 

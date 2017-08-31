@@ -66,6 +66,18 @@ class Schedule extends Model
     }
     
     // 透過醫生ID 取得當月醫生上的所有班
+    public function getNextMonthShiftsByID($id) {
+        $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+        
+        $shifts = DB::table('Schedule')
+            ->where('doctorId', $id)
+            ->where('date', 'like', $nextMonth.'%')
+            ->get();
+        
+        return $shifts;
+    }
+    // 透過醫生ID 取得當月醫生上的所有班
     public function getCurrentMonthShiftsByID($id) {
         $currentMonth = date('Y-m');
         
