@@ -70,7 +70,9 @@ class ReservationController extends Controller
 
         $data = array();
 
-        $reservationData = $reservation->getReservationByID();
+//        $reservationData = $reservation->getReservationByID();
+        $reservationData = $reservation->getNextMonthReservationByID();
+        
         $doctorID = $user->getCurrentUserID();
         $doctorDay = $user->getDoctorInfoByID($doctorID)->mustOnDutyDayShifts;
         $doctorNight = $user->getDoctorInfoByID($doctorID)->mustOnDutyNightShifts;        
@@ -93,14 +95,13 @@ class ReservationController extends Controller
             $doctorRemark=$getDoctorRemark->remark;
         }
         
-        //醫生總班數
-        $totalShifts = ($user->getCurrentUserInfo()->mustOnDutyTotalShifts)*2/3;  
-
+        // 取得該醫生的應上總班數
+        $resLimit = (int)(($user->getCurrentUserInfo()->mustOnDutyTotalShifts) * 2 / 3);
+        
         // 取得醫生預約的on班與off班數量
         $docAndResObj = new DoctorAndReservation();
-        $onResAmount = $docAndResObj->getOnResAmount($user->getCurrentUserID());
-        $offResAmount = $docAndResObj->getOffResAmount($user->getCurrentUserID);
-
+        $onResAmount = $resLimit - $docAndResObj->getNextMonthOnResAmount($user->getCurrentUserID());
+        $offResAmount = $resLimit - $docAndResObj->getNextMonthOffResAmount($user->getCurrentUserID());
 
         return view('pages.reservation', [
             'reservations' => $data,
@@ -108,8 +109,8 @@ class ReservationController extends Controller
             'countNight' => $countNight,
             'doctorDay' =>$doctorDay,
             'doctorNight'=> $doctorNight,
-            'onAmount' => $totalShifts-$onResAmount,
-            'offAmount' => $totalShifts-$offResAmount,
+            'onAmount' => $onResAmount,
+            'offAmount' => $offResAmount,
             'remark'=> $doctorRemark
         ]);
         

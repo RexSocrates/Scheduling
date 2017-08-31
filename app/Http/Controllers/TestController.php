@@ -504,5 +504,20 @@ class TestController extends Controller
         }
     }
     
+    public function getAAAA() {
+        $user = new User();
+        
+        // 取得該醫生的應上總班數
+        $resLimit = (int)(($user->getCurrentUserInfo()->mustOnDutyTotalShifts) * 2 / 3);
+        
+        // 取得醫生預約的on班與off班數量
+        $docAndResObj = new DoctorAndReservation();
+        $onResAmount = $resLimit - $docAndResObj->getOnResAmount($user->getCurrentUserID());
+        $offResAmount = $resLimit - $docAndResObj->getOffResAmount($user->getCurrentUserID());
+        
+        echo $onResAmount.'<br>';
+        echo $offResAmount;
+    }
+    
 }
 

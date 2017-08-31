@@ -15,8 +15,9 @@
                 date1 : startDate,
                 date2 : endDate
             }, function() {
+                // alert('預約成功');
+
                 dhtmlx.message({ type:"error", text:"預約成功"});
-                refresh();
             });
         }
 
@@ -63,9 +64,30 @@
             alert("備註送出完成");
         }
         
-        // 確認是否可預班或預off班
-        function checkReservationAmount() {
+        // 確認是否可預on班或預off班
+        function checkResAmount(isOnRes, startDate, endDate) {
+            var resAmount = 0;
             
+            if(isOnRes) {
+                // 檢查on班預約
+                resAmount = document.getElementById('hiddenCountOn').value;
+            }else {
+                // 檢查off班預約
+                resAmount = document.getElementById('hiddenCountOff').value;
+            }
+            
+            var startArr = startDate.split(" ");
+            var endArr = endDate.split(" ");
+            
+            var days = parseInt(endArr[2]) - parseInt(startArr[2]);
+            
+            if(resAmount <= 0 || resAmount < days) {
+                // 剩餘可預約班數為0，無法預班
+                dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
+                return false;
+            }else {
+                return true;
+            }
         }
         
     </script>
@@ -217,34 +239,57 @@
                             });
 
                           scheduler.attachEvent("onEventAdded", function(id,e){
-                                    var event = scheduler.getEvent(id);
-                                    
-                                    if(event.priority == 1){
-                                        event.text = "行政";
-                                    }else if(event.priority == 2){
-                                        event.text = "教學";
-                                    }else if(event.priority == 3){
-                                        event.text = "台北白班";
-                                    }else if(event.priority == 4){
-                                        event.text = "台北夜班";
-                                    }else if(event.priority == 5){
-                                        event.text = "淡水白班";
-                                    }else if(event.priority == 6){
-                                        event.text = "淡水夜班";
-                                    }else if(event.priority == 7){
-                                        event.text = "off";
-                                    }else if(event.priority == null){
-                                        event.text = "沒選到班";
-                                    }
-                                    sendNewReservation(event.priority, event.start_date, event.end_date);
-                                    countDay();
-                                    console.log("新增");
+                              var event = scheduler.getEvent(id);
+                              var isOnShift = true;
+                              var hasSelected = true;
+                              
+                              
+                              if(event.priority == 1){
+                                  event.text = "行政";
+                              }else if(event.priority == 2){
+                                  event.text = "教學";
+                              }else if(event.priority == 3){
+                                  event.text = "台北白班";
+                              }else if(event.priority == 4){
+                                  event.text = "台北夜班";
+                              }else if(event.priority == 5){
+                                  event.text = "淡水白班";
+                              }else if(event.priority == 6){
+                                  event.text = "淡水夜班";
+                              }else if(event.priority == 7){
+                                  event.text = "off班";
+                                  isOnShift = false;
+                              }else if(event.priority == null){
+                                  event.text = "沒選到班";
+                                  hasSelected = false;
+                              }
+//                              console.log("TYPE : " + typeof event.start_date);
+                              
+                              if(hasSelected) {
+                                  console.log("新增");
+                                  
+                                  // 假設只能夠選一天的班
+                                  if(isOnShift) {
+                                      // 預約on班
+                                      if(checkResAmount(true, String(event.start_date), String(event.end_date))) {
+                                          sendNewReservation(event.priority, event.start_date, event.end_date);
+                                      }
+                                  }else {
+                                      // 預約off班
+                                      if(checkResAmount(false, String(event.start_date), String(event.end_date))) {
+                                          sendNewReservation(event.priority, event.start_date, event.end_date);
+                                      }
+                                  }
+                              }
+//                              countDay();
+                              location.reload();
                                         
-                                });
+                            });
 
 
                             scheduler.attachEvent("onEventChanged", function(id,e){
                                 var event = scheduler.getEvent(id);
+                                var isOnShift = true;
 
                                 if(event.priority == 1){
                                     event.text = "行政";
@@ -259,11 +304,25 @@
                                 }else if(event.priority == 6){
                                     event.text = "淡水夜班";
                                 }else if(event.priority == 7){
-                                    event.text = "off";
+                                    event.text = "off班";
+                                    isOnShift = false;
+                                }
+                                
+                                // 一次只能夠改一天的預班
+                                if(isOnShift) {
+                                    // 預約on班
+                                    if(checkResAmount(true, String(event.start_date), String(event.end_date))) {
+                                        updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
+                                    }
+                                }else {
+                                    // 預約off班
+                                    if(checkResAmount(false, String(event.start_date), String(event.end_date))) {
+                                        updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
+                                    }
                                 }
 
-                                updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
-                                countDay();
+                                location.reload();
+//                                countDay();
                                 
                             
                                 console.log(event.priority);
@@ -279,9 +338,10 @@
                                 var event = scheduler.getEvent(id);
 
                                 deleteReservation(event.hidden);
-                                countDay();
+//                                countDay();
                                 console.log(event.hidden);
                                 console.log(id);
+                                location.reload();
                                 return true;
                             });
 
@@ -357,7 +417,7 @@
                             scheduler.config.limit_end = new Date(endd);
 
                             scheduler.attachEvent("onLimitViolation", function  (id, obj){
-                                dhtmlx.message({ type:"error", text:"此時段無法接受排班", expire:-1 })
+                                dhtmlx.message({ type:"error", text:"此時段無法接受排班" })
                             });
 
                             scheduler.templates.lightbox_header = function(start, end, event){

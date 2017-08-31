@@ -147,7 +147,9 @@ Route::group(['middleware' => ['auth']], function () {
 //Route::get('postAjaxRequest', 'TestController@postAjaxRequest');
 Route::get('test','TestController@shiftFirstEditionAddShifts');
 
-Route::get('test','TestController@shiftFirstEditionAddShifts');
+//Route::get('test','TestController@shiftFirstEditionAddShifts');
+
+Route::get('getAAAA', 'TestController@getAAAA');
 
 Route::get('testDay','TestController@countDay');
 //調整班表->正式班表
