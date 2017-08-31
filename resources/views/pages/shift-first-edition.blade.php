@@ -91,7 +91,7 @@
                             
                             <div class="lightbox-footer">
 
-                                <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn" onclick="save_form()">Save</button>
+                                <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn" onclick="save_form_alert()">Save</button>
                                 <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel modal-btn" onclick="close_form()">Cancel</button>
                                 {{ csrf_field() }}
                             </div>
@@ -475,18 +475,36 @@
             location.reload();
         }
 
+        function save_form_alert(){
+            var ID_1 = document.getElementById('date1').value;
+            var ID_2 = document.getElementById('date2').value;
+
+            if(ID_1 == ID_2){
+                dhtmlx.message({ type:"error", text:"請選擇不同時段醫生" });
+            }
+
+            else if(ID_2 == ""){
+                dhtmlx.message({ type:"error", text:"請選擇醫生" });
+            }
+
+           else{
+            console.log("11");
+            save_form();
+           }
+
+        }
+
         function save_form() {
             $.get('change-shift-first-edition', {
                 scheduleID_1 : document.getElementById('date1').value,
                 scheduleID_2 : document.getElementById('date2').value
             }, function (){
-                 scheduler.endLightbox(true, html("my_form"));
-                 refresh();
+                scheduler.endLightbox(true, html("my_form"));
+                refresh();
             });
         }
 
-        function close_form() {
-                                
+        function close_form() {               
             scheduler.endLightbox(false, html("my_form"));
                                 
         }
