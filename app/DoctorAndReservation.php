@@ -100,4 +100,67 @@ class DoctorAndReservation extends Model
         return $amount;
     }
     
+    // 回傳單一醫生次月on班數量
+    public function getNextMonthOnResAmount($doctorID) {
+        $resSerials = DB::table('DoctorAndReservation')
+            ->where('doctorID', $doctorID)
+            ->get();
+        
+        $serials = [];
+        foreach($resSerials as $resSerial) {
+            array_push($serials, $resSerial->resSerial);
+        }
+        
+        $amount = DB::table('Reservation')
+            ->whereIn('resSerial', $serials)
+            ->whereIn('categorySerial', [3, 4, 5, 6])
+            ->where('date', 'like', $this->getNextMonthString().'%')
+            ->count();
+        
+        return $amount;
+    }
+    
+    
+    // 回傳單一醫生次月off班數量
+    public function getNextMonthOffResAmount($doctorID) {
+        $resSerials = DB::table('DoctorAndReservation')
+            ->where('doctorID', $doctorID)
+            ->get();
+        
+        $serials = [];
+        foreach($resSerials as $resSerial) {
+            array_push($serials, $resSerial->resSerial);
+        }
+        
+        $amount = DB::table('Reservation')
+            ->whereIn('resSerial', $serials)
+            ->where('categorySerial', 7)
+            ->where('date', 'like', $this->getNextMonthString().'%')
+            ->count();
+        
+        return $amount;
+    }
+    
+    private function getNextMonthString() {
+        // 取出次月預約
+        $currentDate = date('Y-m');
+        $dateArr = explode('-', $currentDate);
+        
+        $year = (int)$dateArr[0];
+        $month = (int)$dateArr[1];
+        
+        if($month == 12) {
+            $year += 1;
+        }
+        $month = ($month + 1) % 12;
+        
+        if($month <= 9) {
+            $month = '0'.$month;
+        }
+        
+        $nextMonthStr = $year.'-'.$month;
+        
+        return $nextMonthStr; 
+    }
+    
 }

@@ -54,22 +54,67 @@ class Reservation extends Model
         return $reservationList;
     }
 
-    //查看 單一醫生預班資訊
+    //查看 登入中的使用者的預班資訊
     public function getReservationByID()
     {
         $user = new User();
         $id = $user->getCurrentUserID();
         
-        $doctorData = DB::table('DoctorAndReservation')->where("doctorID",$id)->get();
-        //$date=DB::table('Reservation') -> whereIn("resSerial",)->date;
+        $doctorData = DB::table('DoctorAndReservation')
+            ->where("doctorID",$id)
+            ->get();
 
         $arr = array();
         foreach ($doctorData as $doctorDatum ) {
             $arr[] = $doctorDatum->resSerial;
             
         }
-         $data=DB::table('Reservation') -> whereIn("resSerial",$arr)->get();
-         return $data;
+        $data=DB::table('Reservation')
+            ->whereIn("resSerial",$arr)
+            ->get();
+        return $data;
+
+    }
+    
+    //查看 次月登入中的使用者的預班資訊
+    public function getNextMonthReservationByID()
+    {
+        $user = new User();
+        $id = $user->getCurrentUserID();
+        
+        $doctorData = DB::table('DoctorAndReservation')
+            ->where("doctorID",$id)
+            ->get();
+
+        $arr = array();
+        foreach ($doctorData as $doctorDatum ) {
+            $arr[] = $doctorDatum->resSerial;
+            
+        }
+        
+        // 取出次月預約
+        $currentDate = date('Y-m');
+        $dateArr = explode('-', $currentDate);
+        
+        $year = (int)$dateArr[0];
+        $month = (int)$dateArr[1];
+        
+        if($month == 12) {
+            $year += 1;
+        }
+        $month = ($month + 1) % 12;
+        
+        if($month <= 9) {
+            $month = '0'.$month;
+        }
+        
+        $nextMonthStr = $year.'-'.$month.'%';
+        
+        $data=DB::table('Reservation')
+            ->whereIn("resSerial",$arr)
+            ->where('date', 'like', $nextMonthStr)
+            ->get();
+        return $data;
 
      }
 
