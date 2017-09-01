@@ -540,5 +540,28 @@ class TestController extends Controller
 
         // return $array;
     }
+     public function getChartPageBySelectedID() {
+        //$data = $request->all();
+        
+        
+        $userID = 1;
+        
+        $user = new User();
+        $doctor = array();
+        
+        $selectedtUser = $user->getDoctorInfoByID($userID)->name;
+        
+        $schedule = new Schedule();
+        
+        $shifts = $schedule->getCurrentMonthShiftsByID($userID);
+        
+        $shiftsData = $schedule->countScheduleCategory($shifts);
+        
+      
+        $array = array($selectedtUser,count($shifts),$shiftsData);
+       // array_push($doctor, array($selectedtUser, $shiftsData));
+        
+        echo $array[1];
+    }
 }
 

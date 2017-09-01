@@ -46,7 +46,9 @@ Route::get('profile', 'AccountController@getProfilePage');
 // 統計圖表頁面
 
 // 單一醫生上班紀錄的統計圖表
-Route::get('doctorsChart', 'ChartController@getChartPageBySelectedID');
+Route::get('doctorsChart', 'ChartController@getChartPage');
+Route::post('doctorsChart', 'ChartController@getChartPageBySelectedID');
+Route::get('doctorsChart_selectedUserID','ChartController@getChartPageBySelectedDoctorID');
 
 // 列出全部人的預班資訊
 Route::get('/reservation-all', 'ReservationController@reservation');
@@ -274,7 +276,7 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 //Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
-Route::get("info",'TestController@getDoctorInfoByID');
+Route::get("info",'TestController@getChartPageBySelectedID');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 //Route::post('reservation/updateReservation/{id}', 'ReservationController@updateReservation');
 //Route::get('/reservation/updateReservation/{id}', function() {

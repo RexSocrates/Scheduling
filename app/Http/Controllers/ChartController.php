@@ -16,30 +16,31 @@ class ChartController extends Controller
         
         $doctors = $user->getAtWorkDoctors();
         
-        //$currentUser = $user->getCurrentUserInfo();
+        $currentUser = $user->getCurrentUserInfo();
         
         $schedule = new Schedule();
         
-        $shifts = $schedule->getCurrentMonthShiftsByID(3);
+        $shifts = $schedule->getCurrentMonthShiftsByID($currentUser->doctorID);
         
         $shiftsData = $schedule->countScheduleCategory($shifts);
         
         return view('pages.chart', [
             'doctors' => $doctors,
-            'currentUser' => "張瑋翎",
+            'currentUser' => $currentUser->name,
             'totalShift' => count($shifts),
             'shiftsData' => $shiftsData
         ]);
     }
     
     public function getChartPageBySelectedID(Request $request) {
-        $userID = $request->get('selectedUserID');
-        
+        $data = $request->all();
         $user = new User();
-        
         $doctors = $user->getAtWorkDoctors();
         
-        $selectedtUser = $user->getDoctorInfoByID($userID);
+        $userID = $data['selectedUserID'];
+        
+       
+        $selectedtUser = $user->getDoctorInfoByID($userID)->name;
         
         $schedule = new Schedule();
         
@@ -47,13 +48,40 @@ class ChartController extends Controller
         
         $shiftsData = $schedule->countScheduleCategory($shifts);
         
-        return view('pages.chart', [
+       
+        $array = array($selectedtUser,count($shifts),$shiftsData);
+    
+       return view('pages.chart', [
             'doctors' => $doctors,
             'currentUser' => $selectedtUser,
             'totalShift' => count($shifts),
             'shiftsData' => $shiftsData
         ]);
+       
     }
+
+    public function getChartPageBySelectedDoctorID(Request $request) {
+        $data = $request->all();
+
+        $user = new User();
+        
+        $userID = $data['selectedUserID'];
+       
+        $selectedtUser = $user->getDoctorInfoByID($userID)->name;
+        
+        $schedule = new Schedule();
+        
+        $shifts = $schedule->getCurrentMonthShiftsByID($userID);
+        
+        $shiftsData = $schedule->countScheduleCategory($shifts);
+        
+       
+        $array = array($selectedtUser,count($shifts),$shiftsData);
+    
+        return $array;
+       
+    }
+
     
     
 }

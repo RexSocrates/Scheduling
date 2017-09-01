@@ -273,7 +273,7 @@
         function changeDate(array) {
                 var date = "";
                 for(i=0 ; i<array.length ; i++){
-                    date += "<option value="+array[i][0]+">"+array[i][1]+"</option>";
+                    date += "<option value="+array[i][0]+">"+array[i][2]+"</option>";
                     console.log('1'+array[i][0]);
                 }
                 document.getElementById("date").innerHTML  = date;

@@ -79,8 +79,6 @@ class ShiftRecordsController extends Controller
         $shiftRecords = new ShiftRecords();
         $data = $shiftRecords ->getShiftRecordsByDoctorID();
 
-
-
         return view ("getShiftRecordsByDoctorID",array('data' => $data));
     }
 
@@ -261,7 +259,7 @@ class ShiftRecordsController extends Controller
 
         $currentDoctor = $userObj->getCurrentUserInfo();
 
-        $currentDoctorSchedule=$sheduleObj->getScheduleByCurrentDoctorID(); //查看目前登入的醫生班表資訊
+        $currentDoctorSchedule=$sheduleObj->getNextMonthShiftsByID($currentDoctor->doctorID); //查看目前登入的醫生班表資訊
 
          //選擇換班醫生
         $doctorName = $userObj->getAtWorkDoctors();

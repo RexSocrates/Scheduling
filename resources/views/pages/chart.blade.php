@@ -27,18 +27,18 @@
                 <div id="test1" class="col s12">
                     <div class="card">
                         <div class="card-action">
-                            <form action="doctorsChart" method="post">
+                            <form action="doctorsChart" method="post"> 
                                 <p class="inline">醫師名稱</p>
-                                    <select name="selectedUserID" class="browser-default">
+                                    <select name="selectedUserID" class="browser-default" id=userID required>
                                         <option value="" disabled selected>選擇醫師名稱</option>
                                         @foreach($doctors as $doctor)
-                                            <option value={{ $doctor->doctorID }}>{{ $doctor->name }}</option>
+                                            <option value="{{ $doctor->doctorID }}">{{ $doctor->name }}</option>
                                         @endforeach
                                     </select>
                                     <input class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" type="submit" value="確認">
-                                    <a class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" href="#modal2">確認</a>
+                                   
                                     {{ csrf_field() }}
-                            </form>
+                              </form>  
                         </div>
                         <div class="divider"></div>
                         <div class="card-content">
@@ -57,33 +57,33 @@
                                         <thead>
                                             <tr>
                                                 <th>醫生名字</th>
-                                                <th>{{$currentUser}}</th>
+                                                <th id=name>{{ $currentUser }}</th>
                                              </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td>總班數</td>
-                                                <td>{{ $totalShift }}</td>
+                                                <td id =totalShift>{{ $totalShift }}</td>
                                             </tr>
                                             <tr>
                                                 <td>台北白班</td>
-                                                <td>{{ $shiftsData['taipeiDay'] }}</td>
+                                                <td id=taipeiDay>{{ $shiftsData['taipeiDay'] }}</td>
                                             </tr>
                                             <tr>
                                                 <td>台北夜班</td>
-                                                <td>{{ $shiftsData['taipeiNight'] }}</td>
+                                                <td id=taipeiNight>{{ $shiftsData['taipeiNight'] }}</td>
                                             </tr>
                                             <tr>
                                                 <td>淡水白班</td>
-                                                <td>{{ $shiftsData['tamsuiDay'] }}</td>
+                                                <td id=tamsuiDay>{{ $shiftsData['tamsuiDay'] }}</td>
                                             </tr>
                                             <tr>
                                                 <td>淡水夜班</td>
-                                                <td>{{ $shiftsData['tamsuiNight'] }}</td>
+                                                <td id=tamsuiNight>{{ $shiftsData['tamsuiNight'] }}</td>
                                             </tr>
                                             <tr>
                                                 <td>行政教學班</td>
-                                                <td>{{ $shiftsData['others'] }}</td>
+                                                <td id=others>{{ $shiftsData['others'] }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -99,48 +99,47 @@
                         </div>
                         <div class="divider"></div>
                         <div class="card-content">
-                            <p>醫師名稱</p>
-                              <select class="browser-default">
-                                    <option value="" disabled selected>選擇醫師名稱</option>
-                                    <option value="1">全部醫師</option>
-                                    <option value="2">張國訟</option>
-                                    <option value="3">王樹林</option>
-                              </select>
-
-                            <a class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" href="#modal2">確認</a>
+                            <p class="inline">醫師名稱</p>
+                                    <select name="selectedUserID" class="browser-default" id=ID>
+                                        <option value="" disabled selected>選擇醫師名稱</option>
+                                        @foreach($doctors as $doctor)
+                                            <option value="{{ $doctor->doctorID }}">{{ $doctor->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <button class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" type="submit" value="確認" onclick="selectedID_alert()">確認</button>
                         </div>
 	                </div>
 	                <table class="bordered centered">
 				        <thead>
 				            <tr>
 					            <th>醫生名字</th>
-					            <th>張國訟</th>
+					            <th id=doctorName>{{ $currentUser }}</th>
 				            </tr>
 				        </thead>
 				        <tbody>
 				            <tr>
 				            	<td>總班數</td>
-				            	<td>15</td>
+				            	<td id =totalShifts>{{ $totalShift }}</td>
 				            </tr>
 				            <tr>
 				            	<td>台北白班</td>
-				            	<td>10</td>
+				            	<td id=taipeiDays>{{ $shiftsData['taipeiDay'] }}</td>
 				            </tr>
 				            <tr>
 				            	<td>台北夜班</td>
-				            	<td>0</td>
+				            	<td id=taipeiNights>{{ $shiftsData['taipeiNight'] }}</td>
 				            </tr>
 				            <tr>
 				            	<td>淡水白班</td>
-				            	<td>0</td>
+				            	<td id=tamsuiDays>{{ $shiftsData['tamsuiDay'] }}</td>
 				            </tr>
 				            <tr>
 				            	<td>淡水夜班</td>
-				            	<td>2</td>
+				            	<td id=tamsuiNights>{{ $shiftsData['tamsuiNight'] }}</td>
 				            </tr>
 				            <tr>
 				            	<td>行政教學班</td>
-				            	<td>3</td>
+				            	<td id=other>{{ $shiftsData['others'] }}</td>
 				            </tr>
 				        </tbody>
 					</table>
@@ -309,6 +308,30 @@
 	        window.myPie = new Chart(ctx, config);
 	    };
 
-    
+
+        function selectedID_alert(){
+            var doctor=document.getElementById('ID').value
+                if(doctor==""){
+                dhtmlx.message({ type:"error", text:"請選擇醫生" });
+                }
+                else{
+                selectedID();
+                }
+            }
+        
+        function selectedID() {
+            $.get('doctorsChart_selectedUserID', {
+                selectedUserID : document.getElementById('ID').value
+            }, function (array){
+                document.getElementById("doctorName").innerHTML = array[0];
+                document.getElementById("totalShifts").innerHTML = array[1];
+                document.getElementById("taipeiDays").innerHTML = array[2]['taipeiDay'];
+                document.getElementById("taipeiNights").innerHTML = array[2]['taipeiNight'];
+                document.getElementById("tamsuiDays").innerHTML = array[2]['tamsuiDay'];
+                document.getElementById("tamsuiNights").innerHTML = array[2]['tamsuiNight'];
+                document.getElementById("other").innerHTML = array[2]['others'];
+
+            });
+        }
     </script>
 @endsection

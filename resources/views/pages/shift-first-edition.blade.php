@@ -489,7 +489,6 @@
             }
 
            else{
-            console.log("11");
             save_form();
            }
 
