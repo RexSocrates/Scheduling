@@ -13,6 +13,7 @@ use App\Reservation;
 use App\DoctorAndReservation;
 use App\Schedule;
 use App\ShiftRecords;
+use App\OfficialLeave;
 
 class TestController extends Controller
 {
@@ -562,6 +563,36 @@ class TestController extends Controller
        // array_push($doctor, array($selectedtUser, $shiftsData));
         
         echo $array[1];
+    }
+     public function getOfficialLeavePageById() {
+        //$data = $request->all();
+        
+        $user = new User();
+
+        $doctorID = 1;
+
+        $officialLeave = new OfficialLeave();
+        
+        $leaves = $officialLeave->getLeavesByDoctorID($doctorID);
+        
+        $doctorsLeave = array();
+        
+        foreach($leaves as $leave) {
+            $recordDate = $leave->recordDate;
+            $confirmingPersonID = $leave->confirmingPersonID;
+            $leaveDate = $leave->leaveDate;
+            $remark = $leave->remark;
+            $leaveHours = $leave->leaveHours;
+            
+            array_push($doctorsLeave, array($recordDate,$confirmingPersonID,$leaveDate,$remark,$leaveHours));
+            //echo $doctorsLeave[0];
+        }
+
+            echo $doctorsLeave[1][0];
+        // return view('pages.officialaffair', [
+        //     'doctorsLeave' => $doctorsLeave
+        // ]);
+        
     }
 }
 

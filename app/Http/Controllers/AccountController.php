@@ -49,6 +49,7 @@ class AccountController extends Controller
     
     // 取奪所有醫師的公假紀錄
     public function getOfficialLeavePage() {
+
         $user = new User();
         $officialLeave = new OfficialLeave();
         
@@ -61,17 +62,48 @@ class AccountController extends Controller
             
             array_push($doctorsLeave, array($doctor, $leaves));
         }
-        
+            //return $doctorsLeave;
         return view('pages.officialaffair', [
             'doctorsLeave' => $doctorsLeave
         ]);
         
     }
 
+     public function getOfficialLeavePageById(Request $request) {
+        $data = $request->all();
+        
+        $user = new User();
+
+        $doctorID = $data['id'];
+
+        $officialLeave = new OfficialLeave();
+        
+        $leaves = $officialLeave->getLeavesByDoctorID($doctorID);
+        
+        $doctorsLeave = array();
+        
+        foreach($leaves as $leave) {
+            $recordDate = $leave->recordDate;
+            $confirmingPersonID = $leave->confirmingPersonID;
+            $leaveDate = $leave->leaveDate;
+            $remark = $leave->remark;
+            $leaveHours = $leave->leaveHours;
+            
+            array_push($doctorsLeave, array($recordDate,$confirmingPersonID,$leaveDate,$remark,$leaveHours,$doctorID));
+            //echo $doctorsLeave[0];
+        }
+            return $doctorsLeave;
+            //echo $doctorsLeave[1][0];
+        // return view('pages.officialaffair', [
+        //     'doctorsLeave' => $doctorsLeave
+        // ]);
+        
+    }
     public function getDoctorInfoByID(Request $request){
         $data = $request->all();
 
         $schedule = new Schedule();
+
         $user = new User();
         
         $doctor = $schedule->getNextMonthShiftsByID($data['id']);

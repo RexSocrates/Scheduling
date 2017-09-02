@@ -94,6 +94,7 @@ Route::get('rejectShift/{id}','ShiftRecordsController@rejectShift');
 
 // 列出所有使用者的資訊以及公假
 Route::get('officialLeave', 'AccountController@getOfficialLeavePage');
+Route::get('showOfficialLeaveInfo', 'AccountController@getOfficialLeavePageById');
 
 // 新增預班
 Route::post('sendReservationAdd', 'ReservationController@addReservation');
@@ -276,7 +277,7 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 //Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
-Route::get("info",'TestController@getChartPageBySelectedID');
+Route::get("info",'TestController@getOfficialLeavePageById');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 //Route::post('reservation/updateReservation/{id}', 'ReservationController@updateReservation');
 //Route::get('/reservation/updateReservation/{id}', function() {

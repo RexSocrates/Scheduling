@@ -70,8 +70,8 @@ class ReservationController extends Controller
 
         $data = array();
 
-//        $reservationData = $reservation->getReservationByID();
-        $reservationData = $reservation->getNextMonthReservationByID();
+        $reservationData = $reservation->getReservationByID();
+        //$reservationData = $reservation->getNextMonthReservationByID();
         
         $doctorID = $user->getCurrentUserID();
         $doctorDay = $user->getDoctorInfoByID($doctorID)->mustOnDutyDayShifts;
@@ -231,7 +231,7 @@ class ReservationController extends Controller
             $this->sendRandomNotificationMail($newSerial);
             }
 
-           $date=date("Y-m-d",strtotime($date."+1 day"));
+            $date=date("Y-m-d",strtotime($date."+1 day"));
         }
         
     }

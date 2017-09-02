@@ -37,14 +37,14 @@
                                 <tbody>
                                     @foreach($doctorsLeave as $doctorObj)
                                         <tr>
-                                            <td>{{ $doctorObj[0]->doctorID }}</td>
+                                            <td> {{ $doctorObj[0]->doctorID }}</td>
                                             <td>{{ $doctorObj[0]->name }}</td>
                                             <td>{{ $doctorObj[0]->major }}</td>
                                             <td>{{ $doctorObj[0]->level }}</td>
                                             <td>{{ $doctorObj[0]->location }}</td>
                                             <td>{{ $doctorObj[0]->identity }}</td>
                                             <td class="doctor-td">
-                                                <a class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" href="#modal2">詳細資料</a>
+                                                <a class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" href="#modal2" onclick="showOfficialLeaveInfo({{ $doctorObj[0]->doctorID }})">詳細資料</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -59,7 +59,7 @@
 	
     <!-- Modal Structure -->
     <div id="modal2" class="modal modal-fixed-footer modal-announcement">
-        <form action="#!" method="post">
+        <form action="officialLeave">
             <div class="modal-header" >
                 <h5 class="modal-announcement-title">醫師公假紀錄</h5>
                 <div class="nav-content">
@@ -80,14 +80,16 @@
                 </thead>
                 <tbody>
                     @foreach($doctorsLeave as $leaves)
-                        @foreach($leaves[1] as $leave)
+                        @foreach($leaves[1] as $leave) 
+                        
                             <tr>
-                                <td>{{ $leave->recordDate }}</td>
-                                <td>{{ $leave->confirmingPersonID }}</td>
-                                <td>{{ $leave->leaveDate }}</td>
-                                <td>{{ $leave->remark }}</td>
-                                <td>{{ $leave->leaveHours }}</td>
+                                <td id=recordDate></td>
+                                <td id=confirmingPersonID></td>
+                                <td id=leaveDate></td>
+                                <td id=remark></td>
+                                <td id=leaveHours></td>
                             </tr>
+                        
                         @endforeach
                     @endforeach
                 </tbody>
@@ -122,6 +124,38 @@
             selectYears: 200 // Creates a dropdown of 15 years to control year
         });
         
+    </script>
+    <script>
+
+     function showOfficialLeaveInfo(id) {
+            $.get('showOfficialLeaveInfo', {
+                id :id,
+            }, function (array){
+                var recordDate = "";
+                var confirmingPersonID="";
+                var leaveDate="";
+                var remark ="";
+                var leaveHours="";
+
+                for(i=0 ; i<array.length ; i++){
+                   recordDate += "<td>"+array[i][0]+"</td><br>";
+                   confirmingPersonID += "<td>"+array[i][1]+"</td><br>";
+                   leaveDate += "<td>"+array[i][2]+"</td><br>";
+                   remark += "<td>"+array[i][3]+"</td><br>";
+                   leaveHours += "<td>"+array[i][4]+"</td><br>";
+                
+                    console.log("aaa");
+                }
+                
+                document.getElementById("recordDate").innerHTML  = recordDate; 
+                document.getElementById("confirmingPersonID").innerHTML = confirmingPersonID;
+                document.getElementById("leaveDate").innerHTML = leaveDate;
+                document.getElementById("remark").innerHTML = remark;
+                document.getElementById("leaveHours").innerHTML = leaveHours;
+            
+                 
+            });
+        }
     </script>
 @endsection
 

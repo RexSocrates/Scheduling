@@ -53,12 +53,6 @@
             location.reload();
         }
 
-        // function alert1(countDay,countNight){
-        //     var countDay=countDay;
-        //     alert("countDay"+countDay);
-        //     return countNight;
-        // }
-
         function alert2(){
             alert("備註送出完成");
         }
@@ -271,7 +265,8 @@
                                   if(isOnShift) {
                                       // 預約on班
                                       if(checkResAmount(true, String(event.start_date), String(event.end_date))) {
-                                          sendNewReservation(event.priority, event.start_date, event.end_date);
+                                            sendNewReservation(event.priority, event.start_date, event.end_date);
+                                               
                                       }
                                   }else {
                                       // 預約off班
