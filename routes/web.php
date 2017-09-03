@@ -22,6 +22,12 @@ Route::get('/home', 'HomeController@index')->name('home');
 // 正式路由
 Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
 
+// Ajax get request 編輯醫師資料
+Route::get('editDoctorInfo', 'AccountController@editDoctorInfo');
+
+// 更新醫生資訊
+Route::post('doctorInfoUpdate', 'AccountController@doctorInfoUpdate');
+
 // 取得公告頁面
 Route::get('index', 'AnnouncementController@getAnnouncementPage');
 
