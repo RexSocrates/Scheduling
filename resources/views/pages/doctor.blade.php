@@ -216,7 +216,7 @@
 -->
                     <div class="input-field col s12">
                         <select id="doctorMajor" name="major" required>
-                            <option value="" disabled>選擇專科</option>
+<!--                            <option value="" disabled>選擇專科</option>-->
                             <option value="All">All</option>
                             <option value="Medical">Medical</option>
                             <option value="Surgical">Surgical</option>
@@ -225,9 +225,9 @@
                     </div>
                     <div class="input-field col s12">
                         <select id="doctorLevel" name="level" required>
-                            <option value="" disabled>選擇級別</option>
+<!--                            <option value="" disabled>選擇級別</option>-->
                             <option value="A1">A1</option>
-                            <option value="A2" selected>A2</option>
+                            <option value="A2">A2</option>
                             <option value="A3">A3</option>
                             <option value="A4">A4</option>
                             <option value="A5">A5</option>
@@ -252,18 +252,18 @@
                     <div class="input-field col s12 margin-t0">
                         <p class="margin-0">職登院區</p>
                         <p class="radio-location">
-                            <input class="with-gap" name="location" type="radio" id="radio-Taipei" value="台北" required/>
+                            <input class="with-gap" name="location" type="radio" id="radio-Taipei" value="台北" checked="checked"/>
                             <label for="radio-Taipei">台北</label>
-                            <input class="with-gap" name="location" type="radio" id="radio-Danshui" value="淡水" checked="checked"/>
+                            <input class="with-gap" name="location" type="radio" id="radio-Danshui" value="淡水" />
                             <label for="radio-Danshui">淡水</label>
                         </p>
                     </div>
                     <div class="input-field col s12">
                         <select name="identity" id="doctorIdentity" required>
-                            <option value="" disabled>選擇權限</option>
+<!--                            <option value="" disabled>選擇權限</option>-->
                             <option value="Admin">排班人員</option>
                             <option value="General">一般醫師</option>
-                            <option value="Announcement" selected>一般醫師(可發送公告)</option>
+                            <option value="Announcement">一般醫師(可發送公告)</option>
                         </select>
                         <label>權限</label>
                     </div>
@@ -391,9 +391,14 @@
                 document.getElementById("doctorName").value = doctorData[2];
                 
                 // problematic drop down list
+                // level 3
                 document.getElementById("doctorLevel").value = doctorData[3];
-                document.getElementById('doctorMajor').value = doctorData[4];
+                // major 4
+//                document.getElementById('doctorMajor').value = doctorData[4];
+                document.getElementById('doctorMajor').value = "Surgical";
                 console.log("Major : " + doctorData[4]);
+                
+                document.getElementById("doctorMajor").innerHTML = "<option value='All'>All</option>";
                 
                 // location 5
                 if(doctorData[5] == "台北") {

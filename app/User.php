@@ -112,8 +112,8 @@ class User extends Authenticatable
                 'mustOnDutySurgicalShifts' => $data['mustOnDutySurgicalShifts'],
                 'mustOnDutyTaipeiShifts' => $data['mustOnDutyTaipeiShifts'],
                 'mustOnDutyTamsuiShifts' => $data['mustOnDutyTamsuiShifts'],
-                'mustOnDutyTamsuiShifts' => $data['mustOnDutyDayShifts'],
-                'mustOnDutyTamsuiShifts' => $data['mustOnDutyNightShifts']
+                'mustOnDutyDayShifts' => $data['mustOnDutyDayShifts'],
+                'mustOnDutyNightShifts' => $data['mustOnDutyNightShifts']
             ]);
         
         return $rows;
