@@ -44,7 +44,7 @@
                                         <td>{{ $doctor->location }}</td>
                                         <td>{{ $doctor->identity }}</td>
                                         <td class="doctor-td">
-                                            <a class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" href="#modal2">編輯</a>
+                                            <a class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" href="#modal2" onclick="editDoctor({{ $doctor->doctorID }})">編輯</a>
                                             <a class="waves-effect waves-light red accent-2 btn doctor-td-btn" href="resign/{{ $doctor->doctorID }}">刪除</a>
                                         </td>
                                     </tr>
@@ -145,31 +145,31 @@
                 
                 <div id="modal-right" class="row margin-b0">
                     <div class="input-field col s12">
-                        <input value="15" id="看你怎麼取" name="mustOnDutyTotalShifts" type="number" required>
+                        <input value="15" name="mustOnDutyTotalShifts" type="number" required>
                         <label for="和id一樣">總班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="看你怎麼取" name="mustOnDutyTaipeiShifts" type="number" required>
+                        <input value="15" name="mustOnDutyTaipeiShifts" type="number" required>
                         <label for="和id一樣">台北院區班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="看你怎麼取" name="mustOnDutyTamsuiShifts" type="number" required>
+                        <input value="15" name="mustOnDutyTamsuiShifts" type="number" required>
                         <label for="和id一樣">淡水院區班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="看你怎麼取" name="mustOnDutyDayShifts" type="number" required>
+                        <input value="15" name="mustOnDutyDayShifts" type="number" required>
                         <label for="和id一樣">白天班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="看你怎麼取" name="mustOnDutyNightShifts" type="number" required>
+                        <input value="15" name="mustOnDutyNightShifts" type="number" required>
                         <label for="和id一樣">夜晚班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="看你怎麼取" name="mustOnDutyMedicalShifts" type="number" required>
+                        <input value="15" name="mustOnDutyMedicalShifts" type="number" required>
                         <label for="和id一樣">內科班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="看你怎麼取" name="mustOnDutySurgicalShifts" type="number" required>
+                        <input value="15" name="mustOnDutySurgicalShifts" type="number" required>
                         <label for="和id一樣">外科班數</label>
                     </div>
                 </div>
@@ -184,7 +184,9 @@
        
     <!-- Modal Structure -->
     <div id="modal2" class="modal modal-fixed-footer modal-announcement">
-        <form action="" method="post">
+        <form action="doctorInfoUpdate" method="post">
+            {{ csrf_field() }}
+            <input type="hidden" id="hiddenDoctorID" name="hiddenDoctorID" value="">
             <div class="modal-header">
                 <h5 class="modal-announcement-title">修改醫生</h5>
                 <div class="nav-content">
@@ -199,31 +201,33 @@
             <div class="modal-content modal-content-customize">
                 <div id="modal-left1" class="row margin-b0">
                     <div class="input-field col s12">
-                        <input id="title" type="text" value="" name="name" required>
+                        <input id="doctorName" type="text" value="" name="name" required>
                         <label for="title">醫生名稱</label>
                     </div>
                     <div class="input-field col s12">
-                        <input id="email" type="email" class="validate" value="" name="email" required>
+                        <input id="doctorEmail" type="email" class="validate" value="" name="email" required>
                         <label for="email" data-error="wrong" data-success="right">Email</label>
                     </div>
+<!--
                     <div class="input-field col s12">
-                        <input id="date" type="date" class="datepicker" value="" name="birthday" onchange="dateFormat()">
+                        <input id="date2" type="date" class="datepicker" value="" name="birthday" onchange="dateFormat()">
                         <label for="date">出生日期</label>
                     </div>
+-->
                     <div class="input-field col s12">
-                        <select name="major" required>
-                            <option value="" disabled>選擇專科</option>
+                        <select id="doctorMajor" name="major" required>
+<!--                            <option value="" disabled>選擇專科</option>-->
                             <option value="All">All</option>
-                            <option value="Medical" selected>Medical</option>
+                            <option value="Medical">Medical</option>
                             <option value="Surgical">Surgical</option>
                         </select>
                         <label>專職科別</label>
                     </div>
                     <div class="input-field col s12">
-                        <select name="level" required>
-                            <option value="" disabled>選擇級別</option>
+                        <select id="doctorLevel" name="level" required>
+<!--                            <option value="" disabled>選擇級別</option>-->
                             <option value="A1">A1</option>
-                            <option value="A2" selected>A2</option>
+                            <option value="A2">A2</option>
                             <option value="A3">A3</option>
                             <option value="A4">A4</option>
                             <option value="A5">A5</option>
@@ -248,18 +252,18 @@
                     <div class="input-field col s12 margin-t0">
                         <p class="margin-0">職登院區</p>
                         <p class="radio-location">
-                            <input class="with-gap" name="location" type="radio" id="radio-Taipei" value="台北" required/>
+                            <input class="with-gap" name="location" type="radio" id="radio-Taipei" value="台北" checked="checked"/>
                             <label for="radio-Taipei">台北</label>
-                            <input class="with-gap" name="location" type="radio" id="radio-Danshui" value="淡水" checked="checked"/>
+                            <input class="with-gap" name="location" type="radio" id="radio-Danshui" value="淡水" />
                             <label for="radio-Danshui">淡水</label>
                         </p>
                     </div>
                     <div class="input-field col s12">
-                        <select required>
-                            <option value="" disabled>選擇權限</option>
+                        <select name="identity" id="doctorIdentity" required>
+<!--                            <option value="" disabled>選擇權限</option>-->
                             <option value="Admin">排班人員</option>
                             <option value="General">一般醫師</option>
-                            <option value="Announcement" selected>一般醫師(可發送公告)</option>
+                            <option value="Announcement">一般醫師(可發送公告)</option>
                         </select>
                         <label>權限</label>
                     </div>
@@ -267,27 +271,31 @@
                 
                 <div id="modal-right1" class="row margin-b0">
                     <div class="input-field col s12">
-                        <input value="15" id="看你怎麼取" type="number" required>
+                        <input value="15" id="mustOnDutyTotalShifts" name="mustOnDutyTotalShifts" type="number" required>
+                        <label for="和id一樣">總班數</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input value="15" id="mustOnDutyTaipeiShifts" name="mustOnDutyTaipeiShifts" type="number" required>
                         <label for="和id一樣">台北院區班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="看你怎麼取" type="number" required>
+                        <input value="15" id="mustOnDutyTamsuiShifts" name="mustOnDutyTamsuiShifts" type="number" required>
                         <label for="和id一樣">淡水院區班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="看你怎麼取" type="number" required>
+                        <input value="15" id="mustOnDutyDayShifts" name="mustOnDutyDayShifts" type="number" required>
                         <label for="和id一樣">白天班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="看你怎麼取" type="number" required>
+                        <input value="15" id="mustOnDutyNightShifts" name="mustOnDutyNightShifts" type="number" required>
                         <label for="和id一樣">夜晚班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="看你怎麼取" type="number" required>
+                        <input value="15" id="mustOnDutyMedicalShifts" name="mustOnDutyMedicalShifts" type="number" required>
                         <label for="和id一樣">內科班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="看你怎麼取" type="number" required>
+                        <input value="15" id="mustOnDutySurgicalShifts" name="mustOnDutySurgicalShifts" type="number" required>
                         <label for="和id一樣">外科班數</label>
                     </div>
                 </div>
@@ -303,6 +311,7 @@
 @section('script')
     <script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="../js/dataTables.material.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
         function dateFormat() {
             var dateValue = document.getElementById("date").value;
@@ -370,6 +379,70 @@
             console.log("222");
             console.log(document.getElementById("example_length").getElementsByTagName("ul"));
 //            sleep(10000);
+        }
+        
+        function editDoctor(doctorID) {
+            $.get('editDoctorInfo', {
+                doctorID : doctorID
+            }, function(doctorData) {
+//                alert("GET doctor data");
+                document.getElementById("hiddenDoctorID").value = doctorData[0];
+                document.getElementById("doctorEmail").value = doctorData[1];
+                document.getElementById("doctorName").value = doctorData[2];
+                
+                // problematic drop down list
+                // level 3
+                document.getElementById("doctorLevel").value = doctorData[3];
+                // major 4
+//                document.getElementById('doctorMajor').value = doctorData[4];
+                document.getElementById('doctorMajor').value = "Surgical";
+                console.log("Major : " + doctorData[4]);
+                
+                document.getElementById("doctorMajor").innerHTML = "<option value='All'>All</option>";
+                
+                // location 5
+                if(doctorData[5] == "台北") {
+                    document.getElementById("radio-Taipei").checked = true;
+                }else {
+                    document.getElementById("radio-Danshui").checked = true;
+                }
+                
+                // identity 6
+                document.getElementById("doctorIdentity").value = doctorData[6];
+                
+                // must on duty XX shifts
+                document.getElementById("mustOnDutyTotalShifts").value = doctorData[7];
+                document.getElementById("mustOnDutyMedicalShifts").value = doctorData[8];
+                document.getElementById("mustOnDutySurgicalShifts").value = doctorData[9];
+                document.getElementById("mustOnDutyTaipeiShifts").value = doctorData[10];
+                document.getElementById("mustOnDutyTamsuiShifts").value = doctorData[11];
+                document.getElementById("mustOnDutyDayShifts").value = doctorData[12];
+                document.getElementById("mustOnDutyNightShifts").value = doctorData[13];
+                
+                
+                
+                
+                // doctor major
+//                if(doctorData[4] == "All") {
+//                    document.getElementById("doctorMajor").innerHTML = 
+//                        "<option value='All' selected>All</option>" + 
+//                            "<option value='Medical'>Medical</option>" + 
+//                            "<option value='Surgical'>Surgical</option>";
+//                }else if(doctorData[4] == "Medical") {
+//                    document.getElementById("doctorMajor").innerHTML = 
+//                        "<option value='All'>All</option>" + 
+//                            "<option value='Medical' selected>Medical</option>" + 
+//                            "<option value='Surgical'>Surgical</option>";
+//                }else {
+//                    document.getElementById("doctorMajor").innerHTML = 
+//                        "<option value='All'>All</option>" + 
+//                            "<option value='Medical'>Medical</option>" + 
+//                            "<option value='Surgical' selected>Surgical</option>";
+//                }
+                
+                
+                
+            });
         }
         
 

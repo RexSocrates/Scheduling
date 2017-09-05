@@ -97,7 +97,8 @@
  
             <div class="modal-footer">
 <!--                <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">Save</button> -->
-                <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">Cancel</button>
+<!--                <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">Cancel</button>-->
+                <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel">Cancel</button>
             </div>
         </form>
     </div>

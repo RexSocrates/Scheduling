@@ -34,6 +34,7 @@ class AccountController extends Controller
         return redirect('doctors');
     }
     
+    // 取得個人資料頁面
     public function getProfilePage() {
         $user = new User();
         $shiftRecords = new ShiftRecords();
@@ -69,6 +70,7 @@ class AccountController extends Controller
         
     }
 
+<<<<<<< HEAD
      public function getOfficialLeavePageById(Request $request) {
         $data = $request->all();
         
@@ -99,6 +101,9 @@ class AccountController extends Controller
         // ]);
         
     }
+=======
+    // 調整班表->彈出式視窗取得醫生2的上班資訊
+>>>>>>> 59aecd4c7d6ebbe95adb74bb7c1cd82f6b9fe78b
     public function getDoctorInfoByID(Request $request){
         $data = $request->all();
 
@@ -119,6 +124,45 @@ class AccountController extends Controller
         }
 
         return $array;
+    }
+    
+    // Ajax get request 用於醫生頁面編輯 回傳指定醫生資料
+    public function editDoctorInfo(Request $request) {
+        $data = $request->all();
+        $doctorID = (int)$data['doctorID'];
+        
+        $userObj = new User();
+        
+        $doctorData = $userObj->getDoctorInfoByID($doctorID);
+        
+        return [
+            $doctorData->doctorID,
+            $doctorData->email,
+            $doctorData->name,
+            $doctorData->level,
+            $doctorData->major,
+            $doctorData->location,
+            $doctorData->identity,
+            $doctorData->mustOnDutyTotalShifts,
+            $doctorData->mustOnDutyMedicalShifts,
+            $doctorData->mustOnDutySurgicalShifts,
+            $doctorData->mustOnDutyTaipeiShifts,
+            $doctorData->mustOnDutyTamsuiShifts,
+            $doctorData->mustOnDutyDayShifts,
+            $doctorData->mustOnDutyNightShifts,
+        ];
+    }
+    
+    // 醫師管理頁面->更新醫師資訊
+    public function doctorInfoUpdate(Request $request) {
+        $data = $request->all();
+        $doctorID = $data['hiddenDoctorID'];
+        
+        $userObj = new User();
+        
+        $userObj->updateUserWithSpecificID($doctorID, $data);
+        
+        return redirect('doctors');
     }
     
     public function getSettingPage() {

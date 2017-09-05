@@ -107,6 +107,13 @@ class User extends Authenticatable
                 'major' => $data['major'],
                 'location' => $data['location'],
                 'identity' => $data['identity'],
+                'mustOnDutyTotalShifts' => $data['mustOnDutyTotalShifts'],
+                'mustOnDutyMedicalShifts' => $data['mustOnDutyMedicalShifts'],
+                'mustOnDutySurgicalShifts' => $data['mustOnDutySurgicalShifts'],
+                'mustOnDutyTaipeiShifts' => $data['mustOnDutyTaipeiShifts'],
+                'mustOnDutyTamsuiShifts' => $data['mustOnDutyTamsuiShifts'],
+                'mustOnDutyDayShifts' => $data['mustOnDutyDayShifts'],
+                'mustOnDutyNightShifts' => $data['mustOnDutyNightShifts']
             ]);
         
         return $rows;
@@ -123,7 +130,9 @@ class User extends Authenticatable
                 'mustOnDutyMedicalShifts' => $data['mustOnDutyMedicalShifts'],
                 'mustOnDutySurgicalShifts' => $data['mustOnDutySurgicalShifts'],
                 'mustOnDutyTaipeiShifts' => $data['mustOnDutyTaipeiShifts'],
-                'mustOnDutyTamsuiShifts' => $data['mustOnDutyTamsuiShifts']
+                'mustOnDutyTamsuiShifts' => $data['mustOnDutyTamsuiShifts'],
+                'mustOnDutyTamsuiShifts' => $data['mustOnDutyDayShifts'],
+                'mustOnDutyTamsuiShifts' => $data['mustOnDutyNightShifts']
             ]);
         
         return $rows;
