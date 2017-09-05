@@ -145,8 +145,8 @@
                    leaveHours += "<td>"+array[i][4]+"</td><br>";
                 
                     console.log("aaa");
-                }
                 
+                }
                 document.getElementById("recordDate").innerHTML  = recordDate; 
                 document.getElementById("confirmingPersonID").innerHTML = confirmingPersonID;
                 document.getElementById("leaveDate").innerHTML = leaveDate;

@@ -3,6 +3,7 @@
 @section('head')
      <script src="../codebase/ext/dhtmlxscheduler_collision.js"></script>
     <script src="../codebase/ext/dhtmlxscheduler_limit.js"></script>
+
     <script src="../../codebase/ext/dhtmlxscheduler_serialize.js" type="text/javascript" charset="utf-8"></script>
     
     <style>
@@ -353,6 +354,7 @@
                                 type: "dhx_time_block"
                             
                             });
+                       
                             //scheduler.updateView();
 
                              scheduler.attachEvent("onEventCollision", function (ev, evs){
