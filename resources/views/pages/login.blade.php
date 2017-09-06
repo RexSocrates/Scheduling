@@ -52,7 +52,7 @@
                                     <div class="input-field col s12">
                                         <i class="material-icons prefix">lock_outline</i>
                                         <input id="icon_telephone" type="password" class="validate" name="password">
-                                        <label for="icon_telephone">Password</label>
+                                        <label class="active" for="icon_telephone">Password</label>
                                     </div>
                                     <div class="col s12 margin-t20">
                                         <button type="submit" class="waves-effect waves-light btn teal lighten-2" style="width: 100%;">login</button>
@@ -81,6 +81,10 @@
 	<script type="text/javascript">
         particlesJS.load('particles-js', '../assets/particles.json', function() {
             console.log('callback - particles.js config loaded');
+        });
+        
+        $(document).ready(function() {
+            Materialize.updateTextFields();
         });
     </script>
 
