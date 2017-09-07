@@ -15,8 +15,8 @@ header, main, footer {
 
 @media only screen and (max-width : 992px) {
     body {
-/*        position: relative; 之後確認要不要改回去*/ 
-/*        position: relative;*/
+/*        position: relative; 之後確認要不要改回去 */
+        position: relative;
         float: left;
     }
     
@@ -63,12 +63,20 @@ header, main, footer {
     margin-bottom: 0px !important;  
 }
 
+.margin-l10 {
+    margin-left: 10px;  
+}
+
 .margin-b20 {
     margin-bottom: 20px;  
 }
 
 .margin-t20 {
     margin-top: 20px;  
+}
+
+.margin-l20 {
+    margin-left: 20px;  
 }
 
 .padding-t0 {
@@ -120,7 +128,7 @@ header, main, footer {
 }
 
 #navbar {
-    height: 64px;
+/*    height: 64px;*/
     line-height: 64px;
 }
 
@@ -627,3 +635,53 @@ input.select-dropdown {
     
 }
 
+.white_cell{
+    background-color:white;
+}
+.green_cell{
+    background-color:#95FF95;
+}
+.yellow_cell{
+    background-color:#FFFF79;
+}
+.red_cell{
+    background-color:#FF5353;
+}
+
+table.scroll {
+    width: 100%; /* Optional */
+    border-spacing: 0;
+}
+
+table.scroll tbody, table.scroll thead { 
+    display: block; 
+}
+
+table.scroll tbody {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+table.area1 tbody {
+    height: 255px;
+}
+
+table.area2 tbody {
+    height: 330px;
+}
+
+table.area3 tbody {
+    height: 260px;
+}
+
+table.area4 tbody {
+    height: 365px;
+}
+
+table.area5 tbody {
+    height: 393px;
+}
+
+tbody td:last-child, thead th:last-child {
+    border-right: none;
+}

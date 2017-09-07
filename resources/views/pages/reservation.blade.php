@@ -7,83 +7,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     
-    <script>
-        // 送出新增預班的request
-        function sendNewReservation(categorySerial, startDate, endDate) {
-            $.post('sendReservationAdd', {
-                serial : categorySerial,
-                date1 : startDate,
-                date2 : endDate
-            }, function() {
-                // alert('預約成功');
-                dhtmlx.message({ type:"error", text:"預約成功"});
-            });
-        }
-
-        // 送出更新預班的request
-        function updateReservation(resSerial, categorySerial, startDate, endDate) {
-            $.post('sendReservationUpdate', {
-                resSerial : resSerial,
-                categorySerial : categorySerial,
-                startDate : startDate,
-                endDate : endDate
-            }, function() {
-                dhtmlx.message({ type:"error", text:"預約修改成功" });
-            });
-        }
-
-        // 送出刪除預班的request
-        function deleteReservation(resSerial) {
-            $.post('sendReservationDelete', {
-                resSerial : resSerial,
-            }, function() {
-                dhtmlx.message({ type:"error", text:"預約刪除成功" });
-            });
-        }
-        
-        function countDay(){
-            $.get('countDay', {
-              }, function(array) {
-                document.getElementById("countDay").innerHTML = "尚需排班數: 白班:"+array[0] +"夜班:"+array[1];
-                
-            });
-        }
-
-       function refresh() {
-            location.reload();
-        }
-
-        function alert2(){
-            alert("備註送出完成");
-        }
-        
-        // 確認是否可預on班或預off班
-        function checkResAmount(isOnRes, startDate, endDate) {
-            var resAmount = 0;
-            
-            if(isOnRes) {
-                // 檢查on班預約
-                resAmount = document.getElementById('hiddenCountOn').value;
-            }else {
-                // 檢查off班預約
-                resAmount = document.getElementById('hiddenCountOff').value;
-            }
-            
-            var startArr = startDate.split(" ");
-            var endArr = endDate.split(" ");
-            
-            var days = parseInt(endArr[2]) - parseInt(startArr[2]);
-            
-            if(resAmount <= 0 || resAmount < days) {
-                // 剩餘可預約班數為0，無法預班
-                dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
-                return false;
-            }else {
-                return true;
-            }
-        }
-        
-    </script>
+    
 
     <style>
         td{
@@ -452,8 +376,84 @@
     </div>
 @endsection
 
-<!--
-@section('script')
 
+@section('script')
+    <script>
+        // 送出新增預班的request
+        function sendNewReservation(categorySerial, startDate, endDate) {
+            $.post('sendReservationAdd', {
+                serial : categorySerial,
+                date1 : startDate,
+                date2 : endDate
+            }, function() {
+                // alert('預約成功');
+                dhtmlx.message({ type:"error", text:"預約成功"});
+            });
+        }
+
+        // 送出更新預班的request
+        function updateReservation(resSerial, categorySerial, startDate, endDate) {
+            $.post('sendReservationUpdate', {
+                resSerial : resSerial,
+                categorySerial : categorySerial,
+                startDate : startDate,
+                endDate : endDate
+            }, function() {
+                dhtmlx.message({ type:"error", text:"預約修改成功" });
+            });
+        }
+
+        // 送出刪除預班的request
+        function deleteReservation(resSerial) {
+            $.post('sendReservationDelete', {
+                resSerial : resSerial,
+            }, function() {
+                dhtmlx.message({ type:"error", text:"預約刪除成功" });
+            });
+        }
+        
+        function countDay(){
+            $.get('countDay', {
+              }, function(array) {
+                document.getElementById("countDay").innerHTML = "尚需排班數: 白班:"+array[0] +"夜班:"+array[1];
+                
+            });
+        }
+
+       function refresh() {
+            location.reload();
+        }
+
+        function alert2(){
+            alert("備註送出完成");
+        }
+        
+        // 確認是否可預on班或預off班
+        function checkResAmount(isOnRes, startDate, endDate) {
+            var resAmount = 0;
+            
+            if(isOnRes) {
+                // 檢查on班預約
+                resAmount = document.getElementById('hiddenCountOn').value;
+            }else {
+                // 檢查off班預約
+                resAmount = document.getElementById('hiddenCountOff').value;
+            }
+            
+            var startArr = startDate.split(" ");
+            var endArr = endDate.split(" ");
+            
+            var days = parseInt(endArr[2]) - parseInt(startArr[2]);
+            
+            if(resAmount <= 0 || resAmount < days) {
+                // 剩餘可預約班數為0，無法預班
+                dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
+                return false;
+            }else {
+                return true;
+            }
+        }
+        
+    </script>
 @endsection
--->
+
