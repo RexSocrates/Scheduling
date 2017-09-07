@@ -8,14 +8,10 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
-// send a request
-use GuzzleHttp\Client;
-
 use App\User;
 use App\ScheduleCategory;
 use App\ShiftRecords;
 use App\Schedule;
-
 
 
 class ScheduleController extends Controller
