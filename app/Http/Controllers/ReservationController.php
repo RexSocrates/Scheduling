@@ -79,7 +79,7 @@ class ReservationController extends Controller
         $countDay = $doctorDay-$reservation->amountDayShifts();
         $countNight = $doctorNight-$reservation->amountNightShifts();
         
-        $getDoctorRemark=$remark->getRemarkByDoctorID($doctorID);
+        $getDoctorRemark=$remark->getNextRemarkByDoctorID($doctorID);
 
         foreach ($reservationData as $res) {
             $name = $shiftCategory->findName($res->categorySerial);
@@ -151,12 +151,12 @@ class ReservationController extends Controller
         $remark = new Remark();
         $user = new User();
         $doctorID = $user->getCurrentUserID();
+        
         $addRemark = Input::get('remark');
         
         $remarkData = $remark->modifyRemarkByDoctorID($doctorID,$addRemark);
 
-        
-
+        //echo $addRemark;
         return redirect('reservation');
     }
     

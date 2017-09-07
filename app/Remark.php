@@ -15,6 +15,25 @@ class Remark extends Model
         
         return $remarks;
     }
+
+    // 取得當月所有備註
+    public function getCurrentRemarks() {
+        $currentMonth = date('Y-m');
+        $remarks = DB::table('Remark')
+            ->where('date', 'like', $currentMonth.'%')
+            ->get();
+        
+        return $remarks;
+    }
+
+    // 取得所選擇月份所有備註
+    public function getRemarksByMonth($month) {
+        $remarks = DB::table('Remark')
+            ->where('date', 'like', $month.'%')
+            ->get();
+        
+        return $remarks;
+    }
     
     // 透過備註編號取得單一備註
     public function getRemarkBySerial($serial) {
@@ -46,6 +65,18 @@ class Remark extends Model
         
         return $remark;
     }
+
+    //透過醫生編號找這個月備註
+    public function getNextRemarkByDoctorID($doctorID){
+        $currentMonth = date('Y-m');
+
+        $remark = DB::table('Remark')
+            ->where('doctorID', $doctorID)
+            ->where('date', 'like', $currentMonth.'%')
+            ->first();
+        
+        return $remark;
+    }
     
     // 修改備註
     public function modifyRemark($serial, $newRemark) {
@@ -58,9 +89,12 @@ class Remark extends Model
     }
     // 透過醫生id修改備註
     public function modifyRemarkByDoctorID($doctorID, $newRemark) {
+        $currentMonth = date('Y-m');
+
         if($this->haveRemark($doctorID)>0){
             DB::table('Remark')
                 ->where('doctorID', $doctorID)
+                ->where('date', 'like', $currentMonth.'%')
                 ->update([
                     'remark' => $newRemark
                 ]);
@@ -73,10 +107,15 @@ class Remark extends Model
 
     //判斷醫生有沒有備註
     public function haveRemark($doctorID){
+        $currentMonth = date('Y-m');
+
         $amountRemark=DB::table('Remark')
             ->where('doctorID', $doctorID)
+            ->where('date', 'like', $currentMonth.'%')
             ->count();
 
         return $amountRemark;
     }
+
+
 }

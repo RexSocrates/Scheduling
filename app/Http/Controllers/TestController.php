@@ -594,5 +594,29 @@ class TestController extends Controller
         // ]);
         
     }
+    public function getRemarkByMonth(){
+        //$data = $request->all();
+        $month = '2017-09';
+
+        $remark = new Remark();
+        $userObj = new User();
+
+        $remarks = $remark->getRemarksByMonth($month);
+
+        $displayRemarksArr = [];
+
+        foreach($remarks as $remark) {
+            $remarkDic = [
+                'author' => '',
+                'date' => $remark->date,
+                'content' => $remark->remark
+            ];
+            
+            $remarkDic['author'] = $userObj->getDoctorInfoByID($remark->doctorID)->name;
+            
+            array_push($displayRemarksArr, $remarkDic);
+        }
+        echo $displayRemarksArr[0]['author'];
+    }
 }
 

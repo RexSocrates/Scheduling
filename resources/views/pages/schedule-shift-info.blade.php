@@ -154,16 +154,16 @@
                             <div class="right">
                                 時間：
                                 <div class="input-field inline">
-                                    <select>
+                                    <select id=month onchange="changeMonth()">
                                         <option value="" disabled selected>請選擇月份</option>
-                                        <option value="1">2017年8月</option>
-                                        <option value="2">2017年7月</option>
-                                        <option value="3">2017年6月</option>
+                                        <option value="{{ $currentMonth }}">{{ $currentMonth }}</option>
+                                        <option value="{{ $preMonth }}">{{ $preMonth }}</option>
+                                        <option value="{{ $beforePreMonth }}">{{ $beforePreMonth }}</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        
+                        <!--  -->
                         <div class="divider"></div>
                         <div class="card-content padding-t5">
                             <table class="centered striped scroll area3">
@@ -179,9 +179,9 @@
                                <tbody>
                                  @foreach($remarks as $remark)
                                     <tr>
-                                        <td class="td-padding td-w-5">{{ $remark['author'] }}</td>
-                                        <td class="td-padding td-w-5">{{ $remark['date'] }}</td>
-                                        <td class="td-padding td-w-20">{{ $remark['content'] }}</td>
+                                        <td class="td-padding td-w-5" id=author>{{ $remark['author'] }}</td>
+                                        <td class="td-padding td-w-5" id=date>{{ $remark['date'] }}</td>
+                                        <td class="td-padding td-w-20" id=content>{{ $remark['content'] }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -277,6 +277,27 @@
                     console.log('1'+array[i][0]);
                 }
                 document.getElementById("date").innerHTML  = date;
+        }
+
+        function changeMonth() {
+            $.get('changeMonth', {
+                month : document.getElementById('month').value
+            }, function(array) {
+
+                var author = "";
+                var date = "";
+                var content ="";
+                for(i=0 ; i<array.length ; i++){
+                    author += "<td>"+array[i]['author']+"</td>";
+                    date += "<td>"+array[i]['date']+"</td>";
+                    content += "<td>"+array[i]['content']+"</td>";
+                }
+
+                document.getElementById("author").innerHTML  = author;
+                document.getElementById("date").innerHTML  = date;
+                document.getElementById("content").innerHTML  = content;
+               
+            });
         }
     </script>
 @endsection

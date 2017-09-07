@@ -108,8 +108,52 @@
                                 return "width-200";
                             };
                             
+                             var date = new Date();
+                            var toString =  date.toString();
+                            var res = toString.split(" ");
+                            var month = 0;
+
+                            switch(res[1]){
+                                case "Jan":
+                                    month = 1;
+                                    break;
+                                case "Feb":
+                                    month = 2;
+                                    break;
+                                case "Mar":
+                                    month = 3;
+                                    break;
+                                case "Apr":
+                                    month = 4;
+                                    break;
+                                case "May":
+                                    month = 5;
+                                    break;
+                                case "Jun":
+                                    month = 6;
+                                    break;
+                                case "Jul":
+                                    month = 7;
+                                    break;
+                                case "Aug":
+                                    month = 8;
+                                    break;
+                                case "Sep":
+                                    month = 9;
+                                    break;
+                                case "Oct":
+                                    month = 10;
+                                    break;
+                                case "Nov":
+                                    month = 11;
+                                    break;
+                                case "Dec":
+                                    month = 12;
+                                    break;
+                            }
+
                             //進入畫面後顯示的東西
-                            scheduler.init('scheduler_here',new Date(),"timeline");
+                            scheduler.init('scheduler_here',new Date(res[3],month),"timeline");
                            
                             scheduler.parse([
                             @foreach($reservations as $reservation)

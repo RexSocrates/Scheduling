@@ -115,6 +115,9 @@ Route::post('sendReservationDelete', 'ReservationController@deleteReservation');
 Route::get('schedule-shift-info', 'ShiftRecordsController@getShiftRecords');
 Route::post('schedule-shift-info','ShiftRecordsController@firstEditionShiftAddShifts');
 
+//根據月份選擇列出備註
+Route::get('changeMonth','RemarkController@getRemarkByMonth');
+
 
 // 醫生2同意或拒絕換班
 Route::get('doctor2AgreeShiftRecord/{serial}', 'ShiftRecordsController@doctor2AgreeShiftRecord');
@@ -283,7 +286,7 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 //Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
-Route::get("info",'TestController@getOfficialLeavePageById');
+Route::get("info",'TestController@getRemarkByMonth');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 //Route::post('reservation/updateReservation/{id}', 'ReservationController@updateReservation');
 //Route::get('/reservation/updateReservation/{id}', function() {

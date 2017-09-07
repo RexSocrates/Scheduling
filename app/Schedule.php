@@ -65,7 +65,7 @@ class Schedule extends Model
         return $newScheduleID;
     }
     
-    // 透過醫生ID 取得當月醫生上的所有班
+    // 透過醫生ID 取得下個月醫生上的所有班
     public function getNextMonthShiftsByID($id) {
         $currentMonth = date('Y-m');
         $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));

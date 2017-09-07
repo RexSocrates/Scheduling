@@ -342,23 +342,22 @@
                             scheduler.config.limit_end = new Date(endd);
 
                             scheduler.attachEvent("onLimitViolation", function  (id, obj){
-                            dhtmlx.message({ type:"error", text:"此時段無法接受換班" })
+                                dhtmlx.message({ type:"error", text:"此時段無法接受換班" })
                             });
 
                             //限制非當月利用點擊視窗換班
                             scheduler.addMarkedTimespan({  
                                 start_date: '1900-1-1',
-                                end_date: block_endd,
+                                end_date:   block_endd,
                                 zones: "fullday", 
                                 css: "block_section", 
                                 type: "dhx_time_block"
                             
                             });
-                       
+
                             //scheduler.updateView();
 
-                             scheduler.attachEvent("onEventCollision", function (ev, evs){
-                                  //any custom logic here
+                            scheduler.attachEvent("onEventCollision", function (ev, evs){
                                 var ev = scheduler.getEvent(ev.id);
                                 var evs = scheduler.getEvent(evs[0].id);
                                 var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
@@ -392,6 +391,8 @@
                                 return true;
                             });
                            
+                           
+
                             scheduler.init('scheduler_here',new Date(res[3], month),"timeline");
 
                             scheduler.parse([
@@ -469,7 +470,7 @@
                 id : scheduleID_1,
                 id2 : scheduleID_2
             }, function (array){
-                 dhtmlx.message({ type:"error", text: array[2]+array[1]+"和"+array[0]+array[3]+"換班成功" })
+                 dhtmlx.message({ type:"error", text: array[2]+array[1]+"\n和\n"+array[0]+array[3]+"換班成功" })
                 //alert(array[2]+array[1]+"和"+array[0]+array[3]+"換班成功");
             });
         }

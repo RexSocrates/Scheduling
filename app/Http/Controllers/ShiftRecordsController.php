@@ -333,7 +333,7 @@ class ShiftRecordsController extends Controller
         
         $remarkObj = new Remark();   
         
-        $remarks = $remarkObj->getRemarks();
+        $remarks = $remarkObj->getCurrentRemarks();
         
         $displayRemarksArr = [];
         
@@ -348,8 +348,15 @@ class ShiftRecordsController extends Controller
             
             array_push($displayRemarksArr, $remarkDic);
         }
+
+        //選擇備註月份
+        $currentMonth = date('Y-m');
+        $preMonth=date("Y-m", strtotime('-1 month'));
+        $beforePreMonth=date("Y-m", strtotime('-2 month'));
+
+
         return view('pages.schedule-shift-info', [
-            'shiftRecords'=>$allShiftData,'shiftDataByDoctorID'=>$shiftDataByDoctorID,'currentDoctor'=>$currentDoctor,'currentDoctorSchedule'=>$currentDoctorSchedule,'doctorName'=>$doctorName,'remarks'=>$displayRemarksArr
+            'shiftRecords'=>$allShiftData,'shiftDataByDoctorID'=>$shiftDataByDoctorID,'currentDoctor'=>$currentDoctor,'currentDoctorSchedule'=>$currentDoctorSchedule,'doctorName'=>$doctorName,'remarks'=>$displayRemarksArr,'currentMonth'=>$currentMonth,'preMonth'=>$preMonth,'beforePreMonth'=>$beforePreMonth
         ]);
         
     }

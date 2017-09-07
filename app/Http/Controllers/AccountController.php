@@ -70,7 +70,6 @@ class AccountController extends Controller
         
     }
 
-<<<<<<< HEAD
      public function getOfficialLeavePageById(Request $request) {
         $data = $request->all();
         
@@ -99,11 +98,10 @@ class AccountController extends Controller
         // return view('pages.officialaffair', [
         //     'doctorsLeave' => $doctorsLeave
         // ]);
-        
     }
-=======
+
     // 調整班表->彈出式視窗取得醫生2的上班資訊
->>>>>>> 59aecd4c7d6ebbe95adb74bb7c1cd82f6b9fe78b
+
     public function getDoctorInfoByID(Request $request){
         $data = $request->all();
 
