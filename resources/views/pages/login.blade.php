@@ -80,8 +80,15 @@
 	
 	<script type="text/javascript">
         particlesJS.load('particles-js', '../assets/particles.json', function() {
-            console.log('callback - particles.js config loaded');
+//            console.log('callback - particles.js config loaded');
         });
+        
+        $(document).ready(function() {
+            Materialize.updateTextFields();
+//            $.material.options.autofill = true;
+//            $.material.init();
+        });
+        
     </script>
 
 	

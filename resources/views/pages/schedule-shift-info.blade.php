@@ -5,47 +5,6 @@
         td{
             padding: 0;
         }
-        .white_cell{
-            background-color:white;
-        }
-        .green_cell{
-            background-color:#95FF95;
-        }
-        .yellow_cell{
-            background-color:#FFFF79;
-        }
-        .red_cell{
-            background-color:#FF5353;
-        }
-        table.scroll {
-            width: 100%; /* Optional */
-            border-spacing: 0;
-        }
-
-        table.scroll tbody, table.scroll thead { 
-            display: block; 
-        }
-    
-        table.scroll tbody {
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-        
-        table.area1 tbody {
-            height: 255px;
-        }
-        
-        table.area2 tbody {
-            height: 330px;
-        }
-
-        table.area3 tbody {
-            height: 260px;
-        }
-
-        tbody td:last-child, thead th:last-child {
-            border-right: none;
-        }
     </style>
 @endsection
     
@@ -146,7 +105,6 @@
             <div class="row">
                 <div class="col s12 m12">
                     <div class="card">
-                       
                         <div class="card-action card1">
                             <div class="title1">
                                 <font class="card-title">備註</font>

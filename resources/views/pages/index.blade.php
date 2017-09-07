@@ -32,7 +32,7 @@
     						    	</div>
                                     
     				            </div>
-    						  <div class="divider margin-bottom-20"></div>
+    						  <div class="divider margin-b20"></div>
                             @endforeach
                             <ul id='dropdown-announcement' class='dropdown-content'>
                                 <li><a href="#modal1">編輯</a></li>
@@ -140,6 +140,7 @@
                 document.getElementById("hiddenSerial").value = array[0];
                 document.getElementById("title").value = array[1];
                 document.getElementById("textarea1").value = array[2];
+                Materialize.updateTextFields();
             });
         }
         

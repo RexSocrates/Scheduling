@@ -100,13 +100,13 @@
                         <div class="divider"></div>
                         <div class="card-content">
                             <p class="inline">醫師名稱</p>
-                                    <select name="selectedUserID" class="browser-default" id=ID>
-                                        <option value="" disabled selected>選擇醫師名稱</option>
-                                        @foreach($doctors as $doctor)
-                                            <option value="{{ $doctor->doctorID }}">{{ $doctor->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <button class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" type="submit" value="確認" onclick="selectedID_alert()">確認</button>
+                            <select name="selectedUserID" class="browser-default" id=ID>
+                                <option value="" disabled selected>選擇醫師名稱</option>
+                                @foreach($doctors as $doctor)
+                                    <option value="{{ $doctor->doctorID }}">{{ $doctor->name }}</option>
+                                @endforeach
+                            </select>
+                            <button class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" type="submit" value="確認" onclick="selectedID_alert()">確認</button>
                         </div>
 	                </div>
 	                <table class="bordered centered">

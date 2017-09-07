@@ -96,7 +96,7 @@
         </ul>
     </nav>
     
-    <header id="header" class="container-fix trans-left-five">
+    <header id="header" class="trans-left-five">
         <nav id="navbar" class="nav-extended">
             <div class="nav-wrapper blue-grey darken-1 logo-padding-left">
                 <a onclick="sideNav()" class="blue-grey darken-1 waves-effect waves-light menu-btn">

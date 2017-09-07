@@ -38,20 +38,121 @@
                 
                 <div class="col s8">
                     <div class="card">
+<!--
                         <div class="card-action">
-                            <font class="card-title">排班歷史紀錄</font>
+                            <font class="card-title">使用公假記錄</font>
                             @foreach($doctorShiftRecords as $record)
                             <ul>
-                            <li>Schedule 1 name and date: {{ $record[4]}} {{ $record[2]}}</li> 
-                            <li>Schedule 1 doctor: {{ $record[0] }}</li>
-                            <li>Schedule 2 name and date: {{ $record[5]}} {{ $record[3]}}</li> 
-                            <li>Schedule 2 doctor: {{ $record[1] }}</li>
+                                <li>Schedule 1 name and date: {{ $record[4]}} {{ $record[2]}}</li> 
+                                <li>Schedule 1 doctor: {{ $record[0] }}</li>
+                                <li>Schedule 2 name and date: {{ $record[5]}} {{ $record[3]}}</li> 
+                                <li>Schedule 2 doctor: {{ $record[1] }}</li>
                             </ul>
                              @endforeach
+                             <a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal2"><i class="material-icons">add</i></a>
+                             
+                            <div class="title1">
+                                <font class="card-title">備註</font>
+                            </div>
+                            <div class="right">
+                                時間：
+                                <div class="input-field inline">
+                                    <select>
+                                        <option value="" disabled selected>請選擇月份</option>
+                                        <option value="1">2017年8月</option>
+                                        <option value="2">2017年7月</option>
+                                        <option value="3">2017年6月</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
+-->
+                        
+                        <div class="card-action card1">
+                            <div class="title1">
+                                <font class="card-title">使用公假的記錄</font>
+                            </div>
+                            <div class="title1 margin-l20">
+                                <font class="card-title">剩餘時數: 30</font>
+                            </div>
+                            <a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal2"><i class="material-icons">add</i></a>
+                        </div>
+                        
                         <div class="divider"></div>
-                        <div class="card-content">
+                        <div class="card-content padding-t5">
+                            <table class="centered striped highlight scroll area5">
+                                <thead>
+                                    <tr>
+                                        <th class="td-w-5">申請日期</th>
+                                        <th class="td-w-20">申請理由</th>
+                                        <th class="td-w-5">使用時數</th>
+                                        <th class="td-w-5">狀態</th>
+                                    </tr>
+                                </thead>
 
+                                <tbody>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-15</td>
+                                        <td class="td-padding td-w-20">使用公假內容使用公假內容使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-5">已確認</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-15</td>
+                                        <td class="td-padding td-w-20">使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-5">已確認</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-15</td>
+                                        <td class="td-padding td-w-20">使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-5">已確認</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-15</td>
+                                        <td class="td-padding td-w-20">使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-5">已確認</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-15</td>
+                                        <td class="td-padding td-w-20">使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-5">已確認</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-15</td>
+                                        <td class="td-padding td-w-20">使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-5">已確認</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-15</td>
+                                        <td class="td-padding td-w-20">使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-5">已確認</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-15</td>
+                                        <td class="td-padding td-w-20">使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-5">已確認</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-15</td>
+                                        <td class="td-padding td-w-20">使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-5">已確認</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-15</td>
+                                        <td class="td-padding td-w-20">使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-5">已確認</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>	
                 </div>
@@ -85,6 +186,32 @@
             </div>
         </form>
     </div>
+    
+    <div id="modal2" class="modal modal-fixed-footer modal-announcement">
+        <form action="" method="post">
+            <div class="modal-header">
+                <h5 class="modal-announcement-title">申請公假</h5>
+            </div>
+            <div class="modal-content modal-content-customize1">
+                <div class="row margin-b0">
+                    <div class="input-field col s12">
+                        <input id="hour" type="number" value="" name="hour" required>
+                        <label for="hour">時數</label>
+                    </div>
+                    <div class="input-field col s12 margin-t0">
+                        <textarea id="textarea1" class="materialize-textarea" type="text" name="content"></textarea>
+                        <label for="textarea1">內容</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">Save</button>
+                <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+            
+            
 @endsection
 
 <!--

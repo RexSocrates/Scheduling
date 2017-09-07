@@ -92,7 +92,7 @@
                         <select name="major" required>
                             <option value="" disabled>選擇專科</option>
                             <option value="All">All</option>
-                            <option value="Medical" selected>Medical</option>
+                            <option value="Medical">Medical</option>
                             <option value="Surgical">Surgical</option>
                         </select>
                         <label>專職科別</label>
@@ -101,7 +101,7 @@
                         <select name="level" required>
                             <option value="" disabled>選擇級別</option>
                             <option value="A1">A1</option>
-                            <option value="A2" selected>A2</option>
+                            <option value="A2">A2</option>
                             <option value="A3">A3</option>
                             <option value="A4">A4</option>
                             <option value="A5">A5</option>
@@ -201,11 +201,11 @@
             <div class="modal-content modal-content-customize">
                 <div id="modal-left1" class="row margin-b0">
                     <div class="input-field col s12">
-                        <input id="doctorName" type="text" value="" name="name" required>
+                        <input id="doctorName" type="text" name="name" required>
                         <label for="title">醫生名稱</label>
                     </div>
                     <div class="input-field col s12">
-                        <input id="doctorEmail" type="email" class="validate" value="" name="email" required>
+                        <input id="doctorEmail" type="email" class="validate" name="email" required>
                         <label for="email" data-error="wrong" data-success="right">Email</label>
                     </div>
 <!--
@@ -214,7 +214,7 @@
                         <label for="date">出生日期</label>
                     </div>
 -->
-                    <div class="input-field col s12">
+                    <div class="input-field col s12 margin-b20">
                         <select id="doctorMajor" name="major" required>
 <!--                            <option value="" disabled>選擇專科</option>-->
                             <option value="All">All</option>
@@ -223,7 +223,7 @@
                         </select>
                         <label>專職科別</label>
                     </div>
-                    <div class="input-field col s12">
+                    <div class="input-field col s12 margin-b20">
                         <select id="doctorLevel" name="level" required>
 <!--                            <option value="" disabled>選擇級別</option>-->
                             <option value="A1">A1</option>
@@ -419,7 +419,7 @@
                 document.getElementById("mustOnDutyDayShifts").value = doctorData[12];
                 document.getElementById("mustOnDutyNightShifts").value = doctorData[13];
                 
-                
+                Materialize.updateTextFields();
                 
                 
                 // doctor major

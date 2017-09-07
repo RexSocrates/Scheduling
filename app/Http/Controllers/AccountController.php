@@ -102,6 +102,9 @@ class AccountController extends Controller
 
     // 調整班表->彈出式視窗取得醫生2的上班資訊
 
+    
+    // 調整班表->彈出式視窗取得醫生2的上班資訊
+
     public function getDoctorInfoByID(Request $request){
         $data = $request->all();
 

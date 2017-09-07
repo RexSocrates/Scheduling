@@ -36,6 +36,62 @@ class Reservation extends Model
         return $res;
     }
     
+    // 取得次月所有預約的on班，不包含行政與教學班
+    public function getNextMonthOnReservation() {
+        // 取出次月時間字串
+        $currentDate = date('Y-m');
+        $dateArr = explode('-', $currentDate);
+        
+        $year = (int)$dateArr[0];
+        $month = (int)$dateArr[1];
+        
+        if($month == 12) {
+            $year += 1;
+        }
+        $month = ($month + 1) % 12;
+        
+        if($month <= 9) {
+            $month = '0'.$month;
+        }
+        
+        $nextMonthStr = $year.'-'.$month.'%';
+        
+        $reservations = DB::table('Reservation')
+            ->where('date', 'like', $nextMonthStr)
+            ->whereIn('categorySerial', [3, 4, 5, 6])
+            ->get();
+        
+        return $reservations;
+    }
+    
+    // 取得次月所有預約的off班
+    public function getNextMonthOffReservation() {
+        // 取出次月時間字串
+        $currentDate = date('Y-m');
+        $dateArr = explode('-', $currentDate);
+        
+        $year = (int)$dateArr[0];
+        $month = (int)$dateArr[1];
+        
+        if($month == 12) {
+            $year += 1;
+        }
+        $month = ($month + 1) % 12;
+        
+        if($month <= 9) {
+            $month = '0'.$month;
+        }
+        
+        $nextMonthStr = $year.'-'.$month.'%';
+        
+        $reservations = DB::table('Reservation')
+            ->where('date', 'like', $nextMonthStr)
+            ->where('categorySerial', 7)
+            ->get();
+        
+        return $reservations;
+    }
+    
     // 取得 on班 預班資訊
     public function getOnReservation() {
         $reservationList = DB::table('Reservation')

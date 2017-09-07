@@ -2,7 +2,7 @@
 
 <!--
 @section('head')
-
+    
 @endsection
 -->
 
@@ -10,154 +10,310 @@
     <p class="brand-logo light">醫師公假紀錄</p>
 @endsection
 
+@section('nav-content')
+    <div class="nav-content blue-grey darken-1">
+        <ul class="tabs tabs-transparent">
+            <li class="tab"><a class="active" href="#test1">查看醫生</a></li>
+            <li class="tab"><a href="#test2">待確認</a></li>
+        </ul>
+    </div>
+@endsection
+
 @section('content')
     <div id="section" class="container-fix trans-left-five">
-		<div class="container-section">
+		<div class="container-section2">
 			<div class="row">
-                <div class="col s12 m12">
+                <div id="test1" class="col s12 m12">
       		  	  	<div class="card">
-      		  	  		<div class="card-action">
-      		  	  			<font class="card-title">醫生列表</font>
-      		  	  		</div>
+      		  	  		<div class="card-action card1">
+                            <form action="">
+                                <div class="title1">
+                                    <font class="card-title">醫生：</font>
+                                </div>
+                                <div class="input-field left inline">
+                                    <select>
+                                        <option value="1" selected>全部</option>
+                                        <option value="2">簡定國</option>
+                                        <option value="3">邱毓惠</option>
+                                        <option value="4">馮嚴毅</option>
+                                    </select>
+                                </div>
+                                <div class="title1 margin-l20">
+                                    <font class="card-title">日期：</font>
+                                </div>
+                                <div class="input-field left inline">
+                                    <select>
+                                        <option value="1">All</option>
+                                        <option value="2">2017-07</option>
+                                        <option value="3">2017-06</option>
+                                        <option value="4">2017-05</option>
+                                    </select>
+                                </div>
+                                <div class="title1 margin-l10">
+                                    <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text inline margin-l10">確認</button>
+                                </div>
+                            </form>
+                            <a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1"><i class="material-icons">add</i></a>
+                        </div>
       		  	  		<div class="divider"></div>
-      		  	  	  	<div class="card-content">
-      		  	  	  	    <table id="example" class="mdl-data-table striped highlight" cellspacing="0" width="100%">
+      		  	  	  	<div class="card-content padding-t5">
+      		  	  	  	    <table class="centered striped highlight scroll area4">
                                 <thead>
                                     <tr>
-                                        <tr>
-                                        <th>醫生id</th>
-                                        <th>醫生名稱</th>
-                                        <th>專職科別</th>
-                                        <th>級別</th>
-                                        <th>職登院區</th>
-                                        <th>權限</th>
-                                        <th style="width:150px;">動作</th>
+                                        <th class="td-w-5">日期</th>
+                                        <th class="td-w-5">申請人</th>
+                                        <th class="td-w-5">對象</th>
+                                        <th class="td-w-5">種類</th>
+                                        <th class="td-w-5">時數</th>
+                                        <th class="td-w-25">內容</th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
-                                    @foreach($doctorsLeave as $doctorObj)
-                                        <tr>
-                                            <td> {{ $doctorObj[0]->doctorID }}</td>
-                                            <td>{{ $doctorObj[0]->name }}</td>
-                                            <td>{{ $doctorObj[0]->major }}</td>
-                                            <td>{{ $doctorObj[0]->level }}</td>
-                                            <td>{{ $doctorObj[0]->location }}</td>
-                                            <td>{{ $doctorObj[0]->identity }}</td>
-                                            <td class="doctor-td">
-                                                <a class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" href="#modal2" onclick="showOfficialLeaveInfo({{ $doctorObj[0]->doctorID }})">詳細資料</a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-15</td>
+                                        <td class="td-padding td-w-5">蔡維德</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">增加</td>
+                                        <td class="td-padding td-w-5">+3.5小時</td>
+                                        <td class="td-padding td-w-25">增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-21</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">使用/減少</td>
+                                        <td class="td-padding td-w-5">-12小時</td>
+                                        <td class="td-padding td-w-25">使用公假內容</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-21</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">使用/減少</td>
+                                        <td class="td-padding td-w-5">-12小時</td>
+                                        <td class="td-padding td-w-25">使用公假內容</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-15</td>
+                                        <td class="td-padding td-w-5">蔡維德</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">增加</td>
+                                        <td class="td-padding td-w-5">+3.5小時</td>
+                                        <td class="td-padding td-w-25">增加時數的原因,增加時數的原因,增加時數的原因</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-21</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">使用/減少</td>
+                                        <td class="td-padding td-w-5">-12小時</td>
+                                        <td class="td-padding td-w-25">使用公假內容</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding">2017-10-21</td>
+                                        <td class="td-padding">簡定國</td>
+                                        <td class="td-padding">簡定國</td>
+                                        <td class="td-padding">使用/減少</td>
+                                        <td class="td-padding">-12小時</td>
+                                        <td class="td-padding">使用公假內容</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding">2017-10-21</td>
+                                        <td class="td-padding">簡定國</td>
+                                        <td class="td-padding">簡定國</td>
+                                        <td class="td-padding">使用/減少</td>
+                                        <td class="td-padding">-12小時</td>
+                                        <td class="td-padding">使用公假內容</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding">2017-10-21</td>
+                                        <td class="td-padding">簡定國</td>
+                                        <td class="td-padding">簡定國</td>
+                                        <td class="td-padding">使用/減少</td>
+                                        <td class="td-padding">-12小時</td>
+                                        <td class="td-padding">使用公假內容</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding">2017-10-21</td>
+                                        <td class="td-padding">簡定國</td>
+                                        <td class="td-padding">簡定國</td>
+                                        <td class="td-padding">使用/減少</td>
+                                        <td class="td-padding">-12小時</td>
+                                        <td class="td-padding">使用公假內容</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding">2017-10-21</td>
+                                        <td class="td-padding">簡定國</td>
+                                        <td class="td-padding">簡定國</td>
+                                        <td class="td-padding">使用/減少</td>
+                                        <td class="td-padding">-12小時</td>
+                                        <td class="td-padding">使用公假內容</td>
+                                    </tr>
                                 </tbody>
                             </table>
       		  	  	  	</div>
       		  	  	</div>
       		  	</div>
+      		  	<div id="test2" class="col s12">
+					<div class="card">
+                        <div class="card-action">
+      		  	  			<font class="card-title">換班待確認</font>
+      		  	  		</div>
+      		  	  		<div class="divider"></div>
+      		  	  	  	
+      		  	  	  	<div class="card-content padding-t5">
+                            <table class="centered striped highlight scroll area4">
+                                <thead>
+                                    <tr>
+                                        <th class="td-w-5">申請人</th>
+                                        <th class="td-w-5">申請日期</th>
+                                        <th class="td-w-20">申請理由</th>
+                                        <th class="td-w-5">時數</th>
+                                        <th class="td-w-13">功能</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">2017-10-21</td>
+                                        <td class="td-padding td-w-20">使用公假內容,使用公假內容,使用公假內容使用公假內容,使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-13">
+                                            <a href="" class="waves-effect waves-light btn" name=confirm>允許</a>
+                                            <a href="" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">2017-10-21</td>
+                                        <td class="td-padding td-w-20">使用公假內容,使用公假內容,使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-10">
+                                            <a href="" class="waves-effect waves-light btn" name=confirm>允許</a>
+                                            <a href="" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">2017-10-21</td>
+                                        <td class="td-padding td-w-20">使用公假內容,使用公假內容,使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-10">
+                                            <a href="" class="waves-effect waves-light btn" name=confirm>允許</a>
+                                            <a href="" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">2017-10-21</td>
+                                        <td class="td-padding td-w-20">使用公假內容,使用公假內容,使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-10">
+                                            <a href="" class="waves-effect waves-light btn" name=confirm>允許</a>
+                                            <a href="" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">2017-10-21</td>
+                                        <td class="td-padding td-w-20">使用公假內容,使用公假內容,使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-10">
+                                            <a href="" class="waves-effect waves-light btn" name=confirm>允許</a>
+                                            <a href="" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">2017-10-21</td>
+                                        <td class="td-padding td-w-20">使用公假內容,使用公假內容,使用公假內容</td>
+                                        <td class="td-padding td-w-5">12小時</td>
+                                        <td class="td-padding td-w-10">
+                                            <a href="" class="waves-effect waves-light btn" name=confirm>允許</a>
+                                            <a href="" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
       		</div>
 		</div>
 	</div>
 	
-    <!-- Modal Structure -->
-    <div id="modal2" class="modal modal-fixed-footer modal-announcement">
-        <form action="officialLeave">
-            <div class="modal-header" >
-                <h5 class="modal-announcement-title">醫師公假紀錄</h5>
-                <div class="nav-content">
-                    <ul class=" tabs-fixed-width blue-grey darken-1">
-                        <div class="indicator" style="right: 352px; left: 0px;"></div>
-                    </ul>
+	
+	
+    <div id="modal1" class="modal modal-fixed-footer modal-announcement">
+        <form action="" method="post">
+            <div class="modal-header">
+                <h5 class="modal-announcement-title">時數</h5>
+            </div>
+            
+            <div class="modal-content modal-content-customize1">
+                <div class="row margin-b0">
+                    <div class="input-field col s12 margin-b20">
+                        <select name="doctor" required>
+                            <option value="" selected disabled>選擇醫生</option>
+                            <option value="1">簡定國</option>
+                            <option value="2">簡定國</option>
+                            <option value="3">簡定國</option>
+                            <option value="4">簡定國</option>
+                            <option value="5">簡定國</option>
+                            <option value="6">簡定國</option>
+                            <option value="7">簡定國</option>
+                            <option value="8">簡定國</option>
+                            <option value="9">簡定國</option>
+                            <option value="10">簡定國</option>
+                            <option value="">簡定國</option>
+                            <option value="">簡定國</option>
+                            <option value="">簡定國</option>
+                            <option value="">簡定國</option>
+                            <option value="">簡定國</option>
+                            <option value="">簡定國</option>
+                            <option value="">簡定國</option>
+                            <option value="">簡定國</option>
+                            <option value="">簡定國</option>
+                            <option value="">簡定國</option>
+                        </select>
+                        <label>醫生</label>
+                    </div>
+                    <div class="input-field col s12 margin-t0">
+                        <p class="margin-0">種類</p>
+                        <p class="radio-location">
+                            <input class="with-gap" name="location" type="radio" id="radio-plus" value="1" checked required/>
+                            <label for="radio-plus">增加</label>
+                            <input class="with-gap" name="location" type="radio" id="radio-minus" value="0" />
+                            <label for="radio-minus">減少</label>
+                        </p>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="hour" type="number" value="" name="hour" required>
+                        <label for="hour">時數</label>
+                    </div>
+                    <div class="input-field col s12 margin-t0">
+                        <textarea id="textarea1" class="materialize-textarea" type="text" name="content"></textarea>
+                        <label for="textarea1">內容</label>
+                    </div>
                 </div>
             </div>
-            <table id="example" class="mdl-data-table striped highlight" cellspacing="0" width="100%">
-                <thead>
-                    <tr>
-                        <th style="width:90px;">提出時間</th>
-                        <th style="width:90px;">提出人</th>
-                        <th style="width:160px;">公假期間</th>
-                        <th style="width:120px;">內容</th>
-                        <th>時數</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($doctorsLeave as $leaves)
-                        @foreach($leaves[1] as $leave) 
-                        
-                            <tr>
-                                <td id=recordDate></td>
-                                <td id=confirmingPersonID></td>
-                                <td id=leaveDate></td>
-                                <td id=remark></td>
-                                <td id=leaveHours></td>
-                            </tr>
-                        
-                        @endforeach
-                    @endforeach
-                </tbody>
-            </table>
- 
             <div class="modal-footer">
-<!--                <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">Save</button> -->
-<!--                <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">Cancel</button>-->
+                <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">Save</button>
                 <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel">Cancel</button>
             </div>
         </form>
     </div>
+    
 @endsection
 
 @section('script')
-    <script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="../js/dataTables.material.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#example').DataTable( {
-                columnDefs: [
-                    {
-                        targets: [ 0, 1, 2 ],
-                        className: 'mdl-data-table__cell--non-numeric'
-                    }
-                ]
-            });
+        $(document).ready(function(){
             $('select').material_select();
-        });
-        
-        $('.datepicker').pickadate({
-            selectMonths: true, // Creates a dropdown to control month
-            selectYears: 200 // Creates a dropdown of 15 years to control year
-        });
-        
+  		});
     </script>
-    <script>
-
-     function showOfficialLeaveInfo(id) {
-            $.get('showOfficialLeaveInfo', {
-                id :id,
-            }, function (array){
-                var recordDate = "";
-                var confirmingPersonID="";
-                var leaveDate="";
-                var remark ="";
-                var leaveHours="";
-
-                for(i=0 ; i<array.length ; i++){
-                   recordDate += "<td>"+array[i][0]+"</td><br>";
-                   confirmingPersonID += "<td>"+array[i][1]+"</td><br>";
-                   leaveDate += "<td>"+array[i][2]+"</td><br>";
-                   remark += "<td>"+array[i][3]+"</td><br>";
-                   leaveHours += "<td>"+array[i][4]+"</td><br>";
-                
-                    console.log("aaa");
-                
-                }
-                document.getElementById("recordDate").innerHTML  = recordDate; 
-                document.getElementById("confirmingPersonID").innerHTML = confirmingPersonID;
-                document.getElementById("leaveDate").innerHTML = leaveDate;
-                document.getElementById("remark").innerHTML = remark;
-                document.getElementById("leaveHours").innerHTML = leaveHours;
-            
-                 
-            });
-        }
-    </script>
+    
 @endsection
 
 
