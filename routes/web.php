@@ -49,7 +49,10 @@ Route::get('resign/{id}', 'AccountController@resign');
 // 取得個人頁面
 Route::get('profile', 'AccountController@getProfilePage');
 
-// 統計圖表頁面
+//一般醫生新增公假
+Route::post('addOfficialLeaveByDoctor', 'AccountController@addOfficialLeaveByDoctor');
+
+
 
 // 單一醫生上班紀錄的統計圖表
 Route::get('doctorsChart', 'ChartController@getChartPage');
@@ -99,8 +102,17 @@ Route::get('checkShift/{id}','ShiftRecordsController@checkShift');
 Route::get('rejectShift/{id}','ShiftRecordsController@rejectShift');
 
 // 列出所有使用者的資訊以及公假
-Route::get('officialLeave', 'AccountController@getOfficialLeavePage');
-Route::get('showOfficialLeaveInfo', 'AccountController@getOfficialLeavePageById');
+Route::get('officialLeave', 'LeaveController@getOfficialLeavePage');
+
+//排班人員確認公假
+Route::get('confirmOffcialLeave/{serial}','LeaveController@confirmOffcialLeave');
+
+//排班人員拒絕公假
+Route::get('unconfirmOffcialLeave/{serial}', 'LeaveController@unconfirmOffcialLeave');
+
+//新增醫生公假
+Route::post('addOfficialLeave', 'LeaveController@addOfficialLeaveByAdmin');
+
 
 // 新增預班
 Route::post('sendReservationAdd', 'ReservationController@addReservation');
@@ -192,7 +204,7 @@ Route::get('getExchangeSchedulePage', function() {
 	return view('testPage.exchangeSchedule');
 });
 
-Route::get('getOfficialLeavePage', 'AccountController@getOfficialLeavePage');
+Route::get('getOfficialLeavePage', 'LeaveController@getOfficialLeavePage');
 
 Route::post('exchangeSchedule', 'ShiftRecordsController@adminConfirm');
 

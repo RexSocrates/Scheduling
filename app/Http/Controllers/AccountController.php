@@ -8,6 +8,7 @@ use App\ShiftRecords;
 use App\ShiftCategory;
 use App\Schedule;
 use App\OfficialLeave;
+use App\ConfirmStatus;
 
 
 
@@ -37,40 +38,60 @@ class AccountController extends Controller
     // 取得個人資料頁面
     public function getProfilePage() {
         $user = new User();
+        $officialLeave = new OfficialLeave();
         $shiftRecords = new ShiftRecords();
+        $confirmStatus = new ConfirmStatus();
 
-        $data = $shiftRecords->getMoreCheckShiftsRecordsInformation(true); //到shiftrecords modle找資料
+        $doctorShiftRecords = $shiftRecords->getMoreCheckShiftsRecordsInformation(true); //到shiftrecords modle找資料
 
+        $doctorOfficialLeave = $officialLeave->getLeavesByDoctorID($user->getCurrentUserID());
+
+        $officialLeaveArr =[];
+
+        foreach ($doctorOfficialLeave as $leave) {
+            $leaveDic =[
+                'date' => $leave->recordDate,
+                'remark' => $leave->remark,
+                'hour' => $leave->leaveHours,
+                'status'=> ''
+            ];
+
+            $leaveDic['status'] = $confirmStatus->getStatusBySerial($leave->confirmStatus);
+
+            array_push($officialLeaveArr,$leaveDic);
+
+        }
        
         return view('pages.profile', [
              'doctor' => $user->getCurrentUserInfo(),
-             'doctorShiftRecords' =>$data
+             'doctorShiftRecords' =>$doctorShiftRecords,
+             'doctorOfficialLeave'=>$officialLeaveArr
          ]);
     }
     
-    // 取奪所有醫師的公假紀錄
-    public function getOfficialLeavePage() {
+
+
+    //醫生申請公假
+    public function addOfficialLeaveByDoctor(Request $request){
+        $data = $request->all();
 
         $user = new User();
-        $officialLeave = new OfficialLeave();
-        
-        $doctors = $user->getDoctorList();
-        
-        $doctorsLeave = array();
-        
-        foreach($doctors as $doctor) {
-            $leaves = $officialLeave->getLeavesByDoctorID($doctor->doctorID);
-            
-            array_push($doctorsLeave, array($doctor, $leaves));
-        }
-            //return $doctorsLeave;
-        return view('pages.officialaffair', [
-            'doctorsLeave' => $doctorsLeave
-        ]);
-        
+        $officialLeave = new officialLeave();
+
+        $leave = [
+            'doctorID' => $user->getCurrentUserInfo()->doctorID,
+            'leaveHours'=> -1*$data['hour'],
+            'remark' => $data['content'],
+        ];
+    
+
+        $leave = $officialLeave->applyLeave($leave);
+
+        return redirect('profile');
+
     }
 
-     public function getOfficialLeavePageById(Request $request) {
+    public function getOfficialLeavePageById(Request $request) {
         $data = $request->all();
         
         $user = new User();

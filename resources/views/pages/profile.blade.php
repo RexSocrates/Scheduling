@@ -73,7 +73,7 @@
                                 <font class="card-title">使用公假的記錄</font>
                             </div>
                             <div class="title1 margin-l20">
-                                <font class="card-title">剩餘時數: 30</font>
+                                <font class="card-title">剩餘時數: {{$doctor->currentOfficialLeaveHours}}</font>
                             </div>
                             <a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal2"><i class="material-icons">add</i></a>
                         </div>
@@ -91,66 +91,16 @@
                                 </thead>
 
                                 <tbody>
+                                    @foreach($doctorOfficialLeave as $leave)
                                     <tr>
-                                        <td class="td-padding td-w-5">2017-10-15</td>
-                                        <td class="td-padding td-w-20">使用公假內容使用公假內容使用公假內容</td>
-                                        <td class="td-padding td-w-5">12小時</td>
-                                        <td class="td-padding td-w-5">已確認</td>
+                                        <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
+                                        <td class="td-padding td-w-20">{{ $leave['remark'] }}</td>
+                                        <td class="td-padding td-w-5">{{ $leave['hour'] }}</td>
+                                        <td class="td-padding td-w-5">{{ $leave['status'] }}</td>
+                                       
                                     </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-10-15</td>
-                                        <td class="td-padding td-w-20">使用公假內容</td>
-                                        <td class="td-padding td-w-5">12小時</td>
-                                        <td class="td-padding td-w-5">已確認</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-10-15</td>
-                                        <td class="td-padding td-w-20">使用公假內容</td>
-                                        <td class="td-padding td-w-5">12小時</td>
-                                        <td class="td-padding td-w-5">已確認</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-10-15</td>
-                                        <td class="td-padding td-w-20">使用公假內容</td>
-                                        <td class="td-padding td-w-5">12小時</td>
-                                        <td class="td-padding td-w-5">已確認</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-10-15</td>
-                                        <td class="td-padding td-w-20">使用公假內容</td>
-                                        <td class="td-padding td-w-5">12小時</td>
-                                        <td class="td-padding td-w-5">已確認</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-10-15</td>
-                                        <td class="td-padding td-w-20">使用公假內容</td>
-                                        <td class="td-padding td-w-5">12小時</td>
-                                        <td class="td-padding td-w-5">已確認</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-10-15</td>
-                                        <td class="td-padding td-w-20">使用公假內容</td>
-                                        <td class="td-padding td-w-5">12小時</td>
-                                        <td class="td-padding td-w-5">已確認</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-10-15</td>
-                                        <td class="td-padding td-w-20">使用公假內容</td>
-                                        <td class="td-padding td-w-5">12小時</td>
-                                        <td class="td-padding td-w-5">已確認</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-10-15</td>
-                                        <td class="td-padding td-w-20">使用公假內容</td>
-                                        <td class="td-padding td-w-5">12小時</td>
-                                        <td class="td-padding td-w-5">已確認</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-10-15</td>
-                                        <td class="td-padding td-w-20">使用公假內容</td>
-                                        <td class="td-padding td-w-5">12小時</td>
-                                        <td class="td-padding td-w-5">已確認</td>
-                                    </tr>
+                                     @endforeach
+                                   
                                 </tbody>
                             </table>
                         </div>
@@ -188,7 +138,7 @@
     </div>
     
     <div id="modal2" class="modal modal-fixed-footer modal-announcement">
-        <form action="" method="post">
+        <form action="addOfficialLeaveByDoctor" method="post">
             <div class="modal-header">
                 <h5 class="modal-announcement-title">申請公假</h5>
             </div>
@@ -207,6 +157,7 @@
             <div class="modal-footer">
                 <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">Save</button>
                 <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel">Cancel</button>
+                {{ csrf_field() }}
             </div>
         </form>
     </div>

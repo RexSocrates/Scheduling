@@ -16,6 +16,15 @@ class OfficialLeave extends Model
         
         return $leaves;
     }
+
+    //取得所有未確認公假申請
+    public function getUnconfirmLeaves() {
+        $leaves = DB::table('OfficialLeave')
+                ->where('confirmStatus',0)
+                ->get();
+        
+        return $leaves;
+    }
     
     // 取得單一公假紀錄
     public function getLeaveBySerial($serial) {
@@ -36,19 +45,31 @@ class OfficialLeave extends Model
     }
     
     // 排班人員加入公假紀錄
-    public function addLeave($dataArray) {
+    public function addLeaveByAdmin(array $dataArray) {
         // confirmStatus : 0 hasn't been confirmed
         // 1 confirmed, 2 rejected
         $newSerial = DB::table('OfficialLeave')->insertGetId([
+            'confirmingPersonID'=> $dataArray['confirmingPersonID'],
             'doctorID' => $dataArray['doctorID'],
+            'leaveHours'=> $dataArray['leaveHours'],
             'recordDate'=> date('Y-m-d'),
+            'leaveDate' => date('Y-m-d'),
             'remark' => $dataArray['remark'],
             'confirmStatus' => 1,
         ]);
-        
+
         return $newSerial;
     }
     
+    //更新醫生公假
+    public function updateLeaveHours($doctorID,$currentOfficialLeaveHours){
+         DB::table('Doctor')
+            ->where('doctorID', $doctorID)
+            ->update([
+                'currentOfficialLeaveHours' => $currentOfficialLeaveHours,
+            ]);
+    }
+
     // 一般醫師提出公假申請
     public function applyLeave($dataArray) {
         // 公假時數需登記為負數
@@ -57,6 +78,7 @@ class OfficialLeave extends Model
             'doctorID' => $dataArray['doctorID'],
             'leaveHours' => $dataArray['leaveHours'],
             'recordDate'=> date('Y-m-d'),
+            'leaveDate' => date('Y-m-d'),
             'remark' => $dataArray['remark'],
             'confirmStatus' => 0,
         ]);
@@ -72,6 +94,9 @@ class OfficialLeave extends Model
                 'confirmStatus' => $dataArray['newStatus'],
                 'confirmingPersonID' => $dataArray['confirmingPerson']
             ]);
+            
     }
+
+   
     
 }

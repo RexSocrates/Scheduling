@@ -391,6 +391,10 @@
                                 return true;
                             });
                            
+                           scheduler.attachEvent("onEventDragIn", function (id, e){
+                                var ev = scheduler.getEvent(id);
+                                console.log(ev.text);
+                            });
                            
 
                             scheduler.init('scheduler_here',new Date(res[3], month),"timeline");
