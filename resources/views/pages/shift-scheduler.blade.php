@@ -134,6 +134,15 @@
                                 return "width-200";
                             };
                             
+                            scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
+                                
+                                console.log(ev.start_date);
+                                console.log(ev.end_date);
+                                console.log(ev.section_id);
+                                
+                                return true;
+                            });
+                            
                             //進入畫面後顯示的東西
                             scheduler.init('scheduler_here',new Date(2017,5,26),"timeline");
 

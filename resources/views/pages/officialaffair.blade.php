@@ -64,13 +64,14 @@
                                         <th class="td-w-5">日期</th>
                                         <th class="td-w-5">申請人</th>
                                         <th class="td-w-5">對象</th>
-                                        <th class="td-w-5">種類</th>
-                                        <th class="td-w-5">時數</th>
+                                        <th class="td-w-5">增加/減少</th>
+                                        <th class="td-w-5">剩餘時數</th>
                                         <th class="td-w-25">內容</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
+
                                     @foreach($leaveArr as $leave)
                                     <tr>
                                         <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
@@ -86,6 +87,7 @@
                                     </tr>
                                     @endforeach
                                    
+
                                 </tbody>
                             </table>
       		  	  	  	</div>

@@ -47,6 +47,10 @@ header, main, footer {
     right: 0;
 }
 
+.display-b {
+    display: block;
+}
+
 .margin-0 {
     margin: 0px;
 }

@@ -84,7 +84,7 @@
                                 <thead>
                                     <tr>
                                         <th class="td-w-5">申請日期</th>
-                                        <th class="td-w-20">申請理由</th>
+                                        <th class="td-w-20">申請原因</th>
                                         <th class="td-w-5">使用時數</th>
                                         <th class="td-w-5">狀態</th>
                                     </tr>
@@ -140,7 +140,7 @@
     <div id="modal2" class="modal modal-fixed-footer modal-announcement">
         <form action="addOfficialLeaveByDoctor" method="post">
             <div class="modal-header">
-                <h5 class="modal-announcement-title">申請公假</h5>
+                <h5 class="modal-announcement-title">申請使用公假</h5>
             </div>
             <div class="modal-content modal-content-customize1">
                 <div class="row margin-b0">
@@ -150,7 +150,7 @@
                     </div>
                     <div class="input-field col s12 margin-t0">
                         <textarea id="textarea1" class="materialize-textarea" type="text" name="content"></textarea>
-                        <label for="textarea1">內容</label>
+                        <label for="textarea1">申請原因</label>
                     </div>
                 </div>
             </div>
