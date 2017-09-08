@@ -63,8 +63,8 @@
                                         <th class="td-w-5">日期</th>
                                         <th class="td-w-5">申請人</th>
                                         <th class="td-w-5">對象</th>
-                                        <th class="td-w-5">種類</th>
-                                        <th class="td-w-5">時數</th>
+                                        <th class="td-w-5">增加/減少</th>
+                                        <th class="td-w-5">剩餘時數</th>
                                         <th class="td-w-25">內容</th>
                                     </tr>
                                 </thead>
@@ -74,15 +74,15 @@
                                         <td class="td-padding td-w-5">2017-10-15</td>
                                         <td class="td-padding td-w-5">蔡維德</td>
                                         <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">增加</td>
                                         <td class="td-padding td-w-5">+3.5小時</td>
+                                        <td class="td-padding td-w-5">16小時</td>
                                         <td class="td-padding td-w-25">增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因</td>
                                     </tr>
                                     <tr>
                                         <td class="td-padding td-w-5">2017-10-21</td>
                                         <td class="td-padding td-w-5">簡定國</td>
                                         <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">使用/減少</td>
+                                        <td class="td-padding td-w-5">-12小時</td>
                                         <td class="td-padding td-w-5">-12小時</td>
                                         <td class="td-padding td-w-25">使用公假內容</td>
                                     </tr>
@@ -90,65 +90,57 @@
                                         <td class="td-padding td-w-5">2017-10-21</td>
                                         <td class="td-padding td-w-5">簡定國</td>
                                         <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">使用/減少</td>
                                         <td class="td-padding td-w-5">-12小時</td>
+                                        <td class="td-padding td-w-5">3小時</td>
                                         <td class="td-padding td-w-25">使用公假內容</td>
                                     </tr>
                                     <tr>
                                         <td class="td-padding td-w-5">2017-10-15</td>
                                         <td class="td-padding td-w-5">蔡維德</td>
                                         <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">增加</td>
                                         <td class="td-padding td-w-5">+3.5小時</td>
+                                        <td class="td-padding td-w-5">3.5小時</td>
                                         <td class="td-padding td-w-25">增加時數的原因,增加時數的原因,增加時數的原因</td>
                                     </tr>
                                     <tr>
                                         <td class="td-padding td-w-5">2017-10-21</td>
                                         <td class="td-padding td-w-5">簡定國</td>
                                         <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">使用/減少</td>
                                         <td class="td-padding td-w-5">-12小時</td>
+                                        <td class="td-padding td-w-5">2小時</td>
                                         <td class="td-padding td-w-25">使用公假內容</td>
                                     </tr>
                                     <tr>
-                                        <td class="td-padding">2017-10-21</td>
-                                        <td class="td-padding">簡定國</td>
-                                        <td class="td-padding">簡定國</td>
-                                        <td class="td-padding">使用/減少</td>
-                                        <td class="td-padding">-12小時</td>
-                                        <td class="td-padding">使用公假內容</td>
+                                        <td class="td-padding td-w-5">2017-10-21</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">-12小時</td>
+                                        <td class="td-padding td-w-5">3小時</td>
+                                        <td class="td-padding td-w-25">使用公假內容</td>
                                     </tr>
                                     <tr>
-                                        <td class="td-padding">2017-10-21</td>
-                                        <td class="td-padding">簡定國</td>
-                                        <td class="td-padding">簡定國</td>
-                                        <td class="td-padding">使用/減少</td>
-                                        <td class="td-padding">-12小時</td>
-                                        <td class="td-padding">使用公假內容</td>
+                                        <td class="td-padding td-w-5">2017-10-21</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">-12小時</td>
+                                        <td class="td-padding td-w-5">3小時</td>
+                                        <td class="td-padding td-w-25">使用公假內容</td>
                                     </tr>
                                     <tr>
-                                        <td class="td-padding">2017-10-21</td>
-                                        <td class="td-padding">簡定國</td>
-                                        <td class="td-padding">簡定國</td>
-                                        <td class="td-padding">使用/減少</td>
-                                        <td class="td-padding">-12小時</td>
-                                        <td class="td-padding">使用公假內容</td>
+                                        <td class="td-padding td-w-5">2017-10-21</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">-12小時</td>
+                                        <td class="td-padding td-w-5">3小時</td>
+                                        <td class="td-padding td-w-25">使用公假內容</td>
                                     </tr>
                                     <tr>
-                                        <td class="td-padding">2017-10-21</td>
-                                        <td class="td-padding">簡定國</td>
-                                        <td class="td-padding">簡定國</td>
-                                        <td class="td-padding">使用/減少</td>
-                                        <td class="td-padding">-12小時</td>
-                                        <td class="td-padding">使用公假內容</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding">2017-10-21</td>
-                                        <td class="td-padding">簡定國</td>
-                                        <td class="td-padding">簡定國</td>
-                                        <td class="td-padding">使用/減少</td>
-                                        <td class="td-padding">-12小時</td>
-                                        <td class="td-padding">使用公假內容</td>
+                                        <td class="td-padding td-w-5">2017-10-21</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">-12小時</td>
+                                        <td class="td-padding td-w-5">3小時</td>
+                                        <td class="td-padding td-w-25">使用公假內容</td>
                                     </tr>
                                 </tbody>
                             </table>
