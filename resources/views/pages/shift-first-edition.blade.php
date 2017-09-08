@@ -28,7 +28,6 @@
             filter: alpha(opacity = 0);
         }
     </style>
-
 @endsection
 
 @section('navbar')
@@ -114,6 +113,9 @@
                                 <div class="dhx_cal_next_button"></div>
                                 <div class="dhx_cal_today_button"></div>
                                 <div class="dhx_cal_date"></div>
+                                
+                                <div class="dhx_cal_tab margin-l10"><a class="dhx_cal_tab display-b" href="#modal1">新增</a></div>
+                                
         <!--
                                 <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
                                 <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
@@ -247,8 +249,6 @@
                             scheduler.templates.timeline_scaley_class = function(key, label, section){ 
                                 return "width-200";
                             };
-                            
-                           
                             
                             //彈出客制化的lightbox
                             var html = function(id) { return document.getElementById(id); }; //just a helper
@@ -406,8 +406,95 @@
                     </div>
                 </div>
             </div>
-            
         </div>
+    </div>
+    
+    <div id="modal1" class="modal modal-fixed-footer modal-announcement">
+        <form action="" method="post">
+            <div class="modal-header">
+                <h5 class="modal-announcement-title">新增</h5>
+            </div>
+            
+            <div class="modal-content modal-content-customize1">
+                <div class="row margin-b0">
+                    <div class="input-field col s12 margin-b20">
+                        <select name="doctor" required>
+                            <option value="" selected disabled>選擇醫生</option>
+                            <option value="1">簡定國</option>
+                            <option value="2">簡定國</option>
+                            <option value="3">簡定國</option>
+                            <option value="4">簡定國</option>
+                            <option value="5">簡定國</option>
+                            <option value="6">簡定國</option>
+                            <option value="7">簡定國</option>
+                            <option value="8">簡定國</option>
+                            <option value="9">簡定國</option>
+                            <option value="10">簡定國</option>
+                        </select>
+                        <label>醫生</label>
+                    </div>
+                    <div class="input-field col s12 margin-b20">
+                        <select name="level" required>
+                            <option value="" selected disabled>選擇班種</option>
+                            <option value="1">行政</option>
+                            <option value="2">教學</option>
+                            <option value="3">北白急救</option>
+                            <option value="4">北白發燒</option>
+                            <option value="5">北白內1</option>
+                            <option value="6">北白內2</option>
+                            <option value="7">北白外1</option>
+                            <option value="8">北白外2</option>
+                            <option value="9">淡白內1</option>
+                            <option value="10">淡白內2</option>
+                            <option value="11">淡白外1</option>
+                            <option value="12">淡白外1</option>
+                            <option value="13">北夜急救</option>
+                            <option value="14">北夜發燒</option>
+                            <option value="15">北夜內1</option>
+                            <option value="16">北夜內2</option>
+                            <option value="17">北夜外1</option>
+                            <option value="18">北夜外2</option>
+                            <option value="19">淡夜內1</option>
+                            <option value="20">淡夜內2</option>
+                            <option value="21">淡夜外</option>
+                        </select>
+                        <label>班種</label>
+                    </div>
+                    <div class="input-field col s12 margin-b20">
+                        <select name="level" required>
+                            <option value="" selected disabled>選擇日期</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                        </select>
+                        <label>日期</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">Save</button>
+                <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel">Cancel</button>
+            </div>
+            {{ csrf_field() }}
+        </form>
     </div>
 @endsection
 
