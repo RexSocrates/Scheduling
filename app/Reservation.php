@@ -266,7 +266,7 @@ class Reservation extends Model
         return $generatedSerial;
     }
     
-    // 回傳預班編號
+    // 比對預班資料回傳預班編號
     public function getReservationSerial(array $data) {
         $res = DB::table("Reservation")
             ->where('isWeekday',$data['isWeekday'])
@@ -277,5 +277,18 @@ class Reservation extends Model
             ->first();
         
         return $res->resSerial;
+    }
+    
+    // 回傳此預班是否有人預約
+    public function resIsMade($serial) {
+        $count = DB::table('DoctorAndReservation')
+            ->where('resSerial', $serial)
+            ->count();
+        
+        if($count == 0) {
+            return false;
+        }
+        
+        return true;
     }
 }
