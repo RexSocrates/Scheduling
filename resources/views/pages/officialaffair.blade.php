@@ -82,7 +82,7 @@
                                         @else
                                             <td class="td-padding td-w-5">+{{ $leave['hours'] }}</td>
                                         @endif
-                                        
+                                        <td class="td-padding td-w-5">{{ $leave['confirmingPerson'] }}</td>
                                         <td class="td-padding td-w-25">{{ $leave['remark'] }}</td>
                                     </tr>
                                     @endforeach

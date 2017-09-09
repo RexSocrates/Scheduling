@@ -25,6 +25,15 @@ class OfficialLeave extends Model
         
         return $leaves;
     }
+
+    //取得所有確認公假申請
+    public function getconfirmLeaves() {
+        $leaves = DB::table('OfficialLeave')
+                ->where('confirmStatus',1)
+                ->get();
+        
+        return $leaves;
+    }
     
     // 取得單一公假紀錄
     public function getLeaveBySerial($serial) {
@@ -53,7 +62,6 @@ class OfficialLeave extends Model
             'doctorID' => $dataArray['doctorID'],
             'leaveHours'=> $dataArray['leaveHours'],
             'recordDate'=> date('Y-m-d'),
-            'leaveDate' => date('Y-m-d'),
             'remark' => $dataArray['remark'],
             'confirmStatus' => 1,
         ]);
@@ -78,7 +86,6 @@ class OfficialLeave extends Model
             'doctorID' => $dataArray['doctorID'],
             'leaveHours' => $dataArray['leaveHours'],
             'recordDate'=> date('Y-m-d'),
-            'leaveDate' => date('Y-m-d'),
             'remark' => $dataArray['remark'],
             'confirmStatus' => 0,
         ]);
