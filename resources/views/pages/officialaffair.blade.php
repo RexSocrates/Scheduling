@@ -71,55 +71,23 @@
                                 </thead>
 
                                 <tbody>
-                                    
-<!--
+
                                     @foreach($leaveArr as $leave)
                                     <tr>
                                         <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
                                         <td class="td-padding td-w-5">{{ $leave['doctor'] }}</td>
                                         <td class="td-padding td-w-5">{{ $leave['confirmingPerson'] }}</td>
                                         @if($leave['hours']<0)
-                                            <td class="td-padding td-w-5">使用/減少</td>
+                                            <td class="td-padding td-w-5">{{ $leave['hours'] }}</td>
                                         @else
-                                            <td class="td-padding td-w-5">增加</td>
+                                            <td class="td-padding td-w-5">+{{ $leave['hours'] }}</td>
                                         @endif
-                                        <td class="td-padding td-w-5">{{ $leave['hours'] }}</td>
+                                        
                                         <td class="td-padding td-w-25">{{ $leave['remark'] }}</td>
                                     </tr>
                                     @endforeach
--->
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-10-15</td>
-                                        <td class="td-padding td-w-5">蔡維德</td>
-                                        <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">+3.5小時</td>
-                                        <td class="td-padding td-w-5">16小時</td>
-                                        <td class="td-padding td-w-25">增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-10-21</td>
-                                        <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">-12小時</td>
-                                        <td class="td-padding td-w-5">0小時</td>
-                                        <td class="td-padding td-w-25">使用公假內容</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-10-15</td>
-                                        <td class="td-padding td-w-5">蔡維德</td>
-                                        <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">+3.5小時</td>
-                                        <td class="td-padding td-w-5">3.5小時</td>
-                                        <td class="td-padding td-w-25">增加時數的原因,增加時數的原因,增加時數的原因</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-10-21</td>
-                                        <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">-12小時</td>
-                                        <td class="td-padding td-w-5">2小時</td>
-                                        <td class="td-padding td-w-25">使用公假內容</td>
-                                    </tr>
+
+                                   
                                 </tbody>
                             </table>
       		  	  	  	</div>

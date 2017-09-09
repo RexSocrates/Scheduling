@@ -153,10 +153,9 @@
                     <div class="input-field col s12 margin-b20">
                         <select name="hour" required>
                             <option value="" selected disabled>選擇時數</option>
-                            <option value="12">12</option>
-                            <option value="24">24</option>
-                            <option value="36">36</option>
-                            <option value="48">48</option>
+                            @foreach($leaveHours as $hour)
+                            <option value="{{ $hour }}">{{ $hour }}</option>
+                            @endforeach
                         </select>
                         <label>時數</label>
                     </div>

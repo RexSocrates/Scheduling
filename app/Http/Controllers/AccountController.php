@@ -61,11 +61,20 @@ class AccountController extends Controller
             array_push($officialLeaveArr,$leaveDic);
 
         }
+
+        $leaveHours=[];
+        $hour = $user->getCurrentUserInfo()->currentOfficialLeaveHours;
+
+        for ($i=12 ; $i<=$hour;) {
+            array_push($leaveHours,$i);
+            $i=$i*2;
+        }
        
         return view('pages.profile', [
              'doctor' => $user->getCurrentUserInfo(),
              'doctorShiftRecords' =>$doctorShiftRecords,
-             'doctorOfficialLeave'=>$officialLeaveArr
+             'doctorOfficialLeave'=>$officialLeaveArr,
+             'leaveHours' => $leaveHours
          ]);
     }
     
