@@ -143,7 +143,7 @@
             <div class="modal-content modal-content-customize1">
                 <div class="row margin-b0">
                     <div class="input-field col s12 margin-b20">
-                        <select name="doctor" required>
+                        <select name="doctor" required  id= "doctor" >
                            @foreach($doctors as $doctor)
                                 <option value="{{ $doctor['id'] }}">{{ $doctor['name'] }}</option>
                             @endforeach
@@ -153,9 +153,9 @@
                     <div class="input-field col s12 margin-t0">
                         <p class="margin-0">種類</p>
                         <p class="radio-location">
-                            <input class="with-gap" name="classification" type="radio" id="radio-plus" value="1" checked required/>
+                            <input class="with-gap" name="classification"  type="radio" id="radio-plus" value="1" checked required/>
                             <label for="radio-plus">增加</label>
-                            <input class="with-gap" name="classification" type="radio" id="radio-minus" value="0" />
+                            <input class="with-gap" name="classification"  type="radio" id="radio-minus" value="0" />
                             <label for="radio-minus">減少</label>
                         </p>
                     </div>
@@ -164,7 +164,7 @@
                         <label for="hour">時數</label>
                     </div>
                     <div class="input-field col s12 margin-t0">
-                        <textarea id="textarea1" class="materialize-textarea" type="text" name="content"></textarea>
+                        <textarea id="textarea1" class="materialize-textarea" type="text" name="content" required></textarea>
                         <label for="textarea1">內容</label>
                     </div>
                 </div>
@@ -172,8 +172,9 @@
             <div class="modal-footer">
                 <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">Save</button>
                 <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel">Cancel</button>
-                {{ csrf_field() }}
+                
             </div>
+            {{ csrf_field() }}
         </form>
     </div>
     
@@ -184,6 +185,10 @@
         $(document).ready(function(){
             $('select').material_select();
   		});
+    </script>
+
+    <script>
+
     </script>
     
 @endsection
