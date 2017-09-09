@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
 // 演算法用的model
+use App\User;
 use App\Reservation;
 use App\DoctorAndReservation;
 use App\ShiftCategory;
@@ -34,9 +35,13 @@ class AlgorithmController extends Controller
         foreach($offResList as $res) {
             $res->printData();
         }
-//        echo '<br>==================================================<br>';
         
-//        $doctors = $this->getDoctorsInfo();
+        echo '<br>==================================================<br>';
+        
+        $doctors = $this->getDoctorsInfo();
+        foreach($doctors as $doctor) {
+            $doctor->printData();
+        }
         
 //        echo '<br>==================================================<br>';
         
@@ -125,18 +130,22 @@ class AlgorithmController extends Controller
         
         // 演算法用的陣列
         $doctorsList = [];
+        $numberOfWeeks = $this->getWeeksOfMonth();
         
         foreach($doctors as $doctor) {
             $doctorDic = [
                 'doctorID' => $doctor->doctorID,
                 'major' => '',
                 'totalShifts' => $doctor->mustOnDutyTotalShifts,
+                'dayShifts' => $doctor->mustOnDutyDayShifts,
+                'nightShifts' => $doctor->mustOnDutyNightShifts,
                 'weekendShifts' => 0,
                 'location' => '',
                 'taipeiShiftsLimit' => 0,
                 'tamsuiShiftsLimit' => 0,
                 'surgicalShifts' => $doctor->mustOnDutySurgicalShifts,
                 'medicalShifts' => $doctor->mustOnDutyMedicalShifts,
+                'numberOfWeeks' => $numberOfWeeks
             ];
             
             // 專職科別
@@ -232,15 +241,40 @@ class AlgorithmController extends Controller
         $lastDayOfMonth = date('Y-m-d', strtotime($nextMonthFirstDay.'-1 day'));
         $daysOfMonth = (int)(explode('-', $lastDayOfMonth)[2]);
         
-        $weekdayOfMonth = [];
-        for($i = 1; i <= $daysOfMonth; $i++) {
+        
+        $numberOfWeeks = 0;
+        $weekStart = true;
+        for($i = 1; $i <= $daysOfMonth; $i++) {
             $dateStr = '';
             if($i < 10) {
                 $dateStr = $year.'-'.$month.'-0'.$i;
             }else {
                 $dateStr = $year.'-'.$month.'-'.$i;
             }
-            $dateStr = date('N', strtotime($dateStr));
+            // monday is 1, sunday is 7
+            $weekDay = (int)date('N', strtotime($dateStr));
+            
+            if($weekDay == 7) {
+                // 星期天，一週的結束
+                $numberOfWeeks++;
+                $weekStart = false;
+                
+//                echo 'The end of week '.$dateStr.'<br>';
+//                echo 'Week number : '.$numberOfWeeks.'<br><br>';
+            }
+            if($weekDay == 1) {
+                // 星期一，一週的開始
+                $weekStart = true;
+//                echo 'The start of week '.$dateStr.'<br>';
+//                echo 'Week number : '.$numberOfWeeks.'<br><br>';
+            }
         }
+        if($weekStart == true) {
+            // 雖然不是完整的一星期，但已涵蓋此一星期
+            $numberOfWeeks++;
+//            echo 'Last week number : '.$numberOfWeeks.'<br>';
+        }
+        
+        return $numberOfWeeks;
     }
 }

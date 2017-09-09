@@ -19,7 +19,7 @@ class Doctor {
     private $lostShfits = 0; // 沒選上預約的班的數量
     private $otherLocationShifts = []; // 存放每週在非職登院區上班的班數，當月有幾週就給幾個0
     
-    function __construct($doctorDic) {
+    public function __construct($doctorDic) {
         $this->doctorID = $doctorDic['doctorID'];
         $this->major = $doctorDic['major'];
         $this->totalShifts = $doctorDic['totalShifts'];
@@ -30,13 +30,22 @@ class Doctor {
         $this->taipeiShiftsLimit = $doctorDic['taipeiShiftsLimit'];
         $this->surgicalShifts = $doctorDic['surgicalShifts'];
         $this->medicalShifts = $doctorDic['medicalShifts'];
+        
+        $this->lostShfits = 0;
+        
+        $numberOfWeeks = $doctorDic['numberOfWeeks'];
+        for($i = 1; $i <= $numberOfWeeks; $i++) {
+            array_push($this->otherLocationShifts, 0);
+        }
     }
     
-    function printData() {
-        echo 'Doctor ID : '.doctorID.'<br>';
-        echo '所屬院區 : '.$location.'<br>';
-        echo '台北院區上班限制 : '.$taipeiShiftsLimit.'<br>';
-        echo '淡水院區上班限制 : '.$tamsuiShiftsLimit.'<br>';
+    public function printData() {
+        echo 'Doctor ID : '.$this->doctorID.'<br>';
+        echo '所屬院區 : '.$this->location.'<br>';
+        echo '台北院區上班限制 : '.$this->taipeiShiftsLimit.'<br>';
+        echo '淡水院區上班限制 : '.$this->tamsuiShiftsLimit.'<br>';
+        echo 'Number of weeks : ';
+        echo print_r($this->otherLocationShifts).'<br><br>';
     }
     
     // 計算排班當月有幾週
