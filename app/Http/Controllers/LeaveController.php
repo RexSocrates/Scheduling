@@ -12,13 +12,17 @@ class LeaveController extends Controller
     public function confirmOffcialLeave($serial){
     	$officialLeave = new OfficialLeave();
     	$user = new User();
+
+        $leave = $officialLeave->getLeaveBySerial($serial);
     	$leaveDic=[
     		'serial'=>$serial,
     		'confirmingPerson'=>$user->getCurrentUserID(),
+            'updatedLeaveHours'=>''
     		'newStatus'=>1
     	];
 
-    	$leave = $officialLeave->getLeaveBySerial($serial);
+        $leaveDic['updatedLeaveHours'] = $user->getDoctorInfoByID($leave->doctorID)->currentOfficialLeaveHours+$leave->leaveHours;
+
     	$doctor = $user->getDoctorInfoByID($leave->doctorID);
     	$officialLeave->changeConfirmStatus($leaveDic);
     	$officialLeave->updateLeaveHours($leave->doctorID,$doctor->currentOfficialLeaveHours+$leave->leaveHours);
@@ -41,13 +45,13 @@ class LeaveController extends Controller
     	return redirect('officialLeave');
     }
 
-     // 取奪所有醫師的公假紀錄
+     // 取奪所有醫師的已確認公假紀錄
     public function getOfficialLeavePage() {
 
         $user = new User();
         $officialLeave = new OfficialLeave();
-        
-        $leaves= $officialLeave->getLeaves();
+
+        $leaves= $officialLeave->getconfirmLeaves();
 
         $leaveArr = [];
         foreach ($leaves as $leave) {
@@ -56,6 +60,7 @@ class LeaveController extends Controller
                 'confirmingPerson' =>'',
                 'doctor' =>'',
                 'hours'=>$leave->leaveHours,
+                'updatedLeaveHours'=>$leave->updatedLeaveHours;
                 'remark'=>$leave->remark
             ];
             if($leave->confirmStatus != 0){
@@ -124,10 +129,12 @@ class LeaveController extends Controller
             'doctorID' => $data['doctor'],
             'confirmingPersonID' => $user->getCurrentUserInfo()->doctorID,
             'leaveHours'=> $leaveHours,
+            'updatedLeaveHours'=> '',
             'remark' => $data['content'],
             'confirmStatus'=>1
+
         ];
-    
+        $leave['updatedLeaveHours'] = $user->getDoctorInfoByID($leave->doctorID)->currentOfficialLeaveHours+$leaveHours;
 
         $leave = $officialLeave->addLeaveByAdmin($leave);
 
