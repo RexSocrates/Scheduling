@@ -250,9 +250,9 @@
                     <div class="input-field col s12 margin-t0">
                         <p class="margin-0">職登院區</p>
                         <p class="radio-location">
-                            <input class="with-gap" name="location1" type="radio" id="radio-Taipei1" value="台北" required/>
+                            <input class="with-gap" name="location" type="radio" id="radio-Taipei1" value="台北" required/>
                             <label for="radio-Taipei1">台北</label>
-                            <input class="with-gap" name="location1" type="radio" id="radio-Danshui1" value="淡水" required/>
+                            <input class="with-gap" name="location" type="radio" id="radio-Danshui1" value="淡水" required/>
                             <label for="radio-Danshui1">淡水</label>
                         </p>
                     </div>
@@ -394,24 +394,6 @@
                 document.getElementById("mustOnDutyNightShifts").value = doctorData[13];
                 
                 Materialize.updateTextFields();
-                
-                // doctor major
-//                if(doctorData[4] == "All") {
-//                    document.getElementById("doctorMajor").innerHTML = 
-//                        "<option value='All' selected>All</option>" + 
-//                            "<option value='Medical'>Medical</option>" + 
-//                            "<option value='Surgical'>Surgical</option>";
-//                }else if(doctorData[4] == "Medical") {
-//                    document.getElementById("doctorMajor").innerHTML = 
-//                        "<option value='All'>All</option>" + 
-//                            "<option value='Medical' selected>Medical</option>" + 
-//                            "<option value='Surgical'>Surgical</option>";
-//                }else {
-//                    document.getElementById("doctorMajor").innerHTML = 
-//                        "<option value='All'>All</option>" + 
-//                            "<option value='Medical'>Medical</option>" + 
-//                            "<option value='Surgical' selected>Surgical</option>";
-//                }
                 
                 
                 
