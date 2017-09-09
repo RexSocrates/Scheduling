@@ -13,8 +13,8 @@
 @section('nav-content')
     <div class="nav-content blue-grey darken-1">
         <ul class="tabs tabs-transparent">
-            <li class="tab"><a class="active" href="#test1">查看醫生</a></li>
-            <li class="tab"><a href="#test2">待確認</a></li>
+            <li class="tab"><a class="active" href="#page1">查看醫生</a></li>
+            <li class="tab"><a href="#page2">待確認</a></li>
         </ul>
     </div>
 @endsection
@@ -23,7 +23,7 @@
     <div id="section" class="container-fix trans-left-five">
 		<div class="container-section2">
 			<div class="row">
-                <div id="test1" class="col s12 m12">
+                <div id="page1" class="col s12 m12">
       		  	  	<div class="card">
       		  	  		<div class="card-action card1">
                             <form action="">
@@ -71,7 +71,8 @@
                                 </thead>
 
                                 <tbody>
-
+                                    
+<!--
                                     @foreach($leaveArr as $leave)
                                     <tr>
                                         <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
@@ -86,14 +87,45 @@
                                         <td class="td-padding td-w-25">{{ $leave['remark'] }}</td>
                                     </tr>
                                     @endforeach
-                                   
-
+-->
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-15</td>
+                                        <td class="td-padding td-w-5">蔡維德</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">+3.5小時</td>
+                                        <td class="td-padding td-w-5">16小時</td>
+                                        <td class="td-padding td-w-25">增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因,增加時數的原因</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-21</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">-12小時</td>
+                                        <td class="td-padding td-w-5">0小時</td>
+                                        <td class="td-padding td-w-25">使用公假內容</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-15</td>
+                                        <td class="td-padding td-w-5">蔡維德</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">+3.5小時</td>
+                                        <td class="td-padding td-w-5">3.5小時</td>
+                                        <td class="td-padding td-w-25">增加時數的原因,增加時數的原因,增加時數的原因</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10-21</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">簡定國</td>
+                                        <td class="td-padding td-w-5">-12小時</td>
+                                        <td class="td-padding td-w-5">2小時</td>
+                                        <td class="td-padding td-w-25">使用公假內容</td>
+                                    </tr>
                                 </tbody>
                             </table>
       		  	  	  	</div>
       		  	  	</div>
       		  	</div>
-      		  	<div id="test2" class="col s12">
+      		  	<div id="page2" class="col s12">
 					<div class="card">
                         <div class="card-action">
       		  	  			<font class="card-title">換班待確認</font>
@@ -112,7 +144,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        @foreach($unconfirmLeaveArr as $leave)
+                                    @foreach($unconfirmLeaveArr as $leave)
                                     <tr>
                                         <td class="td-padding td-w-5">{{ $leave['doctor'] }}</td>
                                         <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
@@ -124,10 +156,6 @@
                                         </td>
                                     </tr>
                                     @endforeach
-                                  
-                                           
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -136,8 +164,6 @@
       		</div>
 		</div>
 	</div>
-	
-	
 	
     <div id="modal1" class="modal modal-fixed-footer modal-announcement">
         <form action="addOfficialLeave" method="post">
