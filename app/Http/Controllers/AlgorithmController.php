@@ -4,25 +4,44 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-// send a request
+// import the class to send a request
 use GuzzleHttp\Client;
 
-// 演算法用
+// 演算法用的model
 use App\Reservation;
 use App\DoctorAndReservation;
 use App\ShiftCategory;
 
-// import customized class
+// 導入客製化物件
 use App\CustomClass\OnReservation;
 use App\CustomClass\OffReservation;
+use App\CustomClass\Doctor;
+use App\CustomClass\Month;
 
 class AlgorithmController extends Controller
 {
-    //
     // send a request to the web service
     public function sendRequest() {
         $onResList = $this->getOnReservation();
+//        echo print_r(json_encode($onResList));
+        foreach($onResList as $res) {
+            $res->printData();
+        }
+        
+        echo '<br>==================================================<br>';
+        
         $offResList = $this->getOffReservation();
+        foreach($offResList as $res) {
+            $res->printData();
+        }
+//        echo '<br>==================================================<br>';
+        
+//        $doctors = $this->getDoctorsInfo();
+        
+//        echo '<br>==================================================<br>';
+        
+//        $monthInfo = $this->getMonthInfo();
+//        echo print_r(json_encode($monthInfo));
         
     }
     
@@ -31,7 +50,6 @@ class AlgorithmController extends Controller
         $resObj = new Reservation();
         $docAndResObj = new DoctorAndReservation();
         $shiftCateObj = new ShiftCategory();
-        
         
         $onResList = [];
         
@@ -61,8 +79,12 @@ class AlgorithmController extends Controller
             
             // 有預約此預班的醫生代號
             $doctorsID = $docAndResObj->getDoctorsByResSerial($res->resSerial);
+            $doctorArr = [];
+            foreach($doctorsID as $doctorObj) {
+                array_push($doctorArr, $doctorObj->doctorID);
+            }
             
-            array_push($onResList, new OnReservation($day, $location, $dayOrNight, $doctorsID));
+            array_push($onResList, new OnReservation($day, $location, $dayOrNight, $doctorArr));
         }
         
         return $onResList;
@@ -84,10 +106,141 @@ class AlgorithmController extends Controller
             
             // 有預約此預班的醫生代號
             $doctorsID = $docAndResObj->getDoctorsByResSerial($res->resSerial);
+            $doctorArr = [];
+            foreach($doctorsID as $doctorObj) {
+                array_push($doctorArr, $doctorObj->doctorID);
+            }
             
-            array_push($offResList, new OffReservation($day, $doctorsID));
+            array_push($offResList, new OffReservation($day, $doctorArr));
         }
         
         return $offResList;
+    }
+    
+    // 取得演算法用的醫生資訊
+    private function getDoctorsInfo() {
+        $userObj = new User();
+        
+        $doctors = $userObj->getAtWorkDoctors();
+        
+        // 演算法用的陣列
+        $doctorsList = [];
+        
+        foreach($doctors as $doctor) {
+            $doctorDic = [
+                'doctorID' => $doctor->doctorID,
+                'major' => '',
+                'totalShifts' => $doctor->mustOnDutyTotalShifts,
+                'weekendShifts' => 0,
+                'location' => '',
+                'taipeiShiftsLimit' => 0,
+                'tamsuiShiftsLimit' => 0,
+                'surgicalShifts' => $doctor->mustOnDutySurgicalShifts,
+                'medicalShifts' => $doctor->mustOnDutyMedicalShifts,
+            ];
+            
+            // 專職科別
+            if($doctor->major == 'All') {
+                $doctorDic['major'] = 'all';
+            }else if($doctor->major == 'Medical') {
+                $doctorDic['major'] = 'med';
+            }else {
+                $doctorDic['major'] = 'sur';
+            }
+            
+            // 職登院區與各院區上班班數上限
+            if($doctor->location == 'Taipei') {
+                $doctorDic['location'] = 'T';
+                $doctorDic['taipeiShiftsLimit'] = $doctor->mustOnDutyTotalShifts;
+                $doctorDic['tamsuiShiftsLimit'] = (int)($doctor->mustOnDutyTotalShifts * 0.5);
+            }else {
+                $doctorDic['location'] = 'D';
+                $doctorDic['tamsuiShiftsLimit'] = $doctor->mustOnDutyTotalShifts;
+                $doctorDic['taipeiShiftsLimit'] = (int)($doctor->mustOnDutyTotalShifts * 0.5);
+            }
+            
+            array_push($doctorsList, new Doctor($doctorDic));
+        }
+        
+        return $doctorsList;
+    }
+    // 取得排班月資訊
+    private function getMonthInfo() {
+        
+        $currentDateStr = date('Y-m-d');
+        $dateArr = explode('-', $currentDateStr);
+        
+        // 將年與月轉換為數字
+        $year = (int)$dateArr[0];
+        $month = (int)$dateArr[1];
+        
+        // 調整至排班的月份
+        $month = ($month + 1) % 12;
+        if($month == 1) {
+            $year += 1;
+        }
+        
+//        echo 'Year : '.$year.'<br>';
+//        echo 'Month : '.$month.'<br>';
+        
+        // 計算當月有幾天，取得排班次月第一日後往前推一天
+        $theMonthAfter = ($month + 1) % 12;
+        $nextMonthFirstDay = '';
+        if($theMonthAfter == 1) {
+            $nextMonthFirstDay = ($year + 1).'-'.$theMonthAfter.'-01';
+        }else {
+            $nextMonthFirstDay = $year.'-'.$theMonthAfter.'-01';
+        }
+        
+        $lastDayOfMonth = date('Y-m-d', strtotime($nextMonthFirstDay.'-1 day'));
+//        echo 'The last day of the scheduling month : '.$lastDayOfMonth.'<br>';
+        
+        $daysOfMonth = (int)(explode('-', $lastDayOfMonth)[2]);
+//        echo 'Days of the scheduling month : '.$daysOfMonth.'<br>';
+        
+        // 取得1號是星期幾
+        $firstDay = date('N', strtotime($year.'-'.$month.'-01'));
+//        echo 'The day of first day in the month : '.$firstDay.'<br>';
+        
+        return new Month($year, $month, $daysOfMonth, $firstDay);
+    }
+    
+    // 計算排班當月有幾週
+    private function getWeeksOfMonth() {
+        $currentDateStr = date('Y-m-d');
+        $dateArr = explode('-', $currentDateStr);
+        
+        // 將年與月轉換為數字
+        $year = (int)$dateArr[0];
+        $month = (int)$dateArr[1];
+        
+        // 調整至排班的月份
+        $month = ($month + 1) % 12;
+        if($month == 1) {
+            $year += 1;
+        }
+        
+        // 計算當月有幾天，取得排班次月第一日後往前推一天
+        $theMonthAfter = ($month + 1) % 12;
+        $nextMonthFirstDay = '';
+        if($theMonthAfter == 1) {
+            $nextMonthFirstDay = ($year + 1).'-'.$theMonthAfter.'-01';
+        }else {
+            $nextMonthFirstDay = $year.'-'.$theMonthAfter.'-01';
+        }
+        
+        $lastDayOfMonth = date('Y-m-d', strtotime($nextMonthFirstDay.'-1 day'));
+        $daysOfMonth = (int)(explode('-', $lastDayOfMonth)[2]);
+        
+        $weekdayOfMonth = [];
+        for($i = 1; i <= $daysOfMonth; $i++) {
+            $dateStr = '';
+            if($i < 10) {
+                $dateStr = $year.'-'.$month.'-0'.$i;
+            }else {
+                $dateStr = $year.'-'.$month.'-'.$i;
+            }
+            $dateStr = date('N', strtotime($dateStr));
+        }
     }
 }
