@@ -123,7 +123,7 @@
                                 </div>
                                 <div class="lightbox-footer">
                                     <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn">Save</button>
-                                    <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel  modal-btn">Cancel</button>
+                                    <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel  modal-btn" onclick="close_form1()">Cancel</button>
                                 </div>
                             </form>
                         </div>
@@ -161,7 +161,7 @@
                                 <label>日期:</label>
                                 <select name="scheduleID_1" class="browser-default" id="date1" required>
                                     <option value="" disabled selected>請選擇日期</option>
-                                    <option value= '' ></option>
+                                    <option value=""></option>
                                         
                                 </select>
                             </div>
@@ -170,13 +170,14 @@
                                 <label>日期:</label>
                                 <select  name='scheduleID_2' class="browser-default" id="date2" required>
                                     <option value="" disabled selected>請選擇日期</option>
-                                    <option value= '' ></option>
+                                    <option value=""></option>
                                 </select>
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="lightbox-footer">
+                                <button class="modal-action waves-effect waves-light red lighten-1 btn modal-btn1" onclick="delete_event()">Delete</button>
                                 <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn" onclick="save_form_alert()">Save</button>
                                 <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel modal-btn" onclick="close_form()">Cancel</button>
                                 {{ csrf_field() }}
@@ -696,6 +697,10 @@
 
         function close_form() {               
             scheduler.endLightbox(false, html("my_form"));             
+        }
+        
+        function close_form1() {
+            scheduler.endLightbox(false, html("my_form1"));
         }
     </script>
 @endsection
