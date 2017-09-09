@@ -2,9 +2,9 @@
 namespace App\CustomClass;
 
 class OnReservation {
-    private $day = 0; // 此月的第幾天
-    private $location = ''; // 此預約的院區
-    private $dayOrNight = ''; // 此預約屬於白天或晚上
+    public $day = 0; // 此月的第幾天
+    public $location = ''; // 此預約的院區
+    public $dayOrNight = ''; // 此預約屬於白天或晚上
     public $doctorsID = []; // 有此預約的醫師ID
     
     function __construct($day = 0, $location = '', $dayOrNight = '', $doctors = []) {

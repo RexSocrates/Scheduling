@@ -353,6 +353,7 @@
         
         });
         
+        // 編輯醫師的ajax
         function editDoctor(doctorID) {
             $.get('editDoctorInfo', {
                 doctorID : doctorID
@@ -366,6 +367,7 @@
                 // level 3
 //                document.getElementById("doctorLevel").value = doctorData[3];
                 document.getElementsByClassName("select-dropdown")[10].value = doctorData[3];
+                
                 // major 4
 //                document.getElementById('doctorMajor').value = doctorData[4];
 //                document.getElementById('doctorMajor').value = "Surgical";
@@ -376,9 +378,9 @@
                 
                 // location 5
                 if(doctorData[5] == "台北") {
-                    document.getElementById("radio-Taipei").checked = true;
+                    document.getElementById("radio-Taipei1").checked = true;
                 }else {
-                    document.getElementById("radio-Danshui").checked = true;
+                    document.getElementById("radio-Danshui1").checked = true;
                 }
                 
                 // identity 6

@@ -24,30 +24,33 @@ class AlgorithmController extends Controller
     // send a request to the web service
     public function sendRequest() {
         $onResList = $this->getOnReservation();
-//        echo print_r(json_encode($onResList));
-        foreach($onResList as $res) {
-            $res->printData();
-        }
+//        foreach($onResList as $res) {
+//            $res->printData();
+//        }
+        echo json_encode($onResList);
         
         echo '<br>==================================================<br>';
         
         $offResList = $this->getOffReservation();
-        foreach($offResList as $res) {
-            $res->printData();
-        }
+//        foreach($offResList as $res) {
+//            $res->printData();
+//        }
+        echo json_encode($offResList);
         
         echo '<br>==================================================<br>';
         
         $doctors = $this->getDoctorsInfo();
-        foreach($doctors as $doctor) {
-            $doctor->printData();
-        }
+//        foreach($doctors as $doctor) {
+//            $doctor->printData();
+//        }
         
-//        echo '<br>==================================================<br>';
+        echo json_encode($doctors);
         
-//        $monthInfo = $this->getMonthInfo();
-//        echo print_r(json_encode($monthInfo));
+        echo '<br>==================================================<br>';
         
+        $monthInfo = $this->getMonthInfo();
+//        $monthInfo->printData();
+        echo json_encode($monthInfo);
     }
     
     // 取得演算法使用的on班資訊

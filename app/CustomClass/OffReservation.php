@@ -2,8 +2,8 @@
 namespace App\CustomClass;
 
 class OffReservation {
-    private $day = 0; // 此月的第幾天
-    private $doctorsID = []; // 有此預約的醫生ID
+    public $day = 0; // 此月的第幾天
+    public $doctorsID = []; // 有此預約的醫生ID
     
     function __construct($day = 0, $doctors = []) {
         $this->day = $day;

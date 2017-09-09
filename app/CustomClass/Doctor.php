@@ -3,21 +3,21 @@ namespace App\CustomClass;
 
 class Doctor {
     
-    private $doctorID = 0; // 醫師ID
-    private $major = ''; // 專職科別
-    private $totalShifts = 0; // 總班數
-    private $dayShifts = 0; // 白天班數
-    private $nightShifts = 0; // 夜晚班數
-    private $weekendShifts = 0; // 假日班數
-    private $location = ''; // 所屬院區
-    private $taipeiShiftsLimit = 0; // 在台北院區可上的班數的上限
-    private $tamsuiShiftsLimit = 0; // 在淡水院區可上的班數的上限
-    private $surgicalShifts = 0; // 外科班數
-    private $medicalShifts = 0; // 內科班數
+    public $doctorID = 0; // 醫師ID
+    public $major = ''; // 專職科別
+    public $totalShifts = 0; // 總班數
+    public $dayShifts = 0; // 白天班數
+    public $nightShifts = 0; // 夜晚班數
+    public $weekendShifts = 0; // 假日班數
+    public $location = ''; // 所屬院區
+    public $taipeiShiftsLimit = 0; // 在台北院區可上的班數的上限
+    public $tamsuiShiftsLimit = 0; // 在淡水院區可上的班數的上限
+    public $surgicalShifts = 0; // 外科班數
+    public $medicalShifts = 0; // 內科班數
     
     // 以下部分在此類別產生
-    private $lostShfits = 0; // 沒選上預約的班的數量
-    private $otherLocationShifts = []; // 存放每週在非職登院區上班的班數，當月有幾週就給幾個0
+    public $lostShfits = 0; // 沒選上預約的班的數量
+    public $otherLocationShifts = []; // 存放每週在非職登院區上班的班數，當月有幾週就給幾個0
     
     public function __construct($doctorDic) {
         $this->doctorID = $doctorDic['doctorID'];
