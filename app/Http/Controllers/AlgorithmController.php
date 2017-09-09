@@ -158,7 +158,7 @@ class AlgorithmController extends Controller
             }
             
             // 職登院區與各院區上班班數上限
-            if($doctor->location == 'Taipei') {
+            if($doctor->location == '台北') {
                 $doctorDic['location'] = 'T';
                 $doctorDic['taipeiShiftsLimit'] = $doctor->mustOnDutyTotalShifts;
                 $doctorDic['tamsuiShiftsLimit'] = (int)($doctor->mustOnDutyTotalShifts * 0.5);

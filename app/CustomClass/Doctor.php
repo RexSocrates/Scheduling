@@ -28,6 +28,7 @@ class Doctor {
         $this->weekendShifts = $doctorDic['weekendShifts'];
         $this->location = $doctorDic['location'];
         $this->taipeiShiftsLimit = $doctorDic['taipeiShiftsLimit'];
+        $this->tamsuiShiftsLimit = $doctorDic['tamsuiShiftsLimit'];
         $this->surgicalShifts = $doctorDic['surgicalShifts'];
         $this->medicalShifts = $doctorDic['medicalShifts'];
         
@@ -46,44 +47,5 @@ class Doctor {
         echo '淡水院區上班限制 : '.$this->tamsuiShiftsLimit.'<br>';
         echo 'Number of weeks : ';
         echo print_r($this->otherLocationShifts).'<br><br>';
-    }
-    
-    // 計算排班當月有幾週
-    private function getWeeksOfMonth() {
-        $currentDateStr = date('Y-m-d');
-        $dateArr = explode('-', $currentDateStr);
-        
-        // 將年與月轉換為數字
-        $year = (int)$dateArr[0];
-        $month = (int)$dateArr[1];
-        
-        // 調整至排班的月份
-        $month = ($month + 1) % 12;
-        if($month == 1) {
-            $year += 1;
-        }
-        
-        // 計算當月有幾天，取得排班次月第一日後往前推一天
-        $theMonthAfter = ($month + 1) % 12;
-        $nextMonthFirstDay = '';
-        if($theMonthAfter == 1) {
-            $nextMonthFirstDay = ($year + 1).'-'.$theMonthAfter.'-01';
-        }else {
-            $nextMonthFirstDay = $year.'-'.$theMonthAfter.'-01';
-        }
-        
-        $lastDayOfMonth = date('Y-m-d', strtotime($nextMonthFirstDay.'-1 day'));
-        $daysOfMonth = (int)(explode('-', $lastDayOfMonth)[2]);
-        
-        $weekdayOfMonth = [];
-        for($i = 1; i <= $daysOfMonth; $i++) {
-            $dateStr = '';
-            if($i < 10) {
-                $dateStr = $year.'-'.$month.'-0'.$i;
-            }else {
-                $dateStr = $year.'-'.$month.'-'.$i;
-            }
-            $dateStr = date('N', strtotime($dateStr));
-        }
     }
 }
