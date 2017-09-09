@@ -17,7 +17,7 @@ class LeaveController extends Controller
     	$leaveDic=[
     		'serial'=>$serial,
     		'confirmingPerson'=>$user->getCurrentUserID(),
-            'updatedLeaveHours'=>''
+            'updatedLeaveHours'=>'',
     		'newStatus'=>1
     	];
 
@@ -60,7 +60,7 @@ class LeaveController extends Controller
                 'confirmingPerson' =>'',
                 'doctor' =>'',
                 'hours'=>$leave->leaveHours,
-                'updatedLeaveHours'=>$leave->updatedLeaveHours;
+                'updatedLeaveHours'=>$leave->updatedLeaveHours,
                 'remark'=>$leave->remark
             ];
             if($leave->confirmStatus != 0){
@@ -123,18 +123,18 @@ class LeaveController extends Controller
         if($data['classification']==0){
             $leaveHours= -1*$data['hour'];
         }
+
         $currentOfficialLeaveHours=$user->getDoctorInfoByID($data['doctor'])->currentOfficialLeaveHours+$leaveHours;
 
         $leave = [
             'doctorID' => $data['doctor'],
             'confirmingPersonID' => $user->getCurrentUserInfo()->doctorID,
             'leaveHours'=> $leaveHours,
-            'updatedLeaveHours'=> '',
+            'updatedLeaveHours'=> $currentOfficialLeaveHours,
             'remark' => $data['content'],
             'confirmStatus'=>1
 
         ];
-        $leave['updatedLeaveHours'] = $user->getDoctorInfoByID($leave->doctorID)->currentOfficialLeaveHours+$leaveHours;
 
         $leave = $officialLeave->addLeaveByAdmin($leave);
 

@@ -381,6 +381,14 @@
 //                                
 //                                ev.text = name;
 //                            }
+                            scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
+                                
+                                console.log(ev.start_date);
+                                console.log(ev.end_date);
+                                console.log(ev.section_id);
+                                
+                                return true;
+                            });
 
                             var date = new Date();
                             var toString =  date.toString();
@@ -486,10 +494,6 @@
                                 return true;
                             });
                            
-                           scheduler.attachEvent("onEventDragIn", function (id, e){
-                                var ev = scheduler.getEvent(id);
-                                console.log(ev.text);
-                            });
                            
 
                             scheduler.init('scheduler_here',new Date(res[3], month),"timeline");

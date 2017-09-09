@@ -61,6 +61,7 @@ class OfficialLeave extends Model
             'confirmingPersonID'=> $dataArray['confirmingPersonID'],
             'doctorID' => $dataArray['doctorID'],
             'leaveHours'=> $dataArray['leaveHours'],
+            'updatedLeaveHours' =>$dataArray['updatedLeaveHours'],
             'recordDate'=> date('Y-m-d'),
             'remark' => $dataArray['remark'],
             'confirmStatus' => 1,
@@ -85,6 +86,7 @@ class OfficialLeave extends Model
         $newSerial = DB::table('OfficialLeave')->insertGetId([
             'doctorID' => $dataArray['doctorID'],
             'leaveHours' => $dataArray['leaveHours'],
+            'updatedLeaveHours' =>$dataArray['updatedLeaveHours'],
             'recordDate'=> date('Y-m-d'),
             'remark' => $dataArray['remark'],
             'confirmStatus' => 0,

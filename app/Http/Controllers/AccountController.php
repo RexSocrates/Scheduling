@@ -67,7 +67,7 @@ class AccountController extends Controller
 
         for ($i=12 ; $i<=$hour;) {
             array_push($leaveHours,$i);
-            $i=$i*2;
+            $i=$i+12;
         }
        
         return view('pages.profile', [
@@ -90,6 +90,7 @@ class AccountController extends Controller
         $leave = [
             'doctorID' => $user->getCurrentUserInfo()->doctorID,
             'leaveHours'=> -1*$data['hour'],
+            'updatedLeaveHours' => $user->getCurrentUserInfo()->currentOfficialLeaveHours+(-1*$data['hour']),
             'remark' => $data['content'],
         ];
     

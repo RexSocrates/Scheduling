@@ -82,7 +82,7 @@
                                         @else
                                             <td class="td-padding td-w-5">+{{ $leave['hours'] }}</td>
                                         @endif
-                                        <td class="td-padding td-w-5">{{ $leave['confirmingPerson'] }}</td>
+                                        <td class="td-padding td-w-5">{{ $leave['updatedLeaveHours'] }}</td>
                                         <td class="td-padding td-w-25">{{ $leave['remark'] }}</td>
                                     </tr>
                                     @endforeach
@@ -133,6 +133,7 @@
 		</div>
 	</div>
 	
+    
     <div id="modal1" class="modal modal-fixed-footer modal-announcement">
         <form action="addOfficialLeave" method="post">
             <div class="modal-header">
