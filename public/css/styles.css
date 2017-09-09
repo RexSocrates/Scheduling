@@ -608,6 +608,25 @@ input.select-dropdown {
     box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.3);
 }
 
+#my_form1 {
+    -webkit-transform: translate(-50%,0%);
+    transform: translate(-50%,0%);
+    position: absolute;
+    top: 0% !important;
+    left: 50% !important;
+    z-index: 1001;
+    display: none;
+    background-color: white;
+    /*border: 2px outset gray;*/
+    /*border-radius: 2px;*/
+    /*padding: 20px;*/
+    font-family: Tahoma;
+    font-size: 10pt;
+    width: 700px;
+    height: 530px;
+    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.3);
+}
+
 .lightbox {
     padding: 24px;
     position: absolute;

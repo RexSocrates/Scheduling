@@ -144,9 +144,21 @@
             </div>
             <div class="modal-content modal-content-customize1">
                 <div class="row margin-b0">
+<!--
                     <div class="input-field col s12">
                         <input id="hour" type="number" value="" name="hour" required>
                         <label for="hour">時數</label>
+                    </div>
+-->
+                    <div class="input-field col s12 margin-b20">
+                        <select name="hour" required>
+                            <option value="" selected disabled>選擇時數</option>
+                            <option value="12">12</option>
+                            <option value="24">24</option>
+                            <option value="36">36</option>
+                            <option value="48">48</option>
+                        </select>
+                        <label>時數</label>
                     </div>
                     <div class="input-field col s12 margin-t0">
                         <textarea id="textarea1" class="materialize-textarea" type="text" name="content"></textarea>
@@ -161,15 +173,15 @@
             </div>
         </form>
     </div>
-            
-            
 @endsection
 
-<!--
 @section('script')
-
+    <script>
+        $(document).ready(function(){
+            $('select').material_select();
+        });
+    </script>
 @endsection
--->
 
 
     

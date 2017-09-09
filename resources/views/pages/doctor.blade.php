@@ -1,10 +1,8 @@
 @extends("layouts.app2")
 
-<!--
 @section('head')
-
+    <link type="text/css" rel="stylesheet" href="../css/dataTables.material.min.css"/>
 @endsection
--->
 
 @section('navbar')
     <p class="brand-logo light">醫師管理</p>
@@ -128,7 +126,7 @@
                         <p class="radio-location">
                             <input class="with-gap" name="location" type="radio" id="radio-Taipei" value="台北" required/>
                             <label for="radio-Taipei">台北</label>
-                            <input class="with-gap" name="location" type="radio" id="radio-Danshui" value="淡水" />
+                            <input class="with-gap" name="location" type="radio" id="radio-Danshui" value="淡水" required/>
                             <label for="radio-Danshui">淡水</label>
                         </p>
                     </div>
@@ -252,10 +250,10 @@
                     <div class="input-field col s12 margin-t0">
                         <p class="margin-0">職登院區</p>
                         <p class="radio-location">
-                            <input class="with-gap" name="location" type="radio" id="radio-Taipei" value="台北" checked="checked"/>
-                            <label for="radio-Taipei">台北</label>
-                            <input class="with-gap" name="location" type="radio" id="radio-Danshui" value="淡水" />
-                            <label for="radio-Danshui">淡水</label>
+                            <input class="with-gap" name="location1" type="radio" id="radio-Taipei1" value="台北" required/>
+                            <label for="radio-Taipei1">台北</label>
+                            <input class="with-gap" name="location1" type="radio" id="radio-Danshui1" value="淡水" required/>
+                            <label for="radio-Danshui1">淡水</label>
                         </p>
                     </div>
                     <div class="input-field col s12">
@@ -335,15 +333,6 @@
             document.getElementById("date").value = mysqlDate
         }
         
-        function sleep(milliseconds) {
-            var start = new Date().getTime();
-            for (var i = 0; i < 1e7; i++) {
-                if ((new Date().getTime() - start) > milliseconds){
-                    break;
-                }
-            }
-        }
-        
         $(document).ready(function() {
             $('#example').DataTable( {
                 columnDefs: [
@@ -356,30 +345,13 @@
             
             $('select').material_select();
             
-            var count = 0;
-            for(i=0;i<4;i++){
-                document.getElementById("example_length").getElementsByTagName("li")[i].addEventListener("click", ff);
-            }
+            document.getElementById("example_length").style.display = 'none';
+            
+            document.getElementById("example_filter").style.cssText = 'text-align: left';
+            
+            document.getElementById("example_filter").getElementsByTagName("label")[0].getElementsByTagName("input")[0].style.marginLeft = '0';
+        
         });
-        
-        var tttt = 0;
-        
-        function ff() {
-            f1();
-            f2();
-        }
-        
-        function f1() {
-            console.log("111");
-            console.log(document.getElementById("example_length").getElementsByTagName("ul"));
-//            sleep(10000);
-        }
-        
-        function f2() {
-            console.log("222");
-            console.log(document.getElementById("example_length").getElementsByTagName("ul"));
-//            sleep(10000);
-        }
         
         function editDoctor(doctorID) {
             $.get('editDoctorInfo', {
@@ -392,13 +364,15 @@
                 
                 // problematic drop down list
                 // level 3
-                document.getElementById("doctorLevel").value = doctorData[3];
+//                document.getElementById("doctorLevel").value = doctorData[3];
+                document.getElementsByClassName("select-dropdown")[10].value = doctorData[3];
                 // major 4
 //                document.getElementById('doctorMajor').value = doctorData[4];
-                document.getElementById('doctorMajor').value = "Surgical";
+//                document.getElementById('doctorMajor').value = "Surgical";
                 console.log("Major : " + doctorData[4]);
+                document.getElementsByClassName("select-dropdown")[8].value = doctorData[4];
                 
-                document.getElementById("doctorMajor").innerHTML = "<option value='All'>All</option>";
+//                document.getElementById("doctorMajor").innerHTML = "<option value='All'>All</option>";
                 
                 // location 5
                 if(doctorData[5] == "台北") {
@@ -420,7 +394,6 @@
                 document.getElementById("mustOnDutyNightShifts").value = doctorData[13];
                 
                 Materialize.updateTextFields();
-                
                 
                 // doctor major
 //                if(doctorData[4] == "All") {
@@ -444,8 +417,6 @@
                 
             });
         }
-        
-
         
         $('.datepicker').pickadate({
             selectMonths: true, // Creates a dropdown to control month
