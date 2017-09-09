@@ -41,6 +41,93 @@
                 <div class="col s12 m12">
                     <div class="card border-t">
                        
+                        <div id="my_form1">
+                            <form action="" method="post">
+                                <div class="modal-header">
+                                    <h5 class="modal-announcement-title">新增</h5>
+                                </div>
+
+                                <div class="lightbox">
+                                    <div class="row margin-b0">
+                                        <div class="input-field col s12 margin-b20">
+                                            <select name="doctor" required>
+                                                <option value="" selected disabled>選擇醫生</option>
+                                                <option value="1">簡定國</option>
+                                                <option value="2">簡定國</option>
+                                                <option value="3">簡定國</option>
+                                                <option value="4">簡定國</option>
+                                                <option value="5">簡定國</option>
+                                                <option value="6">簡定國</option>
+                                                <option value="7">簡定國</option>
+                                                <option value="8">簡定國</option>
+                                                <option value="9">簡定國</option>
+                                                <option value="10">簡定國</option>
+                                            </select>
+                                            <label>醫生</label>
+                                        </div>
+                                        <div class="input-field col s12 margin-b20">
+                                            <select name="level" required>
+                                                <option value="" selected disabled>選擇班種</option>
+                                                <option value="1">行政</option>
+                                                <option value="2">教學</option>
+                                                <option value="3">北白急救</option>
+                                                <option value="4">北白發燒</option>
+                                                <option value="5">北白內1</option>
+                                                <option value="6">北白內2</option>
+                                                <option value="7">北白外1</option>
+                                                <option value="8">北白外2</option>
+                                                <option value="9">淡白內1</option>
+                                                <option value="10">淡白內2</option>
+                                                <option value="11">淡白外1</option>
+                                                <option value="12">淡白外1</option>
+                                                <option value="13">北夜急救</option>
+                                                <option value="14">北夜發燒</option>
+                                                <option value="15">北夜內1</option>
+                                                <option value="16">北夜內2</option>
+                                                <option value="17">北夜外1</option>
+                                                <option value="18">北夜外2</option>
+                                                <option value="19">淡夜內1</option>
+                                                <option value="20">淡夜內2</option>
+                                                <option value="21">淡夜外</option>
+                                            </select>
+                                            <label>班種</label>
+                                        </div>
+                                        <div class="input-field col s12 margin-b20">
+                                            <select name="level" required>
+                                                <option value="" selected disabled>選擇日期</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                                <option value="13">13</option>
+                                                <option value="14">14</option>
+                                                <option value="15">15</option>
+                                                <option value="16">16</option>
+                                                <option value="17">17</option>
+                                                <option value="18">18</option>
+                                                <option value="19">19</option>
+                                                <option value="20">20</option>
+                                                <option value="21">21</option>
+                                            </select>
+                                            <label>日期</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lightbox-footer">
+                                    <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn">Save</button>
+                                    <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel  modal-btn">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                        
                         <div id="my_form">
                             <!-- <form action="change-shift-first-edition" method="post" > -->
                              <div class="modal-header">
@@ -90,7 +177,6 @@
                             </div>
                             
                             <div class="lightbox-footer">
-
                                 <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn" onclick="save_form_alert()">Save</button>
                                 <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel modal-btn" onclick="close_form()">Cancel</button>
                                 {{ csrf_field() }}
@@ -114,7 +200,7 @@
                                 <div class="dhx_cal_today_button"></div>
                                 <div class="dhx_cal_date"></div>
                                 
-                                <div class="dhx_cal_tab margin-l10"><a class="dhx_cal_tab display-b" href="#modal1">新增</a></div>
+<!--                                <div class="dhx_cal_tab margin-l10"><a class="dhx_cal_tab display-b" href="#modal1">新增</a></div>-->
                                 
         <!--
                                 <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
@@ -137,7 +223,7 @@
                             scheduler.config.details_on_dblclick = true;
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
 //                            scheduler.config.readonly = true;   //唯讀，不能修改東西
-                            scheduler.config.dblclick_create = false;   //雙擊新增
+//                            scheduler.config.dblclick_create = false;   //雙擊新增
                             scheduler.config.drag_create = false;   //拖拉新增
                             scheduler.xy.margin_left = -19;
                             scheduler.config.container_autoresize = true;
@@ -254,8 +340,16 @@
                             var html = function(id) { return document.getElementById(id); }; //just a helper
                             scheduler.showLightbox = function(id) {
                                 var ev = scheduler.getEvent(id);
-                                scheduler.startLightbox(id, html("my_form"));
-                
+                                
+                                window.scrollTo(0,0);  //開啟後移動到最上面
+                                
+                                if(ev.text == "New"){
+                                    scheduler.startLightbox(id, html("my_form1"));
+                                } else {
+                                    scheduler.startLightbox(id, html("my_form"));
+                                }
+                                
+                                
                                 // var doctorID = ["1"];
                                 // var doctorName = ["張國頌"];
                                 // var array = doctorName.indexOf(ev.text);
@@ -404,8 +498,8 @@
                                  { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}"},
                                
                                 @endforeach
-                                ],"json");
-                           
+                            ],"json");
+                            
                         </script>
                     </div>
                 </div>
@@ -413,6 +507,7 @@
         </div>
     </div>
     
+<!--
     <div id="modal1" class="modal modal-fixed-footer modal-announcement">
         <form action="" method="post">
             <div class="modal-header">
@@ -500,6 +595,7 @@
             {{ csrf_field() }}
         </form>
     </div>
+-->
 @endsection
 
 @section('script')
@@ -599,8 +695,7 @@
         }
 
         function close_form() {               
-            scheduler.endLightbox(false, html("my_form"));
-                                
+            scheduler.endLightbox(false, html("my_form"));             
         }
     </script>
 @endsection
