@@ -366,13 +366,18 @@
                 // problematic drop down list
                 // level 3
 //                document.getElementById("doctorLevel").value = doctorData[3];
-                document.getElementsByClassName("select-dropdown")[10].value = doctorData[3];
+                var doctorLevelValue  = doctorData[3];
+                document.getElementsByClassName("select-dropdown")[10].value = doctorLevelValue;
+                $("#doctorLevel").val(doctorLevelValue).find("option[value=" + doctorLevelValue +"]").attr('selected', true);
                 
                 // major 4
 //                document.getElementById('doctorMajor').value = doctorData[4];
 //                document.getElementById('doctorMajor').value = "Surgical";
                 console.log("Major : " + doctorData[4]);
                 document.getElementsByClassName("select-dropdown")[8].value = doctorData[4];
+                var majorValue  = doctorData[4];
+                document.getElementsByClassName("select-dropdown")[8].value = majorValue;
+                $("#doctorMajor").val(majorValue).find("option[value=" + majorValue +"]").attr('selected', true);
                 
 //                document.getElementById("doctorMajor").innerHTML = "<option value='All'>All</option>";
                 
