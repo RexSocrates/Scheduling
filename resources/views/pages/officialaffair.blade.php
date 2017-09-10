@@ -72,7 +72,20 @@
 
                                 <tbody>
 
-                                    @foreach($leaveArr as $leave)
+
+                                    @foreach($rejectedAndConfirmArr as $leave)
+                                    <tr>
+                                        <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
+                                        <td class="td-padding td-w-5">{{ $leave['doctor'] }}</td>
+                                        <td class="td-padding td-w-5">{{ $leave['confirmingPerson'] }}</td>
+                                        <td class="td-padding td-w-5">{{ $leave['hours'] }}</td>
+                                        <td class="td-padding td-w-5">{{ $leave['updatedLeaveHours'] }}</td>
+                                        <td class="td-padding td-w-25">{{ $leave['remark'] }}</td>
+                                    </tr>
+                                    @endforeach
+
+
+                                   <!--  @foreach($leaveArr as $leave)
                                     <tr>
                                         <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
                                         <td class="td-padding td-w-5">{{ $leave['doctor'] }}</td>
@@ -86,7 +99,7 @@
                                         <td class="td-padding td-w-25">{{ $leave['remark'] }}</td>
                                     </tr>
                                     @endforeach
-
+ -->
                                    
                                 </tbody>
                             </table>
@@ -143,7 +156,7 @@
             <div class="modal-content modal-content-customize1">
                 <div class="row margin-b0">
                     <div class="input-field col s12 margin-b20">
-                        <select name="doctor" required  id= "doctor" >
+                        <select name="doctor" required  id= "doctor"  >
                            @foreach($doctors as $doctor)
                                 <option value="{{ $doctor['id'] }}">{{ $doctor['name'] }}</option>
                             @endforeach
@@ -153,14 +166,14 @@
                     <div class="input-field col s12 margin-t0">
                         <p class="margin-0">種類</p>
                         <p class="radio-location">
-                            <input class="with-gap" name="classification"  type="radio" id="radio-plus" value="1" checked required/>
+                            <input class="with-gap" name="classification" type="radio" id="radio-plus" value="1" checked required>
                             <label for="radio-plus">增加</label>
-                            <input class="with-gap" name="classification"  type="radio" id="radio-minus" value="0" />
+                            <input class="with-gap" name="classification" type="radio" id="radio-minus" value="0" onchange="getLeaveHours()">
                             <label for="radio-minus">減少</label>
                         </p>
                     </div>
                     <div class="input-field col s12">
-                        <input id="hour" type="number" value="" name="hour" required>
+                        <input id="hour" type="number" value="" name="hour" max= required>
                         <label for="hour">時數</label>
                     </div>
                     <div class="input-field col s12 margin-t0">
@@ -188,6 +201,23 @@
     </script>
 
     <script>
+     function getLeaveHours(){
+            $.get('getLeaveHoursByID',{
+                id : document.getElementById('doctor').value
+            }, function(hour){
+                var limithour = hour;
+
+                console.log("13"+limithour);
+
+                document.getElementById("hour").innerHTML="<input max="+limithour+">";
+                // if(document.getElementById("radio-minus").value == 0){
+                //     
+                //     console.log("111");
+                // }
+            });
+        }
+
+       
 
     </script>
     

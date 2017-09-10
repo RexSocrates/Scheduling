@@ -26,6 +26,17 @@ class OfficialLeave extends Model
         return $leaves;
     }
 
+    //取得所有被拒絕和確認公假申請
+    public function getRejectedAndConfirmLeaves() {
+        $leaves = DB::table('OfficialLeave')
+                ->where('confirmStatus',2)
+                ->orwhere('confirmStatus',1)
+                ->OrderBy('recordDate', "desc")
+                ->get();
+        
+        return $leaves;
+    }
+
     //取得所有確認公假申請
     public function getconfirmLeaves() {
         $leaves = DB::table('OfficialLeave')
@@ -101,7 +112,9 @@ class OfficialLeave extends Model
             ->where('leaveSerial', $dataArray['serial'])
             ->update([
                 'confirmStatus' => $dataArray['newStatus'],
-                'confirmingPersonID' => $dataArray['confirmingPerson']
+                'confirmingPersonID' => $dataArray['confirmingPerson'],
+                'leaveHours' => $dataArray['leaveHours'],
+                'updatedLeaveHours' =>$dataArray['updatedLeaveHours'],
             ]);
             
     }
