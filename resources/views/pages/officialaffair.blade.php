@@ -13,7 +13,7 @@
 @section('nav-content')
     <div class="nav-content blue-grey darken-1">
         <ul class="tabs tabs-transparent">
-            <li class="tab"><a class="active" href="#page1">查看醫生</a></li>
+            <li class="tab"><a class="active" href="#page1">查看紀錄</a></li>
             <li class="tab"><a href="#page2">待確認</a></li>
         </ul>
     </div>
