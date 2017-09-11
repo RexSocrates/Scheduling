@@ -1,10 +1,8 @@
 @extends("layouts.app2")
 
-<!--
 @section('head')
-    
+    <link type="text/css" rel="stylesheet" href="../css/dataTables.material.min.css"/>
 @endsection
--->
 
 @section('navbar')
     <p class="brand-logo light">醫師公假紀錄</p>
@@ -25,7 +23,9 @@
 			<div class="row">
                 <div id="page1" class="col s12 m12">
       		  	  	<div class="card">
-      		  	  		<div class="card-action card1">
+      		  	  		<div class="card-action">
+      		  	  		    <font class="card-title">紀錄</font>
+<!--
                             <form action="">
                                 <div class="title1">
                                     <font class="card-title">醫生：</font>
@@ -54,11 +54,13 @@
                                     <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text inline margin-l10">確認</button>
                                 </div>
                             </form>
+-->
                             <a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1"><i class="material-icons">add</i></a>
                         </div>
       		  	  		<div class="divider"></div>
       		  	  	  	<div class="card-content padding-t5">
-      		  	  	  	    <table class="centered striped highlight scroll area4">
+                            <table id="officialLeave" class="mdl-data-table striped highlight" cellspacing="0" width="100%">
+<!--      		  	  	  	    <table class="centered striped highlight scroll area4">-->
                                 <thead>
                                     <tr>
                                         <th class="td-w-5">日期</th>
@@ -66,12 +68,13 @@
                                         <th class="td-w-5">對象</th>
                                         <th class="td-w-5">增加/減少</th>
                                         <th class="td-w-5">剩餘時數</th>
-                                        <th class="td-w-25">內容</th>
+                                        <th class="td-w-20">內容</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
 
+<!--
                                     @foreach($leaveArr as $leave)
                                     <tr>
                                         <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
@@ -83,10 +86,42 @@
                                             <td class="td-padding td-w-5">+{{ $leave['hours'] }}</td>
                                         @endif
                                         <td class="td-padding td-w-5">{{ $leave['updatedLeaveHours'] }}</td>
-                                        <td class="td-padding td-w-25">{{ $leave['remark'] }}</td>
+                                        <td class="td-padding td-w-20">{{ $leave['remark'] }}</td>
                                     </tr>
                                     @endforeach
-
+-->
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-06-22</td>
+                                        <td class="td-padding td-w-5">陳常樂</td>
+                                        <td class="td-padding td-w-5">陳常樂</td>
+                                        <td class="td-padding td-w-5">0</td>
+                                        <td class="td-padding td-w-5">25</td>
+                                        <td class="td-padding td-w-20"><font class="red-text">(拒絕)</font>內容內容內容內容內容內容內容內容內容內容內容內容</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-06-12</td>
+                                        <td class="td-padding td-w-5">陳常樂</td>
+                                        <td class="td-padding td-w-5">陳常樂</td>
+                                        <td class="td-padding td-w-5">-12</td>
+                                        <td class="td-padding td-w-5">0</td>
+                                        <td class="td-padding td-w-20">內容內容內容內容內容內容內容內容內容內容內容內容</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-06-15</td>
+                                        <td class="td-padding td-w-5">陳常樂</td>
+                                        <td class="td-padding td-w-5">陳常樂</td>
+                                        <td class="td-padding td-w-5">0</td>
+                                        <td class="td-padding td-w-5">2</td>
+                                        <td class="td-padding td-w-20"><font class="red-text">(拒絕)</font>內容內容內容內容內容內容內容內容內容內容內容內容</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-06-25</td>
+                                        <td class="td-padding td-w-5">陳常樂</td>
+                                        <td class="td-padding td-w-5">陳常樂</td>
+                                        <td class="td-padding td-w-5">+4</td>
+                                        <td class="td-padding td-w-5">14</td>
+                                        <td class="td-padding td-w-20">內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容</td>
+                                    </tr>
                                    
                                 </tbody>
                             </table>
@@ -181,16 +216,31 @@
 @endsection
 
 @section('script')
+    <script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="../js/dataTables.material.min.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+
     <script>
-        $(document).ready(function(){
+        $(document).ready(function() {
             $('select').material_select();
-  		});
+            
+            $('#officialLeave').DataTable( {
+                columnDefs: [
+                    {
+                        targets: [ 0, 1, 2 ],
+                        className: 'mdl-data-table__cell--non-numeric'
+                    }
+                ]
+            });
+            
+            document.getElementById("officialLeave_length").style.display = 'none';
+            
+            document.getElementById("officialLeave_filter").style.cssText = 'text-align: left';
+            
+            document.getElementById("officialLeave_filter").getElementsByTagName("label")[0].getElementsByTagName("input")[0].style.marginLeft = '0';
+        
+        });
     </script>
-
-    <script>
-
-    </script>
-    
 @endsection
 
 
