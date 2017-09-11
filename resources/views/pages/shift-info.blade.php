@@ -28,7 +28,7 @@
                                     <tr>
                                         <th>申請人</th>
                                         <th>申請日期</th>
-                                        <th>換班內容</th>
+                                        <th>內容</th>
                                         <th>功能</th>
                                     </tr>
                                 </thead>
@@ -83,7 +83,7 @@
                                     <tr>
                                         <th>提出人</th>
                                         <th>申請日期</th>
-                                        <th>備註內容</th>
+                                        <th>內容</th>
                                     </tr>
                                 </thead>
 

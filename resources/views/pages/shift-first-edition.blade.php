@@ -48,29 +48,26 @@
                                 </div>
 
                                 <div class="lightbox">
-                                    <div class="row margin-b0">
+                                    <div class="row">
+                                        <div class="col s6"><h5>臨床班: 北白內1</h5></div>
+                                        <div class="col s6"><h5>日期: 2017-09-20</h5></div>
+                                    </div>
+                                    <div class="row">
                                         <div class="input-field col s12 margin-b20">
-                                            <select name="doctor"  id="doctor" required>
-                                                <option value="" selected disabled>選擇醫生</option> 
-                                                @foreach($doctorName as $name)
-                                                <option value="{{$name->doctorID}}">{{$name->name}}</option>
-                                                @endforeach
+                                            <select name="doctor" required>
+                                                <option value="" selected disabled>選擇醫生</option>
+                                                <option value="1">簡定國</option>
+                                                <option value="2">簡定國</option>
+                                                <option value="3">簡定國</option>
+                                                <option value="4">簡定國</option>
+                                                <option value="5">簡定國</option>
+                                                <option value="6">簡定國</option>
+                                                <option value="7">簡定國</option>
+                                                <option value="8">簡定國</option>
+                                                <option value="9">簡定國</option>
+                                                <option value="10">簡定國</option>
                                             </select>
                                             <label>醫生</label>
-                                        </div>
-                                        <div class="input-field col s12 margin-b20">
-                                            <select name="classification" id="classification" required>
-                                                <option value="" selected disabled>選擇班種</option>
-                                                <option value=""> </option>
-                                            </select>
-                                            <label>選擇班種</label> 
-                                        </div>
-                                        <div class="input-field col s12 margin-b20">
-                                            <select name="date"  id="date_1" required>
-                                                <option value="" selected disabled>選擇日期</option>
-                                                <option value=""> </option>
-                                            </select>
-                                             <label>日期</label> 
                                         </div>
                                     </div>
                                 </div>
@@ -83,7 +80,7 @@
                         
                         <div id="my_form">
                             <!-- <form action="change-shift-first-edition" method="post" > -->
-                             <div class="modal-header">
+                            <div class="modal-header">
                                 <h5 class="modal-announcement-title">換班調整</h5>
                             </div>
                             <div class="lightbox">
@@ -92,45 +89,47 @@
                                         <img src="../img/exchange.svg" style="height: 220px;width: 220px;">
                                     </div>
                                      <div class="col s6">
-                                <label>醫生:</label>
-                                <select name= 'schID_1_doctor' class="browser-default" id="schID_1_doctor" onchange="changeDoctor_1()" required>
-                                    <option  disabled selected>請選擇醫生</option>
-                                        <option disabled value=""></option>
-                                    
-                                </select>
-                            </div>
+                                        <label>醫生:</label>
+                                        <select name= 'schID_1_doctor' class="browser-default" id="schID_1_doctor" onchange="changeDoctor_1()" required>
+                                            <option  disabled selected>請選擇醫生</option>
+                                                <option disabled value=""></option>
+                                                @foreach($doctorName as $name)
+                                                <option value="{{$name->doctorID}}">{{$name->name}}</option>
+                                                @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col s6">
+                                        <label>醫生:</label>
+                                        <select name= 'schID_2_doctor' class="browser-default" id="schID_2_doctor" onchange="changeDoctor()" required>
+                                            <option value="" disabled selected>請選擇醫生</option> 
+                                            @foreach($doctorName as $name)
+                                            <option value="{{$name->doctorID}}">{{$name->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                            <div class="col s6">
-                                <label>醫生:</label>
-                                <select name= 'schID_2_doctor' class="browser-default" id="schID_2_doctor" onchange="changeDoctor()" required>
-                                    <option value="" disabled selected>請選擇醫生</option> 
-                                    @foreach($doctorName as $name)
-                                    <option value="{{$name->doctorID}}">{{$name->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                                    <div class="col s6">
+                                        <label>日期:</label>
+                                        <select name="scheduleID_1" class="browser-default" id="date1" required>
+                                            <option value="" disabled selected>請選擇日期</option>
+                                            <option value=""></option>
 
-                            <div class="col s6">
-                                <label>日期:</label>
-                                <select name="scheduleID_1" class="browser-default" id="date1" required>
-                                    <option value="" disabled selected>請選擇日期</option>
-                                    <option value=""></option>
-                                        
-                                </select>
-                            </div>
+                                        </select>
+                                    </div>
 
-                            <div class="col s6">
-                                <label>日期:</label>
-                                <select  name='scheduleID_2' class="browser-default" id="date2" required>
-                                    <option value="" disabled selected>請選擇日期</option>
-                                    <option value=""></option>
-                                </select>
+                                    <div class="col s6">
+                                        <label>日期:</label>
+                                        <select  name='scheduleID_2' class="browser-default" id="date2" required>
+                                            <option value="" disabled selected>請選擇日期</option>
+                                            <option value=""></option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="lightbox-footer">
-                                <button class="modal-action waves-effect waves-light red lighten-1 btn modal-btn1" onclick="delete_event()">Delete</button>
+                                <button class="modal-action waves-effect waves-light red lighten-1 btn-flat white-text modal-btn1" onclick="delete_confirm()">Delete</button>
+                                <font class="margin-l10">(刪除左邊醫生)</font>
                                 <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn" onclick="save_form_alert()">Save</button>
                                 <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel modal-btn" onclick="close_form()">Cancel</button>
                                 {{ csrf_field() }}
@@ -433,12 +432,12 @@
                             
                             
                             //空白處新增醫生班表
-                            scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
-                                
-                                addNewSchedule(ev.start_date,ev.section_id);
-                                
-                                return true;
-                            });
+//                            scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
+//                                
+//                                addNewSchedule(ev.start_date,ev.section_id);
+//                                
+//                                return true;
+//                            });
 
                             scheduler.attachEvent("onClick", function (id, e){
                                 var event = scheduler.getEvent(id);
@@ -453,10 +452,38 @@
                             scheduler.init('scheduler_here',new Date(res[3], month),"timeline");
 
                             scheduler.parse([
-                                @foreach($schedule as $data)
-                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}"},
-                               
-                                @endforeach
+                                { start_date: "2017-09-30 00:00", end_date: "2017-10-01 00:00", text:"王志平", section_id:1},
+                                { start_date: "2017-09-30 00:00", end_date: "2017-10-01 00:00", text:"黃明源", section_id:2},
+                                { start_date: "2017-09-30 00:00", end_date: "2017-10-01 00:00", text:"莊錦康", section_id:3},
+                                { start_date: "2017-09-30 00:00", end_date: "2017-10-01 00:00", text:"簡立仁", section_id:4},
+
+                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"王志平", section_id:1},
+                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"黃明源", section_id:2},
+                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"莊錦康", section_id:3},
+                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"簡立仁", section_id:4},
+                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"陳長志", section_id:5},
+                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"劉良嶸", section_id:6},
+                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"陳楷宏", section_id:7},
+                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"黃明源", section_id:8},
+                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"鄭婓茵", section_id:9},
+                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"劉蕙慈", section_id:10},
+                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"王志平", section_id:11},
+                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"柳志翰", section_id:12},
+                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"蘇柏樺", section_id:13},
+
+                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"王志平", section_id:1},
+                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"黃明源", section_id:2},
+                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"莊錦康", section_id:3},
+                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"簡立仁", section_id:4},
+                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"陳長志", section_id:5},
+                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"劉良嶸", section_id:6},
+                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"陳楷宏", section_id:7},
+                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"黃明源", section_id:8},
+                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"鄭婓茵", section_id:9},
+                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"劉蕙慈", section_id:10},
+                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"王志平", section_id:11},
+                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"柳志翰", section_id:12},
+                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"蘇柏樺", section_id:13}
                             ],"json");
                             
                         </script>
@@ -659,67 +686,64 @@
 
         }
         
-        function addNewSchedule(date,id){
-
-            var text = null;
-
-            if(id == 1){
-                text = "行政";
-            }else if(id == 2){
-                text = "教學";
-            }else if(id== 3){
-                text = "北白急救";
-            }else if(id == 4){
-                text = "北白發燒";
-            }else if(id == 5){
-                text = "北白內1";
-            }else if(id == 6){
-                text = "北白內2";
-            }else if(id == 7){
-                text = "北白外1";
-            }else if(id == 8){
-                text = "北白外2";
-            }else if(id == 9){
-                text = "淡白內1";
-            }else if(id == 10){
-                text = "淡白內2";
-            }else if(id == 11){
-                text = "淡白外1";
-            }else if(id == 12){
-                text = "淡白外1";
-            }else if(id == 13){
-                text = "北夜急救";
-            }else if(id == 14){
-                text = "北夜發燒";
-            }else if(id == 15){
-                text = "北夜內1";
-            }else if(id == 16){
-                text = "北夜內2";
-            }else if(id == 17){
-                text = "北夜外1";
-            }else if(id == 18){
-                text = "北夜外2";
-            }else if(id == 19){
-                text = "淡夜內1";
-            }else if(id == 20){
-                text = "淡夜內2";
-            }else if(id == 21){
-                text = "淡夜外";
-            }
-            
-            var day = date.getDay();
-            var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-" + date.getDate();
-
-            document.getElementById("date_1").innerHTML= "<option value="+date2+">"+date2+"</option>";
-            document.getElementById("classification").innerHTML="<option value="+id+">"+text+"</option>";
-           
-
-            console.log(id);
-            console.log(text);
-            console.log(date2);
-           
-
-        }
+//        function addNewSchedule(date,id){
+//
+//            var text = null;
+//
+//            if(id == 1){
+//                text = "行政";
+//            }else if(id == 2){
+//                text = "教學";
+//            }else if(id== 3){
+//                text = "北白急救";
+//            }else if(id == 4){
+//                text = "北白發燒";
+//            }else if(id == 5){
+//                text = "北白內1";
+//            }else if(id == 6){
+//                text = "北白內2";
+//            }else if(id == 7){
+//                text = "北白外1";
+//            }else if(id == 8){
+//                text = "北白外2";
+//            }else if(id == 9){
+//                text = "淡白內1";
+//            }else if(id == 10){
+//                text = "淡白內2";
+//            }else if(id == 11){
+//                text = "淡白外1";
+//            }else if(id == 12){
+//                text = "淡白外1";
+//            }else if(id == 13){
+//                text = "北夜急救";
+//            }else if(id == 14){
+//                text = "北夜發燒";
+//            }else if(id == 15){
+//                text = "北夜內1";
+//            }else if(id == 16){
+//                text = "北夜內2";
+//            }else if(id == 17){
+//                text = "北夜外1";
+//            }else if(id == 18){
+//                text = "北夜外2";
+//            }else if(id == 19){
+//                text = "淡夜內1";
+//            }else if(id == 20){
+//                text = "淡夜內2";
+//            }else if(id == 21){
+//                text = "淡夜外";
+//            }
+//            
+//            var day = date.getDay();
+//            var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-" + date.getDate();
+//
+//            document.getElementById("date_1").innerHTML= "<option value="+date2+">"+date2+"</option>";
+//            document.getElementById("classification").innerHTML="<option value="+id+">"+text+"</option>";
+//           
+//            console.log(id);
+//            console.log(text);
+//            console.log(date2);
+//        }
 
         function saveSchedule(){
             $.get('saveSchedule',{
@@ -753,6 +777,20 @@
         
         function close_form1() {
             scheduler.endLightbox(false, html("my_form1"));
+        }
+        
+        function delete_confirm(){
+            var doctor = document.getElementById("schID_1_doctor").value;
+            var date = document.getElementById("date1").value;
+            var r = confirm("是否刪除 " + doctor + " 在 " + date + " 的班?");
+            if (r == true) {
+                var event_id = scheduler.getState().lightbox_id;
+                scheduler.endLightbox(false, html("my_form"));
+                scheduler.deleteEvent(event_id);
+                alert("成功刪除");
+            } else {
+                alert("已取消");
+            }
         }
     </script>
 @endsection
