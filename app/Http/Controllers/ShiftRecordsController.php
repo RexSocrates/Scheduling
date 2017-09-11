@@ -110,15 +110,15 @@ class ShiftRecordsController extends Controller
 
      // 正式班表->換班資訊 新增換班
     public function scheduleEditionShiftAddShifts(){
-            $addShifts = new ShiftRecords();
-            $scheduleID_1 = Input::get('scheduleID_1');
-            $scheduleID_2 = Input::get('scheduleID_2');
-            $schID_1_doctor = Input::get('schID_1_doctor');
-            $schID_2_doctor = Input::get('schID_2_doctor');
-            $doc2Confirm = 0;
-            $adminConfirm = 0;
+        $addShifts = new ShiftRecords();
+        $scheduleID_1 = Input::get('scheduleID_1');
+        $scheduleID_2 = Input::get('scheduleID_2');
+        $schID_1_doctor = Input::get('schID_1_doctor');
+        $schID_2_doctor = Input::get('schID_2_doctor');
+        $doc2Confirm = 0;
+        $adminConfirm = 0;
 
-            $data = [
+        $data = [
             'scheduleID_1' => $scheduleID_1,
             'scheduleID_2' => $scheduleID_2,
             'schID_1_doctor' => $schID_1_doctor,
@@ -128,26 +128,26 @@ class ShiftRecordsController extends Controller
             'date' => date('Y-m-d')
         ];
 
-            $newShiftSerial = $addShifts->addShifts($data);
+        $newShiftSerial = $addShifts->addShifts($data);
 
-            return redirect('schedule-shift-info'); 
+        return redirect('schedule-shift-info'); 
 
     }
 
 
     //調整班表->初版班表 新增換班
     public function shiftFirstEditionAddShifts(Request $request){
-            $data = $request->all();
+        $data = $request->all();
 
-            $scheduleID1 = (int)$data['scheduleID_1'];
-            $scheduleID2 = (int)$data['scheduleID_2'];
+        $scheduleID1 = (int)$data['scheduleID_1'];
+        $scheduleID2 = (int)$data['scheduleID_2'];
 
-            $schedule = new Schedule();
+        $schedule = new Schedule();
 
-            $schedule_1_Info = $schedule->getScheduleDataByID($scheduleID1);
-            $schedule_2_Info = $schedule->getScheduleDataByID($scheduleID2);
+        $schedule_1_Info = $schedule->getScheduleDataByID($scheduleID1);
+        $schedule_2_Info = $schedule->getScheduleDataByID($scheduleID2);
 
-            $shiftInfo = [
+        $shiftInfo = [
             'scheduleID_1' => $schedule_1_Info->scheduleID,
             'scheduleID_2' => $schedule_2_Info->scheduleID,
             'schID_1_doctor' => $schedule_1_Info->doctorID,
@@ -157,14 +157,14 @@ class ShiftRecordsController extends Controller
             'date' => date('Y-m-d')
         ];
 
-            $schedule_1_Date = $schedule_1_Info->date;
+        $schedule_1_Date = $schedule_1_Info->date;
 
-            $shiftRecords = new ShiftRecords();
+        $shiftRecords = new ShiftRecords();
 
-            $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
+        $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
 
-            $shiftRecords->doc2Confirm($newChangeSerial,1);
-            $shiftRecords->adminConfirm($newChangeSerial,1);
+        $shiftRecords->doc2Confirm($newChangeSerial,1);
+        $shiftRecords->adminConfirm($newChangeSerial,1);
 
             //$schedule->$exchangeSchedule($newChangeSerial);
             //return redirect('shift-first-edition');
@@ -176,19 +176,18 @@ class ShiftRecordsController extends Controller
     }
 
     //調整班表->初版班表 顯示換班換班
-   
-     public function shiftFirstEditionShowShifts(Request $request){
-            $data = $request->all();
+    public function shiftFirstEditionShowShifts(Request $request){
+        $data = $request->all();
 
-            $scheduleID1 = (int)$data['scheduleID_1'];
-            $scheduleID2 = (int)$data['scheduleID_2'];
+        $scheduleID1 = (int)$data['scheduleID_1'];
+        $scheduleID2 = (int)$data['scheduleID_2'];
 
-            $schedule = new Schedule();
+        $schedule = new Schedule();
 
-            $schedule_1_Info = $schedule->getScheduleDataByID($scheduleID1);
-            $schedule_2_Info = $schedule->getScheduleDataByID($scheduleID2);
+        $schedule_1_Info = $schedule->getScheduleDataByID($scheduleID1);
+        $schedule_2_Info = $schedule->getScheduleDataByID($scheduleID2);
 
-            $shiftInfo = [
+        $shiftInfo = [
             'scheduleID_1' => $schedule_1_Info->scheduleID,
             'scheduleID_2' => $schedule_2_Info->scheduleID,
             'schID_1_doctor' => $schedule_1_Info->doctorID,
@@ -198,17 +197,17 @@ class ShiftRecordsController extends Controller
             'date' => date('Y-m-d')
         ];
 
-            $schedule_1_Date = $schedule_1_Info->date;
+        $schedule_1_Date = $schedule_1_Info->date;
 
-            $shiftRecords = new ShiftRecords();
+        $shiftRecords = new ShiftRecords();
 
-            $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
+        $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
 
-            $shiftRecords->doc2Confirm($newChangeSerial,1);
-            $shiftRecords->adminConfirm($newChangeSerial,1);
+        $shiftRecords->doc2Confirm($newChangeSerial,1);
+        $shiftRecords->adminConfirm($newChangeSerial,1);
 
            
-            //return redirect('shift-first-edition');
+        //return redirect('shift-first-edition');
     }
 
 
@@ -430,11 +429,9 @@ class ShiftRecordsController extends Controller
             
             array_push($displayArr, $recordDic);
         }
+       $remarkObj = new Remark();   
         
-        $remarkObj = new Remark();
-       
-        
-        $remarks = $remarkObj->getRemarks();
+        $remarks = $remarkObj->getCurrentRemarks();
         
         $displayRemarksArr = [];
         
@@ -449,10 +446,18 @@ class ShiftRecordsController extends Controller
             
             array_push($displayRemarksArr, $remarkDic);
         }
+
+        //選擇備註月份
+        $currentMonth = date('Y-m');
+        $preMonth=date("Y-m", strtotime('-1 month'));
+        $beforePreMonth=date("Y-m", strtotime('-2 month'));
         
         return view('pages.shift-info', [
             'shiftRecords' => $displayArr,
-            'remarks' => $displayRemarksArr
+            'remarks' => $displayRemarksArr,
+            'currentMonth'=>$currentMonth,
+            'preMonth'=>$preMonth,
+            'beforePreMonth'=>$beforePreMonth
         ]);
     }
     
@@ -486,8 +491,7 @@ class ShiftRecordsController extends Controller
         return view('pages.shift-first-edition',array(
             'schedule' => $scheduleData,
             'doctorName' => $doctor,
-            
-            ));
+        ));
 
     }
 

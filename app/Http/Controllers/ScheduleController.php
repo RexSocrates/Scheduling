@@ -80,56 +80,83 @@ class ScheduleController extends Controller
     }
 
     //單一月份班表資訊
-      public function getScheduleByID() {
+    public function getScheduleByID() {
 
-         $schedule = new Schedule();
-         $scheduleData = $schedule->getScheduleByID();
+        $schedule = new Schedule();
+        $scheduleData = $schedule->getScheduleByID();
 
         return view('getScheduleByID', array('schedule' => $scheduleData));
-      }
+    }
 
     //查看 單一醫生班表
-      public function getScheduleByDoctorID() {
+    public function getScheduleByDoctorID() {
 
-         $schedule = new Schedule();
-         $scheduleCategory = new ScheduleCategory();
-         $user = new User();
+        $schedule = new Schedule();
+        $scheduleCategory = new ScheduleCategory();
+        $user = new User();
 
-         $scheduleData = $schedule->getScheduleByDoctorID($user->getCurrentUserID());
+        $scheduleData = $schedule->getScheduleByDoctorID($user->getCurrentUserID());
 
-         foreach ($scheduleData as $data) {
+        foreach ($scheduleData as $data) {
             $scheduleName = $scheduleCategory->findScheduleName($data->schCategorySerial);
             $data->schCategorySerial =  $scheduleName;
         }
 
         return view('pages.schedule', array('schedule' => $scheduleData));
-      }
+    }
 
     
     
 
     //新增班表
-    public function addSchedule(){
-    		$addSchedule = new Schedule();
-        $doctorID = Input::get('doctorID');
-        $periodSerial = Input::get('periodSerial');
-    		$isWeekday = Input::get('isWeekday');
-    		$location = Input::get('location');
-    		$category = Input::get('category');
-    		$date = Input::get('date');
-            $confirmed = Input::get('confirmed');
-    		$newscheduleID = $addSchedule->addSchedule($doctorID, $periodSerial, $isWeekday, $location, $category, $date, $confirmed);
+    public function addSchedule(Request $request){
+        $data = $request->all();
+        
+        $doctorID = $data['id'];
+        $startDate = $data['date'];
+        $categoryID = $data['classification'];
+        
+        
+        $scheduleCategory = new ScheduleCategory();
+        
+        $categoryInfo = $scheduleCategory->getSchCategoryInfo($categoryID);
 
-    		 return redirect('schedule'); 
+        $schInfo = [
+              'doctorID' =>$doctorID,
+              'schCategorySerial'=>$categoryID,
+              'isWeekday' => true,
+              'location' => $categoryInfo,
+              'date' => $startDate,
+              'confirmed'=>1
+            ];
 
+        $weekDay = (int)date('N', strtotime($startDate));
+
+        if($weekDay == 6 || $weekDay == 7){
+          $schInfo['isWeekday'] = false;
+        }
+
+        $schedule = new Schedule();
+        $schedule->addSchedule($schInfo);
+        
     }
     
-     public function deleteSchedule($id){
-       		$deleteschedule= DB::table('Schedule')->where('scheduleID',$id)->delete();
+    // 刪除預班
+    public function deleteReservation(Request $request){
+        $data = $request->all();
+        
+        $docAndRes = new DoctorAndReservation();
+        $userObj = new User();
+        
+        $docAndRes->deleteReservation($data['resSerial'], $userObj->getCurrentUserID());
+    }
+    
+    public function deleteSchedule($id){
+         $deleteschedule= DB::table('Schedule')->where('scheduleID',$id)->delete();
        
-            return redirect('schedule'); 
+         return redirect('schedule'); 
      		
-        }
+    }
        
     //更新班表
     public function updateSchedule(){
@@ -162,7 +189,7 @@ class ScheduleController extends Controller
       return $array;
       
     }
-     public function getDoctorInfoByScheduleIDWhenExchange(Request $request){
+    public function getDoctorInfoByScheduleIDWhenExchange(Request $request){
       $data = $request->all();
 
       $schedule = new Schedule();
@@ -182,4 +209,55 @@ class ScheduleController extends Controller
       return $array;
       
     }
+    // 從scheduler 傳回資料後將日期的字串分解
+    private function processDateStr($dateStr) {
+        $dateArr = explode(' ', $dateStr);
+        
+        // 判斷月份
+        $month = '00';
+        switch($dateArr[1]) {
+            case 'Jan' :
+                $month = '01';
+                break;
+            case 'Feb' :
+                $month = '02';
+                break;
+            case 'Mar' :
+                $month = '03';
+                break;
+            case 'Apr' :
+                $month = '04';
+                break;
+            case 'May' :
+                $month = '05';
+                break;
+            case 'Jun' :
+                $month = '06';
+                break;
+            case 'Jul' :
+                $month = '07';
+                break;
+            case 'Aug' :
+                $month = '08';
+                break;
+            case 'Sep' :
+                $month = '09';
+                break;
+            case 'Oct' :
+                $month = '10';
+                break;
+            case 'Nov' :
+                $month = '11';
+                break;
+            case 'Dec' :
+                $month = '12';
+                break;
+        }
+        
+        $day = $dateArr[2];
+        $year = $dateArr[3];
+        
+        return $year.'-'.$month.'-'.$day;
+    }
+    
 }

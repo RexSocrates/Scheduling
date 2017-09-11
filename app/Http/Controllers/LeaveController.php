@@ -18,6 +18,7 @@ class LeaveController extends Controller
     		'serial'=>$serial,
     		'confirmingPerson'=>$user->getCurrentUserID(),
             'updatedLeaveHours'=>'',
+            'leaveHours'=>$leave->leaveHours,
     		'newStatus'=>1
     	];
 
@@ -37,6 +38,8 @@ class LeaveController extends Controller
     	$leaveDic=[
     		'serial'=>$serial,
     		'confirmingPerson'=>$user->getCurrentUserID(),
+            'leaveHours'=>0,
+            'updatedLeaveHours'=>$user->getCurrentUserInfo()->currentOfficialLeaveHours,
     		'newStatus'=>2
     	];
 
@@ -92,6 +95,7 @@ class LeaveController extends Controller
                 'date' =>$leave->recordDate,
                 'doctor' =>'',
                 'hours'=>$leave->leaveHours,
+                'updatedLeaveHours'=>$user->getDoctorInfoByID($leave->doctorID)->currentOfficialLeaveHours,
                 'remark'=>$leave->remark
             ];
             
@@ -99,12 +103,34 @@ class LeaveController extends Controller
 
             array_push($unconfirmLeaveArr,$unconfirmLeaveDic);
         }
-                                           
+
+        $rejectedAndConfirmLeaves = $officialLeave->getRejectedAndConfirmLeaves();
+        $rejectedAndConfirmArr = [];
+        foreach ($rejectedAndConfirmLeaves as $leave) {
+            $rejectedAndConfirmDic =[
+                'serial' => $leave->leaveSerial,
+                'confirmingPerson' =>'',
+                'date' =>$leave->recordDate,
+                'doctor' =>'',
+                'hours'=>$leave->leaveHours,
+                'updatedLeaveHours'=>$leave->updatedLeaveHours,
+                'remark'=>$leave->remark
+            ];
+            
+            $rejectedAndConfirmDic['doctor'] = $user->getDoctorInfoByID($leave->doctorID)->name;
+            $rejectedAndConfirmDic['confirmingPerson'] = $user->getDoctorInfoByID($leave->confirmingPersonID)->name;
+
+            array_push($rejectedAndConfirmArr,$rejectedAndConfirmDic);
+        }
+
+
+
             //return $doctorsLeave;
         return view('pages.officialaffair', [
             'leaveArr' => $leaveArr,
+            'rejectedAndConfirmArr' => $rejectedAndConfirmArr,
             'unconfirmLeaveArr' =>$unconfirmLeaveArr,
-            'doctors' => $doctorName
+            'doctors' => $doctorName,
         ]);
        
     }

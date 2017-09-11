@@ -78,7 +78,12 @@ class AccountController extends Controller
          ]);
     }
     
-
+    public function hour(Request $request){
+        $data = $request['id'];
+        $user = new User();
+        $hour = $user->getDoctorInfoByID($data)->currentOfficialLeaveHours;
+        return $hour;
+    }
 
     //醫生申請公假
     public function addOfficialLeaveByDoctor(Request $request){
@@ -101,6 +106,7 @@ class AccountController extends Controller
 
     }
 
+    // 回傳醫生的公假
     public function getOfficialLeavePageById(Request $request) {
         $data = $request->all();
         
@@ -130,12 +136,8 @@ class AccountController extends Controller
         //     'doctorsLeave' => $doctorsLeave
         // ]);
     }
-
-    // 調整班表->彈出式視窗取得醫生2的上班資訊
-
     
     // 調整班表->彈出式視窗取得醫生2的上班資訊
-
     public function getDoctorInfoByID(Request $request){
         $data = $request->all();
 

@@ -10,7 +10,7 @@ use App\Schedule;
 class ChartController extends Controller
 {
     //
-    
+    // 取得正式班表統計圖表頁面
     public function getChartPage() {
         $user = new User();
         
@@ -32,6 +32,7 @@ class ChartController extends Controller
         ]);
     }
     
+    // 取得特定醫師在正式班表中的上班統計資訓
     public function getChartPageBySelectedID(Request $request) {
         $data = $request->all();
         $user = new User();
