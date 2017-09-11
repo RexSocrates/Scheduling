@@ -452,38 +452,10 @@
                             scheduler.init('scheduler_here',new Date(res[3], month),"timeline");
 
                             scheduler.parse([
-                                { start_date: "2017-09-30 00:00", end_date: "2017-10-01 00:00", text:"王志平", section_id:1},
-                                { start_date: "2017-09-30 00:00", end_date: "2017-10-01 00:00", text:"黃明源", section_id:2},
-                                { start_date: "2017-09-30 00:00", end_date: "2017-10-01 00:00", text:"莊錦康", section_id:3},
-                                { start_date: "2017-09-30 00:00", end_date: "2017-10-01 00:00", text:"簡立仁", section_id:4},
-
-                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"王志平", section_id:1},
-                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"黃明源", section_id:2},
-                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"莊錦康", section_id:3},
-                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"簡立仁", section_id:4},
-                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"陳長志", section_id:5},
-                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"劉良嶸", section_id:6},
-                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"陳楷宏", section_id:7},
-                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"黃明源", section_id:8},
-                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"鄭婓茵", section_id:9},
-                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"劉蕙慈", section_id:10},
-                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"王志平", section_id:11},
-                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"柳志翰", section_id:12},
-                                { start_date: "2017-10-02 00:00", end_date: "2017-10-03 00:00", text:"蘇柏樺", section_id:13},
-
-                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"王志平", section_id:1},
-                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"黃明源", section_id:2},
-                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"莊錦康", section_id:3},
-                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"簡立仁", section_id:4},
-                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"陳長志", section_id:5},
-                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"劉良嶸", section_id:6},
-                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"陳楷宏", section_id:7},
-                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"黃明源", section_id:8},
-                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"鄭婓茵", section_id:9},
-                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"劉蕙慈", section_id:10},
-                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"王志平", section_id:11},
-                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"柳志翰", section_id:12},
-                                { start_date: "2017-10-03 00:00", end_date: "2017-10-04 00:00", text:"蘇柏樺", section_id:13}
+                                @foreach($schedule as $data)
+                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}"},
+                               
+                                @endforeach
                             ],"json");
                             
                         </script>
