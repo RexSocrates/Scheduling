@@ -49,12 +49,12 @@ class Schedule extends Model
     }
     
     // 新增一筆上班資料
-    public function addSchedule(array $date) {
+    public function addSchedule(array $data) {
         $reservation = new Reservation();
         
         $newScheduleID = DB::table('Schedule')->insertGetId([
             'doctorID' => $data['doctorID'],
-            'schCategorySerial' => $data['categorySerial'],
+            'schCategorySerial' => $data['schCategorySerial'],
             'isWeekday' => $data['isWeekday'],
             'location' => $data['location'],
             'date' => $data['date'],

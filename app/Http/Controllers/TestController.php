@@ -14,6 +14,7 @@ use App\DoctorAndReservation;
 use App\Schedule;
 use App\ShiftRecords;
 use App\OfficialLeave;
+use App\ScheduleCategory;
 
 class TestController extends Controller
 {
@@ -618,5 +619,91 @@ class TestController extends Controller
         }
         echo $displayRemarksArr[0]['author'];
     }
+    //新增班表
+    public function addSchedule(){
+        //$data = $request->all();
+        
+        $name = 1;
+        $date =  "2017-10-01";
+        $categoryID = 8;
+       $day = 7;
+
+        
+        $scheduleCategory = new ScheduleCategory();
+        
+        $categoryInfo = $scheduleCategory->getSchCategoryInfo($categoryID);
+        
+        $user = new User();
+
+        
+
+            $schInfo = [
+                'doctorID' =>$name,
+                'schCategorySerial'=>$categoryID,
+                'isWeekday' => true,
+                'location' => $categoryInfo,
+                'date' => $date,
+                'confirmed'=>1
+            ];
+
+            if($day == 7 or $day == 6) {
+                $schInfo['isWeekday'] = false;
+            }
+
+        $schedule = new Schedule();
+        $schedule->addSchedule($schInfo);
+        
+    }
+    // 從scheduler 傳回資料後將日期的字串分解
+    private function processDateStr($dateStr) {
+        $dateArr = explode(' ', $dateStr);
+        
+        // 判斷月份
+        $month = '00';
+        switch($dateArr[1]) {
+            case 'Jan' :
+                $month = '01';
+                break;
+            case 'Feb' :
+                $month = '02';
+                break;
+            case 'Mar' :
+                $month = '03';
+                break;
+            case 'Apr' :
+                $month = '04';
+                break;
+            case 'May' :
+                $month = '05';
+                break;
+            case 'Jun' :
+                $month = '06';
+                break;
+            case 'Jul' :
+                $month = '07';
+                break;
+            case 'Aug' :
+                $month = '08';
+                break;
+            case 'Sep' :
+                $month = '09';
+                break;
+            case 'Oct' :
+                $month = '10';
+                break;
+            case 'Nov' :
+                $month = '11';
+                break;
+            case 'Dec' :
+                $month = '12';
+                break;
+        }
+        
+        $day = $dateArr[2];
+        $year = $dateArr[3];
+        
+        return $year.'-'.$month.'-'.$day;
+    }
+    
 }
 

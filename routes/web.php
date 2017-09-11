@@ -104,6 +104,9 @@ Route::get('rejectShift/{id}','ShiftRecordsController@rejectShift');
 // 列出所有使用者的資訊以及公假
 Route::get('officialLeave', 'LeaveController@getOfficialLeavePage');
 
+//得到醫生的剩餘公假
+ Route::get('getLeaveHoursByID','AccountController@hour');
+
 //排班人員確認公假
 Route::get('confirmOffcialLeave/{serial}','LeaveController@confirmOffcialLeave');
 
@@ -146,6 +149,17 @@ Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts
 
 Route::post('getSiftInfo',"ShiftRecordsController@shiftFirstEditionShowShifts");
 
+//調整班表->彈出視窗醫生2資訊
+Route::get('changeDoctor','AccountController@getDoctorInfoByID');
+
+//調整班表->彈出視窗醫生1資訊
+Route::get('changeDoctor1','ScheduleController@getDoctorInfoByScheduleID');
+
+//拖拉換班顯示資訊
+Route::get('showInfo','ScheduleController@getDoctorInfoByScheduleIDWhenExchange');
+
+//調整班表->新增班
+Route::get('saveSchedule','ScheduleController@addSchedule');
 
 
 // 調整班表的換班資訊
@@ -179,6 +193,7 @@ Route::get('sendRequest', 'AlgorithmController@sendRequest');
 Route::get('getAAAA', 'TestController@getAAAA');
 
 Route::get('testDay','TestController@countDay');
+
 //調整班表->正式班表
 Route::get('shift-scheduler', function() {
 	return view('pages.shift-scheduler');
@@ -194,14 +209,7 @@ Route::get('testDateString', 'TestController@testDateString');
 
 Route::get('addDoctorAndResTest', 'TestController@addDoctorAndResTest');
 
-//調整班表->彈出視窗醫生2資訊
-Route::get('changeDoctor','AccountController@getDoctorInfoByID');
 
-//調整班表->彈出視窗醫生1資訊
-Route::get('changeDoctor1','ScheduleController@getDoctorInfoByScheduleID');
-
-//拖拉換班顯示資訊
-Route::get('showInfo','ScheduleController@getDoctorInfoByScheduleIDWhenExchange');
 
 Route::get('getExchangeSchedulePage', function() {
 	return view('testPage.exchangeSchedule');
@@ -301,7 +309,7 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 //Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
-Route::get("info",'TestController@getRemarkByMonth');
+Route::get("info",'TestController@addSchedule');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 //Route::post('reservation/updateReservation/{id}', 'ReservationController@updateReservation');
 //Route::get('/reservation/updateReservation/{id}', function() {
