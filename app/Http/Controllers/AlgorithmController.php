@@ -23,34 +23,50 @@ class AlgorithmController extends Controller
 {
     // send a request to the web service
     public function sendRequest() {
-        $onResList = $this->getOnReservation();
+        
+        
+        $client = new Client(['base_uri' => 'http://localhost:5000']);
+        
+        $response = $client->request('POST', '/todo/api/v1.0/tasks', [
+            'json' => [
+                'onRes' => json_encode($this->getOnReservation()),
+                'offRes' => json_encode($this->getOffReservation())
+                'doctors' => json_encode($this->getDoctorsInfo()),
+                'monthInfo' => json_encode($this->getMonthInfo())
+            ]
+        ]);
+        
+        $body = $response->getBody();
+        
+        
+//        $onResList = $this->getOnReservation();
 //        foreach($onResList as $res) {
 //            $res->printData();
 //        }
-        echo json_encode($onResList);
+//        echo json_encode($onResList);
         
-        echo '<br>==================================================<br>';
+//        echo '<br>==================================================<br>';
         
-        $offResList = $this->getOffReservation();
+//        $offResList = $this->getOffReservation();
 //        foreach($offResList as $res) {
 //            $res->printData();
 //        }
-        echo json_encode($offResList);
+//        echo json_encode($offResList);
         
-        echo '<br>==================================================<br>';
+//        echo '<br>==================================================<br>';
         
-        $doctors = $this->getDoctorsInfo();
+//        $doctors = $this->getDoctorsInfo();
 //        foreach($doctors as $doctor) {
 //            $doctor->printData();
 //        }
         
-        echo json_encode($doctors);
+//        echo json_encode($doctors);
         
-        echo '<br>==================================================<br>';
+//        echo '<br>==================================================<br>';
         
-        $monthInfo = $this->getMonthInfo();
+//        $monthInfo = $this->getMonthInfo();
 //        $monthInfo->printData();
-        echo json_encode($monthInfo);
+//        echo json_encode($monthInfo);
     }
     
     // 取得演算法使用的on班資訊

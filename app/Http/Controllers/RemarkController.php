@@ -9,7 +9,8 @@ use App\User;
 class RemarkController extends Controller
 
 {
-   public function getRemarkByMonth(Request $request){
+    // 取得特定月份的備註紀錄
+    public function getRemarkByMonth(Request $request){
    		$data = $request->all();
         $month = $data['month'];
 

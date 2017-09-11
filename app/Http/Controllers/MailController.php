@@ -70,7 +70,7 @@ class MailController extends Controller
     
     // 預班人數過多
     public function sendRandomNotificationMail() {
-        $resSerial = 31;
+        $resSerial = 56;
         
         $job = new SendRandomNotificationMail($resSerial);
         
@@ -80,7 +80,7 @@ class MailController extends Controller
         
         
         
-//        Mail::to('georgelesliemackay0@gmail.com')->send(new RandomNotification($resObj->getReservationBySerial(31)));
+//        Mail::to('socrateshung053@gmail.com')->send(new RandomNotification($resSerial));
         
 //        echo '郵件已送出';
     }

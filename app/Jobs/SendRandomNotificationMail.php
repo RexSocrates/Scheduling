@@ -16,13 +16,17 @@ use App\Mail\RandomNotification;
 use App\Reservation;
 use App\DoctorAndReservation;
 use App\User;
+use App\ShiftCategory;
 
 class SendRandomNotificationMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     
+    protected $adminInfo;
     protected $reservation;
     protected $emails = [];
+    protected $cateName = '';
+    protected $amount = 0;
 
     /**
      * Create a new job instance.
@@ -40,15 +44,25 @@ class SendRandomNotificationMail implements ShouldQueue
         $resAndDoctorObj = new DoctorAndReservation();
         $doctorsID = $resAndDoctorObj->getDoctorsByResSerial($resSerial);
         
+        // 取得預約人數
+        $this->amount = $resAndDoctorObj->amountInResserial($resSerial);
+        
         // 取得list 當中的使用者的email
         $receiversEmail = [];
         $userObj = new User();
+        
+        // 取得排班人員資料
+        $this->adminInfo = $userObj->getAdminList()[0];
         
         foreach($doctorsID as $ID) {
             array_push($receiversEmail, $userObj->getDoctorInfoByID($ID->doctorID)->email);
         }
         
         $this->emails = $receiversEmail;
+        
+        // 取得預約班別的名稱
+        $shiftCate = new ShiftCategory();
+        $this->cateName = $shiftCate->findName($this->reservation->categorySerial);
         
     }
 
@@ -61,7 +75,8 @@ class SendRandomNotificationMail implements ShouldQueue
     {
         //
         foreach($this->emails as $email) {
-            Mail::to($email)->send(new RandomNotification($this->reservation));
+            Mail::to($email)
+                ->send(new RandomNotification($this->reservation, $this->cateName, $this->amount, $this->adminInfo));
         }
         
     }
