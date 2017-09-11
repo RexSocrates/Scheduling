@@ -80,56 +80,56 @@ class ScheduleController extends Controller
     }
 
     //單一月份班表資訊
-      public function getScheduleByID() {
+    public function getScheduleByID() {
 
-         $schedule = new Schedule();
-         $scheduleData = $schedule->getScheduleByID();
+        $schedule = new Schedule();
+        $scheduleData = $schedule->getScheduleByID();
 
         return view('getScheduleByID', array('schedule' => $scheduleData));
-      }
+    }
 
     //查看 單一醫生班表
-      public function getScheduleByDoctorID() {
+    public function getScheduleByDoctorID() {
 
-         $schedule = new Schedule();
-         $scheduleCategory = new ScheduleCategory();
-         $user = new User();
+        $schedule = new Schedule();
+        $scheduleCategory = new ScheduleCategory();
+        $user = new User();
 
-         $scheduleData = $schedule->getScheduleByDoctorID($user->getCurrentUserID());
+        $scheduleData = $schedule->getScheduleByDoctorID($user->getCurrentUserID());
 
-         foreach ($scheduleData as $data) {
+        foreach ($scheduleData as $data) {
             $scheduleName = $scheduleCategory->findScheduleName($data->schCategorySerial);
             $data->schCategorySerial =  $scheduleName;
         }
 
         return view('pages.schedule', array('schedule' => $scheduleData));
-      }
+    }
 
     
     
 
     //新增班表
     public function addSchedule(){
-    		$addSchedule = new Schedule();
+        $addSchedule = new Schedule();
         $doctorID = Input::get('doctorID');
         $periodSerial = Input::get('periodSerial');
-    		$isWeekday = Input::get('isWeekday');
-    		$location = Input::get('location');
-    		$category = Input::get('category');
-    		$date = Input::get('date');
-            $confirmed = Input::get('confirmed');
-    		$newscheduleID = $addSchedule->addSchedule($doctorID, $periodSerial, $isWeekday, $location, $category, $date, $confirmed);
+        $isWeekday = Input::get('isWeekday');
+        $location = Input::get('location');
+        $category = Input::get('category');
+        $date = Input::get('date');
+        $confirmed = Input::get('confirmed');
+        $newscheduleID = $addSchedule->addSchedule($doctorID, $periodSerial, $isWeekday, $location, $category, $date, $confirmed);
 
-    		 return redirect('schedule'); 
+        return redirect('schedule'); 
 
     }
     
-     public function deleteSchedule($id){
-       		$deleteschedule= DB::table('Schedule')->where('scheduleID',$id)->delete();
+    public function deleteSchedule($id){
+         $deleteschedule= DB::table('Schedule')->where('scheduleID',$id)->delete();
        
-            return redirect('schedule'); 
+         return redirect('schedule'); 
      		
-        }
+    }
        
     //更新班表
     public function updateSchedule(){
@@ -162,7 +162,7 @@ class ScheduleController extends Controller
       return $array;
       
     }
-     public function getDoctorInfoByScheduleIDWhenExchange(Request $request){
+    public function getDoctorInfoByScheduleIDWhenExchange(Request $request){
       $data = $request->all();
 
       $schedule = new Schedule();

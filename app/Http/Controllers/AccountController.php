@@ -101,6 +101,7 @@ class AccountController extends Controller
 
     }
 
+    // 回傳醫生的公假
     public function getOfficialLeavePageById(Request $request) {
         $data = $request->all();
         
@@ -130,12 +131,8 @@ class AccountController extends Controller
         //     'doctorsLeave' => $doctorsLeave
         // ]);
     }
-
-    // 調整班表->彈出式視窗取得醫生2的上班資訊
-
     
     // 調整班表->彈出式視窗取得醫生2的上班資訊
-
     public function getDoctorInfoByID(Request $request){
         $data = $request->all();
 
