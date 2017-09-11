@@ -70,13 +70,13 @@
                         <div class="row margin-b0">
                             <div class="input-field col s12">
                                 <i class="material-icons prefix modal-icons">chat_bubble</i>
-                                <input id="title" type="text" name="title">
+                                <input id="title" type="text" name="title" required>
                                 <label for="title">標題</label>
                             </div>
                         
                             <div class="input-field col s12">
                                 <i class="material-icons prefix modal-icons">mode_edit</i>
-                                <textarea id="textarea1" class="materialize-textarea margin-b0" type="text" name="content"></textarea>
+                                <textarea id="textarea1" class="materialize-textarea margin-b0" type="text" name="content" required></textarea>
                                 <label for="textarea1">內容</label>
                             </div>
                         </div>

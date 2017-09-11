@@ -728,7 +728,7 @@
                 classification: document.getElementById('classification').value
                 
             }, function(){
-                alert("成功");
+                //alert("成功");
                 scheduler.endLightbox(true, html("my_form1"));
                 refresh();
                 
