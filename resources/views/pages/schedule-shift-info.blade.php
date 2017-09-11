@@ -32,7 +32,7 @@
                                     <tr>
                                         <th class="td-w-5">申請人</th>
                                         <th class="td-w-5">申請日期</th>
-                                        <th class="td-w-20">內容</th>
+                                        <th class="td-w-20">換班內容</th>
                                     </tr>
                                 </thead>
 
@@ -73,7 +73,7 @@
                                     <tr>
                                         <th class="td-w-5">申請人</th>
                                         <th class="td-w-5">申請日期</th>
-                                        <th class="td-w-25">內容</th>
+                                        <th class="td-w-25">換班內容</th>
                                         <th class="td-w-13">功能</th>
                                     </tr>
                                 </thead>
@@ -129,7 +129,7 @@
                                     <tr>
                                         <th class="td-w-5">申請人</th>
                                         <th class="td-w-5">申請日期</th>
-                                        <th class="td-w-20">內容</th>
+                                        <th class="td-w-20">備註內容</th>
                                     </tr>
                                 </thead>
                                    

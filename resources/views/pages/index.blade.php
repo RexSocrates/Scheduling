@@ -46,6 +46,7 @@
 				<div class="col s12 m4">
       		  	  	<div class="card center">
               			<img src="../img/solar-system.png" class="solar-system">
+              			<p></p>
               			<h3 class="blue-grey-text text-darken-3">開放預班中</h3>
       		  	  		<p class="blue-grey-text text-darken-3" style="font-weight: 500;">01/05/2017 ~ 20/05/2017</p>
       		  	  	  	<div class="card-action center">
@@ -53,15 +54,7 @@
       		  	  	  	</div>
       		  	  	</div>
       		  	</div>
-      		  	<div class="col s12 m4">
-      		  	  	<div class="card center padding-t5">
-                        <h1 class="teal-text text-lighten-2">13.5</h1>
-      		  	  		<p class="blue-grey-text text-darken-3" style="font-weight: 500;">剩餘公假時數</p>
-      		  	  	  	<div class="card-action center">
-      		  	  	  	  	<a href="profile" class="margin-r0">申請使用</a>
-      		  	  	  	</div>
-      		  	  	</div>
-      		  	</div>
+      		  	
       		</div>
 			
 			

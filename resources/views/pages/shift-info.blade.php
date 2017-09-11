@@ -54,7 +54,6 @@
                 </div>
             </div>
             
-<!--
             <div class="row">
                 <div class="col s12 m12">
                     <div class="card">
@@ -84,7 +83,7 @@
                                     <tr>
                                         <th>提出人</th>
                                         <th>申請日期</th>
-                                        <th>內容</th>
+                                        <th>備註內容</th>
                                     </tr>
                                 </thead>
 
@@ -102,7 +101,6 @@
                     </div>
                 </div>
             </div>
--->
 		</div>
 	</div>
 @endsection

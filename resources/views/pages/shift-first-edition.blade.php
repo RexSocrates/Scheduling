@@ -48,12 +48,23 @@
                                 </div>
 
                                 <div class="lightbox">
-                                    <div class="row">
-                                        <div class="col s6"><h5>臨床班: 北白內1</h5></div>
-                                        <div class="col s6"><h5>日期: 2017-09-20</h5></div>
-                                        
-                                        
-<!--
+                                    <div class="row margin-b0">
+                                        <div class="input-field col s12 margin-b20">
+                                            <select name="doctor" required>
+                                                <option value="" selected disabled>選擇醫生</option>
+                                                <option value="1">簡定國</option>
+                                                <option value="2">簡定國</option>
+                                                <option value="3">簡定國</option>
+                                                <option value="4">簡定國</option>
+                                                <option value="5">簡定國</option>
+                                                <option value="6">簡定國</option>
+                                                <option value="7">簡定國</option>
+                                                <option value="8">簡定國</option>
+                                                <option value="9">簡定國</option>
+                                                <option value="10">簡定國</option>
+                                            </select>
+                                            <label>醫生</label>
+                                        </div>
                                         <div class="input-field col s12 margin-b20">
                                             <select name="level" required>
                                                 <option value="" selected disabled>選擇班種</option>
@@ -108,25 +119,6 @@
                                             </select>
                                             <label>日期</label>
                                         </div>
--->
-                                    </div>
-                                    <div class="row">
-                                        <div class="input-field col s12 margin-b20">
-                                            <select name="doctor" required>
-                                                <option value="" selected disabled>選擇醫生</option>
-                                                <option value="1">簡定國</option>
-                                                <option value="2">簡定國</option>
-                                                <option value="3">簡定國</option>
-                                                <option value="4">簡定國</option>
-                                                <option value="5">簡定國</option>
-                                                <option value="6">簡定國</option>
-                                                <option value="7">簡定國</option>
-                                                <option value="8">簡定國</option>
-                                                <option value="9">簡定國</option>
-                                                <option value="10">簡定國</option>
-                                            </select>
-                                            <label>醫生</label>
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="lightbox-footer">
@@ -138,7 +130,7 @@
                         
                         <div id="my_form">
                             <!-- <form action="change-shift-first-edition" method="post" > -->
-                            <div class="modal-header">
+                             <div class="modal-header">
                                 <h5 class="modal-announcement-title">換班調整</h5>
                             </div>
                             <div class="lightbox">
@@ -147,60 +139,50 @@
                                         <img src="../img/exchange.svg" style="height: 220px;width: 220px;">
                                     </div>
                                      <div class="col s6">
-                                        <label>醫生:</label>
-                                        <select name= 'schID_1_doctor' class="browser-default" id="schID_1_doctor" onchange="changeDoctor_1()" required>
-                                            <option  disabled selected>請選擇醫生</option>
-                                                <option disabled value=""></option>
-                                                @foreach($doctorName as $name)
-                                                <option value="{{$name->doctorID}}">{{$name->name}}</option>
-                                                @endforeach
-                                        </select>
-                                    </div>
+                                <label>醫生:</label>
+                                <select name= 'schID_1_doctor' class="browser-default" id="schID_1_doctor" onchange="changeDoctor_1()" required>
+                                    <option  disabled selected>請選擇醫生</option>
+                                        <option disabled value=""></option>
+                                    
+                                </select>
+                            </div>
 
-                                    <div class="col s6">
-                                        <label>醫生:</label>
-                                        <select name= 'schID_2_doctor' class="browser-default" id="schID_2_doctor" onchange="changeDoctor()" required>
-                                            <option value="" disabled selected>請選擇醫生</option> 
-                                            @foreach($doctorName as $name)
-                                            <option value="{{$name->doctorID}}">{{$name->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                            <div class="col s6">
+                                <label>醫生:</label>
+                                <select name= 'schID_2_doctor' class="browser-default" id="schID_2_doctor" onchange="changeDoctor()" required>
+                                    <option value="" disabled selected>請選擇醫生</option> 
+                                    @foreach($doctorName as $name)
+                                    <option value="{{$name->doctorID}}">{{$name->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                                    <div class="col s6">
-                                        <label>日期:</label>
-                                        <select name="scheduleID_1" class="browser-default" id="date1" required>
-                                            <option value="" disabled selected>請選擇日期</option>
-                                            <option value=""></option>
+                            <div class="col s6">
+                                <label>日期:</label>
+                                <select name="scheduleID_1" class="browser-default" id="date1" required>
+                                    <option value="" disabled selected>請選擇日期</option>
+                                    <option value=""></option>
+                                        
+                                </select>
+                            </div>
 
-                                        </select>
+                            <div class="col s6">
+                                <label>日期:</label>
+                                <select  name='scheduleID_2' class="browser-default" id="date2" required>
+                                    <option value="" disabled selected>請選擇日期</option>
+                                    <option value=""></option>
+                                </select>
                                     </div>
-
-                                    <div class="col s6">
-                                        <label>日期:</label>
-                                        <select  name='scheduleID_2' class="browser-default" id="date2" required>
-                                            <option value="" disabled selected>請選擇日期</option>
-                                            <option value=""></option>
-                                        </select>
-                                    </div>
-<!--
-                                    <div class="col s6">
-                                        <button class="modal-action waves-effect waves-light red lighten-1 btn-flat white-text modal-btn1 centered" onclick="delete_event()">Delete</button>
-                                    </div>
--->
                                 </div>
                             </div>
                             
-                            
-                            
                             <div class="lightbox-footer">
-                                <button class="modal-action waves-effect waves-light red lighten-1 btn-flat white-text modal-btn1" onclick="delete_confirm()">Delete</button>
-                                <font class="margin-l10">(刪除左邊醫生)</font>
+                                <button class="modal-action waves-effect waves-light red lighten-1 btn modal-btn1" onclick="delete_event()">Delete</button>
                                 <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn" onclick="save_form_alert()">Save</button>
                                 <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel modal-btn" onclick="close_form()">Cancel</button>
                                 {{ csrf_field() }}
                             </div>
-                            
+
                         <!-- </form> -->
 <!--
                             <label for="description">Event text </label><input type="text" name="description" value="" id="description"><br>
@@ -724,21 +706,5 @@
         function close_form1() {
             scheduler.endLightbox(false, html("my_form1"));
         }
-        
-        function delete_confirm(){
-            var doctor = document.getElementById("schID_1_doctor").value;
-            var date = document.getElementById("date1").value;
-            var r = confirm("是否刪除 " + doctor + " 在 " + date + " 的班?");
-            if (r == true) {
-                var event_id = scheduler.getState().lightbox_id;
-                scheduler.endLightbox(false, html("my_form"));
-                scheduler.deleteEvent(event_id);
-                alert("成功刪除");
-            } else {
-                alert("已取消");
-            }
-        }
-        
-        
     </script>
 @endsection

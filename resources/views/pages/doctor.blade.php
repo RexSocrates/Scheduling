@@ -15,16 +15,16 @@
                 <div class="col s12 m12">
       		  	  	<div class="card">
       		  	  		<div class="card-action">
-      		  	  			<font class="card-title">醫師列表</font>
+      		  	  			<font class="card-title">醫生列表</font>
                             <a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1"><i class="material-icons">add</i></a>
       		  	  		</div>
       		  	  		<div class="divider"></div>
       		  	  	  	<div class="card-content">
-      		  	  	  	    <table id="doctor" class="mdl-data-table striped highlight" cellspacing="0" width="100%">
+      		  	  	  	    <table id="example" class="mdl-data-table striped highlight" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>id</th>
-                                        <th>名稱</th>
+                                        <th>醫生id</th>
+                                        <th>醫生名稱</th>
                                         <th>專職科別</th>
                                         <th>級別</th>
                                         <th>職登院區</th>
@@ -61,7 +61,7 @@
         <form action="register" method="post">
            
             <div class="modal-header">
-                <h5 class="modal-announcement-title">新增醫師</h5>
+                <h5 class="modal-announcement-title">新增醫生</h5>
                 <div class="nav-content">
                     <ul class="tabs tabs-transparent tabs-fixed-width blue-grey darken-1">
                         <li class="tab"><a href="#modal-left" class="active">一般資訊</a></li>
@@ -76,7 +76,7 @@
                 <div id="modal-left" class="row margin-b0">
                     <div class="input-field col s12">
                         <input id="title" type="text" value="" name="name" required>
-                        <label for="title">醫師名稱</label>
+                        <label for="title">醫生名稱</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="email" type="email" class="validate" value="" name="email" required>
@@ -186,7 +186,7 @@
             {{ csrf_field() }}
             <input type="hidden" id="hiddenDoctorID" name="hiddenDoctorID" value="">
             <div class="modal-header">
-                <h5 class="modal-announcement-title">修改醫師</h5>
+                <h5 class="modal-announcement-title">修改醫生</h5>
                 <div class="nav-content">
                     <ul class="tabs tabs-transparent tabs-fixed-width blue-grey darken-1">
                         <li class="tab"><a href="#modal-left1" class="active">一般資訊</a></li>
@@ -200,7 +200,7 @@
                 <div id="modal-left1" class="row margin-b0">
                     <div class="input-field col s12">
                         <input id="doctorName" type="text" name="name" required>
-                        <label for="title">醫師名稱</label>
+                        <label for="title">醫生名稱</label>
                     </div>
                     <div class="input-field col s12">
                         <input id="doctorEmail" type="email" class="validate" name="email" required>
@@ -334,7 +334,7 @@
         }
         
         $(document).ready(function() {
-            $('#doctor').DataTable( {
+            $('#example').DataTable( {
                 columnDefs: [
                     {
                         targets: [ 0, 1, 2 ],
@@ -345,11 +345,11 @@
             
             $('select').material_select();
             
-            document.getElementById("doctor_length").style.display = 'none';
+            document.getElementById("example_length").style.display = 'none';
             
-            document.getElementById("doctor_filter").style.cssText = 'text-align: left';
+            document.getElementById("example_filter").style.cssText = 'text-align: left';
             
-            document.getElementById("doctor_filter").getElementsByTagName("label")[0].getElementsByTagName("input")[0].style.marginLeft = '0';
+            document.getElementById("example_filter").getElementsByTagName("label")[0].getElementsByTagName("input")[0].style.marginLeft = '0';
         
         });
         
