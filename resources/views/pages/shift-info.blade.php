@@ -42,8 +42,13 @@
                                             
                                             @if($record['adminConfirm'] == 1)
                                                 <td class="td-padding"><a class="waves-effect waves-light btn pad-btn disabled">已確認</a></td>
+                                            @elseif($record['adminConfirm'] == 2)
+                                                <td class="td-padding"><a class="waves-effect waves-light btn pad-btn disabled">已拒絕</a></td>
                                             @else
-                                                <td class="td-padding"><a href="adminAgreeShiftRecord/{{ $record['changeSerial'] }}" class="waves-effect waves-light btn">確認</a></td>
+                                                <td class="td-padding">
+                                                <a href="adminAgreeShiftRecord/{{ $record['changeSerial'] }}" class="waves-effect waves-light btn">確認</a>
+                                                <a href="adminDisagreeShiftRecord/{{ $record['changeSerial'] }}" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
+                                                </td>
                                             @endif
                                         </tr>
                                    @endforeach

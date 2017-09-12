@@ -210,7 +210,8 @@
                 var limithour = hour;
 
                 var input= document.getElementById("hour");
-                
+
+                input.min = 0;
                 input.max = limithour;
                 input.placeholder = "小於"+limithour;
 
@@ -219,7 +220,7 @@
 
         function resetLeaveHours() {               
             var input= document.getElementById("hour"); 
-                input.max = null;
+                input.min = 0;
                 input.placeholder = "";             
         }
 

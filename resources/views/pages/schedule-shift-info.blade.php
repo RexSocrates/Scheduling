@@ -188,7 +188,7 @@
                             </div>
                             <div class="col s6">
                                 <label>日期:</label>
-                                <select  name='scheduleID_2' class="browser-default" id="date" required>
+                                <select  name='scheduleID_2' class="browser-default" id="date2" required>
                                     <option value="" disabled selected>請選擇日期</option>
                                     
                                 </select>
@@ -222,8 +222,6 @@
             $.get('changeDoctor', {
                 id : document.getElementById('doctorName').value
             }, function(array) {
-                // var selectBox = document.getElementById('doctorName');
-                // var userInput = selectBox.options[selectBox.selectedIndex].value;
                 changeDate(array);
             });
         }
@@ -232,9 +230,9 @@
                 var date = "";
                 for(i=0 ; i<array.length ; i++){
                     date += "<option value="+array[i][0]+">"+array[i][2]+"</option>";
-                    console.log('1'+array[i][0]);
+                    console.log('aaa'+array[i][0]);
                 }
-                document.getElementById("date").innerHTML  = date;
+                document.getElementById("date2").innerHTML  = date;
         }
 
         function changeMonth() {

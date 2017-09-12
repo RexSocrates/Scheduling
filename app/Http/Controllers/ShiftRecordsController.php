@@ -470,6 +470,15 @@ class ShiftRecordsController extends Controller
         return redirect('shift-info');
     }
 
+    // 排班人員拒絕換班
+    public function adminDisagreeShiftRecord($serial){
+        $shiftRecordObj = new ShiftRecords();
+
+        $shiftRecordObj->adminConfirm($serial,2);
+
+        return redirect('shift-info');
+
+    }
     // 調整班表 換班確認 顯示初版班表 調整換班
     public function shiftFirstEdition($date=null){
         $schedule = new Schedule();

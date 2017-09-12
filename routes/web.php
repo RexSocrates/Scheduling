@@ -168,6 +168,9 @@ Route::get('shift-info', 'ShiftRecordsController@adminShiftRecords');
 // 排班人員確認換班
 Route::get('adminAgreeShiftRecord/{serial}', 'ShiftRecordsController@adminAgreeShiftRecord');
 
+// 排班人員拒絕換班
+Route::get('adminDisagreeShiftRecord/{serial}', 'ShiftRecordsController@adminDisagreeShiftRecord');
+
 
 
 Route::group(['middleware' => ['admin']], function () {

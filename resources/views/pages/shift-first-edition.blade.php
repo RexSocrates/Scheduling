@@ -437,6 +437,17 @@
                                 
                                 addNewSchedule(ev.start_date,ev.section_id);
                                 
+                                //getScheduleInfo(ev.start_date,ev.section_id);
+                                return true;
+                            });
+
+                            scheduler.attachEvent("onEventChanged", function (id, e){
+                                //any custom logic here
+                                var event = scheduler.getEvent(id);
+
+                                //updateSchedule(event,hidden);
+                                console.log("text"+event.hidden);
+
                                 return true;
                             });
 
@@ -454,7 +465,7 @@
 
                             scheduler.parse([
                                 @foreach($schedule as $data)
-                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}"},
+                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}" },
                                
                                 @endforeach
                             ],"json");
@@ -617,6 +628,7 @@
                 id2 : scheduleID_2
             }, function (array){
                  dhtmlx.message({ type:"error", text: array[2]+array[1]+"\n和\n"+array[0]+array[3]+"換班成功" })
+                 refresh();
                 //alert(array[2]+array[1]+"和"+array[0]+array[3]+"換班成功");
             });
         }
@@ -713,11 +725,9 @@
             document.getElementById("date_1").innerHTML= "<option value="+date2+">"+date2+"</option>";
             document.getElementById("classification").innerHTML="<option value="+id+">"+text+"</option>";
            
-
             console.log(id);
             console.log(text);
-            console.log(date2);
-           
+            console.log(date2); 
 
         }
 

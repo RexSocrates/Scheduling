@@ -194,9 +194,11 @@ class ShiftRecords extends Model
     public function adminConfirm($changeSerial, $adminConfirm){
        DB::table('shiftRecords')
             ->where('changeSerial', $changeSerial)
-            ->update(['adminConfirm' => $adminConfirm]); 
-        $schedule = new Schedule();
-        $schedule->exchangeSchedule($changeSerial);
+            ->update(['adminConfirm' => $adminConfirm]);
+        if($adminConfirm==1){
+           $schedule = new Schedule();
+           $schedule->exchangeSchedule($changeSerial);
+        } 
     }
 
     // 查詢 換班編號
