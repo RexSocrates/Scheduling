@@ -147,7 +147,7 @@ Route::get('change-shift-first-edition','ShiftRecordsController@shiftFirstEditio
 // 調整班表->初版班表 新增換班
 Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts');
 
-Route::post('getSiftInfo',"ShiftRecordsController@shiftFirstEditionShowShifts");
+//Route::post('getSiftInfo',"ShiftRecordsController@shiftFirstEditionShowShifts");
 
 //調整班表->彈出視窗醫生2資訊
 Route::get('changeDoctor','AccountController@getDoctorInfoByID');
@@ -155,11 +155,15 @@ Route::get('changeDoctor','AccountController@getDoctorInfoByID');
 //調整班表->彈出視窗醫生1資訊
 Route::get('changeDoctor1','ScheduleController@getDoctorInfoByScheduleID');
 
+
 //拖拉換班顯示資訊
 Route::get('showInfo','ScheduleController@getDoctorInfoByScheduleIDWhenExchange');
 
 //調整班表->新增班
 Route::get('saveSchedule','ScheduleController@addSchedule');
+
+//調整班表->刪除班
+Route::get('deleteSchedule','ScheduleController@deleteSchedule');
 
 
 // 調整班表的換班資訊

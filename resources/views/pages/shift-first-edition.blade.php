@@ -772,17 +772,24 @@
         }
         
         function delete_confirm(){
-            var doctor = document.getElementById("schID_1_doctor").value;
-            var date = document.getElementById("date1").value;
-            var r = confirm("是否刪除 " + doctor + " 在 " + date + " 的班?");
-            if (r == true) {
+            $.get("deleteSchedule",{
+                scheduleID : document.getElementById('date1').value,
+            
+            }, function(){
+                var doctor = document.getElementById("schID_1_doctor").options[document.getElementById('schID_1_doctor').selectedIndex].text;
+                var date = document.getElementById("date1").options[document.getElementById('date1').selectedIndex].text;
+                var r = confirm("是否刪除 " + doctor + " 在 " + date + " 的班?");
+                if (r == true) {
                 var event_id = scheduler.getState().lightbox_id;
                 scheduler.endLightbox(false, html("my_form"));
                 scheduler.deleteEvent(event_id);
                 alert("成功刪除");
+                refresh();
             } else {
                 alert("已取消");
             }
+        
+        });
         }
     </script>
 @endsection

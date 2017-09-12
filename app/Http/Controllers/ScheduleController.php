@@ -151,10 +151,15 @@ class ScheduleController extends Controller
         $docAndRes->deleteReservation($data['resSerial'], $userObj->getCurrentUserID());
     }
     
-    public function deleteSchedule($id){
-         $deleteschedule= DB::table('Schedule')->where('scheduleID',$id)->delete();
+    //刪除班
+    public function deleteSchedule(Request $request){
+        $data = $request->all();
+
+        $schedule = new Schedule();
+
+        $schedule->deleteScheduleByID($data['scheduleID']);
        
-         return redirect('schedule'); 
+        return redirect('schedule'); 
      		
     }
        
