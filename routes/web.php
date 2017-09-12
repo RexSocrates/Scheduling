@@ -144,13 +144,14 @@ Route::get('doctor2DenyShiftRecord/{serial}', 'ShiftRecordsController@doctor2Den
 Route::get('/shift-first-edition','ShiftRecordsController@shiftFirstEdition');//->name('shift-first-edition');
 Route::get('change-shift-first-edition','ShiftRecordsController@shiftFirstEditionAddShifts');
 
+
 // 調整班表->初版班表 新增換班
 Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts');
 
 //Route::post('getSiftInfo',"ShiftRecordsController@shiftFirstEditionShowShifts");
 
-//調整班表->彈出視窗醫生2資訊
-Route::get('changeDoctor','AccountController@getDoctorInfoByID');
+//調整班表->初版班表 彈出視窗醫生2資訊
+Route::get('changeDoctor','AccountController@getDoctorFirstScheduleInfoByID');
 
 //調整班表->彈出視窗醫生1資訊
 Route::get('changeDoctor1','ScheduleController@getDoctorInfoByScheduleID');
@@ -165,6 +166,11 @@ Route::get('saveSchedule','ScheduleController@addSchedule');
 //調整班表->刪除班
 Route::get('deleteSchedule','ScheduleController@deleteSchedule');
 
+//調整班表->正式班表
+Route::get('/shift-scheduler','ShiftRecordsController@shiftScheduler');
+
+//調整班表->正式班表 彈出視窗醫生2資訊
+Route::get('changeDoctorSchedule','AccountController@getDoctorSheduleInfoByID');
 
 // 調整班表的換班資訊
 Route::get('shift-info', 'ShiftRecordsController@adminShiftRecords');
@@ -200,11 +206,6 @@ Route::get('sendRequest', 'AlgorithmController@sendRequest');
 Route::get('getAAAA', 'TestController@getAAAA');
 
 Route::get('testDay','TestController@countDay');
-
-//調整班表->正式班表
-Route::get('shift-scheduler', function() {
-	return view('pages.shift-scheduler');
-});
 
 Route::get('getIndex', function() {
     return view('pages.index');

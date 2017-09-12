@@ -1,9 +1,8 @@
 @extends("layouts.app2")
 
 @section('head')
-     <script src="../codebase/ext/dhtmlxscheduler_collision.js"></script>
+    <script src="../codebase/ext/dhtmlxscheduler_collision.js"></script>
     <script src="../codebase/ext/dhtmlxscheduler_limit.js"></script>
-
     <script src="../../codebase/ext/dhtmlxscheduler_serialize.js" type="text/javascript" charset="utf-8"></script>
     
     <style>
@@ -377,6 +376,7 @@
 
                             var block_startd =new Date(res[3], month-1, 1); 
                             var block_endd = new Date(res[3], month, 1); 
+
                             console.log("startd "+startd);
                             console.log("endd "+endd);
 
@@ -387,7 +387,7 @@
                                 dhtmlx.message({ type:"error", text:"此時段無法接受換班" })
                             });
 
-                            //限制非當月利用點擊視窗換班
+                             //限制非當月利用點擊視窗換班
                             scheduler.addMarkedTimespan({  
                                 start_date: '1900-1-1',
                                 end_date:   block_endd,
@@ -396,6 +396,7 @@
                                 type: "dhx_time_block"
                             
                             });
+
 
                             //scheduler.updateView();
 
@@ -463,6 +464,7 @@
                            
                            
 
+                            //進入畫面後顯示的東西
                             scheduler.init('scheduler_here',new Date(res[3], month),"timeline");
 
                             scheduler.parse([
@@ -471,6 +473,7 @@
                                
                                 @endforeach
                             ],"json");
+
                             
                         </script>
                     </div>
@@ -745,10 +748,6 @@
                 refresh();
                 
             });
-
-            console.log(id);
-            console.log(date);
-            console.log(classification);
         }
 
 
