@@ -49,23 +49,17 @@
 
                                 <div class="lightbox">
                                     <div class="row">
-                                        <div class="col s6"><h5>臨床班: 北白內1</h5></div>
-                                        <div class="col s6"><h5>日期: 2017-09-20</h5></div>
+                                        <input type="hidden" id= "section_id">
+                                        <div class="col s6"><h5>臨床班</h5><h5 id="classification"></h5></div>
+                                        <div class="col s6"><h5>日期</h5><h5 id ="date_1"></h5></div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12 margin-b20">
-                                            <select name="doctor" required>
+                                            <select name="doctor" id="doctor" required>
                                                 <option value="" selected disabled>選擇醫生</option>
-                                                <option value="1">簡定國</option>
-                                                <option value="2">簡定國</option>
-                                                <option value="3">簡定國</option>
-                                                <option value="4">簡定國</option>
-                                                <option value="5">簡定國</option>
-                                                <option value="6">簡定國</option>
-                                                <option value="7">簡定國</option>
-                                                <option value="8">簡定國</option>
-                                                <option value="9">簡定國</option>
-                                                <option value="10">簡定國</option>
+                                                @foreach($doctorName as $name)
+                                                <option value="{{$name->doctorID}}">{{$name->name}}</option>
+                                                @endforeach
                                             </select>
                                             <label>醫生</label>
                                         </div>
@@ -432,7 +426,7 @@
                             
                             
                             //空白處新增醫生班表
-<<<<<<< HEAD
+
                             scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
                                 
                                 addNewSchedule(ev.start_date,ev.section_id);
@@ -450,14 +444,14 @@
 
                                 return true;
                             });
-=======
+
 //                            scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
 //                                
 //                                addNewSchedule(ev.start_date,ev.section_id);
 //                                
 //                                return true;
 //                            });
->>>>>>> 61c4af87a57632573fbe4fd4661a0995e1321b1d
+
 
                             scheduler.attachEvent("onClick", function (id, e){
                                 var event = scheduler.getEvent(id);
@@ -666,152 +660,95 @@
 
         function save_form_alert_addSchedule(){
             var id = document.getElementById('doctor').value;
-            var date = document.getElementById('date_1').value;
-            var classification = document.getElementById('classification').value;
+            var date =document.getElementById('date_1').innerText;
+            var classification = document.getElementById('section_id').innerText;
 
             if(id == ""){
                 dhtmlx.message({ type:"error", text:"請選擇醫生" });
             }
 
            else{
-            saveSchedule();
+            saveSchedule(id,date,classification);
            }
-
-        }
-        
-<<<<<<< HEAD
-        function addNewSchedule(date,id){
-
-            var text = null;
-
-            if(id == 1){
-                text = "行政";
-            }else if(id == 2){
-                text = "教學";
-            }else if(id== 3){
-                text = "北白急救";
-            }else if(id == 4){
-                text = "北白發燒";
-            }else if(id == 5){
-                text = "北白內1";
-            }else if(id == 6){
-                text = "北白內2";
-            }else if(id == 7){
-                text = "北白外1";
-            }else if(id == 8){
-                text = "北白外2";
-            }else if(id == 9){
-                text = "淡白內1";
-            }else if(id == 10){
-                text = "淡白內2";
-            }else if(id == 11){
-                text = "淡白外1";
-            }else if(id == 12){
-                text = "淡白外1";
-            }else if(id == 13){
-                text = "北夜急救";
-            }else if(id == 14){
-                text = "北夜發燒";
-            }else if(id == 15){
-                text = "北夜內1";
-            }else if(id == 16){
-                text = "北夜內2";
-            }else if(id == 17){
-                text = "北夜外1";
-            }else if(id == 18){
-                text = "北夜外2";
-            }else if(id == 19){
-                text = "淡夜內1";
-            }else if(id == 20){
-                text = "淡夜內2";
-            }else if(id == 21){
-                text = "淡夜外";
-            }
             
-            var day = date.getDay();
-            var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-" + date.getDate();
-
-            document.getElementById("date_1").innerHTML= "<option value="+date2+">"+date2+"</option>";
-            document.getElementById("classification").innerHTML="<option value="+id+">"+text+"</option>";
-           
-            console.log(id);
-            console.log(text);
-            console.log(date2); 
-
         }
-=======
-//        function addNewSchedule(date,id){
-//
-//            var text = null;
-//
-//            if(id == 1){
-//                text = "行政";
-//            }else if(id == 2){
-//                text = "教學";
-//            }else if(id== 3){
-//                text = "北白急救";
-//            }else if(id == 4){
-//                text = "北白發燒";
-//            }else if(id == 5){
-//                text = "北白內1";
-//            }else if(id == 6){
-//                text = "北白內2";
-//            }else if(id == 7){
-//                text = "北白外1";
-//            }else if(id == 8){
-//                text = "北白外2";
-//            }else if(id == 9){
-//                text = "淡白內1";
-//            }else if(id == 10){
-//                text = "淡白內2";
-//            }else if(id == 11){
-//                text = "淡白外1";
-//            }else if(id == 12){
-//                text = "淡白外1";
-//            }else if(id == 13){
-//                text = "北夜急救";
-//            }else if(id == 14){
-//                text = "北夜發燒";
-//            }else if(id == 15){
-//                text = "北夜內1";
-//            }else if(id == 16){
-//                text = "北夜內2";
-//            }else if(id == 17){
-//                text = "北夜外1";
-//            }else if(id == 18){
-//                text = "北夜外2";
-//            }else if(id == 19){
-//                text = "淡夜內1";
-//            }else if(id == 20){
-//                text = "淡夜內2";
-//            }else if(id == 21){
-//                text = "淡夜外";
-//            }
-//            
-//            var day = date.getDay();
-//            var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-" + date.getDate();
-//
-//            document.getElementById("date_1").innerHTML= "<option value="+date2+">"+date2+"</option>";
-//            document.getElementById("classification").innerHTML="<option value="+id+">"+text+"</option>";
-//           
-//            console.log(id);
-//            console.log(text);
-//            console.log(date2);
-//        }
->>>>>>> 61c4af87a57632573fbe4fd4661a0995e1321b1d
+    
 
-        function saveSchedule(){
+       function addNewSchedule(date,id){
+
+           var text = null;
+
+           if(id == 1){
+               text = "行政";
+           }else if(id == 2){
+               text = "教學";
+           }else if(id== 3){
+               text = "北白急救";
+           }else if(id == 4){
+               text = "北白發燒";
+           }else if(id == 5){
+               text = "北白內1";
+           }else if(id == 6){
+               text = "北白內2";
+           }else if(id == 7){
+               text = "北白外1";
+           }else if(id == 8){
+               text = "北白外2";
+           }else if(id == 9){
+               text = "淡白內1";
+           }else if(id == 10){
+               text = "淡白內2";
+           }else if(id == 11){
+               text = "淡白外1";
+           }else if(id == 12){
+               text = "淡白外1";
+           }else if(id == 13){
+               text = "北夜急救";
+           }else if(id == 14){
+               text = "北夜發燒";
+           }else if(id == 15){
+               text = "北夜內1";
+           }else if(id == 16){
+               text = "北夜內2";
+           }else if(id == 17){
+               text = "北夜外1";
+           }else if(id == 18){
+               text = "北夜外2";
+           }else if(id == 19){
+               text = "淡夜內1";
+           }else if(id == 20){
+               text = "淡夜內2";
+           }else if(id == 21){
+               text = "淡夜外";
+           }
+           
+           var day = date.getDay();
+           var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-" + date.getDate();
+
+           document.getElementById("section_id").innerHTML= "<input>"+id;
+           document.getElementById("date_1").innerHTML= "<h5 value="+date2+">"+date2+"</h5>";
+           document.getElementById("classification").innerHTML="<h5 value="+id+"> "+text+"</h5>";
+
+          
+           
+       }
+
+
+        function saveSchedule(id,date,classification){
             $.get('saveSchedule',{
-                id: document.getElementById('doctor').value,
-                date: document.getElementById('date_1').value,
-                classification: document.getElementById('classification').value
-                
+                id: id,
+                date: date,
+                classification: classification
             }, function(){
                 //alert("成功");
                 scheduler.endLightbox(true, html("my_form1"));
                 refresh();
                 
             });
+
+            console.log(id);
+            console.log(date);
+            console.log(classification);
         }
 
 
