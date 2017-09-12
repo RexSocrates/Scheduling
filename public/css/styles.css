@@ -712,3 +712,16 @@ table.area5 tbody {
 tbody td:last-child, thead th:last-child {
     border-right: none;
 }
+
+.announcement-ellipsis {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; 
+    line-height: 24px;
+/*    display: inline;*/
+}
+
+.inline {
+/*    display: inline;*/
+}

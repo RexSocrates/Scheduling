@@ -28,7 +28,8 @@
     						    	</div>
     						    	<div class="col s10">
     						    		<span class="card-title">{{ $announcement->title }}<a class="dropdown-edit-button right" href="" data-activates='dropdown-announcement'><i class="material-icons" onclick="passAnnouncementSerial({{ $announcement->announcementSerial }})">more_vert</i></a></span>
-    						    		<p>{{ $announcement->content }}<a href="#modal-more" onclick="getAnnouncement({{ $announcement->announcementSerial }})">more</a></p>
+    						    		<p class="announcement-ellipsis">{{ $announcement->content }}</p>
+    						    		<a href="#modal-more" onclick="getAnnouncement({{ $announcement->announcementSerial }})">more</a>
     						    	</div>
                                     
     				            </div>
