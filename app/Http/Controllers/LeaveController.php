@@ -114,6 +114,7 @@ class LeaveController extends Controller
                 'doctor' =>'',
                 'hours'=>$leave->leaveHours,
                 'updatedLeaveHours'=>$leave->updatedLeaveHours,
+                'confirmStatus' => $leave->confirmStatus, 
                 'remark'=>$leave->remark
             ];
             

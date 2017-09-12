@@ -13,9 +13,9 @@
 @section('nav-content')
     <div class="nav-content blue-grey darken-1">
         <ul class="tabs tabs-transparent">
-            <li class="tab"><a class="active" href="#test1">排班人力配置統計</a></li>
-            <li class="tab"><a href="#test2">日夜班數統計</a></li>
-            <li class="tab"><a href="#test3">白夜班比率</a></li>
+            <li class="tab"><a class="active" href="#page1">排班人力配置統計</a></li>
+<!--            <li class="tab"><a href="#test2">日夜班數統計</a></li>-->
+            <li class="tab"><a href="#page3">白夜班比率</a></li>
         </ul>
     </div>
 @endsection
@@ -24,21 +24,26 @@
     <div id="section" class="container-fix trans-left-five">
         <div class="container-section2">
             <div class="row">
-                <div id="test1" class="col s12">
+                <div id="page1" class="col s12">
                     <div class="card">
-                        <div class="card-action">
-                            <form action="doctorsChart" method="post"> 
-                                <p class="inline">醫師名稱</p>
+                        <div class="card-action card1">
+                            <form action="doctorsChart" method="post">
+                                <div class="title1">
+                                    <font class="card-title">醫師名稱：</font>
+                                </div>
+                                <div class="input-field left inline">
                                     <select name="selectedUserID" class="browser-default" id=userID required>
                                         <option value="" disabled selected>選擇醫師名稱</option>
                                         @foreach($doctors as $doctor)
-                                            <option value="{{ $doctor->doctorID }}">{{ $doctor->name }}</option>
+                                        <option value="{{ $doctor->doctorID }}">{{ $doctor->name }}</option>
                                         @endforeach
                                     </select>
-                                    <input class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" type="submit" value="確認">
-                                   
-                                    {{ csrf_field() }}
-                              </form>  
+                                </div>
+                                <div class="title1 margin-l10">
+                                    <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text inline margin-l10">確認</button>
+                                </div>
+                                {{ csrf_field() }}
+                            </form>
                         </div>
                         <div class="divider"></div>
                         <div class="card-content">
@@ -92,6 +97,7 @@
                         </div>  
                     </div>
 		       	</div>	
+<!--
 				<div id="test2" class="col s12">
 					<div class="card">
                         <div class="card-action">
@@ -144,7 +150,8 @@
 				        </tbody>
 					</table>
                 </div>
-				<div id="test3" class="col s12">
+-->
+				<div id="page3" class="col s12">
                     <div class="card">
                         <table class="bordered centered striped">
                             <thead>
