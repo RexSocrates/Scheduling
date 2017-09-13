@@ -104,11 +104,13 @@
                 </a>
                 @yield('navbar')
                 <ul class="right">
+<!--
                     <li>
                         <a class="dropdown-notification-button" href="#!" data-activates="dropdown-notification">
                             <img src="../img/notifications-button.png" class="notifications-icon">
                         </a>
                     </li>
+-->
                     <li>
                         <a class="dropdown-button" href="#!" data-activates="dropdown1">{{ Auth::user()->name }}<i class="material-icons right">arrow_drop_down</i>
                         </a>
@@ -124,9 +126,11 @@
         </ul>
         
         <ul id="dropdown1" class="dropdown-content">
+<!--
             @if(Auth::user()->identity == 'Admin')
                 <li><a href="setting">設定</a></li>
             @endif
+-->
             <li><a href="profile">個人資料</a></li>
             <li class="divider"></li>
             <li>
