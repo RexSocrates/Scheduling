@@ -256,6 +256,8 @@ class ShiftRecordsController extends Controller
         
         $allShiftData = $shiftRecordObj->getMoreCheckShiftsRecordsInformation(true);  // 列出與自己相關的確認換班資訊
 
+        $allRejectShiftData = $shiftRecordObj->getRejectShiftsRecordsInformation(true);  // 列出與自己相關的被拒絕換班資訊
+
         $currentDoctor = $userObj->getCurrentUserInfo();
 
         $currentDoctorSchedule=$sheduleObj->getNextMonthShiftsByID($currentDoctor->doctorID); //查看目前登入的醫生班表資訊
@@ -355,7 +357,7 @@ class ShiftRecordsController extends Controller
 
 
         return view('pages.schedule-shift-info', [
-            'shiftRecords'=>$allShiftData,'shiftDataByDoctorID'=>$shiftDataByDoctorID,'currentDoctor'=>$currentDoctor,'currentDoctorSchedule'=>$currentDoctorSchedule,'doctorName'=>$doctorName,'remarks'=>$displayRemarksArr,'currentMonth'=>$currentMonth,'preMonth'=>$preMonth,'beforePreMonth'=>$beforePreMonth
+            'shiftRecords'=>$allShiftData,'shiftDataByDoctorID'=>$shiftDataByDoctorID,'currentDoctor'=>$currentDoctor,'currentDoctorSchedule'=>$currentDoctorSchedule,'doctorName'=>$doctorName,'allRejectShiftData'=>$allRejectShiftData,'remarks'=>$displayRemarksArr,'currentMonth'=>$currentMonth,'preMonth'=>$preMonth,'beforePreMonth'=>$beforePreMonth
         ]);
         
     }

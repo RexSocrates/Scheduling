@@ -59,6 +59,96 @@
                     </div>
                 </div>
             </div>
+             <div class="row">
+                <div class="col s12 m12">
+                    <div class="card">
+                        <div class="card-action">
+                            <!-- <img src="../img/announcement.png" class="logo-img"> -->
+                            <font class="card-title">換班拒絕</font>
+                        </div>
+                        <div class="divider"></div>
+                        
+                        <div class="card-content padding-t5">
+                            <table class="centered striped highlight scroll area1">
+                                <thead>
+                                    <tr>
+                                        <th class="td-w-5">申請人</th>
+                                        <th class="td-w-5">申請日期</th>
+                                        <th class="td-w-5">換班醫生</th>
+                                        <th class="td-w-5">排班人員</th>
+                                        <th class="td-w-20">內容</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach($allRejectShiftData as $record)
+                                    <tr>
+                                        <td class="td-padding td-w-5">{{ $record[0] }}</td> <!--申請人-->
+                                        <td class="td-padding td-w-5">{{ $record[6] }}</td>  <!--申請日期-->
+                                        <td class="td-padding td-w-5">{{ $record[8] }}</td>
+                                        <td class="td-padding td-w-5">{{ $record[9] }}</td>
+                                        <td class="td-padding td-w-20">{{ $record[2] }}  <!--申請人想換班的日期-->
+                                            <font class="font-w-b"> 
+                                                {{ $record[0] }} <!--申請人的名字--> 
+                                                {{ $record[4] }}<!--申請人換班名字--> 
+                                            </font> 與 {{ $record[3] }} <!--被換班人的班日期-->
+                                            <font class="font-w-b">
+                                                {{ $record[1] }} <!--被換班人-->
+                                                {{ $record[5] }}<!--被換班人的班名稱-->
+                                            </font> 互換
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col s12 m12">
+                    <div class="card">
+                        <div class="card-action">
+                            <font class="card-title">換班待確認</font>
+                        </div>
+                        <div class="divider"></div>
+                        
+                        <div class="card-content padding-t5">
+                            <table class="centered striped highlight scroll area2">
+                                <thead>
+                                    <tr>
+                                        <th class="td-w-5">申請人</th>
+                                        <th class="td-w-5">申請日期</th>
+                                        <th class="td-w-25">內容</th>
+                                        <th class="td-w-13">功能</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach($shiftDataByDoctorID as $record)
+                                    <tr>
+                                        <td class="td-padding td-w-5">{{ $record[0] }}</td>
+                                        <td class="td-padding td-w-5">{{ $record[6] }}</td>
+                                        <td class="td-padding td-w-25">{{ $record[2] }} 
+                                            <font class="font-w-b">
+                                                {{ $record[0] }} {{ $record[4] }}
+                                            </font> 與 {{ $record[3] }} 
+                                            <font class="font-w-b">
+                                                {{ $record[1] }} {{ $record[5] }}
+                                            </font> 互換</td>
+                                        <td class="td-padding td-w-13">
+                                            <a href="checkShift/{{$record[7]}}" class="waves-effect waves-light btn" name=confirm>允許</a>
+                                            <a href="rejectShift/{{$record[7]}}" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 			<div class="row">
                 <div class="col s12 m12">
       		  	  	<div class="card">
@@ -102,6 +192,7 @@
                     </div>
                 </div>
       		</div>
+
             <div class="row">
                 <div class="col s12 m12">
                     <div class="card">
