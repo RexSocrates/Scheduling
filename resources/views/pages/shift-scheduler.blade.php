@@ -359,22 +359,13 @@
                              //限制非當月利用點擊視窗換班
                             scheduler.addMarkedTimespan({  
                                 start_date: '1900-1-1',
-                                end_date:  new Date(res[3], month+1, 1),
+                                end_date:  new Date(res[3], month-1, 1),
                                 zones: "fullday", 
                                 css: "block_section", 
                                 type: "dhx_time_block"
                             
                             });
 
-                            //限制非當月利用點擊視窗換班
-                            scheduler. deleteMarkedTimespan({  
-                                start_date: new Date(res[3],month-1,1),
-                                end_date:   new Date(res[3], month,1),
-                                zones: "fullday", 
-                                css: "block_section", 
-                                type: "dhx_time_block"
-                            
-                            });
 
 
                             //scheduler.updateView();

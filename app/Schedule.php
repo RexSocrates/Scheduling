@@ -12,13 +12,24 @@ class Schedule extends Model
 {
 	protected $table = 'Schedule';
 
-    //取得所有班表資訊
-	public function getSchedule() {
+
+    //取得所有初版班表資訊
+    public function getFirstSchedule() {
         $schedule = DB::table('Schedule')
             ->get();
         
         return $schedule;
     }
+
+    //取得所有正式班表資訊
+	public function getSchedule() {
+        $schedule = DB::table('Schedule')
+            ->where('confirmed',1)
+            ->get();
+        
+        return $schedule;
+    }
+
 
     //透過班ID取得單一班表資訊
     public function getScheduleDataByID($scheduleID) {
@@ -39,15 +50,25 @@ class Schedule extends Model
         return $doctorScheduleList;
     }
     
-    //透過醫生ID 取得所有上班資料
+    //透過醫生ID 取得所有正式上班資料
     public function getScheduleByDoctorID($id) {
+        $schedule = DB::table('Schedule')
+            ->where('doctorID', $id)
+            ->where('confirmed',1)
+            ->get();
+        
+        return $schedule;
+    }
+
+    //透過醫生ID 取得所有初版上班資料
+    public function getFirstEditionScheduleByDoctorID($id) {
         $schedule = DB::table('Schedule')
             ->where('doctorID', $id)
             ->get();
         
         return $schedule;
     }
-    
+
     // 新增一筆上班資料
     public function addSchedule(array $data) {
         $reservation = new Reservation();

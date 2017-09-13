@@ -21,7 +21,7 @@ class ScheduleController extends Controller
         $schedule = new Schedule();
         $user = new User();
         $shiftRecords = new ShiftRecords(); 
-        $scheduleData = $schedule->getSchedule();
+        $scheduleData = $schedule->getFirstSchedule();
 
         $currentDoctor = $user->getCurrentUserInfo();
 
@@ -59,7 +59,7 @@ class ScheduleController extends Controller
         $scheduleCategory = new ScheduleCategory();
         $user = new User();
 
-        $scheduleData = $schedule->getScheduleByDoctorID($user->getCurrentUserID());
+        $scheduleData = $schedule->getFirstEditionScheduleByDoctorID($user->getCurrentUserID());
         
         $displayData = [];
 

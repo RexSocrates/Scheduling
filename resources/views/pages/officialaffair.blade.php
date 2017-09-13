@@ -85,7 +85,7 @@
       		  	<div id="page2" class="col s12">
 					<div class="card">
                         <div class="card-action">
-      		  	  			<font class="card-title">換班待確認</font>
+      		  	  			<font class="card-title">公假待確認</font>
       		  	  		</div>
       		  	  		<div class="divider"></div>
       		  	  	  	

@@ -516,7 +516,7 @@ class ShiftRecordsController extends Controller
         $schedule = new Schedule();
         $user = new User();
 
-        $scheduleData = $schedule->getSchedule();
+        $scheduleData = $schedule->getFirstSchedule();
 
         $doctor = $user->getAtWorkDoctors();
         //$doctorSchedule = $schedule->getScheduleByDoctorID($doctor->doctorID); //之後用ajax傳入id
