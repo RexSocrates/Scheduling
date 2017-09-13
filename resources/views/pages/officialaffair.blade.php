@@ -151,7 +151,7 @@
                         </p>
                     </div>
                     <div class="input-field col s12">
-                        <input id="hour" type="number" value="" name="hour" max="" required>
+                        <input id="hour" type="number" value="" name="hour" min=0 required>
                         <label for="hour">時數</label>
                     </div>
                     <div class="input-field col s12 margin-t0">

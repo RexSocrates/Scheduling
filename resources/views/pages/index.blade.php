@@ -56,7 +56,7 @@
       		  	</div>
       		  	<div class="col s12 m4">
       		  	  	<div class="card center padding-t5">
-                        <h1 class="teal-text text-lighten-2">13.5</h1>
+                        <h1 class="teal-text text-lighten-2">{{ $currentOfficialLeaveHours }}</h1>
       		  	  		<p class="blue-grey-text text-darken-3" style="font-weight: 500;">剩餘公假時數</p>
       		  	  	  	<div class="card-action center">
       		  	  	  	  	<a href="profile" class="margin-r0">申請使用</a>
