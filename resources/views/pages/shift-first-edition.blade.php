@@ -427,31 +427,22 @@
                             
                             
                             //空白處新增醫生班表
-
                             scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
                                 
                                 addNewSchedule(ev.start_date,ev.section_id);
-                                
-                                //getScheduleInfo(ev.start_date,ev.section_id);
+
+                                showScheduleInfo(ev.start_date,ev.section_id);
+
                                 return true;
                             });
 
                             scheduler.attachEvent("onEventChanged", function (id, e){
-                                //any custom logic here
                                 var event = scheduler.getEvent(id);
 
-                                //updateSchedule(event,hidden);
-                                console.log("text"+event.hidden);
+                                getScheduleID(event.hidden);
 
                                 return true;
                             });
-
-//                            scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
-//                                
-//                                addNewSchedule(ev.start_date,ev.section_id);
-//                                
-//                                return true;
-//                            });
 
 
                             scheduler.attachEvent("onClick", function (id, e){
@@ -736,7 +727,6 @@
            
        }
 
-
         function saveSchedule(id,date,classification){
             $.get('saveSchedule',{
                 id: id,
@@ -750,6 +740,34 @@
             });
         }
 
+        function getScheduleID(id) {
+            $.get('getScheduleID', {
+                id :id,
+            }, function (){
+                updateSchedule();
+            });
+            console.log('id'+id);
+        }
+
+        function showScheduleInfo(date,section_id) {
+            $.get('showScheduleInfo', {
+                date :date,
+                section_id: section_id
+            }, function (){
+                
+            });
+             console.log("date"+date);
+             console.log("111"+section_id);
+        }
+
+        function updateSchedule() {
+            $.get('updateSchedule', {
+
+            }, function (){
+                alert("成功");
+            });
+            
+        }
 
         function save_form() {
             $.get('change-shift-first-edition', {

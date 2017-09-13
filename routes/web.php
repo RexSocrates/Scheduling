@@ -163,8 +163,17 @@ Route::get('showInfo','ScheduleController@getDoctorInfoByScheduleIDWhenExchange'
 //調整班表->新增班
 Route::get('saveSchedule','ScheduleController@addSchedule');
 
+
+Route::get('updateScheduleID','ScheduleController@getDoctorInfoByScheduleID');
+
 //調整班表->刪除班
 Route::get('deleteSchedule','ScheduleController@deleteSchedule');
+
+
+Route::get('getScheduleID','ScheduleController@showScheduleID');
+Route::get('showScheduleInfo','ScheduleController@showScheduleInfo');
+Route::get('updateSchedule','ScheduleController@updateSchedule');
+
 
 //調整班表->正式班表
 Route::get('/shift-scheduler','ShiftRecordsController@shiftScheduler');
@@ -317,7 +326,7 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 //Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
-Route::get("info",'TestController@addSchedule');
+Route::get("info",'TestController@updateSchedule');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 //Route::post('reservation/updateReservation/{id}', 'ReservationController@updateReservation');
 //Route::get('/reservation/updateReservation/{id}', function() {

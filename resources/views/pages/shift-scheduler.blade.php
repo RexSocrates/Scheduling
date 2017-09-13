@@ -2,10 +2,10 @@
 
 @section('head')
     <script src="../codebase/ext/dhtmlxscheduler_collision.js"></script>
-    <script src="../codebase/ext/dhtmlxscheduler_limit.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../codebase/ext/dhtmlxscheduler_limit.js"></script>
     <script src="../../codebase/ext/dhtmlxscheduler_serialize.js" type="text/javascript" charset="utf-8"></script>
-
-   	<style>
+    
+    <style>
         td{
             padding: 0;
         }
@@ -34,31 +34,14 @@
 @endsection
 
 @section('content')
-    <div id="section" class="container-fix trans-left-five">    <!--	 style="background-color:red;"-->
-		<div class="container-section">
-		    <div class="row">
+    <div id="section" class="container-fix trans-left-five">    <!--     style="background-color:red;"-->
+        <div class="container-section">
+            <div class="row">
                 <div class="col s12 m12">
-      		  	  	<div class="card border-t">
-                        <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
-                            <div class="dhx_cal_navline">
-                                <div class="dhx_cal_prev_button"></div>
-                                <div class="dhx_cal_next_button"></div>
-                                <div class="dhx_cal_today_button"></div>
-                                <div class="dhx_cal_date"></div>
-        <!--
-                                <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
-                                <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
-                                <div class="dhx_cal_tab" name="timeline_tab" style="right:280px;"></div>
-                                <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
-        -->
-                            </div>
-                            <div class="dhx_cal_header">
-                            </div>
-                            <div class="dhx_cal_data">
-                            </div>		
-                        </div>
-
-
+                    <div class="card border-t">
+                       
+                     
+                        
                         <div id="my_form">
                             <!-- <form action="change-shift-first-edition" method="post" > -->
                             <div class="modal-header">
@@ -109,10 +92,43 @@
                             </div>
                             
                             <div class="lightbox-footer">
+                                
                                 <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn" onclick="save_form_alert()">Save</button>
                                 <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel modal-btn" onclick="close_form()">Cancel</button>
-                                {{ csrf_field() }}
                             </div>
+
+                        <!-- </form> -->
+<!--
+                            <label for="description">Event text </label><input type="text" name="description" value="" id="description"><br>
+                            <label for="custom1">Custom 1 </label><input type="text" name="custom1" value="" id="custom1"><br>
+                            <label for="custom2">Custom 2 </label><input type="text" name="custom2" value="" id="custom2"><br><br>
+                            <input type="button" name="save" value="Save" id="save" style='width:100px;' onclick="save_form()">
+                            <input type="button" name="close" value="Close" id="close" style='width:100px;' onclick="close_form()">
+                            <input type="button" name="delete" value="Delete" id="delete" style='width:100px;' onclick="delete_event()">
+-->
+                        </div>
+                        
+                        <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
+                            <div class="dhx_cal_navline">
+                                <div class="dhx_cal_prev_button"></div>
+                                <div class="dhx_cal_next_button"></div>
+                                <div class="dhx_cal_today_button"></div>
+                                <div class="dhx_cal_date"></div>
+                                
+<!--                                <div class="dhx_cal_tab margin-l10"><a class="dhx_cal_tab display-b" href="#modal1">新增</a></div>-->
+                                
+        <!--
+                                <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
+                                <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
+                                <div class="dhx_cal_tab" name="timeline_tab" style="right:280px;"></div>
+                                <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
+        -->
+                            </div>
+                            <div class="dhx_cal_header">
+                            </div>
+                            <div class="dhx_cal_data">
+                            </div>      
+                        </div>
 
                         <script type="text/javascript" charset="utf-8">
                     
@@ -129,7 +145,27 @@
                             scheduler.config.collision_limit = 1; 
                             scheduler.config.drag_resize= false;
 
-
+                            scheduler.form_blocks["hidden"] = {
+                                render:function(sns) {
+                                    return "<div class='dhx_cal_ltext'><input type='hidden'></div>";
+                                },
+                                set_value:function(node, value, ev) {
+                                    node.childNodes[0].value = value || "";
+                                },
+                                get_value:function(node, ev) {
+                                    return node.childNodes[0].value;
+                                },
+                                focus:function(node) {
+                                    var a = node.childNodes[0];
+                                    a.select();
+                                    a.focus();
+                                }
+                            };
+                            //彈出視窗的選項
+                            scheduler.config.lightbox.sections=[
+                               
+                                {name:"hidden", height:400, map_to:"hidden", type:"hidden" , focus:true}
+                            ];
                             //===============
                             //Configuration
                             //===============
@@ -156,18 +192,18 @@
                                 {key:20, label:"淡夜內2"},
                                 {key:21, label:"淡夜外"}
                             ];
-
                             scheduler.createTimelineView({
-                                name:	"timeline",
-                                x_unit:	"day",
-                                x_date:	"%d %D",
-                                x_step:	1,
+                                name:   "timeline",
+                                x_unit: "day",
+                                x_date: "%d %D",
+                                x_step: 1,
                                 x_size: 14,
-                                y_unit:	sections,
-                                y_property:	"section_id",
+                                y_unit: sections,
+                                y_property: "section_id",
                                 render:"bar",
                                 round_position:true,    //有點像磁石
                                 event_dy: 46,
+
                             });
                             
                             //===============
@@ -178,11 +214,24 @@
                                 var day = x.getDay();
                                 return (day==0 || day == 6) ? "yellow_cell" : "white_cell";
                             };
-
                             scheduler.templates.timeline_scalex_class = function(date){
                                 if (date.getDay()==0 || date.getDay()==6)  return "yellow_cell";
                                 return "";
                             }
+                            
+                            
+                            //test
+                            
+//                            scheduler.attachEvent("onBeforeDrag", function (id, mode, e){
+//                                dragged_event=scheduler.getEvent(id); //use it to get the object of the dragged event
+//                                console.log("123");
+//                                return true;
+//                            });
+//
+//                            scheduler.attachEvent("onDragEnd", function(){
+//                                var event_obj = dragged_event;
+//                                console.log("555");
+//                            });
                             
                             //更改timeline event 文字
                             scheduler.templates.event_bar_text = function(start,end,event){
@@ -202,8 +251,7 @@
                                 return "width-200";
                             };
                             
-
-                               //彈出客制化的lightbox
+                            //彈出客制化的lightbox
                             var html = function(id) { return document.getElementById(id); }; //just a helper
                             scheduler.showLightbox = function(id) {
                                 var ev = scheduler.getEvent(id);
@@ -216,16 +264,38 @@
                                     scheduler.startLightbox(id, html("my_form"));
                                 }
                                 
+                                
+                                // var doctorID = ["1"];
+                                // var doctorName = ["張國頌"];
+                                // var array = doctorName.indexOf(ev.text);
+                                
+                                // if (ev.text == "New" || ev.text == "") {
+                                //     var id = "";
+                                // } else {
+                                //     var id = doctorID[array];
+                                // }
+                                
+                                    //html("schID_2_doctor").focus();
+                                    //html("schID_2_doctor").value = id;
+//                                  html("custom1").value = ev.custom1 || "";
+//                                  html("custom2").value = ev.custom2 || "";
                             };
-                            scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
-                                
-                                console.log(ev.start_date);
-                                console.log(ev.end_date);
-                                console.log(ev.section_id);
-                                
-                                return true;
-                            });
-
+                           
+                            
+//                            scheduler.attachEvent("onEventAdded", function(id,e){
+//                                console.log("5345");
+//                                var ev = scheduler.getEvent(scheduler.getState().lightbox_id);
+//                                
+//                                var doctorID = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+//                                var doctorName = ["王志平", "黃明源", "莊錦康", "簡立仁", "陳長志", "劉良嶸", "陳楷宏", "黃明源", "鄭婓茵", "劉蕙慈", "柳志翰", "蘇柏樺"];
+//                                
+//                                var array = doctorName.indexOf(ev.text);
+//                                
+//                                var name = doctorName[array];
+//                                
+//                                ev.text = name;
+//                            }
+                            
 
                             var date = new Date();
                             var toString =  date.toString();
@@ -269,50 +339,43 @@
                                     month = 12;
                                     break;
                             }
-
                              //鎖定時間
-                            var startd =new Date(res[3], month, 1); 
-                            var endd = new Date(res[3], month+1, 1); 
+                            var startd =new Date(res[3], month-1, 1); 
+                            var endd = new Date(res[3], month, 1); 
 
                             var block_startd =new Date(res[3], month-1, 1); 
                             var block_endd = new Date(res[3], month, 1); 
-                            
-                        
-                            var unBlock_startd =new Date(res[3], month-1, 1); 
-                            var unBlock_endd = new Date(res[3], month, 1); 
 
+                            console.log("startd "+startd);
+                            console.log("endd "+endd);
 
-                            console.log("startd "+block_startd);
-                            console.log("endd "+block_endd);
-
-                            scheduler.config.limit_start = new Date(block_startd);
-                            scheduler.config.limit_end = new Date(block_endd);
+                            scheduler.config.limit_start = new Date(startd);
+                            scheduler.config.limit_end = new Date(endd);
 
                             scheduler.attachEvent("onLimitViolation", function  (id, obj){
                                 dhtmlx.message({ type:"error", text:"此時段無法接受換班" })
                             });
 
-                            
-                          scheduler.deleteMarkedTimespan({ 
-                            days:  0,
-                            css: "gray", 
-                        });
-
-                            //限制非當月利用點擊視窗換班
+                             //限制非當月利用點擊視窗換班
                             scheduler.addMarkedTimespan({  
                                 start_date: '1900-1-1',
-                                end_date:   new Date(res[3], month+1, 1),
+                                end_date:  new Date(res[3], month+1, 1),
                                 zones: "fullday", 
                                 css: "block_section", 
                                 type: "dhx_time_block"
                             
                             });
 
+                            //限制非當月利用點擊視窗換班
+                            scheduler. deleteMarkedTimespan({  
+                                start_date: new Date(res[3],month-1,1),
+                                end_date:   new Date(res[3], month,1),
+                                zones: "fullday", 
+                                css: "block_section", 
+                                type: "dhx_time_block"
                             
-                            // scheduler.deleteMarkedTimespan({ 
-                            //     start_date: '2017-09-01',
-                            //     end_date:   "2017-10-01",       
-                            // });
+                            });
+
 
                             //scheduler.updateView();
 
@@ -342,32 +405,23 @@
                             });
                             
                             
-                            //空白處新增醫生班表
-
-                            scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
+                            // //空白處新增醫生班表
+                            // scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
                                 
-                               // addNewSchedule(ev.start_date,ev.section_id);
-                                
-                                //getScheduleInfo(ev.start_date,ev.section_id);
-                                return true;
-                            });
+                            //     addNewSchedule(ev.start_date,ev.section_id);
 
-                            scheduler.attachEvent("onEventChanged", function (id, e){
-                                //any custom logic here
-                                var event = scheduler.getEvent(id);
+                            //     showScheduleInfo(ev.start_date,ev.section_id);
 
-                                //updateSchedule(event,hidden);
-                                console.log("text"+event.hidden);
+                            //     return true;
+                            // });
 
-                                return true;
-                            });
+                            // scheduler.attachEvent("onEventChanged", function (id, e){
+                            //     var event = scheduler.getEvent(id);
 
-//                            scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
-//                                
-//                                addNewSchedule(ev.start_date,ev.section_id);
-//                                
-//                                return true;
-//                            });
+                            //     getScheduleID(event.hidden);
+
+                            //     return true;
+                            // });
 
 
                             scheduler.attachEvent("onClick", function (id, e){
@@ -378,31 +432,123 @@
                                 return true;
                             });
                            
-                            
+                           
+
                             //進入畫面後顯示的東西
-                            scheduler.init('scheduler_here',new Date(),"timeline");
+                            scheduler.init('scheduler_here',new Date(res[3], month-1),"timeline");
 
                             scheduler.parse([
                                 @foreach($schedule as $data)
                                  { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}" },
                                
                                 @endforeach
-
                             ],"json");
 
+                            
                         </script>
                     </div>
                 </div>
-      		</div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
+    
+<!--
+    <div id="modal1" class="modal modal-fixed-footer modal-announcement">
+        <form action="" method="post">
+            <div class="modal-header">
+                <h5 class="modal-announcement-title">新增</h5>
+            </div>
+            
+            <div class="modal-content modal-content-customize1">
+                <div class="row margin-b0">
+                    <div class="input-field col s12 margin-b20">
+                        <select name="doctor" required>
+                            <option value="" selected disabled>選擇醫生</option>
+                            <option value="1">簡定國</option>
+                            <option value="2">簡定國</option>
+                            <option value="3">簡定國</option>
+                            <option value="4">簡定國</option>
+                            <option value="5">簡定國</option>
+                            <option value="6">簡定國</option>
+                            <option value="7">簡定國</option>
+                            <option value="8">簡定國</option>
+                            <option value="9">簡定國</option>
+                            <option value="10">簡定國</option>
+                        </select>
+                        <label>醫生</label>
+                    </div>
+                    <div class="input-field col s12 margin-b20">
+                        <select name="level" required>
+                            <option value="" selected disabled>選擇班種</option>
+                            <option value="1">行政</option>
+                            <option value="2">教學</option>
+                            <option value="3">北白急救</option>
+                            <option value="4">北白發燒</option>
+                            <option value="5">北白內1</option>
+                            <option value="6">北白內2</option>
+                            <option value="7">北白外1</option>
+                            <option value="8">北白外2</option>
+                            <option value="9">淡白內1</option>
+                            <option value="10">淡白內2</option>
+                            <option value="11">淡白外1</option>
+                            <option value="12">淡白外1</option>
+                            <option value="13">北夜急救</option>
+                            <option value="14">北夜發燒</option>
+                            <option value="15">北夜內1</option>
+                            <option value="16">北夜內2</option>
+                            <option value="17">北夜外1</option>
+                            <option value="18">北夜外2</option>
+                            <option value="19">淡夜內1</option>
+                            <option value="20">淡夜內2</option>
+                            <option value="21">淡夜外</option>
+                        </select>
+                        <label>班種</label>
+                    </div>
+                    <div class="input-field col s12 margin-b20">
+                        <select name="level" required>
+                            <option value="" selected disabled>選擇日期</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                        </select>
+                        <label>日期</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">Save</button>
+                <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel">Cancel</button>
+            </div>
+            {{ csrf_field() }}
+        </form>
+    </div>
+-->
 @endsection
-
-
 
 @section('script')
     <script>
-
+        $(document).ready(function(){
+            $('select').material_select();
+        });
+    
     function changeDoctor_1(id){
             $.get('changeDoctor1',{
                 id : id
@@ -416,8 +562,6 @@
             $.get('changeDoctorSchedule', {
                 id : document.getElementById('schID_2_doctor').value
             }, function(array) {
-                // var selectBox = document.getElementById('doctorName');
-                // var userInput = selectBox.options[selectBox.selectedIndex].value;
                 changeDate2(array);
             });
         }
@@ -435,6 +579,10 @@
                 document.getElementById("date2").innerHTML  = date;
         }
 
+        function alert1() {
+                alert("不可選擇相同醫生相同時段");
+        }
+
         function updateShift(scheduleID_1,scheduleID_2){
             $.post('sendShiftUpdate',{
                 scheduleID_1:scheduleID_1,
@@ -446,15 +594,14 @@
             });
             //alert(schedule_1+"和"+schedule_2+"換班成功");
         }
-
-        function showInfo(scheduleID_1,scheduleID_2) {
+        
+         function showInfo(scheduleID_1,scheduleID_2) {
             $.get('showInfo', {
                 id : scheduleID_1,
                 id2 : scheduleID_2
             }, function (array){
                  dhtmlx.message({ type:"error", text: array[2]+array[1]+"\n和\n"+array[0]+array[3]+"換班成功" })
                  refresh();
-                //alert(array[2]+array[1]+"和"+array[0]+array[3]+"換班成功");
             });
         }
 
@@ -480,7 +627,25 @@
 
         }
 
-         function save_form() {
+
+        function save_form_alert_addSchedule(){
+            var id = document.getElementById('doctor').value;
+            var date =document.getElementById('date_1').innerText;
+            var classification = document.getElementById('section_id').innerText;
+
+            if(id == ""){
+                dhtmlx.message({ type:"error", text:"請選擇醫生" });
+            }
+
+           else{
+            saveSchedule(id,date,classification);
+           }
+            
+        }
+    
+
+    
+        function save_form() {
             $.get('change-shift-first-edition', {
                 scheduleID_1 : document.getElementById('date1').value,
                 scheduleID_2 : document.getElementById('date2').value
@@ -494,30 +659,8 @@
         function close_form() {               
             scheduler.endLightbox(false, html("my_form"));             
         }
-
-
-         function delete_confirm(){
-            $.get("deleteSchedule",{
-                scheduleID : document.getElementById('date1').value,
-            
-            }, function(){
-                var doctor = document.getElementById("schID_1_doctor").options[document.getElementById('schID_1_doctor').selectedIndex].text;
-                var date = document.getElementById("date1").options[document.getElementById('date1').selectedIndex].text;
-                var r = confirm("是否刪除 " + doctor + " 在 " + date + " 的班?");
-                if (r == true) {
-                var event_id = scheduler.getState().lightbox_id;
-                scheduler.endLightbox(false, html("my_form"));
-                scheduler.deleteEvent(event_id);
-                alert("成功刪除");
-                refresh();
-            } else {
-                alert("已取消");
-            }
         
-        });
-        }
+       
+        
     </script>
-
 @endsection
-
-

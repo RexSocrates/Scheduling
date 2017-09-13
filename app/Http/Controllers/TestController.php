@@ -704,6 +704,62 @@ class TestController extends Controller
         
         return $year.'-'.$month.'-'.$day;
     }
+
+     public function showScheduleID(){
+        //$data = $request->all();
+
+        $id = 26;
+
+        return $id;
+
+    }
+
+    public function showScheduleInfo(){
+        // $data = $request->all();
+        $scheduleCategory = new ScheduleCategory();
+
+        $str= 'Mon Oct 02 2017 00:00:00 GMT+0800 (CST)';
+        $dateArr = explode(' ', $str);
+        $date = $this->processDateStr($str);
+
+        $section_id = 3;
+        $categoryInfo = $scheduleCategory->getSchCategoryInfo($section_id);
+
+        $info=[
+            'date'=> $date,
+            'schCategorySerial'=>$section_id,
+            'location' => $categoryInfo
+        ];
+
+        return $info;
+
+    }
+
+    //更新班表
+    public function updateSchedule(){
+        //$data = $request->all();
+
+        $id = $this->showScheduleID();
+        $info = $this->showScheduleInfo();
+    
+        
+        $schInfo = [
+              'schCategorySerial'=>$info['schCategorySerial'],
+              'isWeekday' => true,
+              'location' => $info['location'],
+              'date' => $info['date'],
+              'confirmed'=>1
+            ];
+
+        $weekDay = (int)date('N', strtotime($info['date']));
+
+        if($weekDay == 6 || $weekDay == 7){
+          $schInfo['isWeekday'] = false;
+        }
+
+        $schedule = new Schedule();
+        $schedule->updateScheduleByID($id,$schInfo);
+    }
     
 }
 

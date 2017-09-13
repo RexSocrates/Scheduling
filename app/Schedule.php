@@ -91,15 +91,16 @@ class Schedule extends Model
     
     // 透過班ID更新單一個班
     public function updateScheduleByID($scheduleID, array $data) {
+        $reservation = new Reservation();
+        
         $affectedRows = DB::table('Schedule')
             ->where('scheduleID', $scheduleID)
             ->update([
-                'doctorID' => $data['doctorID'],
-                'schCategorySerial' => $data['categorySerial'],
+                'schCategorySerial' => $data['schCategorySerial'],
                 'isWeekday' => $data['isWeekday'],
                 'location' => $data['location'],
                 'date' => $data['date'],
-                'endDate' => $data['endDate'],
+                'endDate' => $reservation->date_add($data['date']),
                 'confirmed' => $data['confirmed'],
             ]);
         

@@ -105,9 +105,6 @@ class ScheduleController extends Controller
         return view('pages.schedule', array('schedule' => $scheduleData));
     }
 
-    
-    
-
     //新增班表
     public function addSchedule(Request $request){
         $data = $request->all();
@@ -162,22 +159,59 @@ class ScheduleController extends Controller
         return redirect('schedule'); 
      		
     }
-       
+    
+    public function showScheduleID(Request $request){
+        $data = $request->all();
+
+        $id = $data['id'];
+
+        return $id;
+
+    }
+
+    public function showScheduleInfo(Request $request){
+        $data = $request->all();
+        $scheduleCategory = new ScheduleCategory();
+
+        $str= $data['date'];
+        $dateArr = explode(' ', $str);
+        $date = $this->processDateStr($str);
+
+        $section_id = $data['section_id'];
+        $categoryInfo = $scheduleCategory->getSchCategoryInfo($section_id);
+
+        $info=[
+            'date'=> $date,
+            'schCategorySerial'=>$section_id,
+            'location' => $categoryInfo
+        ];
+
+        return $info;
+
+    }
+
     //更新班表
-    public function updateSchedule(){
-        $serial = Input::get('serial');
-        $updateSchedule = new schedule();
-        $doctorID = Input::get('doctorID');
-        $periodSerial = Input::get('periodSerial');
-        $isWeekday = Input::get('isWeekday');
-        $location = Input::get('location');
-        $category = Input::get('category');
-        $date = Input::get('date');
-        $confirmed = Input::get('confirmed');
-        $update = $updateSchedule->updateSchedule($doctorID, $periodSerial, $isWeekday, $location, $category, $date, $confirmed);
-        
-        return redirect('reservation');
-       	
+    public function updateSchedule(Request $request){
+
+        $id = $this->showScheduleID();
+        $info = $this->showScheduleInfo();
+    
+        $schInfo = [
+              'schCategorySerial'=>$info['schCategorySerial'],
+              'isWeekday' => true,
+              'location' => $info['location'],
+              'date' => $info['date'],
+              'confirmed'=>1
+            ];
+
+        $weekDay = (int)date('N', strtotime($info['date']));
+
+        if($weekDay == 6 || $weekDay == 7){
+          $schInfo['isWeekday'] = false;
+        }
+
+        $schedule = new Schedule();
+        $schedule->updateScheduleByID($id,$schInfo);
     }
 
     public function getDoctorInfoByScheduleID(Request $request){
