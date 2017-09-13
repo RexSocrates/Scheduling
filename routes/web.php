@@ -184,8 +184,10 @@ Route::get('changeDoctorSchedule','AccountController@getDoctorSheduleInfoByID');
 // 調整班表的換班資訊
 Route::get('shift-info', 'ShiftRecordsController@adminShiftRecords');
 
+//
+Route::get('getScheduleInfo','ShiftRecordsController@getShiftRecordsBySerial');
 // 排班人員確認換班
-Route::get('adminAgreeShiftRecord/{serial}', 'ShiftRecordsController@adminAgreeShiftRecord');
+Route::get('adminAgreeShiftRecord', 'ShiftRecordsController@adminAgreeShiftRecord');
 
 // 排班人員拒絕換班
 Route::get('adminDisagreeShiftRecord/{serial}', 'ShiftRecordsController@adminDisagreeShiftRecord');

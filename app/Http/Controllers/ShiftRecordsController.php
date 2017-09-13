@@ -56,6 +56,31 @@ class ShiftRecordsController extends Controller
 
     }
 
+     public function getShiftRecordsBySerial(Request $request){
+        $data = $request->all();
+        $serial = $data['id'];
+
+        $user = new User();
+        $shiftRecordObj = new ShiftRecords();
+        $schedule = new Schedule();
+
+        $shiftInfo = $shiftRecordObj->getShiftRecordByChangeSerial($serial); 
+        $schedule_1_doctor = $schedule->getScheduleDataByID($shiftInfo->scheduleID_1)->doctorID;
+        $schedule_2_doctor = $schedule->getScheduleDataByID($shiftInfo->scheduleID_2)->doctorID;
+
+        $status = 1; //代表true
+        if($schedule_1_doctor == $shiftInfo->schID_1_doctor &&  $schedule_2_doctor == $shiftInfo->schID_2_doctor){
+            $status=1;
+        }
+        else{
+            $status=2;
+        }
+    
+        return $status;
+
+    }
+
+
     //醫生確認換班
     public function checkShift($id){
         $shiftRecords = new ShiftRecords();
@@ -464,9 +489,11 @@ class ShiftRecordsController extends Controller
     }
     
     // 排班人員確認換班
-    public function adminAgreeShiftRecord($serial) {
-        $shiftRecordObj = new ShiftRecords();
+    public function adminAgreeShiftRecord(Request $request) {
+        $data = $request->all();
+        $serial = $data['id'];
 
+        $shiftRecordObj = new ShiftRecords();
         $shiftRecordObj->adminConfirm($serial,1);
 
         return redirect('shift-info');

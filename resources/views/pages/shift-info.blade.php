@@ -36,6 +36,9 @@
                                <tbody>
                                    @foreach($shiftRecords as $record)
                                         <tr>
+                                            <input type="hidden" id="scheduleID1" value="">
+                                            <input type="hidden" id="scheduleID2" value="">
+
                                             <td class="td-padding">{{ $record['applier'] }}</td>
                                             <td class="td-padding">{{ $record['applyDate'] }}</td>
                                             <td class="td-padding">{{ $record['sch1Date'] }} <font class="font-w-b">{{ $record['sch1Content'] }} </font> 與 {{ $record['sch2Date'] }}  <font class="font-w-b">{{ $record['sch2Content'] }} </font> 互換</td>
@@ -46,7 +49,7 @@
                                                 <td class="td-padding"><a class="waves-effect waves-light btn pad-btn disabled">已拒絕</a></td>
                                             @else
                                                 <td class="td-padding">
-                                                <a href="adminAgreeShiftRecord/{{ $record['changeSerial'] }}" class="waves-effect waves-light btn">確認</a>
+                                                <a class="waves-effect waves-light btn" onclick="checkStatus({{ $record['changeSerial'] }})">確認</a>
                                                 <a href="adminDisagreeShiftRecord/{{ $record['changeSerial'] }}" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
                                                 </td>
                                             @endif
@@ -139,6 +142,31 @@
                 document.getElementById("content").innerHTML  = content;
                
             });
+        }
+
+        function checkStatus(id) {
+            $.get('getScheduleInfo', {
+                id : id
+            }, function(status) {
+                if(status ==1){
+                    adminAgreeShiftRecord(id);
+                }
+                else{
+                    alert("此班表已變動，無法確認換班");
+                }
+               
+               
+            });
+            
+        }
+
+        function adminAgreeShiftRecord(id) {
+            $.get('adminAgreeShiftRecord', {
+                id:id
+            }, function() {
+                location.reload();
+            });
+
         }
     </script>
 @endsection
