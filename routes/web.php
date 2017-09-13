@@ -98,7 +98,7 @@ Route::post('first-edition-shift-info','ShiftRecordsController@firstEditionShift
 
 
 //初版班表->換班資訊 換班確認
-Route::get('checkShift/{id}','ShiftRecordsController@checkShift');
+Route::get('checkShift','ShiftRecordsController@checkShift');
 Route::get('rejectShift/{id}','ShiftRecordsController@rejectShift');
 
 // 列出所有使用者的資訊以及公假
@@ -184,8 +184,9 @@ Route::get('changeDoctorSchedule','AccountController@getDoctorSheduleInfoByID');
 // 調整班表的換班資訊
 Route::get('shift-info', 'ShiftRecordsController@adminShiftRecords');
 
-//
+//確認醫生是否有在當日上班
 Route::get('getScheduleInfo','ShiftRecordsController@getShiftRecordsBySerial');
+
 // 排班人員確認換班
 Route::get('adminAgreeShiftRecord', 'ShiftRecordsController@adminAgreeShiftRecord');
 

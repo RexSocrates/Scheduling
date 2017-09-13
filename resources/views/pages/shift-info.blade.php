@@ -36,9 +36,6 @@
                                <tbody>
                                    @foreach($shiftRecords as $record)
                                         <tr>
-                                            <input type="hidden" id="scheduleID1" value="">
-                                            <input type="hidden" id="scheduleID2" value="">
-
                                             <td class="td-padding">{{ $record['applier'] }}</td>
                                             <td class="td-padding">{{ $record['applyDate'] }}</td>
                                             <td class="td-padding">{{ $record['sch1Date'] }} <font class="font-w-b">{{ $record['sch1Content'] }} </font> 與 {{ $record['sch2Date'] }}  <font class="font-w-b">{{ $record['sch2Content'] }} </font> 互換</td>
@@ -154,7 +151,6 @@
                 else{
                     alert("此班表已變動，無法確認換班");
                 }
-               
                
             });
             

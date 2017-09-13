@@ -105,50 +105,7 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="row">
-                <div class="col s12 m12">
-                    <div class="card">
-                        <div class="card-action">
-                            <font class="card-title">換班待確認</font>
-                        </div>
-                        <div class="divider"></div>
-                        
-                        <div class="card-content padding-t5">
-                            <table class="centered striped highlight scroll area2">
-                                <thead>
-                                    <tr>
-                                        <th class="td-w-5">申請人</th>
-                                        <th class="td-w-5">申請日期</th>
-                                        <th class="td-w-25">內容</th>
-                                        <th class="td-w-13">功能</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach($shiftDataByDoctorID as $record)
-                                    <tr>
-                                        <td class="td-padding td-w-5">{{ $record[0] }}</td>
-                                        <td class="td-padding td-w-5">{{ $record[6] }}</td>
-                                        <td class="td-padding td-w-25">{{ $record[2] }} 
-                                            <font class="font-w-b">
-                                                {{ $record[0] }} {{ $record[4] }}
-                                            </font> 與 {{ $record[3] }} 
-                                            <font class="font-w-b">
-                                                {{ $record[1] }} {{ $record[5] }}
-                                            </font> 互換</td>
-                                        <td class="td-padding td-w-13">
-                                            <a href="checkShift/{{$record[7]}}" class="waves-effect waves-light btn" name=confirm>允許</a>
-                                            <a href="rejectShift/{{$record[7]}}" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        
 			<div class="row">
                 <div class="col s12 m12">
       		  	  	<div class="card">
@@ -181,7 +138,7 @@
                                                 {{ $record[1] }} {{ $record[5] }}
                                             </font> 互換</td>
                                         <td class="td-padding td-w-13">
-                                            <a href="checkShift/{{$record[7]}}" class="waves-effect waves-light btn" name=confirm>允許</a>
+                                            <a class="waves-effect waves-light btn" name=confirm onclick="checkStatus({{$record[7]}})">允許</a>
                                             <a href="rejectShift/{{$record[7]}}" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
                                         </td>
                                     </tr>
@@ -345,6 +302,29 @@
                 document.getElementById("content").innerHTML  = content;
                
             });
+        }
+
+        function checkStatus(id) {
+            $.get('getScheduleInfo', {
+                id : id
+            }, function(status) {
+                if(status ==1){
+                    checkShift(id);
+                }
+                else{
+                    alert("此班表已變動，無法確認換班");
+                }
+               
+            });
+            
+        }
+        function checkShift(id) {
+            $.get('checkShift', {
+                id:id
+            }, function() {
+                location.reload();
+            });
+
         }
     </script>
 @endsection

@@ -82,7 +82,10 @@ class ShiftRecordsController extends Controller
 
 
     //醫生確認換班
-    public function checkShift($id){
+    public function checkShift(Request $request){
+        $data = $request->all();
+        $id = $data['id'];
+        
         $shiftRecords = new ShiftRecords();
 
         $shiftCheck = $shiftRecords->doc2Confirm($id,1);
