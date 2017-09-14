@@ -774,7 +774,7 @@
                     var classification = document.getElementById('section_id').innerText;
                     saveSchedule(id,date,classification);
                 }
-                
+                console.log(count);
                 
             });
         }
@@ -840,7 +840,13 @@
            }
            
            var day = date.getDay();
-           var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-" + date.getDate();
+           
+           if(date.getDate()<10){
+            var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-0" + date.getDate();
+           }
+           else{
+            var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-" + date.getDate();
+            }
 
            document.getElementById("section_id").innerHTML= "<input>"+id;
            document.getElementById("date_1").innerHTML= "<h5 value="+date2+">"+date2+"</h5>";
@@ -851,35 +857,41 @@
 
         function checkDoctorSchedule(id){
             $.get('checkDoctorSchedule',{
-                scheduleID : id,
-                date: document.getElementById("shiftDate").value
+                scheduleID : id, // event id
+                date: document.getElementById("shiftDate").value //空格日期
     
-            }, function(count){
-                if(count!=0){
+            }, function(array){
+                if(array[0]!=0){
                     dhtmlx.message({ type:"error", text:"該天已有班" });
+                    refresh();
                 }
-                else{
-                    var id = id;
-                    var date =document.getElementById("shiftDate").value;
+                else {
+                    var date = document.getElementById("shiftDate").value;
+                    var scheduleID = id;
                     var classification = document.getElementById("shiftSessionID").value;
-                    saveSchedule(id,date,classification);
+                    updateSchedule(scheduleID,date,classification);
+                    
                 }
-                
+               
             });
 
-                console.log("id"+id);
-                console.log("date"+document.getElementById("shiftDate").value);
          }
 
-        function updateSchedule() {
-            $.get('updateSchedule', {
+         function updateSchedule(scheduleID,date,classification){
+            $.get('updateSchedule',{
+                id: scheduleID,
+                newDate: date,
+                newSessionID: classification
                 
-            }, function (){
+            }, function(id){
+                console.log(id);
                 alert("成功");
+                refresh();
                 
             });
-            
         }
+
+        
 
         function showScheduleInfo(date,section_id) {
              document.getElementById("shiftDate").value=date;

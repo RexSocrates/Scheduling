@@ -16,7 +16,7 @@ class Schedule extends Model
     //取得所有初版班表資訊
     public function getFirstSchedule() {
         $schedule = DB::table('Schedule')
-            ->get();
+                    ->get();
         
         return $schedule;
     }

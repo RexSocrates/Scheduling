@@ -331,13 +331,13 @@
                             console.log("startd "+startd);
                             console.log("endd "+endd);
 
-                            // scheduler.config.limit_start = new Date(startd);
-                            // scheduler.config.limit_end = new Date(endd);
+                            scheduler.config.limit_start = new Date(startd);
+                            scheduler.config.limit_end = new Date(endd);
 
-                            // scheduler.attachEvent("onLimitViolation", function  (id, obj){
+                            scheduler.attachEvent("onLimitViolation", function  (id, obj){
                                 
-                            //     dhtmlx.message({ type:"error", text:"此時段無法接受排班" })
-                            // });
+                                dhtmlx.message({ type:"error", text:"此時段無法接受排班" })
+                            });
 
                             scheduler.templates.lightbox_header = function(start, end, event){
                                 if (event.text == "New") {

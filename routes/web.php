@@ -177,7 +177,7 @@ Route::get('updateScheduleID','ScheduleController@getDoctorInfoByScheduleID');
 //調整班表->刪除班
 Route::get('deleteSchedule','ScheduleController@deleteSchedule');
 
-
+//調整班表->初版班表 確認醫生一天的班 （拖拉）
 Route::get('checkDoctorSchedule','ScheduleController@confirmscheduleStatusBySerial');
 Route::get('updateSchedule','ScheduleController@updateSchedule');
 
@@ -336,7 +336,7 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 //Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
-Route::get("info",'TestController@confirmscheduleStatusBySerial');
+Route::get("info",'TestController@updateSchedule');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 //Route::post('reservation/updateReservation/{id}', 'ReservationController@updateReservation');
 //Route::get('/reservation/updateReservation/{id}', function() {

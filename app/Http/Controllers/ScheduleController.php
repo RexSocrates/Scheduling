@@ -125,17 +125,18 @@ class ScheduleController extends Controller
         $data = $request->all();
         
         $scheduleID = $data['scheduleID'];
-        $date = $data['date'];
+        $date = $data['date']; 
 
         $dateStr = $this->processDateStr($date);
 
         $schedule = new Schedule();
 
-        $doctorID = $schedule->getFirstEditionScheduleByDoctorID($scheduleID)->doctorID;
-        
+        $doctorID = $schedule->getScheduleDataByID($scheduleID)->doctorID;
+
         $count = $schedule->checkDocStatus($doctorID,$dateStr);
         
-        return $count;
+
+        return [$count,$doctorID,$dateStr];
 
     }
 
@@ -230,9 +231,10 @@ class ScheduleController extends Controller
 
         $data = $request->all();
 
+        $id = $data['id']; //schedule ID
         $sessionID = $data['newSessionID'];
         $newDate = $data['newDate'];
-        $id = $data['id'];
+        
 
         $date = $this->processDateStr($newDate);
 
@@ -254,6 +256,8 @@ class ScheduleController extends Controller
 
         $schedule = new Schedule();
         $schedule->updateScheduleByID($id,$schInfo);
+
+
     }
 
     public function getDoctorInfoByScheduleID(Request $request){
