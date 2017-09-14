@@ -105,6 +105,20 @@ class ScheduleController extends Controller
         return view('pages.schedule', array('schedule' => $scheduleData));
     }
 
+    //調整班表->新增班 驗證
+    public function confirmscheduleStatus(Request $request){
+        $data = $request->all();
+        
+        $id = $data['id'];
+        $date = $data['date'];
+        $categoryID = $data['classification'];
+
+        $schedule = new Schedule();
+        $count = $schedule->checkDocStatus($id,$date);
+        
+        return $count;
+
+    }
     //新增班表
     public function addSchedule(Request $request){
         $data = $request->all();

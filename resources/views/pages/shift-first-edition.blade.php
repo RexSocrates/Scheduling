@@ -404,13 +404,31 @@
                                 var ev = scheduler.getEvent(ev.id);
                                 var evs = scheduler.getEvent(evs[0].id);
                                 var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
-                                console.log("ev "+ev.start_date)
-                                console.log("evs "+evs.start_date);
+                                console.log("ev "+ev.text)
+                                console.log("evs "+evs.text);
+
+                                var date1=evs.start_date.getFullYear()+"-"+(evs.start_date.getMonth()+1) + "-" + evs.start_date.getDate();
+                                var date2=ev.start_date.getFullYear()+"-"+(ev.start_date.getMonth()+1) + "-" + ev.start_date.getDate();
+
+
+                                 checkDoc1Status(ev.hidden,evs.hidden);
+                                 checkDoc2Status(ev.hidden,evs.hidden);
+
+                                 console.log('checkDoc1Status'+checkDoc1Status(ev.hidden,evs.hidden));
+                                 console.log('checkDoc2Status'+checkDoc2Status(ev.hidden,evs.hidden));
                                 //限制非當月拖拉換班
                                 if(ev.start_date < startd || evs.start_date < startd ){
                                     //console.log("No");
                                     dhtmlx.message({ type:"error", text:"此日期無法換班" });
                                 }
+                                // if(checkDoc1Status(ev.hidden,evs.hidden)!=0){
+                                //     dhtmlx.message({ type:"error", text:ev.text+"在"+date1+"已有班了" });
+                                //     console.log("1"+ev.text);
+                                // }
+                                // if(checkDoc2Status(ev.hidden,evs.hidden)!=0){
+                                //    dhtmlx.message({ type:"error", text:evs.text+"在"+date2+"已有班了" });
+                                //    console.log("2"+evs.text);
+                                // }
                                 else{
                                     if(count>=1){
                                         updateShift(ev.hidden,evs.hidden);
@@ -606,6 +624,27 @@
                 alert("不可選擇相同醫生相同時段");
         }
 
+        function checkDoc1Status(scheduleID_1,scheduleID_2){
+                
+            $.get('checkDoc1Status',{
+                scheduleID_1:scheduleID_1,
+                scheduleID_2:scheduleID_2
+            }, function(count){
+
+            });
+            
+        }
+
+        function checkDoc2Status(scheduleID_1,scheduleID_2){
+            $.get('checkDoc2Status',{
+                scheduleID_1:scheduleID_1,
+                scheduleID_2:scheduleID_2
+            }, function(count){
+                  
+            });
+             
+        }
+
         function updateShift(scheduleID_1,scheduleID_2){
             $.post('sendShiftUpdate',{
                 scheduleID_1:scheduleID_1,
@@ -662,11 +701,42 @@
             }
 
            else{
-            saveSchedule(id,date,classification);
+            confirmsaveSchedule(id,date,classification);
            }
             
         }
-    
+        
+        function confirmsaveSchedule(id,date,classification){
+            $.get('confirmsaveSchedule',{
+                id: id,
+                date: date,
+                classification: classification
+            }, function(count){
+                if(count!=0){
+                    dhtmlx.message({ type:"error", text:"該天已有班" });
+                }
+                else{
+                    var id = document.getElementById('doctor').value;
+                    var date =document.getElementById('date_1').innerText;
+                    var classification = document.getElementById('section_id').innerText;
+                    saveSchedule(id,date,classification);
+                }
+                
+                
+            });
+        }
+        function saveSchedule(id,date,classification){
+            $.get('saveSchedule',{
+                id: id,
+                date: date,
+                classification: classification
+            }, function(){
+                //alert("成功");
+                scheduler.endLightbox(true, html("my_form1"));
+                refresh();
+                
+            });
+        }
 
        function addNewSchedule(date,id){
 
@@ -727,18 +797,7 @@
            
        }
 
-        function saveSchedule(id,date,classification){
-            $.get('saveSchedule',{
-                id: id,
-                date: date,
-                classification: classification
-            }, function(){
-                //alert("成功");
-                scheduler.endLightbox(true, html("my_form1"));
-                refresh();
-                
-            });
-        }
+
 
         function getScheduleID(id) {
             $.get('getScheduleID', {

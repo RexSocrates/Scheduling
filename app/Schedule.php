@@ -69,6 +69,16 @@ class Schedule extends Model
         return $schedule;
     }
 
+    //確認當天一位醫生是否有上班
+    public function checkDocStatus($id,$date){
+        $schedule = DB::table('Schedule')
+            ->where('doctorID', $id)
+            ->where('date', $date)
+            ->count();
+        
+        return $schedule;
+    }
+
     // 新增一筆上班資料
     public function addSchedule(array $data) {
         $reservation = new Reservation();

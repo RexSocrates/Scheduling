@@ -59,17 +59,24 @@ class ShiftRecordsController extends Controller
      public function getShiftRecordsBySerial(Request $request){
         $data = $request->all();
         $serial = $data['id'];
+        $date1 = $data['date1'];
+        $date2 = $data['date2'];
 
         $user = new User();
         $shiftRecordObj = new ShiftRecords();
         $schedule = new Schedule();
 
         $shiftInfo = $shiftRecordObj->getShiftRecordByChangeSerial($serial); 
+
         $schedule_1_doctor = $schedule->getScheduleDataByID($shiftInfo->scheduleID_1)->doctorID;
         $schedule_2_doctor = $schedule->getScheduleDataByID($shiftInfo->scheduleID_2)->doctorID;
 
+        $schedule_1_date1 = $schedule->getScheduleDataByID($shiftInfo->scheduleID_1)->date;
+        $schedule_2_date2 = $schedule->getScheduleDataByID($shiftInfo->scheduleID_2)->date;
+
+
         $status = 1; //代表true
-        if($schedule_1_doctor == $shiftInfo->schID_1_doctor &&  $schedule_2_doctor == $shiftInfo->schID_2_doctor){
+        if($schedule_1_doctor == $shiftInfo->schID_1_doctor &&  $schedule_2_doctor == $shiftInfo->schID_2_doctor && $schedule_1_date1 == $date1 && $schedule_2_date2 == $date2){
             $status=1;
         }
         else{
@@ -109,6 +116,8 @@ class ShiftRecordsController extends Controller
 
         return view ("getShiftRecordsByDoctorID",array('data' => $data));
     }
+
+
 
     // 初版班表->換班資訊 新增換班
     public function firstEditionShiftAddShifts(){
@@ -162,7 +171,43 @@ class ShiftRecordsController extends Controller
 
     }
 
+    //調整班表->初版班表 確認換班狀態
+    public function checkDoc1ShiftStatus(Request $request){
+        $data = $request->all();
 
+        $scheduleID1 = (int)$data['scheduleID_1'];
+        $scheduleID2 = (int)$data['scheduleID_2'];
+
+        $schedule = new Schedule();
+
+        //判斷醫生1班
+        $doctorID1 = $schedule->getScheduleDataByID($scheduleID1)->doctorID;//2
+        $date1 = $schedule->getScheduleDataByID($scheduleID2)->date;
+
+        $count=$schedule->checkDocStatus($doctorID1,$date1);
+
+        return $count;
+        
+    }
+
+    //調整班表->初版班表 確認換班狀態
+    public function checkDoc2ShiftStatus(Request $request){
+        $data = $request->all();
+
+        $scheduleID1 = (int)$data['scheduleID_1'];
+        $scheduleID2 = (int)$data['scheduleID_2'];
+
+        $schedule = new Schedule();
+
+        //判斷醫生1班
+        $doctorID2 = $schedule->getScheduleDataByID($scheduleID2)->doctorID;
+        $date2 = $schedule->getScheduleDataByID($scheduleID1)->date;
+
+        $count=$schedule->checkDocStatus($doctorID2,$date2);
+
+        return $count;
+        
+    }
     //調整班表->初版班表 新增換班
     public function shiftFirstEditionAddShifts(Request $request){
         $data = $request->all();

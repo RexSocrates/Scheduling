@@ -144,6 +144,11 @@ Route::get('doctor2DenyShiftRecord/{serial}', 'ShiftRecordsController@doctor2Den
 Route::get('/shift-first-edition','ShiftRecordsController@shiftFirstEdition');//->name('shift-first-edition');
 Route::get('change-shift-first-edition','ShiftRecordsController@shiftFirstEditionAddShifts');
 
+//調整班表->初版班表 確認醫生1換班狀態
+Route::get('checkDoc1Status','ShiftRecordsController@checkDoc1ShiftStatus');
+
+//調整班表->初版班表 確認醫生2換班狀態
+Route::get('checkDoc2Status','ShiftRecordsController@checkDoc2ShiftStatus');
 
 // 調整班表->初版班表 新增換班
 Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts');
@@ -159,6 +164,9 @@ Route::get('changeDoctor1','ScheduleController@getDoctorInfoByScheduleID');
 
 //拖拉換班顯示資訊
 Route::get('showInfo','ScheduleController@getDoctorInfoByScheduleIDWhenExchange');
+
+//調整班表->新增班 驗證
+Route::get('confirmsaveSchedule','ScheduleController@confirmscheduleStatus');
 
 //調整班表->新增班
 Route::get('saveSchedule','ScheduleController@addSchedule');

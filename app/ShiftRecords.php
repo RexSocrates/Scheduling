@@ -93,10 +93,10 @@ class ShiftRecords extends Model
         $user = new User();
         $doctorID = $user->getCurrentUserID();
         $shiftRecords=DB::table('ShiftRecords')
-        ->orwhere('doc2Confirm',2)
+        ->where('doc2Confirm',2)
         ->orwhere('adminConfirm',2)
-        ->where('schID_1_doctor',$doctorID)
-        ->orwhere('schID_2_doctor',$doctorID)
+        ->where('schID_2_doctor',$doctorID)
+        ->orwhere('schID_1_doctor',$doctorID)
         ->get();
 
         return $shiftRecords;

@@ -46,7 +46,7 @@
                                                 <td class="td-padding"><a class="waves-effect waves-light btn pad-btn disabled">已拒絕</a></td>
                                             @else
                                                 <td class="td-padding">
-                                                <a class="waves-effect waves-light btn" onclick="checkStatus({{ $record['changeSerial'] }})">確認</a>
+                                                <a class="waves-effect waves-light btn" onclick="checkStatus({{ $record['changeSerial'] }}, {{ $record['sch1Date'] }}, {{ $record['sch2Date'] }})">確認</a>
                                                 <a href="adminDisagreeShiftRecord/{{ $record['changeSerial'] }}" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
                                                 </td>
                                             @endif
@@ -141,9 +141,11 @@
             });
         }
 
-        function checkStatus(id) {
+        function checkStatus(id, date1, date2) {
             $.get('getScheduleInfo', {
-                id : id
+                id : id,
+                date1 : date1,
+                date2 : date2
             }, function(status) {
                 if(status ==1){
                     adminAgreeShiftRecord(id);
