@@ -34,6 +34,8 @@
 @endsection
 
 @section('content')
+ <input type="hidden" id=shiftDate value=""> <!--不能刪 -->
+ <input type="hidden" id=shiftSessionID value=""> <!--不能刪 -->
     <div id="section" class="container-fix trans-left-five">    <!--     style="background-color:red;"-->
         <div class="container-section">
             <div class="row">
@@ -449,6 +451,8 @@
                                 
                                 addNewSchedule(ev.start_date,ev.section_id);
 
+
+
                                 showScheduleInfo(ev.start_date,ev.section_id);
 
                                 return true;
@@ -625,20 +629,25 @@
         }
 
         function checkDoc1Status(scheduleID_1,scheduleID_2){
-                
+                var countd;
             $.get('checkDoc1Status',{
                 scheduleID_1:scheduleID_1,
                 scheduleID_2:scheduleID_2
+                
             }, function(count){
-
+                countd=count;
+                 async: false;
+                console.log("count"+countd);
             });
-            
+            return countd;
         }
 
         function checkDoc2Status(scheduleID_1,scheduleID_2){
+            
             $.get('checkDoc2Status',{
                 scheduleID_1:scheduleID_1,
                 scheduleID_2:scheduleID_2
+               
             }, function(count){
                   
             });
@@ -800,33 +809,31 @@
 
 
         function getScheduleID(id) {
-            $.get('getScheduleID', {
+            $.get('updateSchedule', {
                 id :id,
-            }, function (){
-                updateSchedule();
-            });
-            console.log('id'+id);
-        }
-
-        function showScheduleInfo(date,section_id) {
-            $.get('showScheduleInfo', {
-                date :date,
-                section_id: section_id
+                newDate : document.getElementById("shiftDate").value,
+                newSessionID : document.getElementById("shiftSessionID").value
             }, function (){
                 
             });
+            
+        }
+
+        function showScheduleInfo(date,section_id) {
+             document.getElementById("shiftDate").value=date;
+             document.getElementById("shiftSessionID").value=section_id;
              console.log("date"+date);
              console.log("111"+section_id);
         }
 
-        function updateSchedule() {
-            $.get('updateSchedule', {
+        // function updateSchedule() {
+        //     $.get('updateSchedule', {
 
-            }, function (){
-                alert("成功");
-            });
+        //     }, function (){
+        //         alert("成功");
+        //     });
             
-        }
+        // }
 
         function save_form() {
             $.get('change-shift-first-edition', {

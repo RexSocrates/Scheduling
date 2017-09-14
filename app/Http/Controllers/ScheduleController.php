@@ -206,19 +206,27 @@ class ScheduleController extends Controller
 
     //更新班表
     public function updateSchedule(Request $request){
+        $scheduleCategory = new ScheduleCategory();
 
-        $id = $this->showScheduleID();
-        $info = $this->showScheduleInfo();
-    
+        $data = $request->all();
+
+        $sessionID = $data['newSessionID'];
+        $newDate = $data['newDate'];
+        $id = $data['id'];
+
+        $date = $this->processDateStr($newDate);
+
+        $location = $scheduleCategory->getSchCategoryInfo($sessionID);
+
         $schInfo = [
-              'schCategorySerial'=>$info['schCategorySerial'],
+              'schCategorySerial'=>$sessionID,
               'isWeekday' => true,
-              'location' => $info['location'],
-              'date' => $info['date'],
+              'location' => $location,
+              'date' => $date,
               'confirmed'=>1
             ];
 
-        $weekDay = (int)date('N', strtotime($info['date']));
+        $weekDay = (int)date('N', strtotime($date));
 
         if($weekDay == 6 || $weekDay == 7){
           $schInfo['isWeekday'] = false;

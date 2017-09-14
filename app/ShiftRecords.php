@@ -61,6 +61,8 @@ class ShiftRecords extends Model
         return $shiftRecord;
     }
 
+
+
     //查詢 單一醫生換班紀錄(已確認)
     public function getShiftRecordsByDoctorID(){
         $user = new User();
@@ -88,25 +90,28 @@ class ShiftRecords extends Model
         return $shiftRecords;
     }
 
-    //查詢 單一醫生換班被拒
+    //查詢 單一醫生換班紀錄
     public function getRejectShiftRecordsByDoctorID(){
         $user = new User();
         $doctorID = $user->getCurrentUserID();
+
         $shiftRecords=DB::table('ShiftRecords')
-        ->where('doc2Confirm',2)
-        ->orwhere('adminConfirm',2)
-        ->where('schID_2_doctor',$doctorID)
-        ->orwhere('schID_1_doctor',$doctorID)
-        ->get();
+            ->where('doc2Confirm',2)
+            ->orwhere('adminConfirm',2)
+            ->orwhere('adminConfirm',0)
+            ->where('schID_1_doctor', $doctorID)
+            ->orWhere('schID_2_doctor', $doctorID)
+            ->where('doc2Confirm',2)
+            ->orwhere('adminConfirm',2)
+            ->orwhere('adminConfirm',0)
+            ->get();
 
         return $shiftRecords;
     }
 
-    //查看 換班被拒
-    public function getRejectShiftRecordsList(){
+    //查看 換班紀錄
+    public function getShiftRecordsList(){
         $shiftRecords = DB::table("ShiftRecords")
-        ->where('doc2Confirm',2)
-        ->where('adminConfirm',2)
         ->get();
 
          return $shiftRecords;
@@ -167,7 +172,7 @@ class ShiftRecords extends Model
 
         if($single) {
             // 只搜尋個人
-            $shiftRecordsData = $this->getUncheckShiftRecordsByDoctorID(); 
+            $shiftRecordsData = $this->getShiftRecordsByDoctorID(); 
         }else {
             $shiftRecordsData = $this->getUncheckShiftRecordsList();
         }
@@ -190,7 +195,7 @@ class ShiftRecords extends Model
         return $dataInschedule;
     }
 
-     // 被拒絕換班申請
+     // 被所有拒絕換班紀錄
     public function getRejectShiftsRecordsInformation($single){
 
         $schedule = new Schedule();
@@ -204,7 +209,7 @@ class ShiftRecords extends Model
             // 只搜尋個人
             $shiftRecordsData = $this->getRejectShiftRecordsByDoctorID(); 
         }else {
-            $shiftRecordsData = $this->getRejectShiftRecordsList();
+            $shiftRecordsData = $this->getShiftRecordsList();
         }
 
         $dataInschedule = array();

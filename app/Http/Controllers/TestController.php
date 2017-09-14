@@ -736,22 +736,27 @@ class TestController extends Controller
     }
 
     //更新班表
+    //更新班表
     public function updateSchedule(){
-        //$data = $request->all();
 
-        $id = $this->showScheduleID();
-        $info = $this->showScheduleInfo();
-    
-        
+        $scheduleCategory = new ScheduleCategory();
+
+        $sessionID = 2;
+        $newDate = "Wed Oct 04 2017 00:00:00 GMT+0800";
+        $id = 4;
+
+        $date = $this->processDateStr($newDate);
+        $location = $scheduleCategory->getSchCategoryInfo($sessionID);
+
         $schInfo = [
-              'schCategorySerial'=>$info['schCategorySerial'],
+              'schCategorySerial'=>$sessionID,
               'isWeekday' => true,
-              'location' => $info['location'],
-              'date' => $info['date'],
+              'location' => $location,
+              'date' => $newDate,
               'confirmed'=>1
             ];
 
-        $weekDay = (int)date('N', strtotime($info['date']));
+        $weekDay = (int)date('N', strtotime($date));
 
         if($weekDay == 6 || $weekDay == 7){
           $schInfo['isWeekday'] = false;
@@ -760,6 +765,7 @@ class TestController extends Controller
         $schedule = new Schedule();
         $schedule->updateScheduleByID($id,$schInfo);
     }
+
     
 }
 

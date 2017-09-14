@@ -64,7 +64,7 @@
                     <div class="card">
                         <div class="card-action">
                             <!-- <img src="../img/announcement.png" class="logo-img"> -->
-                            <font class="card-title">換班拒絕</font>
+                            <font class="card-title">換班被拒</font>
                         </div>
                         <div class="divider"></div>
                         
@@ -85,8 +85,18 @@
                                     <tr>
                                         <td class="td-padding td-w-5">{{ $record[0] }}</td> <!--申請人-->
                                         <td class="td-padding td-w-5">{{ $record[6] }}</td>  <!--申請日期-->
+                                        @if($record[8] == "已拒絕")
+                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[8] }}<font></td>
+                                        @else
                                         <td class="td-padding td-w-5">{{ $record[8] }}</td>
+                                        @endif
+                                        @if($record[9] == "已拒絕")
+                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[9] }}<font></td>
+                                        @elseif($record[9] == "未確認")
+                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[9] }}<font></td>
+                                        @else
                                         <td class="td-padding td-w-5">{{ $record[9] }}</td>
+                                        @endif
                                         <td class="td-padding td-w-20">{{ $record[2] }}  <!--申請人想換班的日期-->
                                             <font class="font-w-b"> 
                                                 {{ $record[0] }} <!--申請人的名字--> 
