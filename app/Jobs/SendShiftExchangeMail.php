@@ -11,10 +11,14 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Mail;
 use App\Mail\ShiftExchange;
 
+use App\User;
+use App\Schedule;
+
 class SendShiftExchangeMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     
+    // 排班人員強制更換上班
     protected $receiver;
     protected $originalShift;
     protected $newShift;
@@ -26,13 +30,16 @@ class SendShiftExchangeMail implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($receiver, $originalShift, $newShift, $admin)
+    public function __construct($receiverID, $originalShiftSerial, $newShiftSerial)
     {
         //從controller 接收資料
-        $this->receiver = $receiver;
-        $this->originalShift = $originalShift;
-        $this->newShift = $newShift;
-        $this->admin = $admin;
+        $userObj = new USer();
+        $scheduleObj = new Schedule();
+        
+        $this->receiver = $userObj->getDoctorInfoByID($receiverID);
+        $this->originalShift = $scheduleObj->getScheduleDataByID($originalShiftSerial);
+        $this->newShift = $scheduleObj->getScheduleDataByID($newShiftSerial);;
+        $this->admin = $userObj->getAdminList()[0];
     }
 
     /**
