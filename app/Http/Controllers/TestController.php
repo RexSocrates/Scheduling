@@ -766,6 +766,60 @@ class TestController extends Controller
         $schedule->updateScheduleByID($id,$schInfo);
     }
 
-    
+    //調整班表->新增班 驗證 班id
+    public function confirmscheduleStatusBySerial(Request $request){
+        $data = $request->all();
+        
+        $scheduleID = 2;
+        $date = "Sun Oct 01 2017 00:00:00 GMT+0800 (CST)";
+
+        $dateStr = $this->processDateStr($date);
+
+        $schedule = new Schedule();
+        $doctorID = $schedule->getFirstEditionScheduleByDoctorID($scheduleID)->doctorID;
+        $count = $schedule->checkDocStatus($scheduleID,$dateStr);
+        
+        echo $count;
+        //return $count;
+
+    }
+     public function checkDoc1ShiftStatus(){
+        
+
+        $scheduleID1 = 36;
+        $scheduleID2 = 37;
+
+        $schedule = new Schedule();
+
+        //判斷醫生1班
+        $doctorID1 = $schedule->getScheduleDataByID($scheduleID1)->doctorID;//2
+        $date1 = $schedule->getScheduleDataByID($scheduleID2)->date;
+
+        //判斷醫生1班
+        $doctorID2 = $schedule->getScheduleDataByID($scheduleID2)->doctorID;
+        $date2 = $schedule->getScheduleDataByID($scheduleID1)->date;
+
+        $count1=$schedule->checkDocStatus($doctorID1,$date1);
+        $count2=$schedule->checkDocStatus($doctorID2,$date2);
+
+        $countDic=[
+            "count1"=>$count1,
+            "count2"=>$count2,
+
+          
+        ];
+        
+
+        
+        $countArr=[];
+        array_push($countArr,$countDic);
+
+        
+        $date = date('Y-m-d');
+
+        echo  $date;
+        //return $countArr;
+        
+    }
 }
 

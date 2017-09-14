@@ -64,12 +64,12 @@ class Schedule extends Model
     public function getFirstEditionScheduleByDoctorID($id) {
         $schedule = DB::table('Schedule')
             ->where('doctorID', $id)
-            ->get();
+            ->first();
         
         return $schedule;
     }
 
-    //確認當天一位醫生是否有上班
+    //確認當天一位醫生是否有上班 醫生id
     public function checkDocStatus($id,$date){
         $schedule = DB::table('Schedule')
             ->where('doctorID', $id)
@@ -78,6 +78,8 @@ class Schedule extends Model
         
         return $schedule;
     }
+
+
 
     // 新增一筆上班資料
     public function addSchedule(array $data) {
@@ -116,10 +118,19 @@ class Schedule extends Model
             ->where('doctorId', $id)
             ->where('date', 'like', $currentMonth.'%')
             ->get();
-        
         return $shifts;
     }
     
+     // 透過醫生ID 取得當月與下個月醫生上的所有班正式
+    public function getCurrentAndNextMonthShiftsByID($id) {
+        $currentMonth = date('Y-m');
+        
+        $shifts = DB::table('Schedule')
+            ->where('doctorId', $id)
+            ->where('date', 'like', $currentMonth.'%')
+            ->get();
+        return $shifts;
+    }
     // 透過班ID更新單一個班
     public function updateScheduleByID($scheduleID, array $data) {
         $reservation = new Reservation();

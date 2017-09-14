@@ -34,8 +34,10 @@
 @endsection
 
 @section('content')
- <input type="hidden" id=shiftDate value=""> <!--不能刪 -->
- <input type="hidden" id=shiftSessionID value=""> <!--不能刪 -->
+ <input type="hidden" id="shiftDate" value=""> <!--不能刪 -->
+ <input type="hidden" id="shiftSessionID" value=""> <!--不能刪 -->
+ <input type="hidden" id="doctor1Info" value=""> <!--不能刪 -->
+ <input type="hidden" id="doctor2Info" value=""> <!--不能刪 -->
     <div id="section" class="container-fix trans-left-five">    <!--     style="background-color:red;"-->
         <div class="container-section">
             <div class="row">
@@ -409,39 +411,37 @@
                                 console.log("ev "+ev.text)
                                 console.log("evs "+evs.text);
 
-                                var date1=evs.start_date.getFullYear()+"-"+(evs.start_date.getMonth()+1) + "-" + evs.start_date.getDate();
-                                var date2=ev.start_date.getFullYear()+"-"+(ev.start_date.getMonth()+1) + "-" + ev.start_date.getDate();
+                            
 
+                                 checkDocStatus(ev.hidden,evs.hidden);
 
-                                 checkDoc1Status(ev.hidden,evs.hidden);
-                                 checkDoc2Status(ev.hidden,evs.hidden);
-
-                                 console.log('checkDoc1Status'+checkDoc1Status(ev.hidden,evs.hidden));
-                                 console.log('checkDoc2Status'+checkDoc2Status(ev.hidden,evs.hidden));
-                                //限制非當月拖拉換班
-                                if(ev.start_date < startd || evs.start_date < startd ){
-                                    //console.log("No");
-                                    dhtmlx.message({ type:"error", text:"此日期無法換班" });
-                                }
-                                // if(checkDoc1Status(ev.hidden,evs.hidden)!=0){
+                                //  console.log('checkDoc1Status'+document.getElementById("doctor1Info").value);
+                                //  console.log('checkDoc2Status'+document.getElementById("doctor2Info").value);
+                                // //限制非當月拖拉換班
+                                // if(ev.start_date < startd || evs.start_date < startd ){
+                                //     //console.log("No");
+                                //     dhtmlx.message({ type:"error", text:"此日期無法換班" });
+                                // }
+                                // if(document.getElementById("doctor1Info").value!=0){
                                 //     dhtmlx.message({ type:"error", text:ev.text+"在"+date1+"已有班了" });
+                                //     alert("1111");
                                 //     console.log("1"+ev.text);
                                 // }
-                                // if(checkDoc2Status(ev.hidden,evs.hidden)!=0){
+                                // if(document.getElementById("doctor2Info").value!=0){
                                 //    dhtmlx.message({ type:"error", text:evs.text+"在"+date2+"已有班了" });
                                 //    console.log("2"+evs.text);
                                 // }
-                                else{
-                                    if(count>=1){
-                                        updateShift(ev.hidden,evs.hidden);
-                                        //dhtmlx.message({ type:"error", text:"此日期已選過" });
-                                        return true;
-                                    }
-                                    else{
+                                // else{
+                                //     if(count>=1){
+                                //         updateShift(ev.hidden,evs.hidden);
+                                //         //dhtmlx.message({ type:"error", text:"此日期已選過" });
+                                //         return true;
+                                //     }
+                                //     else{
                                         
-                                        return false;
-                                    }
-                               }
+                                //         return false;
+                                //     }
+                               //}
                                 return true;
                             });
                             
@@ -451,8 +451,6 @@
                                 
                                 addNewSchedule(ev.start_date,ev.section_id);
 
-
-
                                 showScheduleInfo(ev.start_date,ev.section_id);
 
                                 return true;
@@ -461,7 +459,7 @@
                             scheduler.attachEvent("onEventChanged", function (id, e){
                                 var event = scheduler.getEvent(id);
 
-                                getScheduleID(event.hidden);
+                                checkDoctorSchedule(event.hidden); //schedule id 
 
                                 return true;
                             });
@@ -628,28 +626,43 @@
                 alert("不可選擇相同醫生相同時段");
         }
 
-        function checkDoc1Status(scheduleID_1,scheduleID_2){
-                var countd;
-            $.get('checkDoc1Status',{
+        function checkDocStatus(scheduleID_1,scheduleID_2){
+            $.get('checkDocStatus',{
                 scheduleID_1:scheduleID_1,
                 scheduleID_2:scheduleID_2
                 
-            }, function(count){
-                countd=count;
-                 async: false;
-                console.log("count"+countd);
+            }, function(array){
+                 if(array[0]['count1']!=0){
+                    dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date2']+"已有班" });
+                    console.log("doc1"+array[0]['count1']);
+
+                }
+                if(array[0]['count2']!=0){
+                    dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生"+array[0]['date1']+"已有班" });
+                    console.log("doc2"+array[0]['count2']);
+                }
+
+                else{
+                    updateShift(scheduleID_1,scheduleID_2);
+                }
             });
-            return countd;
+            
         }
 
         function checkDoc2Status(scheduleID_1,scheduleID_2){
-            
             $.get('checkDoc2Status',{
                 scheduleID_1:scheduleID_1,
                 scheduleID_2:scheduleID_2
-               
-            }, function(count){
-                  
+
+            }, function(array){
+                if(array[0][count1]){
+                    updateShift(scheduleID_1,scheduleID_2);
+
+                }
+                else{
+                     alert("不能換班");
+                }
+                 
             });
              
         }
@@ -682,21 +695,47 @@
         }
 
         function save_form_alert(){
-            var ID_1 = document.getElementById('date1').value;
-            var ID_2 = document.getElementById('date2').value;
+            $.get('checkDocStatus',{
+            scheduleID_1 : document.getElementById('date1').value,
+            scheduleID_2 : document.getElementById('date2').value,
 
-            if(ID_1 == ID_2){
-                dhtmlx.message({ type:"error", text:"請選擇不同時段醫生" });
-            }
+            }, function(array){
+                var ID_1 = document.getElementById('date1').value;
+                var ID_2 = document.getElementById('date2').value;
+                 if(ID_1 == ID_2){
+                     dhtmlx.message({ type:"error", text:"請選擇不同時段醫生" });
+                }
 
-            else if(ID_2 == ""){
-                dhtmlx.message({ type:"error", text:"請選擇醫生" });
-            }
+                else if(ID_2 == ""){
+                    dhtmlx.message({ type:"error", text:"請選擇醫生" });
+                }
 
-           else{
-            save_form();
-           }
+                else if(array[0]['count1']!=0){
+                    dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date2']+"已有班" });
+                    console.log("doc1"+array[0]['count1']);
 
+                }
+                else if(array[0]['count2']!=0){
+                    dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生"+array[0]['date1']+"已有班" });
+                    console.log("doc2"+array[0]['count2']);
+                }
+
+                else{
+                save_form();
+                }
+           
+           });
+        }
+
+         function save_form() {
+            $.get('change-shift-first-edition', {
+                scheduleID_1 : document.getElementById('date1').value,
+                scheduleID_2 : document.getElementById('date2').value
+                
+            }, function (){
+                scheduler.endLightbox(true, html("my_form"));
+                refresh();
+            });
         }
 
 
@@ -801,19 +840,37 @@
            document.getElementById("section_id").innerHTML= "<input>"+id;
            document.getElementById("date_1").innerHTML= "<h5 value="+date2+">"+date2+"</h5>";
            document.getElementById("classification").innerHTML="<h5 value="+id+"> "+text+"</h5>";
-
-          
            
        }
 
 
+        function checkDoctorSchedule(id){
+            $.get('checkDoctorSchedule',{
+                scheduleID : id,
+                date: document.getElementById("shiftDate").value,
+                
+            }, function(count){
+                if(count!=0){
+                    dhtmlx.message({ type:"error", text:"該天已有班" });
+                }
+                else{
+                    var id = id;
+                    var date =document.getElementById("shiftDate").value;
+                    var classification = document.getElementById("shiftSessionID").value;
+                    saveSchedule(id,date,classification);
+                }
+                
+            });
 
-        function getScheduleID(id) {
+                console.log("id"+id);
+                console.log("date"+document.getElementById("shiftDate").value);
+         }
+
+        function updateSchedule() {
             $.get('updateSchedule', {
-                id :id,
-                newDate : document.getElementById("shiftDate").value,
-                newSessionID : document.getElementById("shiftSessionID").value
+                
             }, function (){
+                alert("成功");
                 
             });
             
@@ -822,28 +879,6 @@
         function showScheduleInfo(date,section_id) {
              document.getElementById("shiftDate").value=date;
              document.getElementById("shiftSessionID").value=section_id;
-             console.log("date"+date);
-             console.log("111"+section_id);
-        }
-
-        // function updateSchedule() {
-        //     $.get('updateSchedule', {
-
-        //     }, function (){
-        //         alert("成功");
-        //     });
-            
-        // }
-
-        function save_form() {
-            $.get('change-shift-first-edition', {
-                scheduleID_1 : document.getElementById('date1').value,
-                scheduleID_2 : document.getElementById('date2').value
-                
-            }, function (){
-                scheduler.endLightbox(true, html("my_form"));
-                refresh();
-            });
         }
 
         function close_form() {               

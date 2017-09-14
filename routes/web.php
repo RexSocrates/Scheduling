@@ -145,10 +145,10 @@ Route::get('/shift-first-edition','ShiftRecordsController@shiftFirstEdition');//
 Route::get('change-shift-first-edition','ShiftRecordsController@shiftFirstEditionAddShifts');
 
 //調整班表->初版班表 確認醫生1換班狀態
-Route::get('checkDoc1Status','ShiftRecordsController@checkDoc1ShiftStatus');
+Route::get('checkDocStatus','ShiftRecordsController@checkDoc1ShiftStatus');
 
 //調整班表->初版班表 確認醫生2換班狀態
-Route::get('checkDoc2Status','ShiftRecordsController@checkDoc2ShiftStatus');
+//Route::get('checkDoc2Status','ShiftRecordsController@checkDoc2ShiftStatus');
 
 // 調整班表->初版班表 新增換班
 Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts');
@@ -178,8 +178,7 @@ Route::get('updateScheduleID','ScheduleController@getDoctorInfoByScheduleID');
 Route::get('deleteSchedule','ScheduleController@deleteSchedule');
 
 
-Route::get('getScheduleID','ScheduleController@showScheduleID');
-Route::get('showScheduleInfo','ScheduleController@showScheduleInfo');
+Route::get('checkDoctorSchedule','ScheduleController@confirmscheduleStatusBySerial');
 Route::get('updateSchedule','ScheduleController@updateSchedule');
 
 
@@ -337,7 +336,7 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 //Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
-Route::get("info",'TestController@updateSchedule');
+Route::get("info",'TestController@checkDoc1ShiftStatus');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 //Route::post('reservation/updateReservation/{id}', 'ReservationController@updateReservation');
 //Route::get('/reservation/updateReservation/{id}', function() {

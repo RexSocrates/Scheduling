@@ -180,14 +180,33 @@ class ShiftRecordsController extends Controller
         $scheduleID2 = (int)$data['scheduleID_2'];
 
         $schedule = new Schedule();
+        $user =new User();
 
         //判斷醫生1班
         $doctorID1 = $schedule->getScheduleDataByID($scheduleID1)->doctorID;//2
         $date1 = $schedule->getScheduleDataByID($scheduleID2)->date;
 
-        $count=$schedule->checkDocStatus($doctorID1,$date1);
+        //判斷醫生1班
+        $doctorID2 = $schedule->getScheduleDataByID($scheduleID2)->doctorID;
+        $date2 = $schedule->getScheduleDataByID($scheduleID1)->date;
 
-        return $count;
+        $count1=$schedule->checkDocStatus($doctorID1,$date1);
+        $count2=$schedule->checkDocStatus($doctorID2,$date2);
+
+        $countDic=[
+            "count1"=>$count1,
+            "count2"=>$count2,
+            "doc1"=>$user->getDoctorInfoByID($doctorID1)->name,
+            "doc2"=>$user->getDoctorInfoByID($doctorID2)->name,
+            'date1'=>$schedule->getScheduleDataByID($scheduleID1)->date,
+            'date2'=>$schedule->getScheduleDataByID($scheduleID2)->date
+        ];
+
+        
+        $countArr=[];
+        array_push($countArr,$countDic);
+
+        return $countArr;
         
     }
 

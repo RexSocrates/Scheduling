@@ -105,7 +105,7 @@ class ScheduleController extends Controller
         return view('pages.schedule', array('schedule' => $scheduleData));
     }
 
-    //調整班表->新增班 驗證
+    //調整班表->新增班 驗證醫生id
     public function confirmscheduleStatus(Request $request){
         $data = $request->all();
         
@@ -119,6 +119,26 @@ class ScheduleController extends Controller
         return $count;
 
     }
+
+    //調整班表->新增班 驗證 班id
+    public function confirmscheduleStatusBySerial(Request $request){
+        $data = $request->all();
+        
+        $scheduleID = $data['scheduleID'];
+        $date = $data['date'];
+
+        $dateStr = $this->processDateStr($date);
+
+        $schedule = new Schedule();
+
+        $doctorID = $schedule->getFirstEditionScheduleByDoctorID($scheduleID)->doctorID;
+        
+        $count = $schedule->checkDocStatus($doctorID,$dateStr);
+        
+        return $count;
+
+    }
+
     //新增班表
     public function addSchedule(Request $request){
         $data = $request->all();
