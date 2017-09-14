@@ -632,12 +632,16 @@
                 scheduleID_2:scheduleID_2
                 
             }, function(array){
-                 if(array[0]['count1']!=0){
+                if(array[0]['date2'] == array[0]['date1']  ){
+                     updateShift(scheduleID_1,scheduleID_2);
+                }
+
+                else if(array[0]['count1']!=0){
                     dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date2']+"已有班" });
                     console.log("doc1"+array[0]['count1']);
 
                 }
-                if(array[0]['count2']!=0){
+                else if(array[0]['count2']!=0){
                     dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生"+array[0]['date1']+"已有班" });
                     console.log("doc2"+array[0]['count2']);
                 }
@@ -709,6 +713,7 @@
                 else if(ID_2 == ""){
                     dhtmlx.message({ type:"error", text:"請選擇醫生" });
                 }
+
 
                 else if(array[0]['count1']!=0){
                     dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date2']+"已有班" });
@@ -847,8 +852,8 @@
         function checkDoctorSchedule(id){
             $.get('checkDoctorSchedule',{
                 scheduleID : id,
-                date: document.getElementById("shiftDate").value,
-                
+                date: document.getElementById("shiftDate").value
+    
             }, function(count){
                 if(count!=0){
                     dhtmlx.message({ type:"error", text:"該天已有班" });

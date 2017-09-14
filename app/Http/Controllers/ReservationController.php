@@ -189,6 +189,25 @@ class ReservationController extends Controller
         $dateArr = explode(' ', $str);
         $endDateArr = explode(' ', $end);
 
+        if( $dateArr[3] % 400 ==0 || (($dateArr[3]%4==0)&&($dateArr[3]%100!=0)) ){
+            if($dateArr[1] == 'Feb'){
+                $endDateArr[2] =30;
+            }
+        }
+        else {
+            if($endDateArr[2] == 1 ){
+                if($dateArr[1] == 'Feb'){
+                    $endDateArr[2] =29;
+                }
+                if($dateArr[1] == 'Jan' || $dateArr[1] == 'Mar' || $dateArr[1] == 'May' || $dateArr[1] == 'Jul' || $dateArr[1] == 'Aug' || $dateArr[1] == 'Oct' || $dateArr[1] == 'Dec'){
+                    $endDateArr[2] =32;
+                }
+                if($dateArr[1] == 'Apr' || $dateArr[1] == 'Jun' || $dateArr[1] == 'Sep' || $dateArr[1] == 'Nov'){
+                    $endDateArr[2] =31;
+                }
+            }
+        }
+
         $countDay = $endDateArr[2]-$dateArr[2];
 
         $shiftCategory = new ShiftCategory();

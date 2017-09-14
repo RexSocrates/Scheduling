@@ -767,8 +767,8 @@ class TestController extends Controller
     }
 
     //調整班表->新增班 驗證 班id
-    public function confirmscheduleStatusBySerial(Request $request){
-        $data = $request->all();
+    public function confirmscheduleStatusBySerial(){
+       // $data = $request->all();
         
         $scheduleID = 2;
         $date = "Sun Oct 01 2017 00:00:00 GMT+0800 (CST)";

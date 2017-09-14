@@ -172,7 +172,7 @@ class ShiftRecords extends Model
 
         if($single) {
             // 只搜尋個人
-            $shiftRecordsData = $this->getShiftRecordsByDoctorID(); 
+            $shiftRecordsData = $this->getUncheckShiftRecordsByDoctorID(); 
         }else {
             $shiftRecordsData = $this->getUncheckShiftRecordsList();
         }
