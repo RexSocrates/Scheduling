@@ -75,6 +75,10 @@ header, main, footer {
     margin-bottom: 20px;  
 }
 
+.margin-t10 {
+    margin-top: 10px;  
+}
+
 .margin-t20 {
     margin-top: 20px;  
 }
@@ -724,4 +728,20 @@ tbody td:last-child, thead th:last-child {
 
 .inline {
 /*    display: inline;*/
+}
+
+#slider {
+    padding: 0px 15px;
+}
+
+.slider-text {
+    font-size: 20px;
+    text-align: justify;
+}
+
+
+.slider-text:after {
+  content: "";
+  display: inline-block;
+  width: 100%;
 }
