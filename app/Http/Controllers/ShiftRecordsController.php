@@ -60,8 +60,7 @@ class ShiftRecordsController extends Controller
      public function getShiftRecordsBySerial(Request $request){
         $data = $request->all();
         $serial = $data['id'];
-        $date1 = $data['date1'];
-        $date2 = $data['date2'];
+        
 
         $user = new User();
         $shiftRecordObj = new ShiftRecords();
@@ -69,15 +68,14 @@ class ShiftRecordsController extends Controller
 
         $shiftInfo = $shiftRecordObj->getShiftRecordByChangeSerial($serial); 
 
-        $schedule_1_doctor = $schedule->getScheduleDataByID($shiftInfo->scheduleID_1)->doctorID;
-        $schedule_2_doctor = $schedule->getScheduleDataByID($shiftInfo->scheduleID_2)->doctorID;
+        $schedule_1_doctor = $schedule->getScheduleDataByID($shiftInfo->scheduleID_1)->doctorID; //2
+        $schedule_2_doctor = $schedule->getScheduleDataByID($shiftInfo->scheduleID_2)->doctorID; //3
 
-        $schedule_1_date1 = $schedule->getScheduleDataByID($shiftInfo->scheduleID_1)->date;
-        $schedule_2_date2 = $schedule->getScheduleDataByID($shiftInfo->scheduleID_2)->date;
+        
 
 
         $status = 1; //代表true
-        if($schedule_1_doctor == $shiftInfo->schID_1_doctor &&  $schedule_2_doctor == $shiftInfo->schID_2_doctor && $schedule_1_date1 == $date1 && $schedule_2_date2 == $date2){
+        if($schedule_1_doctor == $shiftInfo->schID_1_doctor &&  $schedule_2_doctor == $shiftInfo->schID_2_doctor){
             $status=1;
         }
         else{
@@ -142,7 +140,7 @@ class ShiftRecordsController extends Controller
 
     		$newShiftSerial = $addShifts->addShifts($data);
 
-    		return redirect('first-edition-shift-info'); 
+    		return redirect('schedule-shift-info'); 
 
     }
 

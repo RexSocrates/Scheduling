@@ -64,7 +64,7 @@ class Schedule extends Model
     public function getFirstEditionScheduleByDoctorID($id) {
         $schedule = DB::table('Schedule')
             ->where('doctorID', $id)
-            ->first();
+            ->get();
         
         return $schedule;
     }

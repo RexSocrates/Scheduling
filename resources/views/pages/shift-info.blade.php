@@ -38,7 +38,12 @@
                                         <tr>
                                             <td class="td-padding">{{ $record['applier'] }}</td>
                                             <td class="td-padding">{{ $record['applyDate'] }}</td>
-                                            <td class="td-padding">{{ $record['sch1Date'] }} <font class="font-w-b">{{ $record['sch1Content'] }} </font> 與 {{ $record['sch2Date'] }}  <font class="font-w-b">{{ $record['sch2Content'] }} </font> 互換</td>
+                                            <td class="td-padding">
+                                            <font id="date1">{{ $record['sch1Date'] }} </font>
+                                            <font class="font-w-b">{{ $record['sch1Content'] }} </font> 
+                                            與 <font id ="date2">{{ $record['sch2Date'] }}  </font>
+                                            <font class="font-w-b">{{ $record['sch2Content'] }} </font> 
+                                            互換</td>
                                             
                                             @if($record['adminConfirm'] == 1)
                                                 <td class="td-padding"><a class="waves-effect waves-light btn pad-btn disabled">已確認</a></td>
@@ -46,7 +51,7 @@
                                                 <td class="td-padding"><a class="waves-effect waves-light btn pad-btn disabled">已拒絕</a></td>
                                             @else
                                                 <td class="td-padding">
-                                                <a class="waves-effect waves-light btn" onclick="checkStatus({{ $record['changeSerial'] }}, {{ $record['sch1Date'] }}, {{ $record['sch2Date'] }})">確認</a>
+                                                <a class="waves-effect waves-light btn" onclick="checkStatus({{ $record['changeSerial'] }})">確認</a>
                                                 <a href="adminDisagreeShiftRecord/{{ $record['changeSerial'] }}" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
                                                 </td>
                                             @endif
@@ -141,11 +146,9 @@
             });
         }
 
-        function checkStatus(id, date1, date2) {
+        function checkStatus(id) {
             $.get('getScheduleInfo', {
                 id : id,
-                date1 : date1,
-                date2 : date2
             }, function(status) {
                 if(status ==1){
                     adminAgreeShiftRecord(id);
@@ -155,6 +158,7 @@
                 }
                
             });
+            
             
         }
 

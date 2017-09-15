@@ -64,7 +64,7 @@
                     <div class="card">
                         <div class="card-action">
                             <!-- <img src="../img/announcement.png" class="logo-img"> -->
-                            <font class="card-title">換班被拒</font>
+                            <font class="card-title">換班確認狀態</font>
                         </div>
                         <div class="divider"></div>
                         
