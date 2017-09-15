@@ -143,32 +143,40 @@
                 
                 <div id="modal-right" class="row margin-b0">
                     <div class="input-field col s12">
-                        <input value="15" name="mustOnDutyTotalShifts" type="number" required>
-                        <label for="和id一樣">總班數</label>
+                        <input value="15" name="totalShifts" type="number" required>
+                        <label for="totalShifts">總班數(行政與教學)</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" name="mustOnDutyTaipeiShifts" type="number" required>
-                        <label for="和id一樣">台北院區班數</label>
+                        <input value="0" name="mustOnDutyTaipeiShifts" type="number" required>
+                        <label for="mustOnDutyTaipeiShifts">臨床總班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" name="mustOnDutyTamsuiShifts" type="number" required>
-                        <label for="和id一樣">淡水院區班數</label>
+                        <input value="0" name="weekendShifts" type="number" required>
+                        <label for="weekendShifts">臨床假日班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" name="mustOnDutyDayShifts" type="number" required>
-                        <label for="和id一樣">白天班數</label>
+                        <input value="0" name="mustOnDutyTaipeiShifts" type="number" required>
+                        <label for="mustOnDutyTaipeiShifts">臨床台北院區班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" name="mustOnDutyNightShifts" type="number" required>
-                        <label for="和id一樣">夜晚班數</label>
+                        <input value="0" name="mustOnDutyTamsuiShifts" type="number" required>
+                        <label for="mustOnDutyTamsuiShifts">臨床淡水院區班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" name="mustOnDutyMedicalShifts" type="number" required>
-                        <label for="和id一樣">內科班數</label>
+                        <input value="0" name="mustOnDutyDayShifts" type="number" required>
+                        <label for="mustOnDutyDayShifts">臨床白天班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" name="mustOnDutySurgicalShifts" type="number" required>
-                        <label for="和id一樣">外科班數</label>
+                        <input value="0" name="mustOnDutyNightShifts" type="number" required>
+                        <label for="mustOnDutyNightShifts">臨床夜晚班數</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input value="0" name="mustOnDutyMedicalShifts" type="number" required>
+                        <label for="mustOnDutyMedicalShifts">臨床內科班數</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input value="0" name="mustOnDutySurgicalShifts" type="number" required>
+                        <label for="mustOnDutySurgicalShifts">臨床外科班數</label>
                     </div>
                 </div>
             </div>
@@ -269,32 +277,40 @@
                 
                 <div id="modal-right1" class="row margin-b0">
                     <div class="input-field col s12">
-                        <input value="15" id="mustOnDutyTotalShifts" name="mustOnDutyTotalShifts" type="number" required>
-                        <label for="和id一樣">總班數</label>
+                        <input value="15" name="totalShifts" type="number" required>
+                        <label for="totalShifts">總班數(行政與教學)</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="mustOnDutyTaipeiShifts" name="mustOnDutyTaipeiShifts" type="number" required>
-                        <label for="和id一樣">台北院區班數</label>
+                        <input value="0" name="mustOnDutyTaipeiShifts" type="number" required>
+                        <label for="mustOnDutyTaipeiShifts">臨床總班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="mustOnDutyTamsuiShifts" name="mustOnDutyTamsuiShifts" type="number" required>
-                        <label for="和id一樣">淡水院區班數</label>
+                        <input value="0" name="weekendShifts" type="number" required>
+                        <label for="weekendShifts">臨床假日班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="mustOnDutyDayShifts" name="mustOnDutyDayShifts" type="number" required>
-                        <label for="和id一樣">白天班數</label>
+                        <input value="0" name="mustOnDutyTaipeiShifts" type="number" required>
+                        <label for="mustOnDutyTaipeiShifts">臨床台北院區班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="mustOnDutyNightShifts" name="mustOnDutyNightShifts" type="number" required>
-                        <label for="和id一樣">夜晚班數</label>
+                        <input value="0" name="mustOnDutyTamsuiShifts" type="number" required>
+                        <label for="mustOnDutyTamsuiShifts">臨床淡水院區班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="mustOnDutyMedicalShifts" name="mustOnDutyMedicalShifts" type="number" required>
-                        <label for="和id一樣">內科班數</label>
+                        <input value="0" name="mustOnDutyDayShifts" type="number" required>
+                        <label for="mustOnDutyDayShifts">臨床白天班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="15" id="mustOnDutySurgicalShifts" name="mustOnDutySurgicalShifts" type="number" required>
-                        <label for="和id一樣">外科班數</label>
+                        <input value="0" name="mustOnDutyNightShifts" type="number" required>
+                        <label for="mustOnDutyNightShifts">臨床夜晚班數</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input value="0" name="mustOnDutyMedicalShifts" type="number" required>
+                        <label for="mustOnDutyMedicalShifts">臨床內科班數</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input value="0" name="mustOnDutySurgicalShifts" type="number" required>
+                        <label for="mustOnDutySurgicalShifts">臨床外科班數</label>
                     </div>
                 </div>
             </div>
@@ -373,7 +389,8 @@
                 // major 4
 //                document.getElementById('doctorMajor').value = doctorData[4];
 //                document.getElementById('doctorMajor').value = "Surgical";
-                console.log("Major : " + doctorData[4]);
+//                console.log("Major : " + doctorData[4]);
+                
                 document.getElementsByClassName("select-dropdown")[8].value = doctorData[4];
                 var majorValue  = doctorData[4];
                 document.getElementsByClassName("select-dropdown")[8].value = majorValue;
@@ -389,7 +406,17 @@
                 }
                 
                 // identity 6
-                document.getElementById("doctorIdentity").value = doctorData[6];
+                var identity = doctorData[6];
+                $("#doctorIdentity").val(identity).find("option[value=" + identity +"]").attr('selected', true);
+                if (identity == "Admin") {
+                    identity = "排班人員";
+                } else if(identity == "Announcement"){
+                    identity = "一般醫師(可發送公告)";
+                } else if(identity == "General"){
+                    identity = "一般醫師";
+                }
+                
+                document.getElementsByClassName("select-dropdown")[12].value = identity;
                 
                 // must on duty XX shifts
                 document.getElementById("mustOnDutyTotalShifts").value = doctorData[7];
@@ -401,8 +428,6 @@
                 document.getElementById("mustOnDutyNightShifts").value = doctorData[13];
                 
                 Materialize.updateTextFields();
-                
-                
                 
             });
         }
