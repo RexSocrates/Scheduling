@@ -41,7 +41,7 @@
                             <form action="addRemark" method="post">
                                 <div class="row margin-b0">
                                     <div class="col s5">
-                                        <p class="information">開放時間: 2017/06/01 - 2017/06/25</p>
+                                        <p class="information">開放時間: 2017/09/01 - 2017/09/25</p>
                                         
                                         <p class="information">可排天班數: on班:{{$onAmount}} off班:{{$offAmount}}</p>
                                         <!-- <p class="information" id='countDay'>尚需排班數: 白班:{{$countDay}} 夜班:{{$countNight}}</p> 
@@ -51,7 +51,7 @@
                                     <div class="col s7">
                                         <form action="addRemark" method="post" class="col s6">
                                             <div class="input-field">
-                                                <textarea id="textarea1" class="materialize-textarea" name="remark"placeholder="請輸入XXXXX">{{$remark}}</textarea>
+                                                <textarea id="textarea1" class="materialize-textarea" name="remark"placeholder="請輸入出國時段或其他事情">{{$remark}}</textarea>
     <!--                                                     data-length="150"-->
                                                 <label for="textarea1">備註:</label>
 
