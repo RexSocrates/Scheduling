@@ -5,18 +5,6 @@
         td{
             padding: 0;
         }
-        .white_cell{
-            background-color:white;
-        }
-        .green_cell{
-            background-color:#95FF95;
-        }
-        .yellow_cell{
-            background-color:#FFFF79;
-        }
-        .red_cell{
-            background-color:#FF5353;
-        }
     </style>
 @endsection
 
@@ -135,11 +123,13 @@
                             
                             //進入畫面後顯示的東西
                             scheduler.init('scheduler_here',new Date(),"timeline");
-                             scheduler.parse([
+                            
+                            scheduler.parse([
                             @foreach($schedule as $data)
                                  { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}"},
                             @endforeach
                             ],"json");
+                            
                         </script>
                     </div>
                 </div>

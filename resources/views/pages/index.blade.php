@@ -16,24 +16,29 @@
       		  	  	<div class="card">
       		  	  		<div class="card-action">
       		  	  			<font class="card-title">系統公告</font>
+      		  	  			@if(Auth::user()->identity == 'Admin')
       		  	  			<a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1"><i class="material-icons">add</i></a>
+      		  	  			@endif
       		  	  		</div>
       		  	  		<div class="divider"></div>
       		  	  	  	
       		  	  	  	<div class="card-content">
                             @foreach($announcements as $announcement)
-                                <div class="row">
-    						    	<div class="col s2">
-    						    		<img src="../img/user.png" class="boss-img">
-    						    	</div>
-    						    	<div class="col s10">
-    						    		<span class="card-title">{{ $announcement->title }}<a class="dropdown-edit-button right" href="" data-activates='dropdown-announcement'><i class="material-icons" onclick="passAnnouncementSerial({{ $announcement->announcementSerial }})">more_vert</i></a></span>
-    						    		<p class="announcement-ellipsis">{{ $announcement->content }}</p>
-    						    		<a href="#modal-more" onclick="getAnnouncement({{ $announcement->announcementSerial }})">more</a>
-    						    	</div>
-                                    
-    				            </div>
-    						  <div class="divider margin-b20"></div>
+                            <div class="row">
+                                <div class="col s2">
+                                    <img src="../img/user.png" class="boss-img">
+                                </div>
+                                <div class="col s10">
+                                    <span class="card-title">{{ $announcement->title }}
+                                    @if(Auth::user()->identity == 'Admin')
+                                    <a class="dropdown-edit-button right" href="" data-activates='dropdown-announcement'><i class="material-icons" onclick="passAnnouncementSerial({{ $announcement->announcementSerial }})">more_vert</i></a>
+                                    @endif
+                                    </span>
+                                    <p class="announcement-ellipsis">{{ $announcement->content }}</p>
+                                    <a href="#modal-more" onclick="getAnnouncement({{ $announcement->announcementSerial }})">more</a>
+                                </div>
+    				        </div>
+    				        <div class="divider margin-b20"></div>
                             @endforeach
                             <ul id='dropdown-announcement' class='dropdown-content'>
                                 <li><a href="#modal1">編輯</a></li>

@@ -126,12 +126,10 @@
         </ul>
         
         <ul id="dropdown1" class="dropdown-content">
-<!--
+            <li><a href="profile">個人資料</a></li>
             @if(Auth::user()->identity == 'Admin')
                 <li><a href="setting">設定</a></li>
             @endif
--->
-            <li><a href="profile">個人資料</a></li>
             <li class="divider"></li>
             <li>
                 <a href="{{ route('logout') }}"

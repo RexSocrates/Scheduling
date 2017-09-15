@@ -5,18 +5,7 @@
         td{
             padding: 0;
         }
-        .white_cell{
-            background-color:white;
-        }
-        .green_cell{
-            background-color:#95FF95;
-        }
-        .yellow_cell{
-            background-color:#FFFF79;
-        }
-        .red_cell{
-            background-color:#FF5353;
-        }
+        
     </style>
 @endsection
 
@@ -103,6 +92,19 @@
                                 return "";
                             }
                             
+                            //更改timeline event 文字
+//                            scheduler.templates.event_bar_text = function(start,end,event){
+//                                var mode = scheduler.getState().mode;
+//                                var text;
+//                                if(mode == "timeline"){
+//                                    text = "<center class='timeline-event-text'>"+event.text+"</center>";
+//                                }
+//                                else {
+//                                    text = "text for other views";
+//                                } 
+//                                return text;
+//                            };
+                            
                             //增加最左邊欄位的class
                             scheduler.templates.timeline_scaley_class = function(key, label, section){ 
                                 return "width-200";
@@ -157,11 +159,8 @@
                            
                             scheduler.parse([
                             @foreach($reservations as $reservation)
-                               
                                 @foreach($reservation[1] as $doctor)
-                                
                                  { start_date: "{{ $reservation[0]->date}} 00:00", end_date: "{{ $reservation[0]->endDate }} 00:00", text:"{{ $doctor->name }}", section_id:"{{ $reservation[0]->categorySerial}}"},
-                               
                                @endforeach
                             @endforeach
                             ],"json");

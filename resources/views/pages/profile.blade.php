@@ -30,8 +30,7 @@
                             <p>級別： {{ $doctor->level }}</p>
                             <p>專職：{{ $doctor->major }}</p>
                             <p>職登院區：{{ $doctor->location }}</p>
-                            <a href="#modal1">更改密碼</a>
-                            
+<!--                            <a href="#modal1">更改密碼</a>-->
                         </div>
                     </div>
                 </div>
