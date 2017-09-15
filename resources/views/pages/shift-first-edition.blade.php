@@ -9,18 +9,6 @@
         td{
             padding: 0;
         }
-        .white_cell{
-            background-color:white;
-        }
-        .green_cell{
-            background-color:#95FF95;
-        }
-        .yellow_cell{
-            background-color:#FFFF79;
-        }
-        .red_cell{
-            background-color:#FF5353;
-        }
         .block_section {
             background-color: white;
             opacity: 0;

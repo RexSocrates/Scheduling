@@ -508,9 +508,10 @@ header, main, footer {
 }
 
 .timeline-event-text {
-    margin-left:-10px;
+    margin-left:-8px;
     font-size:15px;
     padding-top:12px;
+    margin-right: -9px;
 }
 
 .width-200 {
@@ -667,16 +668,24 @@ input.select-dropdown {
 }
 
 .white_cell{
-    background-color:white;
+    background-color:white !important;
 }
 .green_cell{
-    background-color:#95FF95;
+    background-color:#95FF95 !important;
 }
 .yellow_cell{
-    background-color:#FFFF79;
+    background-color:#FFF9C4 !important;
 }
 .red_cell{
-    background-color:#FF5353;
+    background-color:#FF5353 !important;
+}
+
+.dhx_cal_event_line {
+    padding-left: 5px !important;
+    padding-right: 7px !important;
+    padding-bottom: 3px !important;
+    margin-top: -2px !important;
+    margin-left: -1px !important;
 }
 
 table.scroll {
