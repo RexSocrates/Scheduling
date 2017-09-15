@@ -154,9 +154,13 @@ class ReservationController extends Controller
         
         $addRemark = Input::get('remark');
         
+        if($addRemark==null){
+            $addRemark="";
+        }
+        
         $remarkData = $remark->modifyRemarkByDoctorID($doctorID,$addRemark);
 
-        //echo $addRemark;
+        
         return redirect('reservation');
     }
     

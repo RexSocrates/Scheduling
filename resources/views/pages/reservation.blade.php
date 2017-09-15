@@ -426,7 +426,7 @@
         }
 
         function alert2(){
-            alert("備註送出完成");
+            dhtmlx.message({ type:"error", text:"備註送出完成" });
         }
         
         // 確認是否可預on班或預off班
