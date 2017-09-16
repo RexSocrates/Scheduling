@@ -185,6 +185,9 @@ Route::group(['middleware' => ['auth']], function () {
 //Route::get('postAjaxRequest', 'TestController@postAjaxRequest');
 Route::get('test','TestController@shiftFirstEditionAddShifts');
 
+// 演算法 Get 測試
+Route::get('sendGetRequest', 'AlgorithmController@sendGetRequest');
+
 //演算法輸入格式測試
 Route::get('sendRequest', 'AlgorithmController@sendRequest');
 

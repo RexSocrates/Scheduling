@@ -21,49 +21,94 @@ use App\CustomClass\Month;
 
 class AlgorithmController extends Controller
 {
+    // send a GET request
+    public function sendGetRequest() {
+        $client = new Client(['base_uri' => 'http://0.0.0.0:8080/']);
+        $response = $client->request('GET', '');
+        
+        $body = $response->getBody();
+        
+        echo $body;
+    }
+    
     // send a request to the web service
     public function sendRequest() {
         
         
-        $client = new Client(['base_uri' => 'http://localhost:5000']);
+        $client = new Client(['base_uri' => 'http://0.0.0.0:8080/']);
         
-        $response = $client->request('POST', '/todo/api/v1.0/tasks', [
+        $response = $client->request('POST', '', [
             'json' => [
                 'onRes' => json_encode($this->getOnReservation()),
-                'offRes' => json_encode($this->getOffReservation())
+                'offRes' => json_encode($this->getOffReservation()),
                 'doctors' => json_encode($this->getDoctorsInfo()),
                 'monthInfo' => json_encode($this->getMonthInfo())
             ]
         ]);
         
-        $body = $response->getBody();
+        // get response body
+        $body = (string)$response->getBody();
+        echo $body.'<br><br>';
+        $json = json_encode($body);
+//        echo print_r($json).'<br><br>'; // data
+        echo gettype($json); // string
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        // 測試：取得資料庫並轉譯為json
 //        $onResList = $this->getOnReservation();
 //        foreach($onResList as $res) {
 //            $res->printData();
 //        }
-//        echo json_encode($onResList);
-        
 //        echo '<br>==================================================<br>';
-        
+//        echo json_encode($onResList);
+//        
+//        echo '<br>==================================================<br>';
+//        
 //        $offResList = $this->getOffReservation();
 //        foreach($offResList as $res) {
 //            $res->printData();
 //        }
 //        echo json_encode($offResList);
-        
+//        
 //        echo '<br>==================================================<br>';
-        
+//        
 //        $doctors = $this->getDoctorsInfo();
 //        foreach($doctors as $doctor) {
 //            $doctor->printData();
 //        }
-        
+//        
 //        echo json_encode($doctors);
-        
+//        
 //        echo '<br>==================================================<br>';
-        
+//        
 //        $monthInfo = $this->getMonthInfo();
 //        $monthInfo->printData();
 //        echo json_encode($monthInfo);
@@ -158,7 +203,7 @@ class AlgorithmController extends Controller
                 'totalShifts' => $doctor->mustOnDutyTotalShifts,
                 'dayShifts' => $doctor->mustOnDutyDayShifts,
                 'nightShifts' => $doctor->mustOnDutyNightShifts,
-                'weekendShifts' => 0,
+                'weekendShifts' => $doctor->weekendShifts,
                 'location' => '',
                 'taipeiShiftsLimit' => 0,
                 'tamsuiShiftsLimit' => 0,
@@ -187,7 +232,10 @@ class AlgorithmController extends Controller
                 $doctorDic['taipeiShiftsLimit'] = (int)($doctor->mustOnDutyTotalShifts * 0.5);
             }
             
-            array_push($doctorsList, new Doctor($doctorDic));
+            // 扣除自己的測試醫生帳號
+            if($doctor->doctorID != 1) {
+                array_push($doctorsList, new Doctor($doctorDic));
+            }
         }
         
         return $doctorsList;
