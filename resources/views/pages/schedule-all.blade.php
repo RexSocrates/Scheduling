@@ -5,18 +5,6 @@
         td{
             padding: 0;
         }
-        .white_cell{
-            background-color:white;
-        }
-        .green_cell{
-            background-color:#95FF95;
-        }
-        .yellow_cell{
-            background-color:#FFFF79;
-        }
-        .red_cell{
-            background-color:#FF5353;
-        }
     </style>
 @endsection
 
@@ -102,7 +90,7 @@
                                 y_property:	"section_id",
                                 render:"bar",
                                 round_position:true,    //有點像磁石
-//                                event_dy: 46,
+                                event_dy: 46,
                             });
                             
                             //===============
@@ -124,20 +112,31 @@
                                 return "width-200";
                             };
                             
+                            //更改timeline event 文字
+                            scheduler.templates.event_bar_text = function(start,end,event){
+                                var mode = scheduler.getState().mode;
+                                var text;
+                                if(mode == "timeline"){
+                                    text = "<center class='timeline-event-text'>"+event.text+"</center>";
+                                }
+                                else {
+                                    text = "text for other views";
+                                } 
+                                return text;
+                            };
+                            
                             //進入畫面後顯示的東西
-                         scheduler.init('scheduler_here',new Date(),"timeline");
+                            scheduler.init('scheduler_here',new Date(),"timeline");
                            
-                           scheduler.parse([
+                            scheduler.parse([
                             @foreach($schedule as $data)
                                  { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}"},
                                
                             @endforeach
                             ],"json");
-                           
-
+                            
                         </script>
                         
-
                     </div>
                 </div>
                 

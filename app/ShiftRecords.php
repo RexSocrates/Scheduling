@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use DB;
 use App\User;
 use App\ScheduleCategory;
+use App\ConfirmStatus;
 
 class ShiftRecords extends Model
 {
@@ -60,6 +61,8 @@ class ShiftRecords extends Model
         return $shiftRecord;
     }
 
+
+
     //查詢 單一醫生換班紀錄(已確認)
     public function getShiftRecordsByDoctorID(){
         $user = new User();
@@ -85,6 +88,33 @@ class ShiftRecords extends Model
         ->get();
 
         return $shiftRecords;
+    }
+
+    //查詢 單一醫生換班紀錄
+    public function getRejectShiftRecordsByDoctorID(){
+        $user = new User();
+        $doctorID = $user->getCurrentUserID();
+
+        $shiftRecords=DB::table('ShiftRecords')
+            ->where('doc2Confirm',2)
+            ->orwhere('adminConfirm',2)
+            ->orwhere('adminConfirm',0)
+            ->where('schID_1_doctor', $doctorID)
+            ->orWhere('schID_2_doctor', $doctorID)
+            ->where('doc2Confirm',2)
+            ->orwhere('adminConfirm',2)
+            ->orwhere('adminConfirm',0)
+            ->get();
+
+        return $shiftRecords;
+    }
+
+    //查看 換班紀錄
+    public function getShiftRecordsList(){
+        $shiftRecords = DB::table("ShiftRecords")
+        ->get();
+
+         return $shiftRecords;
     }
     
     // 依照申請日期取出所有換班紀錄
@@ -165,6 +195,43 @@ class ShiftRecords extends Model
         return $dataInschedule;
     }
 
+     // 被所有拒絕換班紀錄
+    public function getRejectShiftsRecordsInformation($single){
+
+        $schedule = new Schedule();
+        $user = new User();
+        $shiftCategory = new ScheduleCategory();  
+        $comfirmStatus = new ConfirmStatus();  
+
+        $shiftRecordsData;
+
+        if($single) {
+            // 只搜尋個人
+            $shiftRecordsData = $this->getRejectShiftRecordsByDoctorID(); 
+        }else {
+            $shiftRecordsData = $this->getShiftRecordsList();
+        }
+
+        $dataInschedule = array();
+
+        foreach ($shiftRecordsData as $record) {
+
+            $doctor1 = $user->getDoctorInfoByID($record->schID_1_doctor);
+            $doctor2 = $user->getDoctorInfoByID($record->schID_2_doctor);
+
+            $schedule1 = $schedule->getScheduleDataByID($record->scheduleID_1);
+            $schedule2 = $schedule->getScheduleDataByID($record->scheduleID_2);
+            
+            $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial);
+            $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial);
+
+            $doc2Confirm = $comfirmStatus->getStatusBySerial($record->doc2Confirm);
+            $adminConfirm = $comfirmStatus->getStatusBySerial($record->adminConfirm);
+
+            array_push($dataInschedule, array($doctor1->name, $doctor2->name, $schedule1->date, $schedule2->date, $catName1, $catName2, $record->date, $record->changeSerial, $doc2Confirm, $adminConfirm ));
+        }
+        return $dataInschedule;
+    }
 
     //提出換班
     public function addShifts($data){
@@ -194,9 +261,11 @@ class ShiftRecords extends Model
     public function adminConfirm($changeSerial, $adminConfirm){
        DB::table('shiftRecords')
             ->where('changeSerial', $changeSerial)
-            ->update(['adminConfirm' => $adminConfirm]); 
-        $schedule = new Schedule();
-        $schedule->exchangeSchedule($changeSerial);
+            ->update(['adminConfirm' => $adminConfirm]);
+        if($adminConfirm==1){
+           $schedule = new Schedule();
+           $schedule->exchangeSchedule($changeSerial);
+        } 
     }
 
     // 查詢 換班編號

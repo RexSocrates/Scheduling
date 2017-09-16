@@ -30,8 +30,7 @@
                             <p>級別： {{ $doctor->level }}</p>
                             <p>專職：{{ $doctor->major }}</p>
                             <p>職登院區：{{ $doctor->location }}</p>
-                            <a href="#modal1">更改密碼</a>
-                            
+<!--                            <a href="#modal1">更改密碼</a>-->
                         </div>
                     </div>
                 </div>
@@ -160,7 +159,7 @@
                         <label>時數</label>
                     </div>
                     <div class="input-field col s12 margin-t0">
-                        <textarea id="textarea1" class="materialize-textarea" type="text" name="content"></textarea>
+                        <textarea id="textarea1" class="materialize-textarea" type="text" name="content" required></textarea>
                         <label for="textarea1">申請原因</label>
                     </div>
                 </div>

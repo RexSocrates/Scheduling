@@ -2929,7 +2929,8 @@ td, th {
   display: table-cell;
   text-align: left;
   vertical-align: middle;
-  border-radius: 2px;
+/*  border-radius: 2px;*/  
+/*    有改過*/
 }
 
 @media only screen and (max-width: 992px) {

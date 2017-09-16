@@ -32,7 +32,7 @@
                                     <tr>
                                         <th class="td-w-5">申請人</th>
                                         <th class="td-w-5">申請日期</th>
-                                        <th class="td-w-20">換班內容</th>
+                                        <th class="td-w-20">內容</th>
                                     </tr>
                                 </thead>
 
@@ -59,6 +59,63 @@
                     </div>
                 </div>
             </div>
+             <div class="row">
+                <div class="col s12 m12">
+                    <div class="card">
+                        <div class="card-action">
+                            <!-- <img src="../img/announcement.png" class="logo-img"> -->
+                            <font class="card-title">換班確認狀態</font>
+                        </div>
+                        <div class="divider"></div>
+                        
+                        <div class="card-content padding-t5">
+                            <table class="centered striped highlight scroll area1">
+                                <thead>
+                                    <tr>
+                                        <th class="td-w-5">申請人</th>
+                                        <th class="td-w-5">申請日期</th>
+                                        <th class="td-w-5">換班醫生</th>
+                                        <th class="td-w-5">排班人員</th>
+                                        <th class="td-w-20">內容</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach($allRejectShiftData as $record)
+                                    <tr>
+                                        <td class="td-padding td-w-5">{{ $record[0] }}</td> <!--申請人-->
+                                        <td class="td-padding td-w-5">{{ $record[6] }}</td>  <!--申請日期-->
+                                        @if($record[8] == "已拒絕")
+                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[8] }}<font></td>
+                                        @else
+                                        <td class="td-padding td-w-5">{{ $record[8] }}</td>
+                                        @endif
+                                        @if($record[9] == "已拒絕")
+                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[9] }}<font></td>
+                                        @elseif($record[9] == "未確認")
+                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[9] }}<font></td>
+                                        @else
+                                        <td class="td-padding td-w-5">{{ $record[9] }}</td>
+                                        @endif
+                                        <td class="td-padding td-w-20">{{ $record[2] }}  <!--申請人想換班的日期-->
+                                            <font class="font-w-b"> 
+                                                {{ $record[0] }} <!--申請人的名字--> 
+                                                {{ $record[4] }}<!--申請人換班名字--> 
+                                            </font> 與 {{ $record[3] }} <!--被換班人的班日期-->
+                                            <font class="font-w-b">
+                                                {{ $record[1] }} <!--被換班人-->
+                                                {{ $record[5] }}<!--被換班人的班名稱-->
+                                            </font> 互換
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
 			<div class="row">
                 <div class="col s12 m12">
       		  	  	<div class="card">
@@ -73,7 +130,7 @@
                                     <tr>
                                         <th class="td-w-5">申請人</th>
                                         <th class="td-w-5">申請日期</th>
-                                        <th class="td-w-25">換班內容</th>
+                                        <th class="td-w-25">內容</th>
                                         <th class="td-w-13">功能</th>
                                     </tr>
                                 </thead>
@@ -91,7 +148,7 @@
                                                 {{ $record[1] }} {{ $record[5] }}
                                             </font> 互換</td>
                                         <td class="td-padding td-w-13">
-                                            <a href="checkShift/{{$record[7]}}" class="waves-effect waves-light btn" name=confirm>允許</a>
+                                            <a class="waves-effect waves-light btn" name=confirm onclick="checkStatus({{$record[7]}},{{ $record[2] }},{{ $record[3] }})">允許</a>
                                             <a href="rejectShift/{{$record[7]}}" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
                                         </td>
                                     </tr>
@@ -102,6 +159,7 @@
                     </div>
                 </div>
       		</div>
+
             <div class="row">
                 <div class="col s12 m12">
                     <div class="card">
@@ -129,7 +187,7 @@
                                     <tr>
                                         <th class="td-w-5">申請人</th>
                                         <th class="td-w-5">申請日期</th>
-                                        <th class="td-w-20">備註內容</th>
+                                        <th class="td-w-20">內容</th>
                                     </tr>
                                 </thead>
                                    
@@ -188,7 +246,7 @@
                             </div>
                             <div class="col s6">
                                 <label>日期:</label>
-                                <select  name='scheduleID_2' class="browser-default" id="date" required>
+                                <select  name='scheduleID_2' class="browser-default" id="date2" required>
                                     <option value="" disabled selected>請選擇日期</option>
                                     
                                 </select>
@@ -222,8 +280,6 @@
             $.get('changeDoctor', {
                 id : document.getElementById('doctorName').value
             }, function(array) {
-                // var selectBox = document.getElementById('doctorName');
-                // var userInput = selectBox.options[selectBox.selectedIndex].value;
                 changeDate(array);
             });
         }
@@ -232,9 +288,9 @@
                 var date = "";
                 for(i=0 ; i<array.length ; i++){
                     date += "<option value="+array[i][0]+">"+array[i][2]+"</option>";
-                    console.log('1'+array[i][0]);
+                    console.log('aaa'+array[i][0]);
                 }
-                document.getElementById("date").innerHTML  = date;
+                document.getElementById("date2").innerHTML  = date;
         }
 
         function changeMonth() {
@@ -256,6 +312,31 @@
                 document.getElementById("content").innerHTML  = content;
                
             });
+        }
+
+        function checkStatus(id,date1,date2) {
+            $.get('getScheduleInfo', {
+                id : id,
+                date1 : date1,
+                date2 : date2
+            }, function(status) {
+                if(status ==1){
+                    checkShift(id);
+                }
+                else{
+                    alert("此班表已變動，無法確認換班");
+                }
+               
+            });
+            
+        }
+        function checkShift(id) {
+            $.get('checkShift', {
+                id:id
+            }, function() {
+                location.reload();
+            });
+
         }
     </script>
 @endsection

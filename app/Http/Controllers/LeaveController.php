@@ -95,6 +95,7 @@ class LeaveController extends Controller
                 'date' =>$leave->recordDate,
                 'doctor' =>'',
                 'hours'=>$leave->leaveHours,
+                'updatedLeaveHours'=>$user->getDoctorInfoByID($leave->doctorID)->currentOfficialLeaveHours,
                 'remark'=>$leave->remark
             ];
             
@@ -113,6 +114,7 @@ class LeaveController extends Controller
                 'doctor' =>'',
                 'hours'=>$leave->leaveHours,
                 'updatedLeaveHours'=>$leave->updatedLeaveHours,
+                'confirmStatus' => $leave->confirmStatus, 
                 'remark'=>$leave->remark
             ];
             

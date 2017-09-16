@@ -1,10 +1,8 @@
 @extends("layouts.app2")
 
-<!--
 @section('head')
-    
+    <link type="text/css" rel="stylesheet" href="../css/dataTables.material.min.css"/>
 @endsection
--->
 
 @section('navbar')
     <p class="brand-logo light">醫師公假紀錄</p>
@@ -25,40 +23,13 @@
 			<div class="row">
                 <div id="page1" class="col s12 m12">
       		  	  	<div class="card">
-      		  	  		<div class="card-action card1">
-                            <form action="">
-                                <div class="title1">
-                                    <font class="card-title">醫生：</font>
-                                </div>
-                                <div class="input-field left inline">
-                                    <select>
-                                        <option value="1" selected>全部</option>
-                                        @foreach($doctors as $doctor)
-                                                <option value="{{ $doctor['id'] }}">{{ $doctor['name'] }}</option>
-                                        @endforeach
-                                        
-                                    </select>
-                                </div>
-                                <div class="title1 margin-l20">
-                                    <font class="card-title">日期：</font>
-                                </div>
-                                <div class="input-field left inline">
-                                    <select>
-                                        <option value="1">All</option>
-                                        <option value="2">2017-07</option>
-                                        <option value="3">2017-06</option>
-                                        <option value="4">2017-05</option>
-                                    </select>
-                                </div>
-                                <div class="title1 margin-l10">
-                                    <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text inline margin-l10">確認</button>
-                                </div>
-                            </form>
+      		  	  		<div class="card-action">
+      		  	  		    <font class="card-title">紀錄</font>
                             <a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1"><i class="material-icons">add</i></a>
                         </div>
       		  	  		<div class="divider"></div>
       		  	  	  	<div class="card-content padding-t5">
-      		  	  	  	    <table class="centered striped highlight scroll area4">
+      		  	  	  	    <table id="officialLeave" class="mdl-data-table striped highlight" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
                                         <th class="td-w-5">日期</th>
@@ -66,12 +37,11 @@
                                         <th class="td-w-5">對象</th>
                                         <th class="td-w-5">增加/減少</th>
                                         <th class="td-w-5">剩餘時數</th>
-                                        <th class="td-w-25">內容</th>
+                                        <th class="td-w-20">內容</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-
 
                                     @foreach($rejectedAndConfirmArr as $leave)
                                     <tr>
@@ -80,11 +50,17 @@
                                         <td class="td-padding td-w-5">{{ $leave['confirmingPerson'] }}</td>
                                         <td class="td-padding td-w-5">{{ $leave['hours'] }}</td>
                                         <td class="td-padding td-w-5">{{ $leave['updatedLeaveHours'] }}</td>
-                                        <td class="td-padding td-w-25">{{ $leave['remark'] }}</td>
+
+                                        @if($leave['confirmStatus'] == 2)
+                                        <td class="td-padding td-w-20"><font class="red-text">(拒絕)</font>{{ $leave['remark'] }}</td>
+                                        @else
+                                        <td class="td-padding td-w-20">{{ $leave['remark'] }}</td>
+                                        @endif
                                     </tr>
                                     @endforeach
 
-
+                                  
+                                    
                                    <!--  @foreach($leaveArr as $leave)
                                     <tr>
                                         <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
@@ -109,7 +85,7 @@
       		  	<div id="page2" class="col s12">
 					<div class="card">
                         <div class="card-action">
-      		  	  			<font class="card-title">換班待確認</font>
+      		  	  			<font class="card-title">公假待確認</font>
       		  	  		</div>
       		  	  		<div class="divider"></div>
       		  	  	  	
@@ -119,8 +95,9 @@
                                     <tr>
                                         <th class="td-w-5">申請人</th>
                                         <th class="td-w-5">申請日期</th>
-                                        <th class="td-w-20">申請理由</th>
                                         <th class="td-w-5">時數</th>
+                                        <th class="td-w-5">剩餘時數</th>
+                                        <th class="td-w-20">申請理由</th>
                                         <th class="td-w-13">功能</th>
                                     </tr>
                                 </thead>
@@ -129,8 +106,9 @@
                                     <tr>
                                         <td class="td-padding td-w-5">{{ $leave['doctor'] }}</td>
                                         <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
-                                        <td class="td-padding td-w-25">{{ $leave['remark'] }}</td>
                                         <td class="td-padding td-w-5">{{ $leave['hours'] }}</td> 
+                                        <td class="td-padding td-w-5">{{ $leave['updatedLeaveHours'] }}</td> 
+                                        <td class="td-padding td-w-25">{{ $leave['remark'] }}</td>
                                         <td class="td-padding td-w-13">
                                             <a href="confirmOffcialLeave/{{ $leave['serial']}}" class="waves-effect waves-light btn" name=confirm>允許</a>
                                             <a href="unconfirmOffcialLeave/{{ $leave['serial']}}" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
@@ -166,14 +144,14 @@
                     <div class="input-field col s12 margin-t0">
                         <p class="margin-0">種類</p>
                         <p class="radio-location">
-                            <input class="with-gap" name="classification" type="radio" id="radio-plus" value="1" checked required>
+                            <input class="with-gap" name="classification" type="radio" id="radio-plus" value="1" checked required onchange="resetLeaveHours()">
                             <label for="radio-plus">增加</label>
                             <input class="with-gap" name="classification" type="radio" id="radio-minus" value="0" onchange="getLeaveHours()">
                             <label for="radio-minus">減少</label>
                         </p>
                     </div>
                     <div class="input-field col s12">
-                        <input id="hour" type="number" value="" name="hour" max= required>
+                        <input id="hour" type="number" value="" name="hour" min=0 required>
                         <label for="hour">時數</label>
                     </div>
                     <div class="input-field col s12 margin-t0">
@@ -194,27 +172,50 @@
 @endsection
 
 @section('script')
+    <script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="../js/dataTables.material.min.js"></script>
+    
     <script>
         $(document).ready(function(){
             $('select').material_select();
+            
+            $('#officialLeave').DataTable( {
+                columnDefs: [
+                    {
+                        targets: [ 0, 1, 2 ],
+                        className: 'mdl-data-table__cell--non-numeric'
+                    }
+                ]
+            });
+            
+            document.getElementById("officialLeave_length").style.display = 'none';
+            
+            document.getElementById("officialLeave_filter").style.cssText = 'text-align: left';
+            
+            document.getElementById("officialLeave_filter").getElementsByTagName("label")[0].getElementsByTagName("input")[0].style.marginLeft = '0';
   		});
     </script>
 
     <script>
-     function getLeaveHours(){
+        function getLeaveHours(){
             $.get('getLeaveHoursByID',{
                 id : document.getElementById('doctor').value
             }, function(hour){
                 var limithour = hour;
 
-                console.log("13"+limithour);
+                var input= document.getElementById("hour");
 
-                document.getElementById("hour").innerHTML="<input max="+limithour+">";
-                // if(document.getElementById("radio-minus").value == 0){
-                //     
-                //     console.log("111");
-                // }
+                input.min = 0;
+                input.max = limithour;
+                input.placeholder = "小於"+limithour;
+
             });
+        }
+
+        function resetLeaveHours() {               
+            var input= document.getElementById("hour"); 
+                input.min = 0;
+                input.placeholder = "";             
         }
 
        

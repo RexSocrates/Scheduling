@@ -16,23 +16,29 @@
       		  	  	<div class="card">
       		  	  		<div class="card-action">
       		  	  			<font class="card-title">系統公告</font>
+      		  	  			@if(Auth::user()->identity == 'Admin')
       		  	  			<a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1"><i class="material-icons">add</i></a>
+      		  	  			@endif
       		  	  		</div>
       		  	  		<div class="divider"></div>
       		  	  	  	
       		  	  	  	<div class="card-content">
                             @foreach($announcements as $announcement)
-                                <div class="row">
-    						    	<div class="col s2">
-    						    		<img src="../img/user.png" class="boss-img">
-    						    	</div>
-    						    	<div class="col s10">
-    						    		<span class="card-title">{{ $announcement->title }}<a class="dropdown-edit-button right" href="" data-activates='dropdown-announcement'><i class="material-icons" onclick="passAnnouncementSerial({{ $announcement->announcementSerial }})">more_vert</i></a></span>
-    						    		<p>{{ $announcement->content }}<a href="#modal-more" onclick="getAnnouncement({{ $announcement->announcementSerial }})">more</a></p>
-    						    	</div>
-                                    
-    				            </div>
-    						  <div class="divider margin-b20"></div>
+                            <div class="row">
+                                <div class="col s2">
+                                    <img src="../img/user.png" class="boss-img">
+                                </div>
+                                <div class="col s10">
+                                    <span class="card-title">{{ $announcement->title }}
+                                    @if(Auth::user()->identity == 'Admin')
+                                    <a class="dropdown-edit-button right" href="" data-activates='dropdown-announcement'><i class="material-icons" onclick="passAnnouncementSerial({{ $announcement->announcementSerial }})">more_vert</i></a>
+                                    @endif
+                                    </span>
+                                    <p class="announcement-ellipsis">{{ $announcement->content }}</p>
+                                    <a href="#modal-more" onclick="getAnnouncement({{ $announcement->announcementSerial }})">more</a>
+                                </div>
+    				        </div>
+    				        <div class="divider margin-b20"></div>
                             @endforeach
                             <ul id='dropdown-announcement' class='dropdown-content'>
                                 <li><a href="#modal1">編輯</a></li>
@@ -46,7 +52,6 @@
 				<div class="col s12 m4">
       		  	  	<div class="card center">
               			<img src="../img/solar-system.png" class="solar-system">
-              			<p></p>
               			<h3 class="blue-grey-text text-darken-3">開放預班中</h3>
       		  	  		<p class="blue-grey-text text-darken-3" style="font-weight: 500;">01/05/2017 ~ 20/05/2017</p>
       		  	  	  	<div class="card-action center">
@@ -54,7 +59,15 @@
       		  	  	  	</div>
       		  	  	</div>
       		  	</div>
-      		  	
+      		  	<div class="col s12 m4">
+      		  	  	<div class="card center padding-t5">
+                        <h1 class="teal-text text-lighten-2">{{ $currentOfficialLeaveHours }}</h1>
+      		  	  		<p class="blue-grey-text text-darken-3" style="font-weight: 500;">剩餘公假時數</p>
+      		  	  	  	<div class="card-action center">
+      		  	  	  	  	<a href="profile" class="margin-r0">申請使用</a>
+      		  	  	  	</div>
+      		  	  	</div>
+      		  	</div>
       		</div>
 			
 			
@@ -70,13 +83,13 @@
                         <div class="row margin-b0">
                             <div class="input-field col s12">
                                 <i class="material-icons prefix modal-icons">chat_bubble</i>
-                                <input id="title" type="text" name="title">
+                                <input id="title" type="text" name="title" required>
                                 <label for="title">標題</label>
                             </div>
                         
                             <div class="input-field col s12">
                                 <i class="material-icons prefix modal-icons">mode_edit</i>
-                                <textarea id="textarea1" class="materialize-textarea margin-b0" type="text" name="content"></textarea>
+                                <textarea id="textarea1" class="materialize-textarea margin-b0" type="text" name="content" required></textarea>
                                 <label for="textarea1">內容</label>
                             </div>
                         </div>

@@ -75,6 +75,10 @@ header, main, footer {
     margin-bottom: 20px;  
 }
 
+.margin-t10 {
+    margin-top: 10px;  
+}
+
 .margin-t20 {
     margin-top: 20px;  
 }
@@ -125,6 +129,10 @@ header, main, footer {
 
 .td-w-25 {
     width: 25%;
+}
+
+.font-w-l {
+    font-weight: lighter;
 }
 
 .font-w-b {
@@ -500,9 +508,10 @@ header, main, footer {
 }
 
 .timeline-event-text {
-    margin-left:-10px;
+    margin-left:-8px;
     font-size:15px;
-    padding-top:12px;
+    padding-top:15px;
+    margin-right: -9px;
 }
 
 .width-200 {
@@ -623,7 +632,7 @@ input.select-dropdown {
     font-family: Tahoma;
     font-size: 10pt;
     width: 700px;
-    height: 530px;
+    height: 450px;
     box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.3);
 }
 
@@ -659,16 +668,24 @@ input.select-dropdown {
 }
 
 .white_cell{
-    background-color:white;
+    background-color:white !important;
 }
 .green_cell{
-    background-color:#95FF95;
+    background-color:#95FF95 !important;
 }
 .yellow_cell{
-    background-color:#FFFF79;
+    background-color:#FFF9C4 !important;
 }
 .red_cell{
-    background-color:#FF5353;
+    background-color:#FF5353 !important;
+}
+
+.dhx_cal_event_line {
+    padding-left: 5px !important;
+    padding-right: 7px !important;
+    padding-bottom: 3px !important;
+    margin-top: -2px !important;
+    margin-left: -1px !important;
 }
 
 table.scroll {
@@ -707,4 +724,33 @@ table.area5 tbody {
 
 tbody td:last-child, thead th:last-child {
     border-right: none;
+}
+
+.announcement-ellipsis {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; 
+    line-height: 24px;
+/*    display: inline;*/
+}
+
+.inline {
+/*    display: inline;*/
+}
+
+#slider {
+    padding: 0px 15px;
+}
+
+.slider-text {
+    font-size: 20px;
+    text-align: justify;
+}
+
+
+.slider-text:after {
+  content: "";
+  display: inline-block;
+  width: 100%;
 }

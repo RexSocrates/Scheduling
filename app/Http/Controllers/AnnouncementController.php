@@ -13,8 +13,10 @@ class AnnouncementController extends Controller
     // 列出公告頁面
     public function getAnnouncementPage() {
         $announcementObj = new Announcement();
+        $userObj = new User();
         
         $announcements = $announcementObj->getAnnouncements();
+        $leavehours = $userObj->getCurrentUserInfo()->currentOfficialLeaveHours;
         
 //        foreach($announcements as $obj) {
 //            echo 'Serial : '.$obj->announcementSerial.'<br>';
@@ -24,7 +26,8 @@ class AnnouncementController extends Controller
 //        }
         
         return view('pages.index', [
-            'announcements' => $announcements
+            'announcements' => $announcements,
+            'currentOfficialLeaveHours' => $leavehours
         ]);
     }
     

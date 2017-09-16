@@ -90,9 +90,9 @@
                     </ul>
                 </li>
                 <li><a href="doctors" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
+                <li><a href="officialLeave" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/note.svg"></i>醫師公假紀錄</a></li>
             @endif
                 <li><a href="doctorsChart" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/pie-chart.svg"></i>統計圖表</a></li>
-                <li><a href="officialLeave" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/note.svg"></i>醫師公假紀錄</a></li>
         </ul>
     </nav>
     
@@ -104,11 +104,13 @@
                 </a>
                 @yield('navbar')
                 <ul class="right">
+<!--
                     <li>
                         <a class="dropdown-notification-button" href="#!" data-activates="dropdown-notification">
                             <img src="../img/notifications-button.png" class="notifications-icon">
                         </a>
                     </li>
+-->
                     <li>
                         <a class="dropdown-button" href="#!" data-activates="dropdown1">{{ Auth::user()->name }}<i class="material-icons right">arrow_drop_down</i>
                         </a>
@@ -124,10 +126,10 @@
         </ul>
         
         <ul id="dropdown1" class="dropdown-content">
+            <li><a href="profile">個人資料</a></li>
             @if(Auth::user()->identity == 'Admin')
                 <li><a href="setting">設定</a></li>
             @endif
-            <li><a href="profile">個人資料</a></li>
             <li class="divider"></li>
             <li>
                 <a href="{{ route('logout') }}"

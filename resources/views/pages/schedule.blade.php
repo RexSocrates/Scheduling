@@ -30,38 +30,7 @@
 		<div class="container-section">
 			<div class="row">
                 <div id="self" class="col s12">
-                    <div class="card">
-                        <div class="card-action">
-                            <font class="card-title">排班資訊</font>
-
-                        </div>
-                        <div class="divider"></div>
-                        <div class="card-content">
-                            
-                            
-                            <form>
-                                <div class="row margin-b0">
-                                    <div class="col s5">
-                                        <p class="information">開放時間: 2017/06/01 - 2017/06/25</p>
-                                        <p class="information">可排天班數: 白班: 夜班:</p>
-                                        <p class="information">尚需排班數: 白班: 夜班:</p>    
-                                    </div>
-                                    <div class="col s7">
-                                        <form action="reservation" method="post" class="col s6">
-                                            <div class="input-field">
-                                                <textarea id="textarea1" class="materialize-textarea"  name="remark"placeholder="請輸入XXXXX"></textarea>
-<!--                                                     data-length="150"-->
-                                                <label for="textarea1">備註:</label>
-                                            </div>
-                                            <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right">提交</button>
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </div>
-                                </div>
-                            </form>
-                            
-                        </div>
-                    </div>
+                    
                     
                     <div class="card border-t">
                         <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:1750px;'>

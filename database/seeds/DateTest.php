@@ -389,24 +389,24 @@ class DateTest extends Seeder
           'schCategorySerial' =>3,
           'isWeekday' => 1,
           'location' => 'Taipei',
-          'date' => "2017-10-01",
-          'endDate' => '2017-10-02'
+          'date' => "2017-9-29",
+          'endDate' => '2017-9-30'
      ]);
-  DB::table('Schedule')-> insertGetId([
-          'doctorID' => 1,
-          'schCategorySerial' =>3,
-          'isWeekday' => 1,
-          'location' => 'Taipei',
-          'date' => "2017-10-04",
-          'endDate' => '2017-10-05'
-     ]);
-  DB::table('Schedule')-> insertGetId([
-          'doctorID' => 2,
-          'schCategorySerial' =>3,
-          'isWeekday' => 1,
-          'location' => 'Taipei',
-          'date' => "2017-10-07",
-          'endDate' => '2017-10-08'
-     ]);
-  }
+  // DB::table('Schedule')-> insertGetId([
+  //         'doctorID' => 1,
+  //         'schCategorySerial' =>3,
+  //         'isWeekday' => 1,
+  //         'location' => 'Taipei',
+  //         'date' => "2017-10-04",
+  //         'endDate' => '2017-10-05'
+  //    ]);
+  // DB::table('Schedule')-> insertGetId([
+  //         'doctorID' => 2,
+  //         'schCategorySerial' =>3,
+  //         'isWeekday' => 1,
+  //         'location' => 'Taipei',
+  //         'date' => "2017-10-07",
+  //         'endDate' => '2017-10-08'
+  //    ]);
+   }
 }
