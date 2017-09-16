@@ -13,20 +13,20 @@
 @endsection
 
 @section('content')
-    <div id="section" class="container-fix trans-left-five">    <!--	 style="background-color:red;"-->
-		<div class="container-section">
-		    <div class="row">
+    <div id="section" class="container-fix trans-left-five">    <!--     style="background-color:red;"-->
+        <div class="container-section">
+            <div class="row">
                 <div class="col s12 m12">
                     <div class="card">
                         <div class="card-action">
-      		  	  			<!-- <img src="../img/announcement.png" class="logo-img"> -->
-      		  	  			<font class="card-title">換班資訊區</font>
-      		  	  			<a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1"><i class="material-icons">add</i></a>
-      		  	  			<!-- <a class="btn-floating halfway-fab waves-effect waves-light blue-grey darken-1"><i class="material-icons">add</i></a> -->
-      		  	  		</div>
-      		  	  		<div class="divider"></div>
-      		  	  	  	
-      		  	  	  	<div class="card-content padding-t5">
+                            <!-- <img src="../img/announcement.png" class="logo-img"> -->
+                            <font class="card-title">換班資訊區</font>
+                            <a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1"><i class="material-icons">add</i></a>
+                            <!-- <a class="btn-floating halfway-fab waves-effect waves-light blue-grey darken-1"><i class="material-icons">add</i></a> -->
+                        </div>
+                        <div class="divider"></div>
+                        
+                        <div class="card-content padding-t5">
                             <table class="centered striped highlight scroll area1">
                                 <thead>
                                     <tr>
@@ -116,15 +116,15 @@
                 </div>
             </div>
         
-			<div class="row">
+            <div class="row">
                 <div class="col s12 m12">
-      		  	  	<div class="card">
+                    <div class="card">
                         <div class="card-action">
-      		  	  			<font class="card-title">換班待確認</font>
-      		  	  		</div>
-      		  	  		<div class="divider"></div>
-      		  	  	  	
-      		  	  	  	<div class="card-content padding-t5">
+                            <font class="card-title">換班待確認</font>
+                        </div>
+                        <div class="divider"></div>
+                        
+                        <div class="card-content padding-t5">
                             <table class="centered striped highlight scroll area2">
                                 <thead>
                                     <tr>
@@ -158,7 +158,7 @@
                         </div>
                     </div>
                 </div>
-      		</div>
+            </div>
 
             <div class="row">
                 <div class="col s12 m12">
@@ -206,8 +206,8 @@
                     </div>
                 </div>
             </div>
-      		
-      		
+            
+            
             <div id="modal1" class="modal modal-fixed-footer modal-shift">
                 <form action="schedule-shift-info" method="POST">
                     <div class="modal-header">
@@ -262,8 +262,8 @@
                     </div>
                 </form>
             </div>
-		</div>
-	</div>
+        </div>
+    </div>
 @endsection
 
 
@@ -272,7 +272,7 @@
         $(document).ready(function(){
             $('select').material_select();
             $('.collapsible').collapsible();
-  		});
+        });
     </script>
     
     <script>
@@ -292,12 +292,10 @@
                 }
                 document.getElementById("date2").innerHTML  = date;
         }
-
         function changeMonth() {
             $.get('changeMonth', {
                 month : document.getElementById('month').value
             }, function(array) {
-
                 var author = "";
                 var date = "";
                 var content ="";
@@ -306,14 +304,12 @@
                     date += "<td>"+array[i]['date']+"</td>";
                     content += "<td>"+array[i]['content']+"</td>";
                 }
-
                 document.getElementById("author").innerHTML  = author;
                 document.getElementById("date").innerHTML  = date;
                 document.getElementById("content").innerHTML  = content;
                
             });
         }
-
         function checkStatus(id,date1,date2) {
             $.get('getScheduleInfo', {
                 id : id,
@@ -336,8 +332,6 @@
             }, function() {
                 location.reload();
             });
-
         }
     </script>
 @endsection
-

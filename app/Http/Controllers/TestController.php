@@ -821,5 +821,14 @@ class TestController extends Controller
         //return $countArr;
         
     }
+    
+    //公布正式班表
+    public function announceSchedule(Request $request){
+        
+        $schedule = new Schedule();
+
+        $schedule->confirmNextMonthSchedule();
+ 
+    }
 }
 

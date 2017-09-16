@@ -38,7 +38,10 @@ Route::get('getAnnouncement', 'AnnouncementController@getAnnouncement');
 Route::get('deleteAnnouncement/{serial}', 'AnnouncementController@deleteAnnouncement');
 
 // 設定頁面
-Route::get('setting', 'AccountController@getSettingPage');
+Route::get('setting', 'SettingController@getSettingPage');
+
+//公布正式班表
+Route::get('announceSchedule','ScheduleController@announceSchedule');
 
 // 新增公告
 Route::post('addAnnouncement', 'AnnouncementController@addOrUpdateAnnouncement');
@@ -339,7 +342,7 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 //Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
-Route::get("info",'TestController@updateSchedule');
+Route::get("info",'TestController@announceSchedule');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 //Route::post('reservation/updateReservation/{id}', 'ReservationController@updateReservation');
 //Route::get('/reservation/updateReservation/{id}', function() {

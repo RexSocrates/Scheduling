@@ -162,6 +162,20 @@ class Schedule extends Model
         return $affectedRows;
     }
 
+     // 確認下月班表
+    public function confirmNextMonthSchedule() {
+        $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+        
+        $affectedRows = DB::table('Schedule')
+            ->where('date', 'like', $nextMonth.'%')
+            ->update([
+                'confirmed' => true
+            ]);
+        
+        return $affectedRows;
+    }
+
     // 透過班ID刪除單一紀錄
     public function deleteScheduleByID($scheduleID) {
         DB::table('Schedule')

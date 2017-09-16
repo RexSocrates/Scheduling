@@ -223,7 +223,13 @@ class AccountController extends Controller
         return redirect('doctors');
     }
     
-    public function getSettingPage() {
-        return view('pages.setting');
+    
+    //公布正式班表
+    public function announceSchedule(Request $request){
+        
+        $schedule = new Schedule();
+
+        $schedule->confirmNextMonthSchedule();
+ 
     }
 }

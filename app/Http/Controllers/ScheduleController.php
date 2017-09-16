@@ -260,6 +260,15 @@ class ScheduleController extends Controller
 
     }
 
+    //公布正式班表
+    public function announceSchedule(Request $request){
+        
+        $schedule = new Schedule();
+
+        $schedule->confirmNextMonthSchedule();
+ 
+    }
+
     public function getDoctorInfoByScheduleID(Request $request){
 
       $data = $request->all();

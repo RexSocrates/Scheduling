@@ -190,7 +190,10 @@ class ShiftRecords extends Model
             $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial);
             $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial);
 
-            array_push($dataInschedule, array($doctor1->name, $doctor2->name, $schedule1->date, $schedule2->date, $catName1, $catName2, $record->date, $record->changeSerial));
+            $doc2Confirm = $record->doc2Confirm;
+
+
+            array_push($dataInschedule, array($doctor1->name, $doctor2->name, $schedule1->date, $schedule2->date, $catName1, $catName2, $record->date, $record->changeSerial, $doc2Confirm ));
         }
         return $dataInschedule;
     }

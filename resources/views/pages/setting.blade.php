@@ -22,7 +22,7 @@
                             <div class="card-content">
                                 <input type="hidden" id="startDate">
                                 <input type="hidden" id="endDate">
-                                <p class="slider-text">10月<font id="startFont"></font>日 至 10月<font id="endFont"></font>日</p>
+                                <p class="slider-text">{{ $month }}月<font id="startFont"></font>日 至 {{ $month }} 月<font id="endFont"></font>日</p>
                                 <div id="slider"></div>
                             </div>
                             <div class="card-action">
@@ -56,7 +56,7 @@
                             <h5 class="margin-t0">初版班表調整中</h5>
                             <p>排班人員可以調整初版班表</p>
                             <p>調整完成後按下按鈕公佈正式班表</p>
-                            <button type="button" class="btn btn-secondary margin-t10">公佈正式班表</button>
+                            <button type="button" class="btn btn-secondary margin-t10" onclick="announceSchedule()">公佈正式班表</button>
                         </div>
                     </div>
                 </div>
@@ -114,6 +114,15 @@
             }
         });
 
+        function announceSchedule(){
+            $.get('announceSchedule',{
+                
+            }, function(){
+               alert("正式班表公布成功");
+
+            });
+            console.log("111");
+        }
 //        startDate.addEventListener('change', function(){
 //            slider.noUiSlider.set([this.value, null]);
 //        });
