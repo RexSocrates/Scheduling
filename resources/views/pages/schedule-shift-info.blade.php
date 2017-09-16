@@ -209,7 +209,7 @@
             
             
             <div id="modal1" class="modal modal-fixed-footer modal-shift">
-                <form action="schedule-shift-info" method="POST">
+                <!-- <form action="schedule-shift-info" method="POST"> -->
                     <div class="modal-header">
                         <h5 class="modal-announcement-title">換班申請</h5>
                     </div>
@@ -221,14 +221,14 @@
                             
                             <div class="col s6">
                                <label>醫生:</label>
-                                <select name= 'schID_1_doctor' class="browser-default" required>
+                                <select name= 'schID_1_doctor' class="browser-default"  id= "schID_1_doctor" required>
                                     <option value="{{$currentDoctor->doctorID}}" selected>{{$currentDoctor->name}}</option>
                                 </select>
                             </div>
 
                             <div class="col s6">
                                 <label>醫生:</label>
-                                <select name= 'schID_2_doctor' class="browser-default" id="doctorName" onchange="changeDoctor()" required>
+                                <select name= 'schID_2_doctor' class="browser-default" id="schID_2_doctor" onchange="changeDoctor()" required>
                                     <option value="" disabled selected>請選擇醫生</option> 
                                     @foreach($doctorName as $name)
                                     <option value="{{$name->doctorID}}">{{$name->name}}</option>
@@ -237,17 +237,18 @@
                             </div>
                             <div class="col s6">
                                 <label>日期:</label>
-                                <select name="scheduleID_1" class="browser-default" required>
+                                <select name="scheduleID_1" class="browser-default"  id="date1" required>
                                     <option value="" disabled selected>請選擇日期</option>
                                     @foreach($currentDoctorSchedule as $data)
-                                    <option value= '{{$data->scheduleID}}' >{{$data->date}}</option>
+                                    <option value='{{$data->scheduleID}}'>{{$data->date}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col s6">
                                 <label>日期:</label>
+                                
                                 <select  name='scheduleID_2' class="browser-default" id="date2" required>
-                                    <option value="" disabled selected>請選擇日期</option>
+                                    <option  value="" disabled selected>請選擇日期</option>
                                     
                                 </select>
                             </div>
@@ -256,11 +257,11 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">Save</button>
+                        <button type="button" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save" onclick="save()">Save</button>
                         <button class="modal-action modal-close  waves-effect waves-light btn-flat btn-cancel">Cancel</button>
                         {{ csrf_field() }}
                     </div>
-                </form>
+                <!-- </form> -->
             </div>
         </div>
     </div>
@@ -278,7 +279,7 @@
     <script>
         function changeDoctor() {
             $.get('changeDoctor', {
-                id : document.getElementById('doctorName').value
+                id : document.getElementById('schID_2_doctor').value
             }, function(array) {
                 changeDate(array);
             });
@@ -291,6 +292,7 @@
                     console.log('aaa'+array[i][0]);
                 }
                 document.getElementById("date2").innerHTML  = date;
+               
         }
         function changeMonth() {
             $.get('changeMonth', {
@@ -332,6 +334,96 @@
             }, function() {
                 location.reload();
             });
+        }
+
+        function save(){
+            var ID_1 = document.getElementById('date1').value;
+            var ID_2 = document.getElementById('date2').value;
+
+            var doctorID_1 = document.getElementById('schID_1_doctor').value;
+            var doctorID_2 = document.getElementById('schID_2_doctor').value;
+
+            if(ID_1 == ""){
+                dhtmlx.message({ type:"error", text:"請選擇日期" });
+
+            }
+            else if(ID_1 == ID_2){
+                     dhtmlx.message({ type:"error", text:"請選擇不同時段醫生" });
+            }
+
+            else if(ID_2 == ""){
+                    dhtmlx.message({ type:"error", text:"請選擇醫生" });
+            }
+
+            else if(doctorID_1 == doctorID_2){
+                    dhtmlx.message({ type:"error", text:"請選擇不同醫生" });
+            }
+
+            
+
+            else{
+                save_form_alert();
+            }
+
+        }
+
+         function save_form_alert(){
+            
+            $.get('checkDocStatus',{
+            scheduleID_1 : document.getElementById('date1').value,
+            scheduleID_2 : document.getElementById('date2').value,
+
+            }, function(array){
+                var ID_1 = document.getElementById('date1').value;
+                var ID_2 = document.getElementById('date2').value;    
+
+                var weekday1 = array[0]['weekday1'];
+                var weekday2 = array[0]['weekday2'];
+               
+                if(array[0]['date2'] == array[0]['date1']  ){
+                     save_form();
+                }
+                else if(array[0]['count1']!=0){
+                    dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date1']+"已有班" });
+                    console.log("doc1"+array[0]['date1']);
+
+                }
+                else if(array[0]['count2']!=0){
+                    dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生"+array[0]['date2']+"已有班" });
+                    console.log("doc2"+array[0]['date2']);
+                }
+
+                else if( (array[0]['doc1weekend']<=4) && ( weekday2==6 || weekday2 ==7)  && ( weekday1!=6 && weekday1!=7) ){
+                    dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生假日班不得少於4" });
+                    console.log("$week1"+weekday1);
+                    console.log("$week1"+weekday2);
+                }
+                else if((array[0]['doc2weekend']<4) &&  ( weekday1==6 || weekday1 ==7) && ( weekday2!=6 && weekday2!=7) ){
+                    dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生假日班不得少於4" });
+
+                }
+
+                else{
+                save_form();
+
+                }
+                    console.log("$week1"+weekday1);
+                    console.log("$week1"+weekday2);
+                
+           });
+
+        }
+
+
+         function save_form() {
+            $.get('addShifts', {
+                scheduleID_1 : document.getElementById('date1').value,
+                scheduleID_2 : document.getElementById('date2').value
+                
+            }, function (){
+               location.reload();
+            });
+
         }
     </script>
 @endsection

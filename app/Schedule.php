@@ -79,7 +79,15 @@ class Schedule extends Model
         return $schedule;
     }
 
-
+    //確認醫生假日班數 醫生id
+    public function checkDocScheduleInWeekend($id){
+        $schedule = DB::table('Schedule')
+            ->where('doctorID', $id)
+            ->where('isWeekday', 0)
+            ->count();
+        
+        return $schedule;
+    }
 
     // 新增一筆上班資料
     public function addSchedule(array $data) {

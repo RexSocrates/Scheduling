@@ -823,12 +823,75 @@ class TestController extends Controller
     }
     
     //公布正式班表
-    public function announceSchedule(Request $request){
+    public function announceSchedule(){
         
         $schedule = new Schedule();
 
-        $schedule->confirmNextMonthSchedule();
+    
+        $date2 = $schedule->getScheduleDataByID(2)->date;
+        $weekday2 = (int)date('N', strtotime($date2));
+
+        echo $weekday2;
+       
+
+
  
     }
+     public function firstEditionShiftAddShifts(Request $request){
+        $data = $request->all();
+
+        $scheduleID1 = (int)$data['scheduleID_1'];
+        $scheduleID2 = (int)$data['scheduleID_2'];
+
+        $schedule = new Schedule();
+
+        $schedule_1_Info = $schedule->getScheduleDataByID($scheduleID1);
+        $schedule_2_Info = $schedule->getScheduleDataByID($scheduleID2);
+
+        $shiftInfo = [
+            'scheduleID_1' => $schedule_1_Info->scheduleID,
+            'scheduleID_2' => $schedule_2_Info->scheduleID,
+            'schID_1_doctor' => $schedule_1_Info->doctorID,
+            'schID_2_doctor' => $schedule_2_Info->doctorID,
+            'doc2Confirm' => 0,
+            'adminConfirm' => 0,
+            'date' => date('Y-m-d')
+        ];
+
+        $schedule_1_Date = $schedule_1_Info->date;
+
+        $shiftRecords = new ShiftRecords();
+
+        $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
+
+    }
+    //單一醫生在假日班的狀況
+     public function checkDocScheduleInWeekendByperson(){
+        //$data = $request->all();
+        $schedule = new Schedule();
+        $user = new User();
+
+        $scheduleID = 58;
+
+        $doctorID = $schedule->getScheduleDataByID($scheduleID)->doctorID;
+        $docWeekend = $schedule->checkDocScheduleInWeekend($doctorID);
+        $date = $schedule->getScheduleDataByID($scheduleID)->date;
+        $name = $user->getDoctorInfoByID($doctorID)->name;
+        $weekDay = (int)date('N', strtotime($date)); 
+
+        $dataArr = [];
+
+        $info=[
+            "docName" =>$name,
+            "docWeekend"=>$docWeekend,
+            "weekDay"=>$weekDay
+        ];
+
+        array_push($dataArr,$info);
+
+        return $dataArr;
+
+    }
+
 }
 

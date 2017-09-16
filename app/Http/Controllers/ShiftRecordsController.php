@@ -119,28 +119,34 @@ class ShiftRecordsController extends Controller
 
 
     // 初版班表->換班資訊 新增換班
-    public function firstEditionShiftAddShifts(){
-    		$addShifts = new ShiftRecords();
-    		$scheduleID_1 = Input::get('scheduleID_1');
-    		$scheduleID_2 = Input::get('scheduleID_2');
-    		$schID_1_doctor = Input::get('schID_1_doctor');
-    		$schID_2_doctor = Input::get('schID_2_doctor');
-            $doc2Confirm = 0;
-            $adminConfirm = 0;
+    public function firstEditionShiftAddShifts(Request $request){
+        $data = $request->all();
 
-            $data = [
-            'scheduleID_1' => $scheduleID_1,
-            'scheduleID_2' => $scheduleID_2,
-            'schID_1_doctor' => $schID_1_doctor,
-            'schID_2_doctor' => $schID_2_doctor,
-            'doc2Confirm' => '0',
-            'adminConfirm' => '0',
+        $scheduleID1 = (int)$data['scheduleID_1'];
+        $scheduleID2 = (int)$data['scheduleID_2'];
+
+        $schedule = new Schedule();
+
+        $schedule_1_Info = $schedule->getScheduleDataByID($scheduleID1);
+        $schedule_2_Info = $schedule->getScheduleDataByID($scheduleID2);
+
+        $shiftInfo = [
+            'scheduleID_1' => $schedule_1_Info->scheduleID,
+            'scheduleID_2' => $schedule_2_Info->scheduleID,
+            'schID_1_doctor' => $schedule_1_Info->doctorID,
+            'schID_2_doctor' => $schedule_2_Info->doctorID,
+            'doc2Confirm' => 0,
+            'adminConfirm' => 0,
             'date' => date('Y-m-d')
         ];
 
-    		$newShiftSerial = $addShifts->addShifts($data);
+        $schedule_1_Date = $schedule_1_Info->date;
 
-    		return redirect('schedule-shift-info'); 
+        $shiftRecords = new ShiftRecords();
+
+        $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
+
+
 
     }
 
@@ -180,24 +186,36 @@ class ShiftRecordsController extends Controller
         $schedule = new Schedule();
         $user =new User();
 
+
         //判斷醫生1班
         $doctorID1 = $schedule->getScheduleDataByID($scheduleID1)->doctorID;//2
         $date1 = $schedule->getScheduleDataByID($scheduleID2)->date;
+        $weekday1 = (int)date('N', strtotime($date1));
 
-        //判斷醫生1班
+        //判斷醫生2班
         $doctorID2 = $schedule->getScheduleDataByID($scheduleID2)->doctorID;
         $date2 = $schedule->getScheduleDataByID($scheduleID1)->date;
+        $weekday2 = (int)date('N', strtotime($date2));
 
+        //確認當天一位醫生是否有上班 醫生id
         $count1=$schedule->checkDocStatus($doctorID1,$date1);
         $count2=$schedule->checkDocStatus($doctorID2,$date2);
+
+        //確認醫生假日班數
+        $doc1weekend = $schedule->checkDocScheduleInWeekend($doctorID1);
+        $doc2weekend = $schedule->checkDocScheduleInWeekend($doctorID2);
 
         $countDic=[
             "count1"=>$count1,
             "count2"=>$count2,
             "doc1"=>$user->getDoctorInfoByID($doctorID1)->name,
             "doc2"=>$user->getDoctorInfoByID($doctorID2)->name,
-            'date1'=>$schedule->getScheduleDataByID($scheduleID1)->date,
-            'date2'=>$schedule->getScheduleDataByID($scheduleID2)->date
+            'date1'=>$date1,
+            'date2'=>$date2,
+            'weekday1'=>$weekday1,
+            'weekday2'=>$weekday2,
+            'doc1weekend'=> $doc1weekend,
+            'doc2weekend' => $doc2weekend
         ];
 
         
