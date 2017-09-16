@@ -20,11 +20,12 @@ class User extends Authenticatable
      *
      * @var array
      */
+    // 註冊醫師時所有可填入的欄位必須在這邊紀錄
     protected $fillable = [
-        'email', 'password', 'name', 'level', 'major', 'location', 'identity',
+        'email', 'password', 'name', 'level', 'major', 'location', 'identity', 'totalShift',
         'mustOnDutyTotalShifts', 'mustOnDutyMedicalShifts', 'mustOnDutySurgicalShifts',
         'mustOnDutyTaipeiShifts', 'mustOnDutyTamsuiShifts', 'mustOnDutyDayShifts',
-        'mustOnDutyNightShifts'
+        'mustOnDutyNightShifts', 'weekendShifts'
     ];
 
     /**
@@ -107,13 +108,15 @@ class User extends Authenticatable
                 'major' => $data['major'],
                 'location' => $data['location'],
                 'identity' => $data['identity'],
+                'totalShift' => $data['totalShift'],
                 'mustOnDutyTotalShifts' => $data['mustOnDutyTotalShifts'],
                 'mustOnDutyMedicalShifts' => $data['mustOnDutyMedicalShifts'],
                 'mustOnDutySurgicalShifts' => $data['mustOnDutySurgicalShifts'],
                 'mustOnDutyTaipeiShifts' => $data['mustOnDutyTaipeiShifts'],
                 'mustOnDutyTamsuiShifts' => $data['mustOnDutyTamsuiShifts'],
                 'mustOnDutyDayShifts' => $data['mustOnDutyDayShifts'],
-                'mustOnDutyNightShifts' => $data['mustOnDutyNightShifts']
+                'mustOnDutyNightShifts' => $data['mustOnDutyNightShifts'],
+                'weekendShifts' => $data['weekendShifts']
             ]);
         
         return $rows;

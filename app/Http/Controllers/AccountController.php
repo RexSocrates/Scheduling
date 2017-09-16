@@ -199,6 +199,7 @@ class AccountController extends Controller
             $doctorData->major,
             $doctorData->location,
             $doctorData->identity,
+            $doctorData->totalShift,
             $doctorData->mustOnDutyTotalShifts,
             $doctorData->mustOnDutyMedicalShifts,
             $doctorData->mustOnDutySurgicalShifts,
@@ -206,6 +207,7 @@ class AccountController extends Controller
             $doctorData->mustOnDutyTamsuiShifts,
             $doctorData->mustOnDutyDayShifts,
             $doctorData->mustOnDutyNightShifts,
+            $doctorData->weekendShifts
         ];
     }
     

@@ -74,13 +74,15 @@ class RegisterController extends Controller
             'level' => $data['level'],
             'location' => $data['location'],
             'identity' => $data['identity'],
+            'totalShift' => $data['totalShift'],
             'mustOnDutyTotalShifts' => $data['mustOnDutyTotalShifts'],
             'mustOnDutyMedicalShifts' => $data['mustOnDutyMedicalShifts'],
             'mustOnDutySurgicalShifts' => $data['mustOnDutySurgicalShifts'],
             'mustOnDutyTaipeiShifts' => $data['mustOnDutyTaipeiShifts'],
             'mustOnDutyTamsuiShifts' => $data['mustOnDutyTamsuiShifts'],
             'mustOnDutyDayShifts' => $data['mustOnDutyDayShifts'],
-            'mustOnDutyNightShifts' => $data['mustOnDutyNightShifts']
+            'mustOnDutyNightShifts' => $data['mustOnDutyNightShifts'],
+            'weekendShifts' => $data['weekendShifts']
         ]);
     }
     
