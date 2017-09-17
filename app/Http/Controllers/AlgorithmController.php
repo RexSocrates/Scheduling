@@ -48,10 +48,10 @@ class AlgorithmController extends Controller
         
         // get response body
         $body = (string)$response->getBody();
-        echo $body.'<br><br>';
-        $json = json_encode($body);
+//        echo $body.'<br><br>';
+//        $json = json_encode($body);
 //        echo print_r($json).'<br><br>'; // data
-        echo gettype($json); // string
+//        echo gettype($json); // string
         
         
         
