@@ -388,6 +388,14 @@
                                 type: "dhx_time_block"
                             
                             });
+                            
+                            scheduler.attachEvent("onBeforeExternalDragIn",function(source,dhtmlx,tArea,tNode,e){
+                                //any custom logic here
+                                
+                                console.log("Native obj : ==========================");
+//                                console.log("Native obj : " + e);
+                                return true;
+                            });
 
 
                             //scheduler.updateView();
@@ -396,12 +404,12 @@
                                 var ev = scheduler.getEvent(ev.id);
                                 var evs = scheduler.getEvent(evs[0].id);
                                 var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
-                                console.log("ev "+ev.text)
+                                console.log("ev "+ev.text);
                                 console.log("evs "+evs.text);
 
                             
 
-                                 checkDocStatus(ev.hidden,evs.hidden);
+                                checkDocStatus(ev.hidden,evs.hidden);
 
                                 //  console.log('checkDoc1Status'+document.getElementById("doctor1Info").value);
                                 //  console.log('checkDoc2Status'+document.getElementById("doctor2Info").value);
