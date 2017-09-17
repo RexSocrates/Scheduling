@@ -279,6 +279,13 @@ class ShiftRecords extends Model
         ->first();
 
         return $changeSerial;
+    }
 
+    // 刪除 被刪除班有關的紀錄
+    public function deleteShiftRecord($scheduleID){
+        DB::table('shiftRecords')
+        ->where('scheduleID_1',$scheduleID)
+        ->orwhere('scheduleID_2',$scheduleID)
+        ->delete();
     }
 }

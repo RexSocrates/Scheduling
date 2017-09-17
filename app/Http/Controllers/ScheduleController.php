@@ -92,18 +92,38 @@ class ScheduleController extends Controller
         
         return $count;
     }
-    //調整班表->新增班 驗證 班id
+    //調整班表->更新班 驗證 班id
     public function confirmscheduleStatusBySerial(Request $request){
         $data = $request->all();
+        $schedule = new Schedule();
+        $user = new User();
         
         $scheduleID = $data['scheduleID'];
-        $date = $data['date']; 
+        $date = $data['date']; //移動到哪一天
         $dateStr = $this->processDateStr($date);
-        $schedule = new Schedule();
         $doctorID = $schedule->getScheduleDataByID($scheduleID)->doctorID;
+        $dateInSchedule = $schedule->getScheduleDataByID($scheduleID)->date;
+        $docName = $user->getDoctorInfoByID($doctorID)->name;
+        $docWeekend = $schedule->checkDocScheduleInWeekend($doctorID);
         $count = $schedule->checkDocStatus($doctorID,$dateStr);
+        $weekDay = (int)date('N', strtotime($dateStr));  //移動的
+        $weekDayInSchedule = (int)date('N', strtotime($dateInSchedule));
+
+        $dataArr = [];
+
+        $info = [
+            "count"=>$count,
+            "docName"=>$docName,
+            "docWeekend"=>$docWeekend,
+            "weekDay"=>$weekDay,
+            "date"=>$dataArr,
+            'weekDayInSchedule' => $weekDayInSchedule
+        ];
+
+        array_push($dataArr,$info);
+
+        return $dataArr;
         
-        return [$count,$doctorID,$dateStr];
     }
     //新增班表
     public function addSchedule(Request $request){
@@ -144,8 +164,8 @@ class ScheduleController extends Controller
         $docAndRes->deleteReservation($data['resSerial'], $userObj->getCurrentUserID());
     }
 
-    //單一醫生在假日班的狀況
-     public function checkDocScheduleInWeekendByperson(Request $request){
+    //單一醫生的狀況
+     public function checkDocScheduleByperson(Request $request){
         $data = $request->all();
         $schedule = new Schedule();
         $user = new User();
@@ -157,13 +177,17 @@ class ScheduleController extends Controller
         $date = $schedule->getScheduleDataByID($scheduleID)->date;
         $name = $user->getDoctorInfoByID($doctorID)->name;
         $weekDay = (int)date('N', strtotime($date)); 
+        $totalShift = $schedule->confirmNextMonthScheduleByDoctorID($doctorID);
+        $mustOnDuty = $user->getDoctorInfoByID($doctorID)->mustOnDutyTotalShifts;
 
         $dataArr = [];
 
         $info=[
             "docName" =>$name,
             "docWeekend"=>$docWeekend,
-            "weekDay"=>$weekDay
+            "weekDay"=>$weekDay,
+            "totalShift" =>$totalShift,
+            "mustOnDuty" => $mustOnDuty
         ];
 
         array_push($dataArr,$info);
@@ -176,8 +200,10 @@ class ScheduleController extends Controller
     public function deleteSchedule(Request $request){
         $data = $request->all();
         $schedule = new Schedule();
+        $shiftRecords = new ShiftRecords();
         
         $schedule->deleteScheduleByID($data['scheduleID']);
+        $shiftRecords->deleteShiftRecord($data['scheduleID']);
        
         return redirect('schedule'); 
             

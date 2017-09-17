@@ -867,29 +867,14 @@ class TestController extends Controller
     }
     //單一醫生在假日班的狀況
      public function checkDocScheduleInWeekendByperson(){
-        //$data = $request->all();
         $schedule = new Schedule();
         $user = new User();
 
-        $scheduleID = 58;
+        $totalShift = $schedule->confirmNextMonthScheduleByDoctorID(3);
+        $mustOnDuty = $user->getDoctorInfoByID(3)->mustOnDutyTotalShifts;
 
-        $doctorID = $schedule->getScheduleDataByID($scheduleID)->doctorID;
-        $docWeekend = $schedule->checkDocScheduleInWeekend($doctorID);
-        $date = $schedule->getScheduleDataByID($scheduleID)->date;
-        $name = $user->getDoctorInfoByID($doctorID)->name;
-        $weekDay = (int)date('N', strtotime($date)); 
-
-        $dataArr = [];
-
-        $info=[
-            "docName" =>$name,
-            "docWeekend"=>$docWeekend,
-            "weekDay"=>$weekDay
-        ];
-
-        array_push($dataArr,$info);
-
-        return $dataArr;
+        echo $totalShift;
+        echo $mustOnDuty;
 
     }
 

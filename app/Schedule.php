@@ -190,6 +190,19 @@ class Schedule extends Model
             ->where('scheduleID', $scheduleID)
             ->delete();
     }
+
+     // 計算單一醫生下個月總班數
+    public function confirmNextMonthScheduleByDoctorID($doctorID) {
+        $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+        
+        $affectedRows = DB::table('Schedule')
+            ->where('doctorID', $doctorID)
+            ->where('date', 'like', $nextMonth.'%')
+            ->count();
+        
+        return $affectedRows;
+    }
     
     // 計算各種類的班的數量
     public function countScheduleCategory($shifts) {

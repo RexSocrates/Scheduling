@@ -178,7 +178,7 @@ Route::get('saveSchedule','ScheduleController@addSchedule');
 Route::get('updateScheduleID','ScheduleController@getDoctorInfoByScheduleID');
 
 // 驗證 假日班 調整班表->刪除班
-Route::get('confirmDeleteSchedule','ScheduleController@checkDocScheduleInWeekendByperson');
+Route::get('confirmDeleteSchedule','ScheduleController@checkDocScheduleByperson');
 //調整班表->刪除班
 Route::get('deleteSchedule','ScheduleController@deleteSchedule');
 
