@@ -1,8 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Jobs;
 
-use Illuminate\Http\Request;
+use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 
 // import the class to send a request
 use GuzzleHttp\Client;
@@ -19,22 +23,28 @@ use App\CustomClass\OffReservation;
 use App\CustomClass\Doctor;
 use App\CustomClass\Month;
 
-class AlgorithmController extends Controller
+class SendAlgorithmRequest implements ShouldQueue
 {
-    // send a GET request
-    public function sendGetRequest() {
-        $client = new Client(['base_uri' => 'http://0.0.0.0:8080/']);
-        $response = $client->request('GET', '');
-        
-        $body = $response->getBody();
-        
-        echo $body;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
     }
-    
-    // send a request to the web service
-    public function sendRequest() {
-        
-        
+
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        //
         $client = new Client(['base_uri' => 'http://0.0.0.0:8080/']);
         
         $response = $client->request('POST', '', [
@@ -47,71 +57,11 @@ class AlgorithmController extends Controller
         ]);
         
         // get response body
-//        $body = (string)$response->getBody();
+        $body = (string)$response->getBody();
 //        echo $body.'<br><br>';
 //        $json = json_encode($body);
 //        echo print_r($json).'<br><br>'; // data
 //        echo gettype($json); // string
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        // 測試：取得資料庫並轉譯為json
-        $onResList = $this->getOnReservation();
-        foreach($onResList as $res) {
-            $res->printData();
-        }
-        echo '<br>==================================================<br>';
-        echo json_encode($onResList);
-        
-        echo '<br>==================================================<br>';
-        
-        $offResList = $this->getOffReservation();
-        foreach($offResList as $res) {
-            $res->printData();
-        }
-        echo json_encode($offResList);
-        
-        echo '<br>==================================================<br>';
-        
-        $doctors = $this->getDoctorsInfo();
-        foreach($doctors as $doctor) {
-            $doctor->printData();
-        }
-        
-        echo json_encode($doctors);
-        
-        echo '<br>==================================================<br>';
-        
-        $monthInfo = $this->getMonthInfo();
-        $monthInfo->printData();
-        echo json_encode($monthInfo);
     }
     
     // 取得演算法使用的on班資訊
