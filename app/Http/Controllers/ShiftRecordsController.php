@@ -147,7 +147,6 @@ class ShiftRecordsController extends Controller
         $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
 
 
-
     }
 
      // 正式班表->換班資訊 新增換班

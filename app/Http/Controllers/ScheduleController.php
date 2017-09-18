@@ -143,7 +143,7 @@ class ScheduleController extends Controller
               'isWeekday' => true,
               'location' => $categoryInfo,
               'date' => $startDate,
-              'confirmed'=>1
+              'confirmed'=>0
             ];
         $weekDay = (int)date('N', strtotime($startDate));
         if($weekDay == 6 || $weekDay == 7){

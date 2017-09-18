@@ -95,18 +95,12 @@ class ShiftRecords extends Model
         $user = new User();
         $doctorID = $user->getCurrentUserID();
 
-        $shiftRecords=DB::table('ShiftRecords')
-            ->where('doc2Confirm',2)
-            ->orwhere('adminConfirm',2)
-            ->orwhere('adminConfirm',0)
-            ->where('schID_1_doctor', $doctorID)
-            ->orWhere('schID_2_doctor', $doctorID)
-            ->where('doc2Confirm',2)
-            ->orwhere('adminConfirm',2)
-            ->orwhere('adminConfirm',0)
-            ->get();
+        $result = DB::SELECT('SELECT * FROM ShiftRecords WHERE (schID_1_doctor = ? OR schID_2_doctor = ?) AND (NOT doc2Confirm = 1 OR NOT adminConfirm = 1)', [
+            $doctorID,
+            $doctorID
+        ]);
 
-        return $shiftRecords;
+        return $result;
     }
 
     //查看 換班紀錄

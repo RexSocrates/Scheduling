@@ -266,8 +266,8 @@
                             scheduler.attachEvent("onEventCollision", function (ev, evs){
                                   //any custom logic here
                                 var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
-                                if(count>1){
-                                    dhtmlx.message({ type:"error", text:"此日期已選過" });
+                                if(count>=1){
+                                    dhtmlx.message({ type:"error", text:count+"此日期已選過" });
                                     return true;
                                 }
                                 else{
@@ -275,6 +275,7 @@
 
                                 }
 
+                                console.log("111"+count);
                                  return true;
                             });
 

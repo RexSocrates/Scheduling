@@ -148,7 +148,7 @@
                                                 {{ $record[1] }} {{ $record[5] }}
                                             </font> 互換</td>
                                         <td class="td-padding td-w-13">
-                                            <a class="waves-effect waves-light btn" name=confirm onclick="checkStatus({{$record[7]}},{{ $record[2] }},{{ $record[3] }})">允許</a>
+                                            <a class="waves-effect waves-light btn" name=confirm onclick="checkStatus({{$record[7]}} )">允許</a>
                                             <a href="rejectShift/{{$record[7]}}" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
                                         </td>
                                     </tr>
@@ -312,11 +312,10 @@
                
             });
         }
-        function checkStatus(id,date1,date2) {
+        function checkStatus(id) {
             $.get('getScheduleInfo', {
-                id : id,
-                date1 : date1,
-                date2 : date2
+                id : id
+                
             }, function(status) {
                 if(status ==1){
                     checkShift(id);
