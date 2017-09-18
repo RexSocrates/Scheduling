@@ -212,7 +212,7 @@ class ReservationController extends Controller
             }
         }
 
-        $countDay = $endDateArr[2]-$dateArr[2];
+        $countDay = abs($endDateArr[2]-$dateArr[2]);
 
         $shiftCategory = new ShiftCategory();
         

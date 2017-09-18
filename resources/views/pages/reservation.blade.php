@@ -26,6 +26,8 @@
 <input type="hidden" id='hiddenCountOn' value={{$onAmount}}>
 <input type="hidden" id='hiddenCountOff' value={{$offAmount}}>
 
+<input type="hidden" id="originalEventStartDate" value="">
+
     <div id="section" class="container-fix trans-left-five">
         <div class="container-section">
             <div class="row">
@@ -203,6 +205,18 @@
                               location.reload();
                                         
                             });
+                            
+                            scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
+                                //事件被移動前的資料
+                                console.log("onBeforeEventChanged");
+                                console.log(original.text);
+                                console.log(original.start_date);
+                                
+                                // 將原始的日期資料存入 hidden input，之後用於確認更新預約是否是換時間而不是更換預約類別
+                                document.getElementById("originalEventStartDate").value = original.start_date;
+                                
+                                return true;
+                            });
 
 
                             scheduler.attachEvent("onEventChanged", function(id,e){
@@ -228,14 +242,20 @@
                                 
                                 // 一次只能夠改一天的預班
                                 if(isOnShift) {
-                                    // 預約on班
-                                    if(checkResAmount(true, String(event.start_date), String(event.end_date))) {
+                                    // 預約on班，班數足夠或更換預約時間(改變前與改變後事件起始時間不一致)則使其更新
+                                    if(checkResAmount(true, String(event.start_date), String(event.end_date)) || document.getElementById("originalEventStartDate").value != event.start_date) {
                                         updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
+                                    }else {
+                                        // 剩餘可預約班數為0，無法預班
+                                        dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
                                     }
                                 }else {
                                     // 預約off班
-                                    if(checkResAmount(false, String(event.start_date), String(event.end_date))) {
+                                    if(checkResAmount(false, String(event.start_date), String(event.end_date)) || document.getElementById("originalEventStartDate").value != event.start_date) {
                                         updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
+                                    }else {
+                                        // 剩餘可預約班數為0，無法預班
+                                        dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
                                     }
                                 }
 
@@ -447,8 +467,6 @@
             var days = parseInt(endArr[2]) - parseInt(startArr[2]);
             
             if(resAmount <= 0 || resAmount < days) {
-                // 剩餘可預約班數為0，無法預班
-                dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
                 return false;
             }else {
                 return true;

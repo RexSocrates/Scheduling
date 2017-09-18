@@ -47,7 +47,7 @@ class AlgorithmController extends Controller
         ]);
         
         // get response body
-        $body = (string)$response->getBody();
+//        $body = (string)$response->getBody();
 //        echo $body.'<br><br>';
 //        $json = json_encode($body);
 //        echo print_r($json).'<br><br>'; // data
@@ -83,35 +83,35 @@ class AlgorithmController extends Controller
         
         
         // 測試：取得資料庫並轉譯為json
-//        $onResList = $this->getOnReservation();
-//        foreach($onResList as $res) {
-//            $res->printData();
-//        }
-//        echo '<br>==================================================<br>';
-//        echo json_encode($onResList);
-//        
-//        echo '<br>==================================================<br>';
-//        
-//        $offResList = $this->getOffReservation();
-//        foreach($offResList as $res) {
-//            $res->printData();
-//        }
-//        echo json_encode($offResList);
-//        
-//        echo '<br>==================================================<br>';
-//        
-//        $doctors = $this->getDoctorsInfo();
-//        foreach($doctors as $doctor) {
-//            $doctor->printData();
-//        }
-//        
-//        echo json_encode($doctors);
-//        
-//        echo '<br>==================================================<br>';
-//        
-//        $monthInfo = $this->getMonthInfo();
-//        $monthInfo->printData();
-//        echo json_encode($monthInfo);
+        $onResList = $this->getOnReservation();
+        foreach($onResList as $res) {
+            $res->printData();
+        }
+        echo '<br>==================================================<br>';
+        echo json_encode($onResList);
+        
+        echo '<br>==================================================<br>';
+        
+        $offResList = $this->getOffReservation();
+        foreach($offResList as $res) {
+            $res->printData();
+        }
+        echo json_encode($offResList);
+        
+        echo '<br>==================================================<br>';
+        
+        $doctors = $this->getDoctorsInfo();
+        foreach($doctors as $doctor) {
+            $doctor->printData();
+        }
+        
+        echo json_encode($doctors);
+        
+        echo '<br>==================================================<br>';
+        
+        $monthInfo = $this->getMonthInfo();
+        $monthInfo->printData();
+        echo json_encode($monthInfo);
     }
     
     // 取得演算法使用的on班資訊
