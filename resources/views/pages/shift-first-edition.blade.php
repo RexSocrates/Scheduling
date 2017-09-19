@@ -389,14 +389,7 @@
                                 type: "dhx_time_block"
                             
                             });
-                            
-                            scheduler.attachEvent("onBeforeExternalDragIn",function(source,dhtmlx,tArea,tNode,e){
-                                //any custom logic here
-                                
-                               
-//                                console.log("Native obj : " + e);
-                                return true;
-                            });
+                           
 
 
                             //scheduler.updateView();
@@ -404,7 +397,7 @@
                             scheduler.attachEvent("onEventCollision", function (ev, evs){
                                 var ev = scheduler.getEvent(ev.id);
 
-                                //var evs =  scheduler.getEvent(evs.id);
+                                var evs =  scheduler.getEvent(evs[0].id);
                            //     ("onEventCollision", function(ev, evs){ 
                            //      var c = 0, l = scheduler.config.collision_limit;
                            //      for (var i=0; i<evs.length; i++) {  
@@ -412,25 +405,21 @@
                            //      } 
                            //          return !(c < l);
                            // });
+                                
+                               //  console.log("1111"+evs.length);
 
+                               // for(var i = 0; i<  evs.length; i++){
+                                
 
-                               for(var i = 0; i<  evs.length; i++){
-                                var evs = scheduler.getEvent(evs[i].id);
-
-                                //console.log("1111"+evs.length);
-
-                                }
+                               //  console.log("1111"+evs.length);
+                               //  }
                                 
                                 //var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
                                 console.log("ev "+ev.text)
-=======
-                                var evs = scheduler.getEvent(evs[0].id);
+                               // var evs = scheduler.getEvent(evs[0].id);
                                 var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
-                                console.log("ev "+ev.text);
->>>>>>> ae933a97f1c76c4c9b8475114ebc56e62a72a688
+
                                 console.log("evs "+evs.text);
-
-
                             
 
                                 checkDocStatus(ev.hidden,evs.hidden);

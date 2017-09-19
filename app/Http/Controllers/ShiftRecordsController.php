@@ -274,25 +274,29 @@ class ShiftRecordsController extends Controller
         $shiftRecords->doc2Confirm($newChangeSerial,1);
         $shiftRecords->adminConfirm($newChangeSerial,1);
 
-        // $user = new User();
+        $user = new User();
 
-        // $doctor1 =$schedule_1_Info->doctorID;
-        // $doctor2 = $schedule_2_Info->doctorID;
+        $doctor1 =$schedule_1_Info->doctorID;
+        $doctor2 = $schedule_2_Info->doctorID;
 
-        // $oldscheduleID1 = $schedule_1_Info->scheduleID;
-        // $newscheduleID1 = $schedule_2_Info->scheduleID;
-        // $oldscheduleID2 = $schedule_2_Info->scheduleID;
-        // $newscheduleID2 = $schedule_1_Info->scheduleID;
+        $oldscheduleID1 = $schedule_1_Info->scheduleID;
+        $newscheduleID1 = $schedule_2_Info->scheduleID;
+        $oldscheduleID2 = $schedule_2_Info->scheduleID;
+        $newscheduleID2 = $schedule_1_Info->scheduleID;
 
-        // $job1 = new SendShiftExchangeMail($doctor1,$oldscheduleID1,$newscheduleID1);
-        // $job2 = new SendShiftExchangeMail($doctor2,$oldscheduleID2,$newscheduleID2);
+        $job1 = new SendShiftExchangeMail($doctor1,$oldscheduleID1,$newscheduleID1);
+        $job2 = new SendShiftExchangeMail($doctor2,$oldscheduleID2,$newscheduleID2);
+
+        dispatch($job1);
+        dispatch($job2);
 
 
-            //$schedule->$exchangeSchedule($newChangeSerial);
-            //return redirect('shift-first-edition');
-              // return redirect()->action(
-              //    'ShiftRecordsController@shiftFirstEdition', ['date' => $schedule_1_Date]
-              // );
+
+            $schedule->$exchangeSchedule($newChangeSerial);
+            return redirect('shift-first-edition');
+              return redirect()->action(
+                 'ShiftRecordsController@shiftFirstEdition', ['date' => $schedule_1_Date]
+              );
             
 
     }

@@ -194,11 +194,19 @@
                                             sendNewReservation(event.priority, event.start_date, event.end_date);
                                                
                                       }
+                                      else {
+                                        // 剩餘可預約班數為0，無法預班
+                                        dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
+                                    }
                                   }else {
                                       // 預約off班
                                       if(checkResAmount(false, String(event.start_date), String(event.end_date))) {
                                           sendNewReservation(event.priority, event.start_date, event.end_date);
                                       }
+                                      else {
+                                        // 剩餘可預約班數為0，無法預班
+                                        dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
+                                    }
                                   }
                               }
 //                              countDay();
