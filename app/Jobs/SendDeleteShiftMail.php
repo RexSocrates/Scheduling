@@ -23,17 +23,23 @@ class SendDeleteShiftMail implements ShouldQueue
     // 寄送上班時段被移除之信件
     protected $doctor;
     protected $scheduleData;
+    protected $admin;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($doctorID, $scheduleData)
+    public function __construct($doctorID, $scheduleID)
     {
         //所需參數：通知的醫生ID, 被移除的班的資料
-        $this->doctor = $doctorID;
-        $this->scheduleData = $scheduleData;
+        $userObj = new User();
+        $this->doctor = $userObj->getDoctorInfoByID($doctorID);
+        
+        $schObj = new Schedule();
+        $this->scheduleData = $schObj->getScheduleDataByID($scheduleID);
+        
+        $this->admin = $userObj->getAdminList()[0];
     }
 
     /**
@@ -45,6 +51,6 @@ class SendDeleteShiftMail implements ShouldQueue
     {
         //
         Mail::to($this->doctor->email)
-            ->send(new DeleteShift($this->doctor, $this->schedule));
+            ->send(new DeleteShift($this->doctor, $this->schedule, $this->admin));
     }
 }

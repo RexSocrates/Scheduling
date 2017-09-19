@@ -13,17 +13,19 @@ class DeleteShift extends Mailable
     
     protected $doctor;
     protected $scheduleData;
+    protected $admin
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($doctor, $scheduleData)
+    public function __construct($doctor, $scheduleData, $admin)
     {
         //
         $this->$doctor = $doctor;
         $this->scheduleData = $scheduleData;
+        $this->admin = $admin;
     }
 
     /**
@@ -37,7 +39,8 @@ class DeleteShift extends Mailable
             ->subject('【馬偕醫院】排班系統')
             ->markdown('emails.deleteShift', [
                 'doctor' => $this->doctor,
-                'scheduleData' => $this->scheduleData
+                'scheduleData' => $this->scheduleData,
+                'admin' => $this->admin
             ]);
     }
 }
