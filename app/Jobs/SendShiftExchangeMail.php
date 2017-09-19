@@ -32,13 +32,17 @@ class SendShiftExchangeMail implements ShouldQueue
      */
     public function __construct($receiverID, $originalShiftSerial, $newShiftSerial)
     {
+        // 所需參數：被換班的醫生ID, 原本的上班資料, 新的上班編號
         //從controller 接收資料
         $userObj = new USer();
         $scheduleObj = new Schedule();
         
         $this->receiver = $userObj->getDoctorInfoByID($receiverID);
         $this->originalShift = $scheduleObj->getScheduleDataByID($originalShiftSerial);
+        
         $this->newShift = $scheduleObj->getScheduleDataByID($newShiftSerial);;
+        
+        // 取得排班人員聯絡資訊
         $this->admin = $userObj->getAdminList()[0];
     }
 
