@@ -27,6 +27,7 @@ class SendAlgorithmRequest implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    // 將排班資料向演算法的 web service 傳送
     /**
      * Create a new job instance.
      *
