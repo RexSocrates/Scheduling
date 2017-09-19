@@ -470,7 +470,7 @@
                             scheduler.attachEvent("onEventChanged", function (id, e){
                                 var event = scheduler.getEvent(id);
 
-                                checkDoctorSchedule(event.hidden); //schedule id
+                                //checkDoctorSchedule(event.hidden); //schedule id
 
                                 console.log("124"+event.text); 
 

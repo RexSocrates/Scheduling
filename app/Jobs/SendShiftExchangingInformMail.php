@@ -30,7 +30,7 @@ class SendShiftExchangingInformMail implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($admin, $applicantID, $receiverID, $applicantShiftID, $receiverShiftID)
+    public function __construct($applicantID, $receiverID, $applicantShiftID, $receiverShiftID)
     {
         //
         $userObj = new User();

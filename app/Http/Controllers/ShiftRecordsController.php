@@ -17,6 +17,7 @@ use App\Jobs\SendAgreeShiftExchangeMail;
 use App\Jobs\SendDenyShiftExchangeMail;
 use App\Jobs\SendShiftExchangeMail;
 use App\Jobs\SendApplyShiftExchangeMail;
+use App\Jobs\SendShiftExchangingInformMail;
 
 class ShiftRecordsController extends Controller
 {
@@ -626,8 +627,19 @@ class ShiftRecordsController extends Controller
         $shiftRecordObj = new ShiftRecords();
         $shiftRecordObj->adminConfirm($serial,1);
 
-        return redirect('shift-info');
+        $shiftRecordObj->getShiftRecordByChangeSerial($serial);
+
+        $applier = $shiftRecordObj->schID_1_doctor;
+        $receiver = $shiftRecordObj->schID_2_doctor;
+        $applier_ScheduleID = $shiftRecordObj->scheduleID_1;
+        $receiver_ScheduleID = $shiftRecordObj->scheduleID_2;
+
+        $job = new SendShiftExchangingInformMail($applier,$receiver,$applier_ScheduleID,$receiver_ScheduleID);
+
+        dispatch($job);
         
+        return redirect('shift-info');
+
     }
 
     // 排班人員拒絕換班
