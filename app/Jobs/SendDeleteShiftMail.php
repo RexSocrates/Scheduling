@@ -10,36 +10,30 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 // import mail
 use Mail;
-use App\Mail\NewShiftAssignment;
+use App\Mail\DeleteShift;
 
 // import model
 use App\User;
 use App\Schedule;
 
-class SendNewShiftAssignmentMail implements ShouldQueue
+class SendDeleteShiftMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     
-    // 寄送排班人員新增醫師上班的通知信件
+    // 寄送上班時段被移除之信件
     protected $doctor;
     protected $scheduleData;
-    protected $admin;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($doctorID, $scheduleID)
+    public function __construct($doctorID, $scheduleData)
     {
-        //所需參數：倍新增上班時段的醫師ID, 新增的班的資料
-        $userObj = new User();
-        $this->doctor = $userObj->getDoctorInfoByID($doctorID);
-        
-        $schObj = new Schedule();
-        $this->scheduleData = $schObj->getScheduleDataByID($scheduleID);
-        
-        $this->admin = $userObj->getAdminList()[0];
+        //所需參數：通知的醫生ID, 被移除的班的資料
+        $this->doctor = $doctorID;
+        $this->scheduleData = $scheduleData;
     }
 
     /**
@@ -51,6 +45,6 @@ class SendNewShiftAssignmentMail implements ShouldQueue
     {
         //
         Mail::to($this->doctor->email)
-            ->send(new NewShiftAssignment($this->doctor, $this->scheduleData, $this->admin));
+            ->send(new DeleteShift($this->doctor, $this->schedule));
     }
 }

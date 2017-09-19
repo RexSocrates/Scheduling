@@ -7,25 +7,23 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NewShiftAssignment extends Mailable
+class DeleteShift extends Mailable
 {
     use Queueable, SerializesModels;
     
     protected $doctor;
     protected $scheduleData;
-    protected $admin;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($doctor, $scheduleData, $admin)
+    public function __construct($doctor, $scheduleData)
     {
         //
-        $this->doctor = $doctor;
+        $this->$doctor = $doctor;
         $this->scheduleData = $scheduleData;
-        $this->admin = $admin
     }
 
     /**
@@ -37,10 +35,9 @@ class NewShiftAssignment extends Mailable
     {
         return $this
             ->subject('【馬偕醫院】排班系統')
-            ->markdown('emails.newShiftAssignment', [
+            ->markdown('emails.deleteShift', [
                 'doctor' => $this->doctor,
-                'schedule' => $this->scheduleData,
-                'admin' => $this->admin
-        ]);
+                'scheduleData' => $this->scheduleData
+            ]);
     }
 }
