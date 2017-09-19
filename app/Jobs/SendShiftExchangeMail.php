@@ -18,7 +18,7 @@ class SendShiftExchangeMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     
-    // 排班人員強制更換上班
+    // 排班人員強制更換上班的通知信件
     protected $receiver;
     protected $originalShift;
     protected $newShift;

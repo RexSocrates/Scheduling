@@ -22,6 +22,7 @@ class SendRandomNotificationMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     
+    // 當預約人數過多，向所有預約的醫師通知人數過多將會隨機選取上班醫師
     protected $adminInfo;
     protected $reservation;
     protected $emails = [];
