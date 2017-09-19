@@ -11,11 +11,15 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Mail;
 use App\Mail\ApplyShiftExchange;
 
+// import model
+use App\User;
+use App\Schedule;
+
 class SendApplyShiftExchangeMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     
-    //
+    // 對醫生通知有人對他/她申請換班
     protected $receiver;
     protected $applicant;
     protected $applicantShift;
@@ -28,14 +32,20 @@ class SendApplyShiftExchangeMail implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($receiver, $applicant, $applicantShift, $receiverShift, $admin)
+    public function __construct($receiverID, $applicantID, $applicantShiftID, $receiverShiftID)
     {
-        //
-        $this->receiver = $receiver;
-        $this->applicant = $applicant;
-        $this->applicantShift = $applicantShift;
-        $this->receiverShift = $$receiverShift;
-        $this->admin = $admin;
+        //所需參數 接收者的ID, 提出人的ID, 提出人用來交換的班ID, 接收者被提出更換的班ID
+        $userObj = new User();
+        
+        $this->receiver = $userObj->getDoctorInfoByID($receiverID);
+        $this->applicant = $userObj->getDoctorInfoByID($applicantID);
+        
+        $schObj = new Schedule();
+        $this->applicantShift = $schObj->getScheduleDataByID($applicantShiftID);
+        $this->receiverShift = $schObj->getScheduleDataByID($receiverShiftID);
+        
+        // 取得排班人員資料
+        $this->admin = $userObj->getAdminList()[0];
     }
 
     /**
