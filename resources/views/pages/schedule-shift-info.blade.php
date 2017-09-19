@@ -315,7 +315,6 @@
         function checkStatus(id) {
             $.get('getScheduleInfo', {
                 id : id
-                
             }, function(status) {
                 if(status ==1){
                     checkShift(id);

@@ -97,6 +97,17 @@ class ShiftRecordsController extends Controller
 
         $shiftCheck = $shiftRecords->doc2Confirm($id,1);
 
+        $shiftRecords->getShiftRecordByChangeSerial($id);
+
+        $applier = $shiftRecords->schID_1_doctor;
+        $receiver = $shiftRecords->schID_2_doctor;
+        $applier_ScheduleID = $shiftRecords->scheduleID_1;
+        $receiver_ScheduleID = $shiftRecords->scheduleID_2;
+
+        $job = new SendAgreeShiftExchangeMail($applier,$receiver,$applier_ScheduleID,$receiver_ScheduleID);
+
+        dispatch($job);
+
         return redirect ('schedule-shift-info');
     }
 
@@ -105,6 +116,13 @@ class ShiftRecordsController extends Controller
         $shiftRecords = new ShiftRecords();
 
         $shiftCheck = $shiftRecords->doc2Confirm($id,2);
+
+        $applier = $shiftRecords->schID_1_doctor;
+        $receiver = $shiftRecords->schID_2_doctor;
+
+        $job = new SendDenyShiftExchangeMail($applier,$receiver);
+
+        dispatch($job);
 
         return redirect ('schedule-shift-info');
     }
@@ -609,6 +627,7 @@ class ShiftRecordsController extends Controller
         $shiftRecordObj->adminConfirm($serial,1);
 
         return redirect('shift-info');
+        
     }
 
     // 排班人員拒絕換班
