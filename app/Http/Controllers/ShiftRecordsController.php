@@ -148,6 +148,13 @@ class ShiftRecordsController extends Controller
         $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
 
         $receiver = $schedule_2_Info->doctorID; 
+        $applier = $schedule_1_Info->doctorID;
+        $applier_ScheduleID = $schedule_1_Info->scheduleID;
+        $receiver_ScheduleID = $schedule_2_Info->scheduleID;
+
+        $job = new SendApplyShiftExchangeMail($receiver,$applier,$applier_ScheduleID,$receiver_ScheduleID);
+
+        dispatch($job);
 
 
     }

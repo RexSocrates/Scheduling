@@ -57,6 +57,6 @@ class SendApplyShiftExchangeMail implements ShouldQueue
     {
         //
         Mail::to($this->receiver->email)
-            ->send(new ApplyShiftExchange($this->applicant, $this->receiver));
+            ->send(new ApplyShiftExchange($this->applicant, $this->receiver, $this->applicantShift, $this->receiverShift, $this->admin));
     }
 }
