@@ -11,6 +11,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Mail;
 use App\Mail\ShiftExchangingInform;
 
+use App\User;
+use App\Schedule;
+
 class SendShiftExchangingInformMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -27,14 +30,17 @@ class SendShiftExchangingInformMail implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($admin, $applicant, $receiver, $applicantShift, $receiverShift)
+    public function __construct($admin, $applicantID, $receiverID, $applicantShiftID, $receiverShiftID)
     {
         //
-        $this->admin = $admin;
-        $this->applicant = $applicant;
-        $this->receiver = $receiver;
-        $this->applicantShift = $applicantShift;
-        $this->receiverShift = $receiverShift;
+        $userObj = new User();
+        $schObj = new Schedule();
+        
+        $this->admin = userObj->getAdminList()[0];
+        $this->applicant = $userObj->getDoctorInfoByID($applicantID);
+        $this->receiver = $userObj->getDoctorInfoByID($receiverID)
+        $this->applicantShift = $schObj->getScheduleDataByID($applicantShiftID);
+        $this->receiverShift = $schObj->getScheduleDataByID($receiverShiftID);
     }
 
     /**
