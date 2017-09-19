@@ -16,6 +16,7 @@ use App\Remark;
 use App\Jobs\SendAgreeShiftExchangeMail;
 use App\Jobs\SendDenyShiftExchangeMail;
 use App\Jobs\SendShiftExchangeMail;
+use App\Jobs\SendApplyShiftExchangeMail;
 
 class ShiftRecordsController extends Controller
 {
@@ -145,6 +146,8 @@ class ShiftRecordsController extends Controller
         $shiftRecords = new ShiftRecords();
 
         $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
+
+        $receiver = $schedule_2_Info->doctorID; 
 
 
     }
@@ -292,11 +295,12 @@ class ShiftRecordsController extends Controller
 
 
 
-            $schedule->$exchangeSchedule($newChangeSerial);
-            return redirect('shift-first-edition');
-              return redirect()->action(
-                 'ShiftRecordsController@shiftFirstEdition', ['date' => $schedule_1_Date]
-              );
+        $schedule->exchangeSchedule($newChangeSerial);
+        
+        //return redirect('shift-first-edition');
+              // return redirect()->action(
+                 // 'ShiftRecordsController@shiftFirstEdition', ['date' => $schedule_1_Date]
+              // );
             
 
     }

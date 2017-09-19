@@ -394,65 +394,65 @@
 
                             //scheduler.updateView();
 
-                            scheduler.attachEvent("onEventCollision", function (ev, evs){
-                                var ev = scheduler.getEvent(ev.id);
+                           //  scheduler.attachEvent("onEventCollision", function (ev, evs){
+                           //      var ev = scheduler.getEvent(ev.id);
 
-                                var evs =  scheduler.getEvent(evs[0].id);
-                           //     ("onEventCollision", function(ev, evs){ 
-                           //      var c = 0, l = scheduler.config.collision_limit;
-                           //      for (var i=0; i<evs.length; i++) {  
-                           //          if ((ev.room_number == evs[i].room_number)&& ev.id != evs[i].id) c++; 
-                           //      } 
-                           //          return !(c < l);
-                           // });
+                           //      var evs =  scheduler.getEvent(evs[0].id);
+                           // //     ("onEventCollision", function(ev, evs){ 
+                           // //      var c = 0, l = scheduler.config.collision_limit;
+                           // //      for (var i=0; i<evs.length; i++) {  
+                           // //          if ((ev.room_number == evs[i].room_number)&& ev.id != evs[i].id) c++; 
+                           // //      } 
+                           // //          return !(c < l);
+                           // // });
                                 
-                               //  console.log("1111"+evs.length);
+                           //     //  console.log("1111"+evs.length);
 
-                               // for(var i = 0; i<  evs.length; i++){
+                           //     // for(var i = 0; i<  evs.length; i++){
                                 
 
-                               //  console.log("1111"+evs.length);
-                               //  }
+                           //     //  console.log("1111"+evs.length);
+                           //     //  }
                                 
-                                //var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
-                                console.log("ev "+ev.text)
-                               // var evs = scheduler.getEvent(evs[0].id);
-                                var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
+                           //      //var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
+                           //      console.log("ev "+ev.text)
+                           //     // var evs = scheduler.getEvent(evs[0].id);
+                           //      var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
 
-                                console.log("evs "+evs.text);
+                           //      console.log("evs "+evs.text);
                             
 
-                                checkDocStatus(ev.hidden,evs.hidden);
+                           //      checkDocStatus(ev.hidden,evs.hidden);
 
-                                //  console.log('checkDoc1Status'+document.getElementById("doctor1Info").value);
-                                //  console.log('checkDoc2Status'+document.getElementById("doctor2Info").value);
-                                // //限制非當月拖拉換班
-                                // if(ev.start_date < startd || evs.start_date < startd ){
-                                //     //console.log("No");
-                                //     dhtmlx.message({ type:"error", text:"此日期無法換班" });
-                                // }
-                                // if(document.getElementById("doctor1Info").value!=0){
-                                //     dhtmlx.message({ type:"error", text:ev.text+"在"+date1+"已有班了" });
-                                //     alert("1111");
-                                //     console.log("1"+ev.text);
-                                // }
-                                // if(document.getElementById("doctor2Info").value!=0){
-                                //    dhtmlx.message({ type:"error", text:evs.text+"在"+date2+"已有班了" });
-                                //    console.log("2"+evs.text);
-                                // }
-                                // else{
-                                //     if(count>=1){
-                                //         updateShift(ev.hidden,evs.hidden);
-                                //         //dhtmlx.message({ type:"error", text:"此日期已選過" });
-                                //         return true;
-                                //     }
-                                //     else{
+                           //      //  console.log('checkDoc1Status'+document.getElementById("doctor1Info").value);
+                           //      //  console.log('checkDoc2Status'+document.getElementById("doctor2Info").value);
+                           //      // //限制非當月拖拉換班
+                           //      // if(ev.start_date < startd || evs.start_date < startd ){
+                           //      //     //console.log("No");
+                           //      //     dhtmlx.message({ type:"error", text:"此日期無法換班" });
+                           //      // }
+                           //      // if(document.getElementById("doctor1Info").value!=0){
+                           //      //     dhtmlx.message({ type:"error", text:ev.text+"在"+date1+"已有班了" });
+                           //      //     alert("1111");
+                           //      //     console.log("1"+ev.text);
+                           //      // }
+                           //      // if(document.getElementById("doctor2Info").value!=0){
+                           //      //    dhtmlx.message({ type:"error", text:evs.text+"在"+date2+"已有班了" });
+                           //      //    console.log("2"+evs.text);
+                           //      // }
+                           //      // else{
+                           //      //     if(count>=1){
+                           //      //         updateShift(ev.hidden,evs.hidden);
+                           //      //         //dhtmlx.message({ type:"error", text:"此日期已選過" });
+                           //      //         return true;
+                           //      //     }
+                           //      //     else{
                                         
-                                //         return false;
-                                //     }
-                               //}
-                                return true;
-                            });
+                           //      //         return false;
+                           //      //     }
+                           //     //}
+                           //      return true;
+                           //  });
                             
                             
                             //空白處新增醫生班表
@@ -462,13 +462,17 @@
 
                                 showScheduleInfo(ev.start_date,ev.section_id);
 
+                                console.log("111"+ev.text);
+
                                 return true;
                             });
 
                             scheduler.attachEvent("onEventChanged", function (id, e){
                                 var event = scheduler.getEvent(id);
 
-                                checkDoctorSchedule(event.hidden); //schedule id 
+                                checkDoctorSchedule(event.hidden); //schedule id
+
+                                console.log("124"+event.text); 
 
                                 return true;
                             });
@@ -480,7 +484,7 @@
                                 changeDoctor_1(event.hidden);
                                 showScheduleInfo(event.start_date,event.section_id);
 
-                                console.log(event.text);
+                                console.log("123"+event.text);
 
                                 return true;
                             });
@@ -986,8 +990,10 @@
                     updateSchedule(scheduleID,date,classification);
                     
                 }
+                
                
             });
+
 
          }
 
@@ -1000,7 +1006,7 @@
             }, function(id){
                 console.log(id);
                 alert("成功");
-                refresh();
+                //refresh();
                 
             });
         }

@@ -114,6 +114,7 @@ class Schedule extends Model
         $shifts = DB::table('Schedule')
             ->where('doctorId', $id)
             ->where('date', 'like', $nextMonth.'%')
+            ->orderBy('date')
             ->get();
         
         return $shifts;

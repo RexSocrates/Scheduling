@@ -116,7 +116,7 @@ class ScheduleController extends Controller
             "docName"=>$docName,
             "docWeekend"=>$docWeekend,
             "weekDay"=>$weekDay,
-            "date"=>$dataArr,
+            "date"=>$dateArr,
             'weekDayInSchedule' => $weekDayInSchedule
         ];
 
