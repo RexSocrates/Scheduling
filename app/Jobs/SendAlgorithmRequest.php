@@ -45,7 +45,7 @@ class SendAlgorithmRequest implements ShouldQueue
      */
     public function handle()
     {
-        //
+        // 準備向web service 送出request
         $client = new Client(['base_uri' => 'http://0.0.0.0:8080/']);
         
         $response = $client->request('POST', '', [
@@ -57,7 +57,7 @@ class SendAlgorithmRequest implements ShouldQueue
             ]
         ]);
         
-        // get response body
+        // 回收演算法回傳的內容
         $body = (string)$response->getBody();
 //        echo $body.'<br><br>';
 //        $json = json_encode($body);
