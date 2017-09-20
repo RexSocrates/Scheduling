@@ -13,6 +13,7 @@ use App\Mail\ShiftExchangingInform;
 
 use App\User;
 use App\Schedule;
+use App\ShiftRecords;
 
 class SendShiftExchangingInformMail implements ShouldQueue
 {
@@ -24,23 +25,42 @@ class SendShiftExchangingInformMail implements ShouldQueue
     protected $receiver;
     protected $applicantShift;
     protected $receiverShift;
+    
+    protected $shitRecordData;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($admin, $applicantID, $receiverID, $applicantShiftID, $receiverShiftID)
+    public function __construct($changeSerial)
     {
-        //
+        // $admin, $applicantID, $receiverID, $applicantShiftID, $receiverShiftID
         $userObj = new User();
         $schObj = new Schedule();
         
         $this->admin = userObj->getAdminList()[0];
-        $this->applicant = $userObj->getDoctorInfoByID($applicantID);
-        $this->receiver = $userObj->getDoctorInfoByID($receiverID)
-        $this->applicantShift = $schObj->getScheduleDataByID($applicantShiftID);
-        $this->receiverShift = $schObj->getScheduleDataByID($receiverShiftID);
+//        $this->applicant = $userObj->getDoctorInfoByID($applicantID);
+//        $this->receiver = $userObj->getDoctorInfoByID($receiverID)
+//        $this->applicantShift = $schObj->getScheduleDataByID($applicantShiftID);
+//        $this->receiverShift = $schObj->getScheduleDataByID($receiverShiftID);
+        
+        
+        // 使用change serial 取得換班資料
+        $shiftRecObj = new ShiftRecords();
+        $shiftRecordData = $shiftRecObj->getShiftRecordByChangeSerial($changeSerial);
+        
+        $this->shitRecordData = $shiftRecordData;
+        
+        // 從換班紀錄中取得醫師1與醫師2的資料
+        $this->applicant = $userObj->getDoctorInfoByID($shiftRecordData->schID_1_doctor);
+        $this->receiver = $userObj->getDoctorInfoByID($shiftRecordData->schID_2_doctor);
+        
+        // 取得提出申請換班的人的原本的資訊
+        $this->applicantShift = $schObj->getScheduleDataByID($shiftRecordData->scheduleID_1);
+        // 取出換班申請的對象的原始上班資料
+        $this->receiverShift = $schObj->getScheduleDataByID($shiftRecordData->scheduleID_2);
+        
     }
 
     /**

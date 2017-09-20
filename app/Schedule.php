@@ -274,9 +274,11 @@ class Schedule extends Model
         $scheduleID_1 = $record->scheduleID_1;
         $scheduleID_2 = $record->scheduleID_2;
         
+        // 取出換班的兩位醫生ID
         $doctor1 = $record->schID_1_doctor;
         $doctor2 = $record->schID_2_doctor;
         
+        // 兩個上班資訊中的醫師ID互換，原本的上班編號不動
         $this->updateDoctorForSchedule($scheduleID_1, $doctor2);
         $this->updateDoctorForSchedule($scheduleID_2, $doctor1);
         
