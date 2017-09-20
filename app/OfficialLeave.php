@@ -100,6 +100,7 @@ class OfficialLeave extends Model
             'updatedLeaveHours' =>$dataArray['updatedLeaveHours'],
             'recordDate'=> date('Y-m-d'),
             'remark' => $dataArray['remark'],
+            // 'date' => $dataArray['date'],
             'confirmStatus' => 0,
         ]);
         

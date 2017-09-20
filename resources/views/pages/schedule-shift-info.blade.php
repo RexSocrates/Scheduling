@@ -170,7 +170,7 @@
                             <div class="right">
                                 時間：
                                 <div class="input-field inline">
-                                    <select id=month onchange="changeMonth()">
+                                    <select id=month onchange="changeRemarkMonth()">
                                         <option value="" disabled selected>請選擇月份</option>
                                         <option value="{{ $currentMonth }}">{{ $currentMonth }}</option>
                                         <option value="{{ $preMonth }}">{{ $preMonth }}</option>
@@ -195,9 +195,9 @@
                                <tbody>
                                  @foreach($remarks as $remark)
                                     <tr>
-                                        <td class="td-padding td-w-5" id=author>{{ $remark['author'] }}</td>
-                                        <td class="td-padding td-w-5" id=date>{{ $remark['date'] }}</td>
-                                        <td class="td-padding td-w-20" id=content>{{ $remark['content'] }}</td>
+                                        <td class="td-padding td-w-5" id=author><!-- {{ $remark['author'] }} --></td>
+                                        <td class="td-padding td-w-5" id=date><!-- {{ $remark['date'] }} --></td>
+                                        <td class="td-padding td-w-20" id=content><!-- {{ $remark['content'] }} --></td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -294,8 +294,8 @@
                 document.getElementById("date2").innerHTML  = date;
                
         }
-        function changeMonth() {
-            $.get('changeMonth', {
+        function changeRemarkMonth() {
+            $.get('changeRemarkMonth', {
                 month : document.getElementById('month').value
             }, function(array) {
                 var author = "";
@@ -305,12 +305,18 @@
                     author += "<td>"+array[i]['author']+"</td>";
                     date += "<td>"+array[i]['date']+"</td>";
                     content += "<td>"+array[i]['content']+"</td>";
+                    
+                    console.log(date);
                 }
+
+               
                 document.getElementById("author").innerHTML  = author;
                 document.getElementById("date").innerHTML  = date;
                 document.getElementById("content").innerHTML  = content;
+            
                
             });
+            console.log(document.getElementById('month').value);
         }
         function checkStatus(id) {
             $.get('getScheduleInfo', {
@@ -391,15 +397,15 @@
                     console.log("doc2"+array[0]['date2']);
                 }
 
-                else if( (array[0]['doc1weekend']<=4) && ( weekday2==6 || weekday2 ==7)  && ( weekday1!=6 && weekday1!=7) ){
-                    dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生假日班不得少於4" });
-                    console.log("$week1"+weekday1);
-                    console.log("$week1"+weekday2);
-                }
-                else if((array[0]['doc2weekend']<4) &&  ( weekday1==6 || weekday1 ==7) && ( weekday2!=6 && weekday2!=7) ){
-                    dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生假日班不得少於4" });
+                // else if( (array[0]['doc1weekend']<=4) && ( weekday2==6 || weekday2 ==7)  && ( weekday1!=6 && weekday1!=7) ){
+                //     dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生假日班不得少於4" });
+                //     console.log("$week1"+weekday1);
+                //     console.log("$week1"+weekday2);
+                // }
+                // else if((array[0]['doc2weekend']<4) &&  ( weekday1==6 || weekday1 ==7) && ( weekday2!=6 && weekday2!=7) ){
+                //     dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生假日班不得少於4" });
 
-                }
+                // }
 
                 else{
                 save_form();

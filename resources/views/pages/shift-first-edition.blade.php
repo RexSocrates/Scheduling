@@ -670,27 +670,27 @@
                     console.log("doc2"+array[0]['count2']);
                 }
 
-                 else if( (array[0]['doc1weekend']<=4) && ( weekday2==6 || weekday2 ==7)  && ( weekday1!=6 && weekday1!=7) ){
-                    var check = confirm(array[0]['doc1']+"醫生假日班不得少於4\n確定要換班嗎?");
+                //  else if( (array[0]['doc1weekend']<=4) && ( weekday2==6 || weekday2 ==7)  && ( weekday1!=6 && weekday1!=7) ){
+                //     var check = confirm(array[0]['doc1']+"醫生假日班不得少於4\n確定要換班嗎?");
 
-                    if(check==true){
-                       updateShift(scheduleID_1,scheduleID_2);
-                    }
-                    else{
-                        alert("已取消");
-                    }
-                }
-                else if((array[0]['doc2weekend']<=4) &&  ( weekday1==6 || weekday1 ==7) && ( weekday2!=6 && weekday2!=7) ){
-                    var check = confirm(array[0]['doc2']+"醫生假日班不得少於4\n確定要換班嗎?");
+                //     if(check==true){
+                //        updateShift(scheduleID_1,scheduleID_2);
+                //     }
+                //     else{
+                //         alert("已取消");
+                //     }
+                // }
+                // else if((array[0]['doc2weekend']<=4) &&  ( weekday1==6 || weekday1 ==7) && ( weekday2!=6 && weekday2!=7) ){
+                //     var check = confirm(array[0]['doc2']+"醫生假日班不得少於4\n確定要換班嗎?");
 
-                    if(check==true){
-                       updateShift(scheduleID_1,scheduleID_2);
-                    }
-                    else{
-                        alert("已取消");
-                    }
+                //     if(check==true){
+                //        updateShift(scheduleID_1,scheduleID_2);
+                //     }
+                //     else{
+                //         alert("已取消");
+                //     }
 
-                }
+                // }
 
                 else{
                     updateShift(scheduleID_1,scheduleID_2);
@@ -800,30 +800,30 @@
                     console.log("doc2"+array[0]['count2']);
                 }
 
-                 else if( (array[0]['doc1weekend']<=4) && ( weekday2==6 || weekday2 ==7)  && ( weekday1!=6 && weekday1!=7) ){
+                //  else if( (array[0]['doc1weekend']<=4) && ( weekday2==6 || weekday2 ==7)  && ( weekday1!=6 && weekday1!=7) ){
 
-                    var check = confirm(array[0]['doc1']+"醫生假日班不得少於4\n確定要換班嗎?");
+                //     var check = confirm(array[0]['doc1']+"醫生假日班不得少於4\n確定要換班嗎?");
 
-                    if(check == true){
-                       save_form();
-                    }
-                    else{
-                        alert("已取消");
-                    }
-                    //dhtmlx.message({ type:"error", text:array[0]['docName']+"醫生假日班不得少於4" });
-                }
+                //     if(check == true){
+                //        save_form();
+                //     }
+                //     else{
+                //         alert("已取消");
+                //     }
+                //     //dhtmlx.message({ type:"error", text:array[0]['docName']+"醫生假日班不得少於4" });
+                // }
                 
-                else if((array[0]['doc2weekend']<=4) &&  ( weekday1==6 || weekday1 ==7) && ( weekday2!=6 && weekday2!=7) ){
-                    var check = confirm(array[0]['doc2']+"醫生假日班不得少於4\n確定要換班嗎?");
+                // else if((array[0]['doc2weekend']<=4) &&  ( weekday1==6 || weekday1 ==7) && ( weekday2!=6 && weekday2!=7) ){
+                //     var check = confirm(array[0]['doc2']+"醫生假日班不得少於4\n確定要換班嗎?");
 
-                    if(check == true){
-                       save_form();
-                    }
-                    else{
-                        alert("已取消");
-                    }
+                //     if(check == true){
+                //        save_form();
+                //     }
+                //     else{
+                //         alert("已取消");
+                //     }
 
-                }
+                // }
                 else{
                 save_form();
                 }
@@ -988,18 +988,18 @@
                     refresh();
                 }
 
-                else if(array[0]['docWeekend']<=4 && (weekday != 6 && weekday != 7) && (weekDayInSchedule==6 || weekDayInSchedule==7)){
-                    var check= confirm(array[0]['docName']+"醫生假日班不得少於4\n確定要換班嗎?");
-                    if(check==true){
-                        updateSchedule(scheduleID,date,classification);
-                    }
-                    else{
-                        alert("已取消");
-                        refresh();
-                    }
-                     console.log(array[0]['docWeekend']);
-                     console.log(weekday);
-                }
+                // else if(array[0]['docWeekend']<=4 && (weekday != 6 && weekday != 7) && (weekDayInSchedule==6 || weekDayInSchedule==7)){
+                //     var check= confirm(array[0]['docName']+"醫生假日班不得少於4\n確定要換班嗎?");
+                //     if(check==true){
+                //         updateSchedule(scheduleID,date,classification);
+                //     }
+                //     else{
+                //         alert("已取消");
+                //         refresh();
+                //     }
+                //      console.log(array[0]['docWeekend']);
+                //      console.log(weekday);
+                // }
                 else {
                     updateSchedule(scheduleID,date,classification);
                     
@@ -1045,26 +1045,26 @@
             
             }, function(array){
                 var weekday = array[0]['weekDay'];
-                if( array[0]['docWeekend'] <=4 && (weekday == 6 || weekday == 7)){
-                    var checkdelete = confirm(array[0]['docName']+"醫生假日班不得少於4\n確定要刪除嗎?");
-                    if(checkdelete==true){
-                        delete_confirm();
-                    }
-                    else{
-                        alert("已取消");
-                    }
-                }
-                if (array[0]['totalShift']<=array[0]['mustOnDuty']){
-                    var checkdelete = confirm(array[0]['docName']+"總班數不得小於"+array[0]['mustOnDuty']+"\n"+"確定要刪除嗎?");
-                    if(checkdelete==true){
-                        delete_confirm();
-                    }
-                    else{
-                        alert("已取消");
-                    }
+                // if( array[0]['docWeekend'] <=4 && (weekday == 6 || weekday == 7)){
+                //     var checkdelete = confirm(array[0]['docName']+"醫生假日班不得少於4\n確定要刪除嗎?");
+                //     if(checkdelete==true){
+                //         delete_confirm();
+                //     }
+                //     else{
+                //         alert("已取消");
+                //     }
+                // }
+                // if (array[0]['totalShift']<=array[0]['mustOnDuty']){
+                //     var checkdelete = confirm(array[0]['docName']+"總班數不得小於"+array[0]['mustOnDuty']+"\n"+"確定要刪除嗎?");
+                //     if(checkdelete==true){
+                //         delete_confirm();
+                //     }
+                //     else{
+                //         alert("已取消");
+                //     }
 
-                }
-                else{
+                // }
+                // else{
                     var date = document.getElementById("date1").options[document.getElementById('date1').selectedIndex].text;
                     var r = confirm("是否刪除 " + array[0]['docName'] + " 在 " + date + " 的班?");
                         if (r == true) {
@@ -1074,7 +1074,7 @@
                          alert("已取消");
                      }
                     
-                }
+                // }
                
             console.log(array[0]['totalShift']);
             console.log(array[0]['mustOnDuty']);

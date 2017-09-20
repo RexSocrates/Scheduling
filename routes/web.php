@@ -139,7 +139,7 @@ Route::get('schedule-shift-info', 'ShiftRecordsController@getShiftRecords');
 Route::get('addShifts','ShiftRecordsController@firstEditionShiftAddShifts');
 
 //根據月份選擇列出備註
-Route::get('changeMonth','RemarkController@getRemarkByMonth');
+Route::get('changeRemarkMonth','RemarkController@getRemarkByMonth');
 
 
 // 醫生2同意或拒絕換班

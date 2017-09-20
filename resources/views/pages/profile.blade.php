@@ -163,8 +163,15 @@
                         <label for="textarea1">申請原因</label>
                     </div>
                     <div class="input-field col s12 margin-t0">
-                        <br><br><input type="month" name="bday" min="1911-01-01" required><br>
-                        <label>選擇月份</label>
+
+                        <select name="date" required id='date'>
+                            <option value="" selected disabled>選擇月份</option>
+                            <option value="{{ $currentMonth }}">{{ $currentMonth }}</option>
+                            <option value="{{ $nextMonth }}">{{ $nextMonth }}</option>
+                        </select>
+                        <label>月份</label>
+                        <!-- <br><br><input type="month" name="bday" min="2017-09-01" required><br>
+                        <label>選擇月份</label -->
                     </div>
                 </div>
             </div>
