@@ -627,18 +627,20 @@ class ShiftRecordsController extends Controller
         $shiftRecordObj = new ShiftRecords();
         $shiftRecordObj->adminConfirm($serial,1);
 
-        $shiftRecordObj->getShiftRecordByChangeSerial($serial);
+        // $shiftRecordData = $shiftRecordObj->getShiftRecordByChangeSerial($serial);
 
-        $applier = $shiftRecordObj->schID_1_doctor;
-        $receiver = $shiftRecordObj->schID_2_doctor;
-        $applier_ScheduleID = $shiftRecordObj->scheduleID_1;
-        $receiver_ScheduleID = $shiftRecordObj->scheduleID_2;
+        // $applier = $shiftRecordData->schID_1_doctor;
+        // $receiver = $shiftRecordData->schID_2_doctor;
+        // $applier_ScheduleID = $shiftRecordData->scheduleID_1;
+        // $receiver_ScheduleID = $shiftRecordData->scheduleID_2;
 
-        $job = new SendShiftExchangingInformMail($applier,$receiver,$applier_ScheduleID,$receiver_ScheduleID);
+        // $job = new SendShiftExchangingInformMail($applier,$receiver,$applier_ScheduleID,$receiver_ScheduleID);
+
+        $job = new SendShiftExchangingInformMail($serial);
 
         dispatch($job);
-        
-        return redirect('shift-info');
+
+        // return redirect('shift-info');
 
     }
 

@@ -36,6 +36,7 @@ class ChartController extends Controller
     public function getChartPageBySelectedID(Request $request) {
         $data = $request->all();
         $user = new User();
+
         $doctors = $user->getAtWorkDoctors();
         
         $userID = $data['selectedUserID'];

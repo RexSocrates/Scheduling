@@ -14,21 +14,24 @@
 			<div class="row">
                 <div class="col s5">                 
                     <div class="card">
-                        <form action="" method="post">
+                        <!-- <form action="setDate" method="post"> -->
                             <div class="card-action">
                                 <font class="card-title">預班時段</font>
                             </div>
                             <div class="divider"></div>
                             <div class="card-content">
-                                <input type="hidden" id="startDate">
-                                <input type="hidden" id="endDate">
-                                <p class="slider-text">{{ $month }}月<font id="startFont"></font>日 至 {{ $month }} 月<font id="endFont"></font>日</p>
+                                <input type="hidden" id="startDate" name="startDate">
+                                <input type="hidden" id="endDate" name="endDate">
+                                <p class="slider-text">{{ $month }}月<font id="startFont"></font>日 
+                                至 {{ $month }} 月<font id="endFont"></font>日</p>
                                 <div id="slider"></div>
                             </div>
                             <div class="card-action">
-                                <button type="submit" class="modal-action waves-effect waves-light btn btn-save">Save</button>
+                                <button type="submit" class="modal-action waves-effect waves-light btn btn-save" 
+                                onclick="setDate()">Save</button>
                             </div>
-                        </form>
+                            {{ csrf_field() }}
+                        <!-- </form> -->
                     </div>
                 </div>
       		  	<div class="col s5">                 
@@ -123,6 +126,32 @@
             });
             console.log("111");
         }
+
+        function setDate(){
+             $.get('setDate',{
+                startDate:document.getElementById('startDate').value,
+                endDate:document.getElementById('endDate').value
+                
+            }, function(){
+                alert("時間修改成功");
+                //change();
+
+            });
+        }
+        function change(){
+             $.get('getDate',{
+                
+            }, function(array){
+                
+                document.getElementById('startFont').innerHTML = array[0];
+                document.getElementById('endFont').innerHTML = array[1];
+
+                alert("時間修改成功");
+            });
+        }
+
+
+        
 //        startDate.addEventListener('change', function(){
 //            slider.noUiSlider.set([this.value, null]);
 //        });

@@ -116,8 +116,9 @@ class ScheduleController extends Controller
             "docName"=>$docName,
             "docWeekend"=>$docWeekend,
             "weekDay"=>$weekDay,
-            "date"=>$dateArr,
-            'weekDayInSchedule' => $weekDayInSchedule
+            "date"=>$dateStr,
+            'weekDayInSchedule' => $weekDayInSchedule,
+            'dateInSchedule' =>$dateInSchedule
         ];
 
         array_push($dataArr,$info);
@@ -253,6 +254,7 @@ class ScheduleController extends Controller
         }
         $schedule = new Schedule();
         $schedule->updateScheduleByID($id,$schInfo);
+
     }
 
     //公布正式班表

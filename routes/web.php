@@ -40,6 +40,11 @@ Route::get('deleteAnnouncement/{serial}', 'AnnouncementController@deleteAnnounce
 // 設定頁面
 Route::get('setting', 'SettingController@getSettingPage');
 
+Route::get('getDate', 'SettingController@getDate');
+
+// 設定預班時間
+Route::get('setDate', 'SettingController@setDate');
+
 //公布正式班表
 Route::get('announceSchedule','ScheduleController@announceSchedule');
 
@@ -90,7 +95,7 @@ Route::get('first-edition', 'ScheduleController@firstEditionSchedule');
 //初版班表 全部醫生
 Route::get('/first-edition-all', 'ScheduleController@firstSchedule');
 
-//初版班表->換班資訊
+//初版班表->換班資訊-
 Route::get('first-edition-shift-info','ShiftRecordsController@shiftRecords');
 Route::post('first-edition-shift-info','ShiftRecordsController@firstEditionShiftAddShifts');
 

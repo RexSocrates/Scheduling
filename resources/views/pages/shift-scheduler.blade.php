@@ -22,6 +22,7 @@
 @endsection
 
 @section('content')
+<input type='hidden' id="getDate">
     <div id="section" class="container-fix trans-left-five">    <!--     style="background-color:red;"-->
         <div class="container-section">
             <div class="row">
@@ -132,7 +133,6 @@
                             scheduler.config.container_autoresize = true;
                             scheduler.config.collision_limit = 1; 
                             scheduler.config.drag_resize= false;
-
                             scheduler.form_blocks["hidden"] = {
                                 render:function(sns) {
                                     return "<div class='dhx_cal_ltext'><input type='hidden'></div>";
@@ -191,7 +191,6 @@
                                 render:"bar",
                                 round_position:true,    //有點像磁石
                                 event_dy: 46,
-
                             });
                             
                             //===============
@@ -243,15 +242,24 @@
                             var html = function(id) { return document.getElementById(id); }; //just a helper
                             scheduler.showLightbox = function(id) {
                                 var ev = scheduler.getEvent(id);
-                                
+                                var date =Date.parse(document.getElementById("getDate").value).valueOf();
+
+                                var now  = new Date();
+                                var today = Date.parse(now.getFullYear()+"-"+(now.getMonth()+1)+"-"+now.getDate()).valueOf();
+
                                 window.scrollTo(0,0);  //開啟後移動到最上面
                                 
                                 if(ev.text == "New"){
                                     scheduler.startLightbox(id, html("my_form1"));
-                                } else {
+                                } 
+                                else if(date>today){
+                                    console.log('nothing');
+                                }
+                                else {
                                     scheduler.startLightbox(id, html("my_form"));
                                 }
-                                
+                                console.log("111"+date);
+                                console.log("111"+today);
                                 
                                 // var doctorID = ["1"];
                                 // var doctorName = ["張國頌"];
@@ -284,7 +292,6 @@
 //                                ev.text = name;
 //                            }
                             
-
                             var date = new Date();
                             var toString =  date.toString();
                             var res = toString.split(" ");
@@ -330,20 +337,15 @@
                              //鎖定時間
                             var startd =new Date(res[3], month-1, 1); 
                             var endd = new Date(res[3], month, 1); 
-
                             var block_startd =new Date(res[3], month-1, 1); 
                             var block_endd = new Date(res[3], month, 1); 
-
                             console.log("startd "+startd);
                             console.log("endd "+endd);
-
                             scheduler.config.limit_start = new Date(startd);
                             scheduler.config.limit_end = new Date(endd);
-
                             scheduler.attachEvent("onLimitViolation", function  (id, obj){
                                 dhtmlx.message({ type:"error", text:"此時段無法接受換班" })
                             });
-
                              //限制非當月利用點擊視窗換班
                             scheduler.addMarkedTimespan({  
                                 start_date: '1900-1-1',
@@ -353,11 +355,7 @@
                                 type: "dhx_time_block"
                             
                             });
-
-
-
                             //scheduler.updateView();
-
                             scheduler.attachEvent("onEventCollision", function (ev, evs){
                                 var ev = scheduler.getEvent(ev.id);
                                 var evs = scheduler.getEvent(evs[0].id);
@@ -366,7 +364,6 @@
                                 console.log("evs "+evs.start_date);
                                 
                                 checkDocStatus(ev.hidden,evs.hidden);
-
                                 return true;
                             });
                             
@@ -375,41 +372,30 @@
                             // scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
                                 
                             //     addNewSchedule(ev.start_date,ev.section_id);
-
                             //     showScheduleInfo(ev.start_date,ev.section_id);
-
                             //     return true;
                             // });
-
                             // scheduler.attachEvent("onEventChanged", function (id, e){
                             //     var event = scheduler.getEvent(id);
-
                             //     getScheduleID(event.hidden);
-
                             //     return true;
                             // });
-
-
                             scheduler.attachEvent("onClick", function (id, e){
                                 var event = scheduler.getEvent(id);
                             
                                 changeDoctor_1(event.hidden);
-
                                 return true;
                             });
                            
                            
-
                             //進入畫面後顯示的東西
                             scheduler.init('scheduler_here',new Date(res[3], month-1),"timeline");
-
                             scheduler.parse([
                                 @foreach($schedule as $data)
                                  { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}" },
                                
                                 @endforeach
                             ],"json");
-
                             
                         </script>
                     </div>
@@ -523,7 +509,6 @@
                 changeDate1(array);
             });
         }
-
         function changeDoctor() {
             $.get('changeDoctorSchedule', {
                 id : document.getElementById('schID_2_doctor').value
@@ -531,11 +516,10 @@
                 changeDate2(array);
             });
         }
-
         function changeDate1(array) {
-                document.getElementById("date1").innerHTML= "<option value="+array[0]+">"+array[2]+"</option>"     
+                document.getElementById("date1").innerHTML= "<option value="+array[0]+">"+array[2]+"</option>",
+                document.getElementById("getDate").value=array[2]     
         }
-
         function changeDate2(array) {
                 var date = "";
                 for(i=0 ; i<array.length ; i++){
@@ -544,11 +528,9 @@
                 }
                 document.getElementById("date2").innerHTML  = date;
         }
-
         function alert1() {
                 alert("不可選擇相同醫生相同時段");
         }
-
         function updateShift(scheduleID_1,scheduleID_2){
             $.post('sendShiftUpdate',{
                 scheduleID_1:scheduleID_1,
@@ -570,45 +552,36 @@
                  refresh();
             });
         }
-
         function refresh() {
             location.reload();
         }
-
         function save_form_alert(){
             $.get('checkDocStatus',{
             scheduleID_1 : document.getElementById('date1').value,
             scheduleID_2 : document.getElementById('date2').value,
-
             }, function(array){
                 var ID_1 = document.getElementById('date1').value;
                 var ID_2 = document.getElementById('date2').value;
                 var date = new Date();
                 var dateStr=date.getFullYear()+"-"+(date.getMonth()+1) + "-" + date.getDate();
-
                  if(ID_1 == ID_2){
                      dhtmlx.message({ type:"error", text:"請選擇不同時段醫生" });
                 }
-
                 else if(ID_2 == ""){
                     dhtmlx.message({ type:"error", text:"請選擇醫生" });
                 }
-
                 else if(Date.parse(dateStr)<Date.parse(array[0]['date2']) || Date.parse(dateStr)<Date.parse(array[0]['date1'])){
                     dhtmlx.message({ type:"error", text:"還不能換班" });
                     console.log(dateStr);
                 }
-
                 else if(array[0]['count1']!=0){
                     dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date2']+"已有班" });
                     console.log("doc1"+array[0]['count1']);
-
                 }
                 else if(array[0]['count2']!=0){
                     dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生"+array[0]['date1']+"已有班" });
                     console.log("doc2"+array[0]['count2']);
                 }
-
                 else{
                 save_form();
                 }
@@ -616,7 +589,6 @@
            });
            
         }
-
         function save_form() {
             $.get('change-shift-first-edition', {
                 scheduleID_1 : document.getElementById('date1').value,
@@ -627,23 +599,19 @@
                 refresh();
             });
         }
-
         function save_form_alert_addSchedule(){
             var id = document.getElementById('doctor').value;
             var date =document.getElementById('date_1').innerText;
             var classification = document.getElementById('section_id').innerText;
-
             if(id == ""){
                 dhtmlx.message({ type:"error", text:"請選擇醫生" });
             }
-
            else{
             saveSchedule(id,date,classification);
            }
             
         }
     
-
     
         function save_form() {
             $.get('change-shift-first-edition', {
@@ -655,7 +623,6 @@
                 refresh();
             });
         }
-
         function close_form() {               
             scheduler.endLightbox(false, html("my_form"));             
         }
@@ -669,13 +636,11 @@
                  if(array[0]['count1']!=0){
                     dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date2']+"已有班" });
                     console.log("doc1"+array[0]['count1']);
-
                 }
                 if(array[0]['count2']!=0){
                     dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生"+array[0]['date1']+"已有班" });
                     console.log("doc2"+array[0]['count2']);
                 }
-
                 else{
                     updateShift(scheduleID_1,scheduleID_2);
                 }

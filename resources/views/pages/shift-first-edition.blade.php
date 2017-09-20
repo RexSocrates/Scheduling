@@ -463,6 +463,7 @@
                                 showScheduleInfo(ev.start_date,ev.section_id);
 
                                 console.log("111"+ev.text);
+                                console.log("111"+ev.start_date);
 
                                 return true;
                             });
@@ -470,9 +471,10 @@
                             scheduler.attachEvent("onEventChanged", function (id, e){
                                 var event = scheduler.getEvent(id);
 
-                                //checkDoctorSchedule(event.hidden); //schedule id
+                                checkDoctorSchedule(event.hidden); //schedule id
 
                                 console.log("124"+event.text); 
+                                console.log("111"+event.start_date);
 
                                 return true;
                             });
@@ -937,13 +939,26 @@
            }
            
            var day = date.getDay();
-           
-           if(date.getDate()<10){
-            var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-0" + date.getDate();
+           if(date.getMonth()<10){
+                if(date.getDate()<10){
+                     var date2=date.getFullYear()+"-0"+(date.getMonth()+1) + "-0" + date.getDate();
+                }
+                else{
+                    var date2=date.getFullYear()+"-0"+(date.getMonth()+1) + "-" + date.getDate();
+                }
+
            }
            else{
-            var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-" + date.getDate();
-            }
+                if(date.getDate()<10){
+                    var date2=date.getFullYear()+"-0"+(date.getMonth()+1) + "-0" + date.getDate();
+                }
+                else{
+                var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-" + date.getDate();
+                }
+            
+           }
+           
+           
 
            document.getElementById("section_id").innerHTML= "<input>"+id;
            document.getElementById("date_1").innerHTML= "<h5 value="+date2+">"+date2+"</h5>";
@@ -965,8 +980,13 @@
                 var weekday = array[0]['weekDay'];
                 var weekDayInSchedule =array[0]['weekDayInSchedule'];
 
-                if(array[0]['count']!=0){
+                if(array[0]['date'] == array[0]['dateInSchedule']){
+                    updateSchedule(scheduleID,date,classification);
+                }
+
+                else if(array[0]['count']!=0){
                     dhtmlx.message({ type:"error", text:array[0]['docName']+"醫生"+array[0]['date']+"已有班" });
+                    refresh();
                 }
 
                 else if(array[0]['docWeekend']<=4 && (weekday != 6 && weekday != 7) && (weekDayInSchedule==6 || weekDayInSchedule==7)){
@@ -981,16 +1001,11 @@
                      console.log(array[0]['docWeekend']);
                      console.log(weekday);
                 }
-                else if(array[0]['date'] == array[0]['date']){
-                    updateSchedule(scheduleID,date,classification);
-                }
-                
-                
                 else {
                     updateSchedule(scheduleID,date,classification);
                     
                 }
-                
+                console.log(array[0]['date']);
                
             });
 
@@ -1005,8 +1020,8 @@
                 
             }, function(id){
                 console.log(id);
-                alert("成功");
-                //refresh();
+                dhtmlx.message({ type:"error", text:"修改成功" });
+                refresh();
                 
             });
         }
