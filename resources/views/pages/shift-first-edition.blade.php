@@ -767,11 +767,12 @@
                     dhtmlx.message({ type:"error", text:"請選擇不同醫生" });
             }
 
-            
-
             else{
                 save_form_alert();
             }
+
+            console.log("111+"+doctorID_1);
+            console.log("111+"+doctorID_2);
 
         }
         function save_form_alert(){

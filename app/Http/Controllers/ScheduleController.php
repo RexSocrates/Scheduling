@@ -9,6 +9,8 @@ use App\User;
 use App\ScheduleCategory;
 use App\ShiftRecords;
 use App\Schedule;
+
+use App\Jobs\SendDeleteShiftMail;
 class ScheduleController extends Controller
 {
     //查看初版全部班表 
@@ -205,8 +207,14 @@ class ScheduleController extends Controller
         
         $schedule->deleteScheduleByID($data['scheduleID']);
         $shiftRecords->deleteShiftRecord($data['scheduleID']);
+        $doctorID = $schedule->getScheduleDataByID($data['scheduleID'])->doctorID;
+
+        $job = new SendDeleteShiftMail($data['scheduleID'],$doctorID);
+
+        dispatch($job);
+
        
-        return redirect('schedule'); 
+        //return redirect('schedule'); 
             
     }
 
