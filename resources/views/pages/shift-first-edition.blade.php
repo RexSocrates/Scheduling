@@ -80,7 +80,7 @@
                                             <option  disabled selected>請選擇醫生</option>
                                                 <option disabled value=""></option>
                                                 @foreach($doctorName as $name)
-                                                <option value="{{$name->doctorID}}">{{$name->name}}</option>
+                                                <option value="{{$name->doctorID}}">{{$name->name}} </option>
                                                 @endforeach
                                         </select>
                                     </div>
@@ -612,7 +612,7 @@
             $.get('changeDoctor1',{
                 id : id
             }, function(array){
-                document.getElementById("schID_1_doctor").innerHTML= "<option value="+array[0]+">"+array[1]+"</option>";
+                document.getElementById("schID_1_doctor").innerHTML= "<option value="+array[3]+">"+array[1]+"</option>";
                 changeDate1(array);
             });
         }
@@ -940,7 +940,7 @@
            }
            
            var day = date.getDay();
-           if(date.getMonth()<10){
+           if((date.getMonth()+1)<10){
                 if(date.getDate()<10){
                      var date2=date.getFullYear()+"-0"+(date.getMonth()+1) + "-0" + date.getDate();
                 }
@@ -951,16 +951,14 @@
            }
            else{
                 if(date.getDate()<10){
-                    var date2=date.getFullYear()+"-0"+(date.getMonth()+1) + "-0" + date.getDate();
+                    var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-0" + date.getDate();
                 }
                 else{
                 var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-" + date.getDate();
                 }
             
            }
-           
-           
-
+        
            document.getElementById("section_id").innerHTML= "<input>"+id;
            document.getElementById("date_1").innerHTML= "<h5 value="+date2+">"+date2+"</h5>";
            document.getElementById("classification").innerHTML="<h5 value="+id+"> "+text+"</h5>";

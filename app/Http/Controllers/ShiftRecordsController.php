@@ -18,6 +18,7 @@ use App\Jobs\SendDenyShiftExchangeMail;
 use App\Jobs\SendShiftExchangeMail;
 use App\Jobs\SendApplyShiftExchangeMail;
 use App\Jobs\SendShiftExchangingInformMail;
+use App\Jobs\SendDenyConfirmedShiftExchangeMail;
 
 class ShiftRecordsController extends Controller
 {
@@ -59,7 +60,8 @@ class ShiftRecordsController extends Controller
 
     }
 
-     public function getShiftRecordsBySerial(Request $request){
+    // 檢查這筆換班紀錄的兩筆上班資料是否有被異動過
+    public function getShiftRecordsBySerial(Request $request){
         $data = $request->all();
         $serial = $data['id'];
         
@@ -73,11 +75,10 @@ class ShiftRecordsController extends Controller
         $schedule_1_doctor = $schedule->getScheduleDataByID($shiftInfo->scheduleID_1)->doctorID; //2
         $schedule_2_doctor = $schedule->getScheduleDataByID($shiftInfo->scheduleID_2)->doctorID; //3
 
-        
-
 
         $status = 1; //代表true
         if($schedule_1_doctor == $shiftInfo->schID_1_doctor &&  $schedule_2_doctor == $shiftInfo->schID_2_doctor){
+            // 表示兩筆上班資料都沒有其他異動
             $status=1;
         }
         else{
@@ -649,6 +650,10 @@ class ShiftRecordsController extends Controller
         $shiftRecordObj = new ShiftRecords();
 
         $shiftRecordObj->adminConfirm($serial,2);
+
+        $job = new SendDenyConfirmedShiftExchangeMail($serial);
+
+        dispatch($job);
 
         return redirect('shift-info');
 

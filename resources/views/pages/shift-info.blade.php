@@ -150,6 +150,7 @@
             $.get('getScheduleInfo', {
                 id : id,
             }, function(status) {
+                // console.log("check status ID : " + id);
                 if(status ==1){
                     adminAgreeShiftRecord(id);
                 }

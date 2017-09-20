@@ -16,6 +16,7 @@ class Schedule extends Model
     //取得所有初版班表資訊
     public function getFirstSchedule() {
         $schedule = DB::table('Schedule')
+                    ->whereNotNull('doctorID')
                     ->get();
         
         return $schedule;
@@ -24,6 +25,7 @@ class Schedule extends Model
     //取得所有正式班表資訊
 	public function getSchedule() {
         $schedule = DB::table('Schedule')
+            ->whereNotNull('doctorID')
             ->where('confirmed',1)
             ->get();
         
@@ -45,7 +47,10 @@ class Schedule extends Model
     {
         $user = new User();
         $id = $user->getCurrentUserID();
-        $doctorScheduleList = DB::table('Schedule')->where("doctorID",$id)->get();
+        $doctorScheduleList = DB::table('Schedule')
+                    ->where("doctorID",$id)
+                    ->whereNotNull('doctorID')
+                    ->get();
          
         return $doctorScheduleList;
     }
@@ -53,6 +58,7 @@ class Schedule extends Model
     //透過醫生ID 取得所有正式上班資料
     public function getScheduleByDoctorID($id) {
         $schedule = DB::table('Schedule')
+            ->whereNotNull('doctorID')
             ->where('doctorID', $id)
             ->where('confirmed',1)
             ->get();
@@ -72,6 +78,7 @@ class Schedule extends Model
     //確認當天一位醫生是否有上班 醫生id
     public function checkDocStatus($id,$date){
         $schedule = DB::table('Schedule')
+            ->whereNotNull('doctorID')
             ->where('doctorID', $id)
             ->where('date', $date)
             ->count();
@@ -82,6 +89,7 @@ class Schedule extends Model
     //確認醫生假日班數 醫生id
     public function checkDocScheduleInWeekend($id){
         $schedule = DB::table('Schedule')
+            ->whereNotNull('doctorID')
             ->where('doctorID', $id)
             ->where('isWeekday', 0)
             ->count();
@@ -112,6 +120,7 @@ class Schedule extends Model
         $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
         
         $shifts = DB::table('Schedule')
+            ->whereNotNull('doctorID')
             ->where('doctorId', $id)
             ->where('date', 'like', $nextMonth.'%')
             ->orderBy('date')
@@ -124,6 +133,7 @@ class Schedule extends Model
         $currentMonth = date('Y-m');
         
         $shifts = DB::table('Schedule')
+            ->whereNotNull('doctorID')
             ->where('doctorId', $id)
             ->where('date', 'like', $currentMonth.'%')
             ->get();
@@ -135,6 +145,7 @@ class Schedule extends Model
         $currentMonth = date('Y-m');
         
         $shifts = DB::table('Schedule')
+            ->whereNotNull('doctorID')
             ->where('doctorId', $id)
             ->where('date', 'like', $currentMonth.'%')
             ->get();
@@ -163,6 +174,7 @@ class Schedule extends Model
         $currentMonthStr = date('Y-m');
         
         $affectedRows = DB::table('Schedule')
+            ->whereNotNull('doctorID')
             ->where('date', 'like', $currentMonthStr.'%')
             ->update([
                 'confirmed' => true
@@ -177,6 +189,7 @@ class Schedule extends Model
         $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
         
         $affectedRows = DB::table('Schedule')
+            ->whereNotNull('doctorID')
             ->where('date', 'like', $nextMonth.'%')
             ->update([
                 'confirmed' => true
@@ -198,6 +211,7 @@ class Schedule extends Model
         $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
         
         $affectedRows = DB::table('Schedule')
+            ->whereNotNull('doctorID')
             ->where('doctorID', $doctorID)
             ->where('date', 'like', $nextMonth.'%')
             ->count();
@@ -291,7 +305,7 @@ class Schedule extends Model
     }
     
     // 更新班表醫師
-    protected function updateDoctorForSchedule($scheduleID, $doctorID) {
+    public function updateDoctorForSchedule($scheduleID, $doctorID) {
         $affectedRows = DB::table('Schedule')
             ->where('scheduleID', $scheduleID)
             ->update([
@@ -299,6 +313,17 @@ class Schedule extends Model
             ]);
         
         return $affectedRows;
+    }
+
+    // 將刪除班表的醫生id改為null
+    public function deleteDoctorID($scheduleID) {
+           DB::table('Schedule')
+            ->where('scheduleID', $scheduleID)
+            ->update([
+                'doctorID' => null
+            ]);
+        
+       
     }
     
     // 換班

@@ -205,7 +205,7 @@ class ScheduleController extends Controller
         $schedule = new Schedule();
         $shiftRecords = new ShiftRecords();
         
-        $schedule->deleteScheduleByID($data['scheduleID']);
+        $schedule->deleteDoctorID($data['scheduleID']);
         $shiftRecords->deleteShiftRecord($data['scheduleID']);
         $doctorID = $schedule->getScheduleDataByID($data['scheduleID'])->doctorID;
 
@@ -213,8 +213,6 @@ class ScheduleController extends Controller
 
         dispatch($job);
 
-       
-        //return redirect('schedule'); 
             
     }
 
@@ -280,10 +278,11 @@ class ScheduleController extends Controller
       $user = new User();
       $doctor = $schedule->getScheduleDataByID($data['id']);
      
+      $doctorID =$doctor->doctorID;
       $id = $doctor->scheduleID;
       $name = $user->getDoctorInfoByID($doctor->doctorID)->name;
       $date = $doctor->date;
-      $array = array($id,$name,$date);
+      $array = array($id,$name,$date,$doctorID);
       return $array;
       
     }
