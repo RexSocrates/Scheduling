@@ -102,7 +102,7 @@ class AccountController extends Controller
             'doctorID' => $user->getCurrentUserInfo()->doctorID,
             'leaveHours'=> -1*$data['hour'],
             'updatedLeaveHours' => $user->getCurrentUserInfo()->currentOfficialLeaveHours+(-1*$data['hour']),
-            // 'date'=>$data['date'],
+            'leaveMonth'=>$data['leaveMonth'],
             'remark' => $data['content'],
         ];
     

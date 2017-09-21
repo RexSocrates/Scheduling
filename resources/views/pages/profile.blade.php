@@ -151,7 +151,7 @@
 -->
                     <div class="input-field col s12 margin-b20">
                         <select name="hour" required>
-                            <option value="" selected disabled>選擇時數</option>
+                            <option value="" selected disabled required>選擇時數</option>
                             @foreach($leaveHours as $hour)
                             <option value="{{ $hour }}">{{ $hour }}</option>
                             @endforeach
@@ -164,7 +164,7 @@
                     </div>
                     <div class="input-field col s12 margin-t0">
 
-                        <select name="date" required id='date'>
+                        <select name="leaveMonth" required id='leaveMonth'>
                             <option value="" selected disabled>選擇月份</option>
                             <option value="{{ $currentMonth }}">{{ $currentMonth }}</option>
                             <option value="{{ $nextMonth }}">{{ $nextMonth }}</option>

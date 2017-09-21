@@ -33,18 +33,29 @@ class LeaveController extends Controller
 
         $onDutyInfo=[
             'doctorID' => $doctorID,
-            'month'=>$leave->date,
+            'leaveMonth'=>$leave->leaveMonth,
             'mustOnDutyShift'=>""
         ];
 
-        $onDutyInfo['mustOnDutyShift']=($user->getDoctorInfoByID($doctorID)->mustOnDutyTotalShifts)-(ads($leave->leaveHours))/12;
+        $onDutyInfo['mustOnDutyShift']=($user->getDoctorInfoByID($doctorID)->mustOnDutyTotalShifts)-(abs($leave->leaveHours))/12;
+
+
+        $updateOnDutyInfo=[
+            'doctorID' => $doctorID,
+            'month'=>$leave->leaveMonth,
+            'updateMustOnDutyShift'=>""
+        ];
+
+        $updateOnDutyInfo['updateMustOnDutyShift']=($mustOnDutyShiftPerMonth->getOnDutyShift($onDutyInfo)->mustOnDutyShift)-(abs($leave->leaveHours))/12;
+       
 
         $count = $mustOnDutyShiftPerMonth->countOnDutyShift($onDutyInfo);
         if($count == 0){
             $mustOnDutyShiftPerMonth->addOnDutyShift($onDutyInfo);
         }
         else{
-            $mustOnDutyShiftPerMonth->updateOnDutyShift($onDutyInfo);
+            $mustOnDutyShiftPerMonth->updateOnDutyShift($updateOnDutyInfo);
+            
         }
 
     	return redirect('officialLeave');

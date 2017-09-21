@@ -15,7 +15,7 @@ class MustOnDutyShiftPerMonth extends Model
             ->where('doctorID', $data['doctorID'])
             ->where('month',$data['month'])
             ->update([
-                'mustOnDutyShift' => $data['mustOnDutyShift'] 
+                'mustOnDutyShift' => $data['updateMustOnDutyShift'] 
             ]);
     }
 
@@ -23,7 +23,7 @@ class MustOnDutyShiftPerMonth extends Model
  
           	DB::table('MustOnDutyShiftPerMonth')->insertGetId([
             'doctorID' => $data['doctorID'],
-            'month' => $data['month'],
+            'month' => $data['leaveMonth'],
             'mustOnDutyShift' => $data['mustOnDutyShift']   
         ]);
         
@@ -33,9 +33,21 @@ class MustOnDutyShiftPerMonth extends Model
     {
         	$count=DB::table('MustOnDutyShiftPerMonth')
             ->where('doctorID', $data['doctorID'])
-            ->where('month',$data['month'])
+            ->where('month',$data['leaveMonth'])
             ->count();
             return $count;
+    }
+
+     public function getOnDutyShift(array $data)
+    {
+            $info=DB::table('MustOnDutyShiftPerMonth')
+            ->where('doctorID', $data['doctorID'])
+            ->where('month',$data['leaveMonth'])
+            ->first();
+
+            return $info;
+
+            
     }
 
     
