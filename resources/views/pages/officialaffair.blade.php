@@ -94,22 +94,22 @@
                                 <thead>
                                     <tr>
                                         <th class="td-w-5">申請人</th>
-                                        <th class="td-w-5">申請日期</th>
+                                        <th class="td-w-7">申請日期</th>
                                         <th class="td-w-5">時數</th>
                                         <th class="td-w-5">剩餘時數</th>
-                                        <th class="td-w-20">申請理由</th>
-                                        <th class="td-w-13">功能</th>
+                                        <th class="td-w-25">申請理由</th>
+                                        <th class="td-w-15">功能</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($unconfirmLeaveArr as $leave)
                                     <tr>
                                         <td class="td-padding td-w-5">{{ $leave['doctor'] }}</td>
-                                        <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
+                                        <td class="td-padding td-w-7">{{ $leave['date'] }}</td>
                                         <td class="td-padding td-w-5">{{ $leave['hours'] }}</td> 
                                         <td class="td-padding td-w-5">{{ $leave['updatedLeaveHours'] }}</td> 
                                         <td class="td-padding td-w-25">{{ $leave['remark'] }}</td>
-                                        <td class="td-padding td-w-13">
+                                        <td class="td-padding td-w-15">
                                             <a href="confirmOffcialLeave/{{ $leave['serial']}}" class="waves-effect waves-light btn" name=confirm>允許</a>
                                             <a href="unconfirmOffcialLeave/{{ $leave['serial']}}" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
                                         </td>
@@ -134,12 +134,13 @@
             <div class="modal-content modal-content-customize1">
                 <div class="row margin-b0">
                     <div class="input-field col s12 margin-b20">
-                        <select name="doctor" required  id= "doctor"  >
-                           @foreach($doctors as $doctor)
-                                <option value="{{ $doctor['id'] }}">{{ $doctor['name'] }}</option>
+                        <select name="doctor" id= "doctor" required>
+                            <option value="" selected disabled>選擇醫師</option>
+                            @foreach($doctors as $doctor)
+                            <option value="{{ $doctor['id'] }}">{{ $doctor['name'] }}</option>
                             @endforeach
                         </select>
-                        <label>醫生</label>
+                        <label>醫師</label>
                     </div>
                     <div class="input-field col s12 margin-t0">
                         <p class="margin-0">種類</p>

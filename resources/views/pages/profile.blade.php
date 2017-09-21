@@ -69,7 +69,7 @@
                         
                         <div class="card-action card1">
                             <div class="title1">
-                                <font class="card-title">使用公假的記錄</font>
+                                <font class="card-title">公假記錄</font>
                             </div>
                             <div class="title1 margin-l20">
                                 <font class="card-title">剩餘時數: {{$doctor->currentOfficialLeaveHours}}</font>
@@ -84,7 +84,7 @@
                                     <tr>
                                         <th class="td-w-5">申請日期</th>
                                         <th class="td-w-20">申請原因</th>
-                                        <th class="td-w-5">使用時數</th>
+                                        <th class="td-w-5">增加/減少</th>
                                         <th class="td-w-5">狀態</th>
                                     </tr>
                                 </thead>
@@ -143,12 +143,14 @@
             </div>
             <div class="modal-content modal-content-customize1">
                 <div class="row margin-b0">
-<!--
-                    <div class="input-field col s12">
-                        <input id="hour" type="number" value="" name="hour" required>
-                        <label for="hour">時數</label>
+                    <div class="input-field col s12 margin-b20">
+                        <select name="date" required id='date'>
+                            <option value="" selected disabled>選擇月份</option>
+                            <option value="{{ $currentMonth }}">{{ $currentMonth }}</option>
+                            <option value="{{ $nextMonth }}">{{ $nextMonth }}</option>
+                        </select>
+                        <label>月份</label>
                     </div>
--->
                     <div class="input-field col s12 margin-b20">
                         <select name="hour" required>
                             <option value="" selected disabled>選擇時數</option>
@@ -161,17 +163,6 @@
                     <div class="input-field col s12 margin-t0">
                         <textarea id="textarea1" class="materialize-textarea" type="text" name="content" required></textarea>
                         <label for="textarea1">申請原因</label>
-                    </div>
-                    <div class="input-field col s12 margin-t0">
-
-                        <select name="date" required id='date'>
-                            <option value="" selected disabled>選擇月份</option>
-                            <option value="{{ $currentMonth }}">{{ $currentMonth }}</option>
-                            <option value="{{ $nextMonth }}">{{ $nextMonth }}</option>
-                        </select>
-                        <label>月份</label>
-                        <!-- <br><br><input type="month" name="bday" min="2017-09-01" required><br>
-                        <label>選擇月份</label -->
                     </div>
                 </div>
             </div>
