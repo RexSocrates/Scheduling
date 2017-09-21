@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 // import model
 use App\Announcement;
 use App\User;
+use App\ReservationData;
 
 class AnnouncementController extends Controller
 {
@@ -17,7 +18,13 @@ class AnnouncementController extends Controller
         
         $announcements = $announcementObj->getAnnouncements();
         $leavehours = $userObj->getCurrentUserInfo()->currentOfficialLeaveHours;
-        
+
+        $reservationData = new ReservationData();
+        $month=date("m");
+        $year = date('Y');
+        $startDate = $reservationData->getDate($month)->startDate;
+        $endDate = $reservationData->getDate($month)->endDate;
+
 //        foreach($announcements as $obj) {
 //            echo 'Serial : '.$obj->announcementSerial.'<br>';
 //            echo 'Title : '.$obj->title.'<br>';
@@ -27,7 +34,9 @@ class AnnouncementController extends Controller
         
         return view('pages.index', [
             'announcements' => $announcements,
-            'currentOfficialLeaveHours' => $leavehours
+            'currentOfficialLeaveHours' => $leavehours,
+            'startDate' => $year.'/'.$month.'/'.$startDate,
+            'endDate' => $year.'/'.$month.'/'.$endDate,
         ]);
     }
     

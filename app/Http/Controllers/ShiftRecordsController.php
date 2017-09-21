@@ -16,6 +16,9 @@ use App\Remark;
 use App\Jobs\SendAgreeShiftExchangeMail;
 use App\Jobs\SendDenyShiftExchangeMail;
 use App\Jobs\SendShiftExchangeMail;
+use App\Jobs\SendApplyShiftExchangeMail;
+use App\Jobs\SendShiftExchangingInformMail;
+use App\Jobs\SendDenyConfirmedShiftExchangeMail;
 
 class ShiftRecordsController extends Controller
 {
@@ -57,7 +60,8 @@ class ShiftRecordsController extends Controller
 
     }
 
-     public function getShiftRecordsBySerial(Request $request){
+    // 檢查這筆換班紀錄的兩筆上班資料是否有被異動過
+    public function getShiftRecordsBySerial(Request $request){
         $data = $request->all();
         $serial = $data['id'];
         
@@ -71,11 +75,10 @@ class ShiftRecordsController extends Controller
         $schedule_1_doctor = $schedule->getScheduleDataByID($shiftInfo->scheduleID_1)->doctorID; //2
         $schedule_2_doctor = $schedule->getScheduleDataByID($shiftInfo->scheduleID_2)->doctorID; //3
 
-        
-
 
         $status = 1; //代表true
         if($schedule_1_doctor == $shiftInfo->schID_1_doctor &&  $schedule_2_doctor == $shiftInfo->schID_2_doctor){
+            // 表示兩筆上班資料都沒有其他異動
             $status=1;
         }
         else{
@@ -96,6 +99,17 @@ class ShiftRecordsController extends Controller
 
         $shiftCheck = $shiftRecords->doc2Confirm($id,1);
 
+        $shiftRecords->getShiftRecordByChangeSerial($id);
+
+        $applier = $shiftRecords->schID_1_doctor;
+        $receiver = $shiftRecords->schID_2_doctor;
+        $applier_ScheduleID = $shiftRecords->scheduleID_1;
+        $receiver_ScheduleID = $shiftRecords->scheduleID_2;
+
+        $job = new SendAgreeShiftExchangeMail($applier,$receiver,$applier_ScheduleID,$receiver_ScheduleID);
+
+        dispatch($job);
+
         return redirect ('schedule-shift-info');
     }
 
@@ -104,6 +118,13 @@ class ShiftRecordsController extends Controller
         $shiftRecords = new ShiftRecords();
 
         $shiftCheck = $shiftRecords->doc2Confirm($id,2);
+
+        $applier = $shiftRecords->schID_1_doctor;
+        $receiver = $shiftRecords->schID_2_doctor;
+
+        $job = new SendDenyShiftExchangeMail($applier,$receiver);
+
+        dispatch($job);
 
         return redirect ('schedule-shift-info');
     }
@@ -119,28 +140,42 @@ class ShiftRecordsController extends Controller
 
 
     // 初版班表->換班資訊 新增換班
-    public function firstEditionShiftAddShifts(){
-    		$addShifts = new ShiftRecords();
-    		$scheduleID_1 = Input::get('scheduleID_1');
-    		$scheduleID_2 = Input::get('scheduleID_2');
-    		$schID_1_doctor = Input::get('schID_1_doctor');
-    		$schID_2_doctor = Input::get('schID_2_doctor');
-            $doc2Confirm = 0;
-            $adminConfirm = 0;
+    public function firstEditionShiftAddShifts(Request $request){
+        $data = $request->all();
 
-            $data = [
-            'scheduleID_1' => $scheduleID_1,
-            'scheduleID_2' => $scheduleID_2,
-            'schID_1_doctor' => $schID_1_doctor,
-            'schID_2_doctor' => $schID_2_doctor,
-            'doc2Confirm' => '0',
-            'adminConfirm' => '0',
+        $scheduleID1 = (int)$data['scheduleID_1'];
+        $scheduleID2 = (int)$data['scheduleID_2'];
+
+        $schedule = new Schedule();
+
+        $schedule_1_Info = $schedule->getScheduleDataByID($scheduleID1);
+        $schedule_2_Info = $schedule->getScheduleDataByID($scheduleID2);
+
+        $shiftInfo = [
+            'scheduleID_1' => $schedule_1_Info->scheduleID,
+            'scheduleID_2' => $schedule_2_Info->scheduleID,
+            'schID_1_doctor' => $schedule_1_Info->doctorID,
+            'schID_2_doctor' => $schedule_2_Info->doctorID,
+            'doc2Confirm' => 0,
+            'adminConfirm' => 0,
             'date' => date('Y-m-d')
         ];
 
-    		$newShiftSerial = $addShifts->addShifts($data);
+        $schedule_1_Date = $schedule_1_Info->date;
 
-    		return redirect('schedule-shift-info'); 
+        $shiftRecords = new ShiftRecords();
+
+        $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
+
+        $receiver = $schedule_2_Info->doctorID; 
+        $applier = $schedule_1_Info->doctorID;
+        $applier_ScheduleID = $schedule_1_Info->scheduleID;
+        $receiver_ScheduleID = $schedule_2_Info->scheduleID;
+
+        $job = new SendApplyShiftExchangeMail($receiver,$applier,$applier_ScheduleID,$receiver_ScheduleID);
+
+        dispatch($job);
+
 
     }
 
@@ -180,24 +215,36 @@ class ShiftRecordsController extends Controller
         $schedule = new Schedule();
         $user =new User();
 
+
         //判斷醫生1班
         $doctorID1 = $schedule->getScheduleDataByID($scheduleID1)->doctorID;//2
         $date1 = $schedule->getScheduleDataByID($scheduleID2)->date;
+        $weekday1 = (int)date('N', strtotime($date1));
 
-        //判斷醫生1班
+        //判斷醫生2班
         $doctorID2 = $schedule->getScheduleDataByID($scheduleID2)->doctorID;
         $date2 = $schedule->getScheduleDataByID($scheduleID1)->date;
+        $weekday2 = (int)date('N', strtotime($date2));
 
+        //確認當天一位醫生是否有上班 醫生id
         $count1=$schedule->checkDocStatus($doctorID1,$date1);
         $count2=$schedule->checkDocStatus($doctorID2,$date2);
+
+        //確認醫生假日班數
+        $doc1weekend = $schedule->checkDocScheduleInWeekend($doctorID1);
+        $doc2weekend = $schedule->checkDocScheduleInWeekend($doctorID2);
 
         $countDic=[
             "count1"=>$count1,
             "count2"=>$count2,
             "doc1"=>$user->getDoctorInfoByID($doctorID1)->name,
             "doc2"=>$user->getDoctorInfoByID($doctorID2)->name,
-            'date1'=>$schedule->getScheduleDataByID($scheduleID1)->date,
-            'date2'=>$schedule->getScheduleDataByID($scheduleID2)->date
+            'date1'=>$date1,
+            'date2'=>$date2,
+            'weekday1'=>$weekday1,
+            'weekday2'=>$weekday2,
+            'doc1weekend'=> $doc1weekend,
+            'doc2weekend' => $doc2weekend
         ];
 
         
@@ -257,24 +304,29 @@ class ShiftRecordsController extends Controller
         $shiftRecords->doc2Confirm($newChangeSerial,1);
         $shiftRecords->adminConfirm($newChangeSerial,1);
 
-        // $user = new User();
+        $user = new User();
 
-        // $doctor1 =$schedule_1_Info->doctorID;
-        // $doctor2 = $schedule_2_Info->doctorID;
+        $doctor1 =$schedule_1_Info->doctorID;
+        $doctor2 = $schedule_2_Info->doctorID;
 
-        // $oldscheduleID1 = $schedule_1_Info->scheduleID;
-        // $newscheduleID1 = $schedule_2_Info->scheduleID;
-        // $oldscheduleID2 = $schedule_2_Info->scheduleID;
-        // $newscheduleID2 = $schedule_1_Info->scheduleID;
+        $oldscheduleID1 = $schedule_1_Info->scheduleID;
+        $newscheduleID1 = $schedule_2_Info->scheduleID;
+        $oldscheduleID2 = $schedule_2_Info->scheduleID;
+        $newscheduleID2 = $schedule_1_Info->scheduleID;
 
-        // $job1 = new SendShiftExchangeMail($doctor1,$oldscheduleID1,$newscheduleID1);
-        // $job2 = new SendShiftExchangeMail($doctor2,$oldscheduleID2,$newscheduleID2);
+        $job1 = new SendShiftExchangeMail($doctor1,$oldscheduleID1,$newscheduleID1);
+        $job2 = new SendShiftExchangeMail($doctor2,$oldscheduleID2,$newscheduleID2);
+
+        dispatch($job1);
+        dispatch($job2);
 
 
-            //$schedule->$exchangeSchedule($newChangeSerial);
-            //return redirect('shift-first-edition');
+
+        $schedule->exchangeSchedule($newChangeSerial);
+        
+        //return redirect('shift-first-edition');
               // return redirect()->action(
-              //    'ShiftRecordsController@shiftFirstEdition', ['date' => $schedule_1_Date]
+                 // 'ShiftRecordsController@shiftFirstEdition', ['date' => $schedule_1_Date]
               // );
             
 
@@ -591,7 +643,21 @@ class ShiftRecordsController extends Controller
         $shiftRecordObj = new ShiftRecords();
         $shiftRecordObj->adminConfirm($serial,1);
 
-        return redirect('shift-info');
+        // $shiftRecordData = $shiftRecordObj->getShiftRecordByChangeSerial($serial);
+
+        // $applier = $shiftRecordData->schID_1_doctor;
+        // $receiver = $shiftRecordData->schID_2_doctor;
+        // $applier_ScheduleID = $shiftRecordData->scheduleID_1;
+        // $receiver_ScheduleID = $shiftRecordData->scheduleID_2;
+
+        // $job = new SendShiftExchangingInformMail($applier,$receiver,$applier_ScheduleID,$receiver_ScheduleID);
+
+        $job = new SendShiftExchangingInformMail($serial);
+
+        dispatch($job);
+
+        // return redirect('shift-info');
+
     }
 
     // 排班人員拒絕換班
@@ -599,6 +665,10 @@ class ShiftRecordsController extends Controller
         $shiftRecordObj = new ShiftRecords();
 
         $shiftRecordObj->adminConfirm($serial,2);
+
+        $job = new SendDenyConfirmedShiftExchangeMail($serial);
+
+        dispatch($job);
 
         return redirect('shift-info');
 

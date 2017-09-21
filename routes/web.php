@@ -38,7 +38,15 @@ Route::get('getAnnouncement', 'AnnouncementController@getAnnouncement');
 Route::get('deleteAnnouncement/{serial}', 'AnnouncementController@deleteAnnouncement');
 
 // 設定頁面
-Route::get('setting', 'AccountController@getSettingPage');
+Route::get('setting', 'SettingController@getSettingPage');
+
+Route::get('getDate', 'SettingController@getDate');
+
+// 設定預班時間
+Route::get('setDate', 'SettingController@setDate');
+
+//公布正式班表
+Route::get('announceSchedule','ScheduleController@announceSchedule');
 
 // 新增公告
 Route::post('addAnnouncement', 'AnnouncementController@addOrUpdateAnnouncement');
@@ -87,7 +95,7 @@ Route::get('first-edition', 'ScheduleController@firstEditionSchedule');
 //初版班表 全部醫生
 Route::get('/first-edition-all', 'ScheduleController@firstSchedule');
 
-//初版班表->換班資訊
+//初版班表->換班資訊-
 Route::get('first-edition-shift-info','ShiftRecordsController@shiftRecords');
 Route::post('first-edition-shift-info','ShiftRecordsController@firstEditionShiftAddShifts');
 
@@ -128,10 +136,10 @@ Route::post('sendReservationDelete', 'ReservationController@deleteReservation');
 
 // 列出正式班表的換班資訊
 Route::get('schedule-shift-info', 'ShiftRecordsController@getShiftRecords');
-Route::post('schedule-shift-info','ShiftRecordsController@firstEditionShiftAddShifts');
+Route::get('addShifts','ShiftRecordsController@firstEditionShiftAddShifts');
 
 //根據月份選擇列出備註
-Route::get('changeMonth','RemarkController@getRemarkByMonth');
+Route::get('changeRemarkMonth','RemarkController@getRemarkByMonth');
 
 
 // 醫生2同意或拒絕換班
@@ -144,7 +152,7 @@ Route::get('doctor2DenyShiftRecord/{serial}', 'ShiftRecordsController@doctor2Den
 Route::get('/shift-first-edition','ShiftRecordsController@shiftFirstEdition');//->name('shift-first-edition');
 Route::get('change-shift-first-edition','ShiftRecordsController@shiftFirstEditionAddShifts');
 
-//調整班表->初版班表 確認醫生1換班狀態
+//調整班表->初版班表 確認醫生換班狀態
 Route::get('checkDocStatus','ShiftRecordsController@checkDoc1ShiftStatus');
 
 //調整班表->初版班表 確認醫生2換班狀態
@@ -174,6 +182,8 @@ Route::get('saveSchedule','ScheduleController@addSchedule');
 
 Route::get('updateScheduleID','ScheduleController@getDoctorInfoByScheduleID');
 
+// 驗證 假日班 調整班表->刪除班
+Route::get('confirmDeleteSchedule','ScheduleController@checkDocScheduleByperson');
 //調整班表->刪除班
 Route::get('deleteSchedule','ScheduleController@deleteSchedule');
 
@@ -339,7 +349,7 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 //Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
-Route::get("info",'TestController@updateSchedule');
+Route::get("info",'TestController@checkDocScheduleInWeekendByperson');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 //Route::post('reservation/updateReservation/{id}', 'ReservationController@updateReservation');
 //Route::get('/reservation/updateReservation/{id}', function() {

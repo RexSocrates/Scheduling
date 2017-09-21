@@ -43,7 +43,7 @@
                             <form action="addRemark" method="post">
                                 <div class="row margin-b0">
                                     <div class="col s5">
-                                        <p class="information">開放時間: 2017/09/01 - 2017/09/25</p>
+                                        <p class="information">開放時間: {{ $startDate }} - {{ $endDate }}</p>
                                         
                                         <p class="information">可排天班數: on班:{{$onAmount}} off班:{{$offAmount}}</p>
                                         <!-- <p class="information" id='countDay'>尚需排班數: 白班:{{$countDay}} 夜班:{{$countNight}}</p> 
@@ -194,11 +194,19 @@
                                             sendNewReservation(event.priority, event.start_date, event.end_date);
                                                
                                       }
+                                      else {
+                                        // 剩餘可預約班數為0，無法預班
+                                        dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
+                                    }
                                   }else {
                                       // 預約off班
                                       if(checkResAmount(false, String(event.start_date), String(event.end_date))) {
                                           sendNewReservation(event.priority, event.start_date, event.end_date);
                                       }
+                                      else {
+                                        // 剩餘可預約班數為0，無法預班
+                                        dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
+                                    }
                                   }
                               }
 //                              countDay();
@@ -286,8 +294,8 @@
                             scheduler.attachEvent("onEventCollision", function (ev, evs){
                                   //any custom logic here
                                 var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
-                                if(count>1){
-                                    dhtmlx.message({ type:"error", text:"此日期已選過" });
+                                if(count>=1){
+                                    dhtmlx.message({ type:"error", text:count+"此日期已選過" });
                                     return true;
                                 }
                                 else{
@@ -295,6 +303,7 @@
 
                                 }
 
+                                console.log("111"+count);
                                  return true;
                             });
 

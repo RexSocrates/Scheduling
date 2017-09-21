@@ -304,11 +304,11 @@ class DateTest extends Seeder
       //   ]);   
     
       //  DB::table('ShiftRecords')-> insertGetId([
-      //       'scheduleID_1' => 5 ,
-      //       'scheduleID_2' => 1 ,
-      //       'schID_1_doctor' => 2,
+      //       'scheduleID_1' => 48 ,
+      //       'scheduleID_2' => 49,
+      //       'schID_1_doctor' => 1,
       //       'schID_2_doctor' => 3,
-      //       'doc2Confirm' => 0, 
+      //       'doc2Confirm' => 1, 
       //       'adminConfirm' => 0,
       //       'date' => "2017-07-26"
                
@@ -384,14 +384,14 @@ class DateTest extends Seeder
      
   // }
 
-  DB::table('Schedule')-> insertGetId([
-          'doctorID' => 3,
-          'schCategorySerial' =>3,
-          'isWeekday' => 1,
-          'location' => 'Taipei',
-          'date' => "2017-9-29",
-          'endDate' => '2017-9-30'
-     ]);
+  // DB::table('Schedule')-> insertGetId([
+  //         'doctorID' => 3,
+  //         'schCategorySerial' =>3,
+  //         'isWeekday' => 1,
+  //         'location' => 'Taipei',
+  //         'date' => "2017-9-29",
+  //         'endDate' => '2017-9-30'
+  //    ]);
   // DB::table('Schedule')-> insertGetId([
   //         'doctorID' => 1,
   //         'schCategorySerial' =>3,

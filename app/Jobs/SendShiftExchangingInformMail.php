@@ -33,6 +33,9 @@ class SendShiftExchangingInformMail implements ShouldQueue
      *
      * @return void
      */
+
+    
+
     public function __construct($changeSerial)
     {
         // $admin, $applicantID, $receiverID, $applicantShiftID, $receiverShiftID
@@ -40,16 +43,12 @@ class SendShiftExchangingInformMail implements ShouldQueue
         $schObj = new Schedule();
         
         $this->admin = $userObj->getAdminList()[0];
-//        $this->applicant = $userObj->getDoctorInfoByID($applicantID);
-//        $this->receiver = $userObj->getDoctorInfoByID($receiverID)
-//        $this->applicantShift = $schObj->getScheduleDataByID($applicantShiftID);
-//        $this->receiverShift = $schObj->getScheduleDataByID($receiverShiftID);
-        
         
         // 使用change serial 取得換班資料
         $shiftRecObj = new ShiftRecords();
         $shiftRecordData = $shiftRecObj->getShiftRecordByChangeSerial($changeSerial);
         
+        // 取出換班資訊
         $this->shitRecordData = $shiftRecordData;
         
         // 從換班紀錄中取得醫師1與醫師2的資料

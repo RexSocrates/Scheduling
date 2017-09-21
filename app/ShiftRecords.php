@@ -95,18 +95,12 @@ class ShiftRecords extends Model
         $user = new User();
         $doctorID = $user->getCurrentUserID();
 
-        $shiftRecords=DB::table('ShiftRecords')
-            ->where('doc2Confirm',2)
-            ->orwhere('adminConfirm',2)
-            ->orwhere('adminConfirm',0)
-            ->where('schID_1_doctor', $doctorID)
-            ->orWhere('schID_2_doctor', $doctorID)
-            ->where('doc2Confirm',2)
-            ->orwhere('adminConfirm',2)
-            ->orwhere('adminConfirm',0)
-            ->get();
+        $result = DB::SELECT('SELECT * FROM ShiftRecords WHERE (schID_1_doctor = ? OR schID_2_doctor = ?) AND (NOT doc2Confirm = 1 OR NOT adminConfirm = 1)', [
+            $doctorID,
+            $doctorID
+        ]);
 
-        return $shiftRecords;
+        return $result;
     }
 
     //查看 換班紀錄
@@ -190,7 +184,10 @@ class ShiftRecords extends Model
             $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial);
             $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial);
 
-            array_push($dataInschedule, array($doctor1->name, $doctor2->name, $schedule1->date, $schedule2->date, $catName1, $catName2, $record->date, $record->changeSerial));
+            $doc2Confirm = $record->doc2Confirm;
+
+
+            array_push($dataInschedule, array($doctor1->name, $doctor2->name, $schedule1->date, $schedule2->date, $catName1, $catName2, $record->date, $record->changeSerial, $doc2Confirm ));
         }
         return $dataInschedule;
     }
@@ -276,6 +273,13 @@ class ShiftRecords extends Model
         ->first();
 
         return $changeSerial;
+    }
 
+    // 刪除 被刪除班有關的紀錄
+    public function deleteShiftRecord($scheduleID){
+        DB::table('shiftRecords')
+        ->where('scheduleID_1',$scheduleID)
+        ->orwhere('scheduleID_2',$scheduleID)
+        ->delete();
     }
 }

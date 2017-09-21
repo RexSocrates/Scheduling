@@ -16,6 +16,7 @@ use App\DoctorAndReservation;
 use App\ShiftCategory;
 use App\Remark;
 use App\User;
+use App\ReservationData;
 
 // jobs
 use App\Jobs\SendRandomNotificationMail;
@@ -67,8 +68,14 @@ class ReservationController extends Controller
         $shiftCategory = new ShiftCategory();
         $user = new User();
         $remark = new Remark();
+        $reservationData = new ReservationData();
 
         $data = array();
+
+        $month=date("m");
+        $year = date('Y');
+        $startDate = $reservationData->getDate($month)->startDate;
+        $endDate = $reservationData->getDate($month)->endDate;
 
         $reservationData = $reservation->getReservationByID();
         //$reservationData = $reservation->getNextMonthReservationByID();
@@ -103,7 +110,10 @@ class ReservationController extends Controller
         $onResAmount = $resLimit - $docAndResObj->getNextMonthOnResAmount($user->getCurrentUserID());
         $offResAmount = $resLimit - $docAndResObj->getNextMonthOffResAmount($user->getCurrentUserID());
 
+
         return view('pages.reservation', [
+            'startDate' => $year.'/'.$month.'/'.$startDate,
+            'endDate' => $year.'/'.$month.'/'.$endDate,
             'reservations' => $data,
             'countDay' => $countDay,
             'countNight' => $countNight,

@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\OfficialLeave;
 use App\User;
+use App\MustOnDutyShiftPerMonth;
 
 class LeaveController extends Controller
 {
 	//排班人員確認公假
     public function confirmOffcialLeave($serial){
     	$officialLeave = new OfficialLeave();
+        $mustOnDutyShiftPerMonth =new MustOnDutyShiftPerMonth();
     	$user = new User();
 
         $leave = $officialLeave->getLeaveBySerial($serial);
+        $doctorID = $officialLeave->getLeaveBySerial($serial)->doctorID;
     	$leaveDic=[
     		'serial'=>$serial,
     		'confirmingPerson'=>$user->getCurrentUserID(),
@@ -27,6 +30,22 @@ class LeaveController extends Controller
     	$doctor = $user->getDoctorInfoByID($leave->doctorID);
     	$officialLeave->changeConfirmStatus($leaveDic);
     	$officialLeave->updateLeaveHours($leave->doctorID,$doctor->currentOfficialLeaveHours+$leave->leaveHours);
+
+        $onDutyInfo=[
+            'doctorID' => $doctorID,
+            'month'=>$leave->date,
+            'mustOnDutyShift'=>""
+        ];
+
+        $onDutyInfo['mustOnDutyShift']=($user->getDoctorInfoByID($doctorID)->mustOnDutyTotalShifts)+$leave->leaveHours;
+
+        $count = $mustOnDutyShiftPerMonth->countOnDutyShift($onDutyInfo);
+        if($count == 0){
+            $mustOnDutyShiftPerMonth->addOnDutyShift($onDutyInfo);
+        }
+        else{
+            $mustOnDutyShiftPerMonth->updateOnDutyShift($onDutyInfo);
+        }
 
     	return redirect('officialLeave');
     }

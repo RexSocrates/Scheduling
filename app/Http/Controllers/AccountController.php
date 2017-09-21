@@ -69,12 +69,18 @@ class AccountController extends Controller
             array_push($leaveHours,$i);
             $i=$i+12;
         }
-       
+
+         //選擇月份
+        $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m", strtotime('+1 month'));
+        
         return view('pages.profile', [
              'doctor' => $user->getCurrentUserInfo(),
              'doctorShiftRecords' =>$doctorShiftRecords,
              'doctorOfficialLeave'=>$officialLeaveArr,
-             'leaveHours' => $leaveHours
+             'leaveHours' => $leaveHours,
+             'currentMonth'=>$currentMonth,
+             'nextMonth'=>$nextMonth
          ]);
     }
     
@@ -96,6 +102,7 @@ class AccountController extends Controller
             'doctorID' => $user->getCurrentUserInfo()->doctorID,
             'leaveHours'=> -1*$data['hour'],
             'updatedLeaveHours' => $user->getCurrentUserInfo()->currentOfficialLeaveHours+(-1*$data['hour']),
+            // 'date'=>$data['date'],
             'remark' => $data['content'],
         ];
     
@@ -223,7 +230,13 @@ class AccountController extends Controller
         return redirect('doctors');
     }
     
-    public function getSettingPage() {
-        return view('pages.setting');
+    
+    //公布正式班表
+    public function announceSchedule(Request $request){
+        
+        $schedule = new Schedule();
+
+        $schedule->confirmNextMonthSchedule();
+ 
     }
 }
