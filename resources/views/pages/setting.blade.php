@@ -22,6 +22,7 @@
                             <div class="card-content">
                                 <input type="hidden" id="startDate" name="startDate">
                                 <input type="hidden" id="endDate" name="endDate">
+
                                 <p class="slider-text">{{ $month }}月<font id="startFont"></font>日 
                                 至 {{ $month }} 月<font id="endFont"></font>日</p>
                                 <div id="slider"></div>
@@ -88,9 +89,37 @@
     <script src="../js/wNumb.js"></script>
     <script>
         var slider = document.getElementById('slider');
+            
+        var start={{ $strDate }};
+        var end={{ $endDate }};
+
+        function setDate(){
+             $.get('setDate',{
+                startDate:document.getElementById('startDate').value,
+                endDate:document.getElementById('endDate').value
+                
+            }, function(){
+                change();
+
+            });
+        }
+        function change(){
+             $.get('getDate',{
+                
+            }, function(array){
+                
+                start = array[0];
+                end = array[1];
+
+                document.getElementById('startFont').innerHTML = start;
+                document.getElementById('endFont').innerHTML = end;
+                
+            });
+        }
+
 
         noUiSlider.create(slider, {
-            start: [ 1, 20 ],
+            start: [ start, end ],
             step: 1,
             connect: true,
             range: {
@@ -127,28 +156,7 @@
             console.log("111");
         }
 
-        function setDate(){
-             $.get('setDate',{
-                startDate:document.getElementById('startDate').value,
-                endDate:document.getElementById('endDate').value
-                
-            }, function(){
-                alert("時間修改成功");
-                //change();
-
-            });
-        }
-        function change(){
-             $.get('getDate',{
-                
-            }, function(array){
-                
-                document.getElementById('startFont').innerHTML = array[0];
-                document.getElementById('endFont').innerHTML = array[1];
-
-                alert("時間修改成功");
-            });
-        }
+        
 
 
         

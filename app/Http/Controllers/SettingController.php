@@ -12,12 +12,12 @@ class SettingController extends Controller
 
 
         $nextMonth=date("m");
-        //$reservationData = new ReservationData();
-        // $strDate = $reservationData->getDate($nextMonth)->startDate;
-        // $endDate = $reservationData->getDate($nextMonth)->endDate;
+        $reservationData = new ReservationData();
+        $strDate = $reservationData->getDate($nextMonth)->startDate;
+        $endDate = $reservationData->getDate($nextMonth)->endDate;
 
 
-        return view('pages.setting', array('month'=> $nextMonth));
+        return view('pages.setting', array('month'=> $nextMonth,'strDate'=>$strDate,'endDate'=>$endDate));
 
     }
 
