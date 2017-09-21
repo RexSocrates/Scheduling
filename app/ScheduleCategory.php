@@ -18,7 +18,7 @@ class ScheduleCategory extends Model
 	}
 
 	// 回傳該 schedule category的地點
-	 public function getSchCategoryInfo($categorySerial) {
+    public function getSchCategoryInfo($categorySerial) {
        $location=null;
         if($categorySerial == 1 || $categorySerial == 2 ||
         	$categorySerial == 3|| $categorySerial == 4 ||
@@ -39,5 +39,14 @@ class ScheduleCategory extends Model
         	$location="Tamsui";
 		}   
         return $location;
+    }
+    
+    // 回傳班的名稱
+    public function getSchCateName($serial) {
+        $result = DB::table('ScheduleCategory')
+            ->where('schCategorySerial', $serial)
+            ->first();
+        
+        return $result->schCategoryName;
     }
 }

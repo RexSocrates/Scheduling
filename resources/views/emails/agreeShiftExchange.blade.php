@@ -3,7 +3,7 @@
 
 親愛的 {{ $applicant->name }}醫師 您好:
 <br>
-    {{ $receiver->name }}醫師同意您提出的換班要求，
+{{ $receiver->name }}醫師同意您提出的換班要求，
 系統已將您的{{ $applicantShift->date }} {{ $applicantShift->location }}院
 {{ $applicantShift->shiftName }}班
 調整至{{ $receiverShift->date }} {{$receiverShift->location}}院{{$receiverShift->shiftName}}班，
@@ -23,6 +23,7 @@
 <br>
 
 ※ 此信件為系統發出信件，請勿直接回覆。若您有問題請向相關人員提出，謝謝!
+<br>
 
 @component('mail::button', ['url' => 'http://localhost:8000/login'])
 立即登入系統

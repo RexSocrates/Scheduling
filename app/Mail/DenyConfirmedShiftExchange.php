@@ -45,7 +45,7 @@ class DenyConfirmedShiftExchange extends Mailable
     public function build()
     {
         return $this
-            ->subject('【馬偕醫院】排班系統')
+            ->subject('【馬偕醫院】換班申請回復（拒絕）')
             ->markdown('emails.denyConfirmedShiftExchange', [
                 'doctor1' => $this->doctor1,
                 'doctor2' => $this->doctor2,

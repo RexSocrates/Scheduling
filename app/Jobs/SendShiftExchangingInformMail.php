@@ -39,7 +39,7 @@ class SendShiftExchangingInformMail implements ShouldQueue
         $userObj = new User();
         $schObj = new Schedule();
         
-        $this->admin = userObj->getAdminList()[0];
+        $this->admin = $userObj->getAdminList()[0];
 //        $this->applicant = $userObj->getDoctorInfoByID($applicantID);
 //        $this->receiver = $userObj->getDoctorInfoByID($receiverID)
 //        $this->applicantShift = $schObj->getScheduleDataByID($applicantShiftID);

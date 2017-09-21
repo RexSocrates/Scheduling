@@ -8,11 +8,14 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
+//import mail
 use Mail;
 use App\Mail\ShiftExchange;
 
+// import models
 use App\User;
 use App\Schedule;
+use App\ScheduleCategory;
 
 class SendShiftExchangeMail implements ShouldQueue
 {
@@ -21,7 +24,10 @@ class SendShiftExchangeMail implements ShouldQueue
     // 排班人員強制更換上班的通知信件
     protected $receiver;
     protected $originalShift;
+    protected $originalShiftName;
+    
     protected $newShift;
+    protected $newShiftName;
     protected $admin;
     
 
@@ -36,11 +42,18 @@ class SendShiftExchangeMail implements ShouldQueue
         //從controller 接收資料
         $userObj = new USer();
         $scheduleObj = new Schedule();
+        $schCateObj = new ScheduleCategory();
         
+        // 取得收信者的資料
         $this->receiver = $userObj->getDoctorInfoByID($receiverID);
-        $this->originalShift = $scheduleObj->getScheduleDataByID($originalShiftSerial);
         
+        // 取得舊的班的資料
+        $this->originalShift = $scheduleObj->getScheduleDataByID($originalShiftSerial);
+        $this->originalShiftName = $schCateObj->getSchCateName($this->originalShift->schCategorySerial);
+        
+        // 取得新的班的資料
         $this->newShift = $scheduleObj->getScheduleDataByID($newShiftSerial);;
+        $this->newShiftName = $schCateObj->getSchCateName($this->newShift->schCategorySerial);
         
         // 取得排班人員聯絡資訊
         $this->admin = $userObj->getAdminList()[0];
@@ -55,6 +68,6 @@ class SendShiftExchangeMail implements ShouldQueue
     {
         // 寄送換班通知信件
         Mail::to($this->receiver->email)
-            ->send(new ShiftExchange($this->receiver->name, $this->originalShift, $this->newShift, $this->admin));
+            ->send(new ShiftExchange($this->receiver->name, $this->originalShift, $this->originalShiftName, $this->newShift, $this->newShiftName, $this->admin));
     }
 }

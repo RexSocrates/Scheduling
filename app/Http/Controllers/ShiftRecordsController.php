@@ -456,13 +456,28 @@ class ShiftRecordsController extends Controller
         }
 
         //選擇備註月份
-        $currentMonth = date('Y-m');
-        $preMonth=date("Y-m", strtotime('-1 month'));
-        $beforePreMonth=date("Y-m", strtotime('-2 month'));
+        $monthList = [date('Y-m')];
+        for($i = 1; $i <= 11; $i++) {
+            array_push($monthList, date('Y-m', strtotime((-1 * $i).' month')));
+        }
+        
+//        $currentMonth = date('Y-m');
+//        $preMonth=date("Y-m", strtotime('-1 month'));
+//        $beforePreMonth=date("Y-m", strtotime('-2 month'));
 
 
         return view('pages.schedule-shift-info', [
-            'shiftRecords'=>$allShiftData,'shiftDataByDoctorID'=>$shiftDataByDoctorID,'currentDoctor'=>$currentDoctor,'currentDoctorSchedule'=>$currentDoctorSchedule,'doctorName'=>$doctorName,'allRejectShiftData'=>$allRejectShiftData,'remarks'=>$displayRemarksArr,'currentMonth'=>$currentMonth,'preMonth'=>$preMonth,'beforePreMonth'=>$beforePreMonth
+            'shiftRecords'=>$allShiftData,
+            'shiftDataByDoctorID'=>$shiftDataByDoctorID,
+            'currentDoctor'=>$currentDoctor,
+            'currentDoctorSchedule'=>$currentDoctorSchedule,
+            'doctorName'=>$doctorName,
+            'allRejectShiftData'=>$allRejectShiftData,
+            'remarks'=>$displayRemarksArr,
+            'monthList' => $monthList,
+//            'currentMonth'=>$currentMonth,
+//            'preMonth'=>$preMonth,
+//            'beforePreMonth'=>$beforePreMonth
         ]);
         
     }
