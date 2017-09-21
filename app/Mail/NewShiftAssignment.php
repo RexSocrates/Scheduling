@@ -12,7 +12,14 @@ class NewShiftAssignment extends Mailable
     use Queueable, SerializesModels;
     
     protected $doctor;
+    
     protected $scheduleData;
+    // 月 日 院 班
+    protected $month;
+    protected $day;
+    protected $location;
+    protected $shiftName;
+    
     protected $admin;
 
     /**
@@ -36,7 +43,7 @@ class NewShiftAssignment extends Mailable
     public function build()
     {
         return $this
-            ->subject('【馬偕醫院】排班系統')
+            ->subject('【馬偕醫院】新增班表確認')
             ->markdown('emails.newShiftAssignment', [
                 'doctor' => $this->doctor,
                 'schedule' => $this->scheduleData,

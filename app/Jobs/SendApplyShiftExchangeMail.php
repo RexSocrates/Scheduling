@@ -14,6 +14,7 @@ use App\Mail\ApplyShiftExchange;
 // import model
 use App\User;
 use App\Schedule;
+use App\ScheduleCategory;
 
 class SendApplyShiftExchangeMail implements ShouldQueue
 {
@@ -22,8 +23,13 @@ class SendApplyShiftExchangeMail implements ShouldQueue
     // 對醫生通知有人對他/她申請換班
     protected $receiver;
     protected $applicant;
+    
     protected $applicantShift;
+    protected $applicantShiftName;
+    
     protected $receiverShift;
+    protected $receiverShiftName;
+    
     protected $admin;
     
 
@@ -41,8 +47,13 @@ class SendApplyShiftExchangeMail implements ShouldQueue
         $this->applicant = $userObj->getDoctorInfoByID($applicantID);
         
         $schObj = new Schedule();
+        $schCateObj = new ScheduleCategory();
+        
         $this->applicantShift = $schObj->getScheduleDataByID($applicantShiftID);
+        $this->applicantShiftName = $schCateObj->getSchCateName($this->applicantShift);
+        
         $this->receiverShift = $schObj->getScheduleDataByID($receiverShiftID);
+        $this->receiverShiftName = $schCateObj->getSchCateName($this->receiverShift);
         
         // 取得排班人員資料
         $this->admin = $userObj->getAdminList()[0];
@@ -57,6 +68,6 @@ class SendApplyShiftExchangeMail implements ShouldQueue
     {
         //
         Mail::to($this->receiver->email)
-            ->send(new ApplyShiftExchange($this->applicant, $this->receiver, $this->applicantShift, $this->receiverShift, $this->admin));
+            ->send(new ApplyShiftExchange($this->applicant, $this->receiver, $this->applicantShift, $this->applicantShiftName, $this->receiverShift, $this->receiverShiftName, $this->admin));
     }
 }

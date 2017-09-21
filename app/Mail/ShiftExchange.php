@@ -14,7 +14,12 @@ class ShiftExchange extends Mailable
     // 排班人員將醫師換班後寄送通知信
     protected $receiverName = '';
     protected $originalShift;
+    protected $originalLocation;
+    protected $originalShiftName;
+    
     protected $newShift;
+    protected $newLocation;
+    protected $newShiftName;
     protected $admin;
 
     /**
@@ -22,12 +27,27 @@ class ShiftExchange extends Mailable
      *
      * @return void
      */
-    public function __construct($receiverName, $originalShift, $newShift, $admin)
+    public function __construct($receiverName, $originalShift, $originalShiftName, $newShift, $newShiftName, $admin)
     {
         //
         $this->receiverName = $receiverName;
+        
         $this->originalShift = $originalShift;
+        if($originalShift->location == 'Taipei') {
+            $this->originalLocation = '台北';
+        }else {
+            $this->originalLocation = '淡水';
+        }
+        $this->originalShiftName = $originalShiftName;
+        
         $this->newShift = $newShift;
+        if($newShift->location == 'Taipei') {
+            $this->newLocation = '台北';
+        }else {
+            $this->newLocation = '淡水';
+        }
+        $this->newShiftName = $newShiftName;
+        
         $this->admin = $admin;
     }
 
@@ -43,8 +63,12 @@ class ShiftExchange extends Mailable
             ->markdown('emails.shiftExchange', [
                 'receiverName' => $this->receiverName,
                 'originalShift' => $this->originalShift,
+                'originalLocation' => $this->originalLocation,
+                'originalShiftName' => $this->originalShiftName,
                 'newShift' => $this->newShift,
-                'admin' =. $this->admin
+                'newLocation' => $this->newLocation,
+                'newShiftName' => $this->newShiftName,
+                'admin' => $this->admin
             ]);
     }
 }

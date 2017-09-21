@@ -15,6 +15,7 @@ use App\Mail\NewShiftAssignment;
 // import model
 use App\User;
 use App\Schedule;
+use App\ScheduleCategory;
 
 class SendNewShiftAssignmentMail implements ShouldQueue
 {
@@ -32,7 +33,7 @@ class SendNewShiftAssignmentMail implements ShouldQueue
      */
     public function __construct($doctorID, $scheduleID)
     {
-        //所需參數：倍新增上班時段的醫師ID, 新增的班的資料
+        //所需參數：被新增上班時段的醫師ID, 新增的班的資料
         $userObj = new User();
         $this->doctor = $userObj->getDoctorInfoByID($doctorID);
         

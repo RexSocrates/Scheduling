@@ -172,9 +172,10 @@
                                 <div class="input-field inline">
                                     <select id=month onchange="changeRemarkMonth()">
                                         <option value="" disabled selected>請選擇月份</option>
-                                        <option value="{{ $currentMonth }}">{{ $currentMonth }}</option>
-                                        <option value="{{ $preMonth }}">{{ $preMonth }}</option>
-                                        <option value="{{ $beforePreMonth }}">{{ $beforePreMonth }}</option>
+                                        @foreach($monthList as $month)
+                                            <option value="{{ $month }}">{{ $month }}</option>
+                                        @endforeach
+                                        
                                     </select>
                                 </div>
                             </div>

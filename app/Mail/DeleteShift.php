@@ -11,21 +11,28 @@ class DeleteShift extends Mailable
 {
     use Queueable, SerializesModels;
     
+    // 排班人員刪除醫師的班
     protected $doctor;
-    protected $scheduleData;
-    protected $admin
+    protected $admin;
+    protected $month;
+    protected $day;
+    protected $location;
+    protected $schCateName;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($doctor, $scheduleData, $admin)
+    public function __construct($doctor, $admin, $month, $day, $location, $schCateName)
     {
         //
-        $this->$doctor = $doctor;
-        $this->scheduleData = $scheduleData;
+        $this->doctor = $doctor;
         $this->admin = $admin;
+        $this->month = $month;
+        $this->day = $day;
+        $this->location = $location;
+        $this->schCateName = $schCateName;
     }
 
     /**
@@ -36,11 +43,14 @@ class DeleteShift extends Mailable
     public function build()
     {
         return $this
-            ->subject('【馬偕醫院】排班系統')
+            ->subject('【馬偕醫院】刪除班表確認')
             ->markdown('emails.deleteShift', [
                 'doctor' => $this->doctor,
-                'scheduleData' => $this->scheduleData,
-                'admin' => $this->admin
+                'admin' => $this->admin,
+                'month' => $this->month,
+                'day' => $this->day,
+                'location' => $this->location,
+                'schCateName' => $this->schCateName
             ]);
     }
 }

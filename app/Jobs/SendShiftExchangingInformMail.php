@@ -41,7 +41,7 @@ class SendShiftExchangingInformMail implements ShouldQueue
         // $admin, $applicantID, $receiverID, $applicantShiftID, $receiverShiftID
         $userObj = new User();
         $schObj = new Schedule();
-
+        
         $this->admin = $userObj->getAdminList()[0];
         
         // 使用change serial 取得換班資料
