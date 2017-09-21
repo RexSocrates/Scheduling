@@ -245,7 +245,7 @@
                                 var date =Date.parse(document.getElementById("getDate").value).valueOf();
 
                                 var now  = new Date();
-                                var today = Date.parse(now.getFullYear()+"-"+(now.getMonth()+1)+"-"+now.getDate()).valueOf();
+                                var today = Date.parse(now.getFullYear()+"-"+(now.getMonth()+2)+"-1").valueOf();
 
                                 window.scrollTo(0,0);  //開啟後移動到最上面
                                 
@@ -260,6 +260,7 @@
                                 }
                                 console.log("111"+date);
                                 console.log("111"+today);
+                                console.log(now.getFullYear()+"-"+(now.getMonth()+2)+"-1");
                                 
                                 // var doctorID = ["1"];
                                 // var doctorName = ["張國頌"];
@@ -344,7 +345,7 @@
                             scheduler.config.limit_start = new Date(startd);
                             scheduler.config.limit_end = new Date(endd);
                             scheduler.attachEvent("onLimitViolation", function  (id, obj){
-                                dhtmlx.message({ type:"error", text:"此時段無法接受換班" })
+                                //dhtmlx.message({ type:"error", text:"此時段無法接受換班" })
                             });
                              //限制非當月利用點擊視窗換班
                             scheduler.addMarkedTimespan({  
@@ -354,7 +355,7 @@
                                 css: "block_section", 
                                 type: "dhx_time_block"
                             
-                            });
+                             });
                             //scheduler.updateView();
                             scheduler.attachEvent("onEventCollision", function (ev, evs){
                                 var ev = scheduler.getEvent(ev.id);
@@ -517,7 +518,7 @@
             });
         }
         function changeDate1(array) {
-                document.getElementById("date1").innerHTML= "<option value="+array[0]+">"+array[2]+"</option>",
+                document.getElementById("date1").innerHTML= "<option value="+array[3]+">"+array[2]+"</option>",
                 document.getElementById("getDate").value=array[2]     
         }
         function changeDate2(array) {

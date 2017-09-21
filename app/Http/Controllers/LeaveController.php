@@ -37,7 +37,7 @@ class LeaveController extends Controller
             'mustOnDutyShift'=>""
         ];
 
-        $onDutyInfo['mustOnDutyShift']=($user->getDoctorInfoByID($doctorID)->mustOnDutyTotalShifts)+$leave->leaveHours;
+        $onDutyInfo['mustOnDutyShift']=($user->getDoctorInfoByID($doctorID)->mustOnDutyTotalShifts)-(ads($leave->leaveHours))/12;
 
         $count = $mustOnDutyShiftPerMonth->countOnDutyShift($onDutyInfo);
         if($count == 0){
