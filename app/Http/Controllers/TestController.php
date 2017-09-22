@@ -877,6 +877,38 @@ class TestController extends Controller
         echo $mustOnDuty;
 
     }
+ public function getMoreCheckShiftsRecordsInformationBymonth(){
 
+    //$data = $request->all();
+        $month = '2017-09';
+
+        $shiftRecordObj = new ShiftRecords();
+        $user = new User();
+        $shiftCategory = new ScheduleCategory(); 
+        $schedule = new Schedule();
+
+        $shiftRecordsData = $shiftRecordObj->getShiftRecordsByMonth($month);
+
+        $dataInschedule = [];
+
+        foreach ($shiftRecordsData as $record) {
+
+            $doctor1 = $user->getDoctorInfoByID($record->schID_1_doctor);
+            $doctor2 = $user->getDoctorInfoByID($record->schID_2_doctor);
+
+            $schedule1 = $schedule->getScheduleDataByID($record->scheduleID_1);
+            $schedule2 = $schedule->getScheduleDataByID($record->scheduleID_2);
+            
+            $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial);
+            $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial);
+
+            array_push($dataInschedule, array($doctor1->name, $doctor2->name, $schedule1->date, $schedule2->date, $catName1, $catName2, $record->date, $record->changeSerial));
+        }
+
+        echo print_r($dataInschedule);
+
+
+
+    }
 }
 

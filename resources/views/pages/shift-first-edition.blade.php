@@ -1045,26 +1045,26 @@
             
             }, function(array){
                 var weekday = array[0]['weekDay'];
-                // if( array[0]['docWeekend'] <=4 && (weekday == 6 || weekday == 7)){
-                //     var checkdelete = confirm(array[0]['docName']+"醫生假日班不得少於4\n確定要刪除嗎?");
-                //     if(checkdelete==true){
-                //         delete_confirm();
-                //     }
-                //     else{
-                //         alert("已取消");
-                //     }
-                // }
-                // if (array[0]['totalShift']<=array[0]['mustOnDuty']){
-                //     var checkdelete = confirm(array[0]['docName']+"總班數不得小於"+array[0]['mustOnDuty']+"\n"+"確定要刪除嗎?");
-                //     if(checkdelete==true){
-                //         delete_confirm();
-                //     }
-                //     else{
-                //         alert("已取消");
-                //     }
+                if( array[0]['docWeekend'] <=4 && (weekday == 6 || weekday == 7)){
+                    var checkdelete = confirm(array[0]['docName']+"醫生假日班不得少於4\n確定要刪除嗎?");
+                    if(checkdelete==true){
+                        delete_confirm();
+                    }
+                    else{
+                        alert("已取消");
+                    }
+                }
+                if (array[0]['totalShift']<=array[0]['mustOnDuty']){
+                    var checkdelete = confirm(array[0]['docName']+"總班數不得小於"+array[0]['mustOnDuty']+"\n"+"確定要刪除嗎?");
+                    if(checkdelete==true){
+                        delete_confirm();
+                    }
+                    else{
+                        alert("已取消");
+                    }
 
-                // }
-                // else{
+                }
+                else{
                     var date = document.getElementById("date1").options[document.getElementById('date1').selectedIndex].text;
                     var r = confirm("是否刪除 " + array[0]['docName'] + " 在 " + date + " 的班?");
                         if (r == true) {
@@ -1074,7 +1074,7 @@
                          alert("已取消");
                      }
                     
-                // }
+                 }
                
             console.log(array[0]['totalShift']);
             console.log(array[0]['mustOnDuty']);
@@ -1089,6 +1089,7 @@
                 alert("成功刪除");
                 refresh();
         });
+
         }
     </script>
 @endsection

@@ -64,7 +64,7 @@
                 </div>
             </div>
             
-            <div class="row">
+      <!--       <div class="row">
                 <div class="col s12 m12">
                     <div class="card">
                        
@@ -107,10 +107,10 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-            </div>
+            </div> -->
 		</div>
 	</div>
 @endsection

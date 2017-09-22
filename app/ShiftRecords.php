@@ -120,6 +120,51 @@ class ShiftRecords extends Model
         return $records;
     }
 
+    public function getShiftRecordsByDoctorIDandMonth($doctorID,$month){
+        $records = DB::table('ShiftRecords')
+            ->where('doctorID', $doctorID)
+            ->where('date', 'like', $month.'%')
+            ->get();
+        
+        return $records;
+    }
+
+     public function getShiftRecordsByMonth($month){
+        $records = DB::table('ShiftRecords')
+            ->where('doc2Confirm',1)
+            ->where('adminConfirm',1)
+            ->where('date', 'like', $month.'%')
+            ->get();
+        
+        return $records;
+    }
+
+      // 更多資訊的換班紀錄(已確認) 月份查詢
+    public function getMoreCheckShiftsRecordsInformationBymonth($month){
+
+        $schedule = new Schedule();
+        $user = new User();
+        $shiftCategory = new ScheduleCategory();      
+        
+        $shiftRecordsData = $this->getShiftRecordsByMonth($month);
+
+       // $dataInschedule = array();
+
+       //  foreach ($shiftRecordsData as $record) {
+
+       //      $doctor1 = $user->getDoctorInfoByID($record->schID_1_doctor);
+       //      $doctor2 = $user->getDoctorInfoByID($record->schID_2_doctor);
+
+       //      $schedule1 = $schedule->getScheduleDataByID($record->scheduleID_1);
+       //      $schedule2 = $schedule->getScheduleDataByID($record->scheduleID_2);
+            
+       //      $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial);
+       //      $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial);
+
+       //      array_push($dataInschedule, array($doctor1->name, $doctor2->name, $schedule1->date, $schedule2->date, $catName1, $catName2, $record->date, $record->changeSerial));
+       //  }
+        return $shiftRecordsData;
+    }
 
     // 更多資訊的換班紀錄(已確認)
     public function getMoreCheckShiftsRecordsInformation($single){

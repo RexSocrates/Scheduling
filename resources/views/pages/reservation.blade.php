@@ -209,8 +209,10 @@
                                     }
                                   }
                               }
-//                              countDay();
+
                               location.reload();
+//                              countDay();
+                             
                                         
                             });
                             
@@ -416,10 +418,13 @@
                 date1 : startDate,
                 date2 : endDate
             }, function() {
-                // alert('預約成功');
-                dhtmlx.message({ type:"error", text:"預約成功"});
+                dhtmlx.message({ type:"error", text:"預約成功" });
             });
+           
+            
         }
+
+        
 
         // 送出更新預班的request
         function updateReservation(resSerial, categorySerial, startDate, endDate) {

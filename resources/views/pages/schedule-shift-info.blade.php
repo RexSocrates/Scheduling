@@ -18,9 +18,23 @@
             <div class="row">
                 <div class="col s12 m12">
                     <div class="card">
-                        <div class="card-action">
+                        <div class="card-action card1">
                             <!-- <img src="../img/announcement.png" class="logo-img"> -->
-                            <font class="card-title">換班資訊區</font>
+                            <div class="title1">
+                                <font class="card-title">換班資訊區</font>
+                            </div>
+                            <div class="right" style="margin-right: 60px;">
+                                時間：
+                                <div class="input-field inline">
+                                    <select id="shiftMonth" name ="shiftMonth" onchange="changeShiftMonth()">
+                                        <option value="" disabled selected>請選擇月份</option>
+                                        @foreach($monthList as $month)
+                                            <option value="{{ $month }}">{{ $month }}</option>
+                                        @endforeach
+                                        
+                                    </select>
+                                </div>
+                            </div>
                             <a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1"><i class="material-icons">add</i></a>
                             <!-- <a class="btn-floating halfway-fab waves-effect waves-light blue-grey darken-1"><i class="material-icons">add</i></a> -->
                         </div>
@@ -193,12 +207,12 @@
                                 </thead>
                                    
 
-                               <tbody>
+                               <tbody id="remarkTableBody">
                                  @foreach($remarks as $remark)
                                     <tr>
-                                        <td class="td-padding td-w-5" id=author><!-- {{ $remark['author'] }} --></td>
-                                        <td class="td-padding td-w-5" id=date><!-- {{ $remark['date'] }} --></td>
-                                        <td class="td-padding td-w-20" id=content><!-- {{ $remark['content'] }} --></td>
+                                        <td class="td-padding td-w-5" id=author>{{ $remark['author'] }}</td>
+                                        <td class="td-padding td-w-5" id=date>{{ $remark['date'] }}</td>
+                                        <td class="td-padding td-w-20" id=content>{{ $remark['content'] }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -295,29 +309,36 @@
                 document.getElementById("date2").innerHTML  = date;
                
         }
+
+         function changeShiftMonth() {
+
+            console.log("Month : " + document.getElementById('shiftMonth').value);
+            $.get('changeShiftMonth', {
+                month : document.getElementById('shiftMonth').value
+            }, function(str) {
+                console.log(str);
+            });
+            // console.log(document.getElementById('shiftMonth').value);
+        }
+
+        // 依照月份取得備註
         function changeRemarkMonth() {
             $.get('changeRemarkMonth', {
                 month : document.getElementById('month').value
             }, function(array) {
-                var author = "";
-                var date = "";
-                var content ="";
-                for(i=0 ; i<array.length ; i++){
-                    author += "<td>"+array[i]['author']+"</td>";
-                    date += "<td>"+array[i]['date']+"</td>";
-                    content += "<td>"+array[i]['content']+"</td>";
-                    
-                    console.log(date);
+                htmlTableBody = "";
+                for(i = 0; i < array.length; i++) {
+                    htmlDoc = "<tr>";
+                    htmlDoc += "<td class='td-padding td-w-5' >" +  array[i]['author']+ "</td>";
+                    htmlDoc += "<td class='td-padding td-w-5' >" +  array[i]['date']+ "</td>";
+                    htmlDoc += "<td class='td-padding td-w-20' >" +  array[i]['content']+ "</td>";
+                    htmlDoc +=  "</tr>";
+                    htmlTableBody += htmlDoc;
                 }
 
-               
-                document.getElementById("author").innerHTML  = author;
-                document.getElementById("date").innerHTML  = date;
-                document.getElementById("content").innerHTML  = content;
-            
+                document.getElementById("remarkTableBody").innerHTML = htmlTableBody;
                
             });
-            console.log(document.getElementById('month').value);
         }
         function checkStatus(id) {
             $.get('getScheduleInfo', {
