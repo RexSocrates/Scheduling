@@ -16,6 +16,9 @@ use App\ShiftRecords;
 use App\OfficialLeave;
 use App\ScheduleCategory;
 
+use App\Jobs\SendDeleteShiftMail;
+use App\Jobs\SendApplyShiftExchangeMail;
+
 class TestController extends Controller
 {
     
@@ -877,7 +880,33 @@ class TestController extends Controller
         echo $mustOnDuty;
 
     }
+
  public function getMoreCheckShiftsRecordsInformationBymonth(){
+
+    
+    // 測試刪除醫生上班時間的通知信件寄送工作
+    public function deleteDoctorSchedule() {
+        $schObj = new Schedule();
+        
+        $schData = $schObj->getScheduleDataByID(2);
+        
+        $schObj->deleteDoctorID(2);
+        
+        $job = new SendDeleteShiftMail($schData->doctorID, $schData->scheduleID);
+        
+        dispatch($job);
+        
+        echo 'The job has been put onto the queue';
+    }
+    
+    // 測試申請換班通知信件寄送工作
+    public function sendApplyEmailTest() {
+        $job = new SendApplyShiftExchangeMail(6);
+        dispatch($job);
+        
+        echo 'The job has been put onto the queue';
+    }
+
 
     //$data = $request->all();
         $month = '2017-09';

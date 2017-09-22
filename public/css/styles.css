@@ -115,12 +115,20 @@ header, main, footer {
     width: 5%;
 }
 
+.td-w-7 {
+    width: 7%;
+}
+
 .td-w-10 {
     width: 10%;
 }
 
 .td-w-13 {
     width: 13%;
+}
+
+.td-w-15 {
+    width: 15%;
 }
 
 .td-w-20 {

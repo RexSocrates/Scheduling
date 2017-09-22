@@ -15,9 +15,12 @@ class Schedule extends Model
 
     //取得所有初版班表資訊
     public function getFirstSchedule() {
+        $currentMonth = date('Y-m');
+        
         $schedule = DB::table('Schedule')
-                    ->whereNotNull('doctorID')
-                    ->get();
+            ->whereNotNull('doctorID')
+            ->where('date', 'like', date('Y-m', strtotime($currentMonth.' +1 month')).'%')
+            ->get();
         
         return $schedule;
     }
