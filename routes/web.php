@@ -330,7 +330,11 @@ Route::get('/addReservation', function() {
 Route::post('/addReservation', 'ReservationController@addReservation');
 // ===================================================================================
 
+// 測試刪除醫生上班時間的寄送信件工作
+Route::get('deleteDoctorSchedule', 'TestController@deleteDoctorSchedule');
 
+// 測試申請換班的通知信件寄送工作
+Route::get('sendApplyEmailTest', 'TestController@sendApplyEmailTest');
 
 //所有換班紀錄
 Route::get('/shiftRecords/', 'ShiftRecordsController@shiftRecords');

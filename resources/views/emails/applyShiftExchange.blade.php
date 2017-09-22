@@ -5,7 +5,7 @@
 <br>
     {{ $applicant->name }}醫師向您提出換班要求，
 希望能與您{{ $receiverShift->date }} {{ $receiverShiftLocation }}院
-X {{ $receiverShiftName }}班
+ {{ $receiverShiftName }}班
 調整至{{ $applicantShift->date }} {{ $applicantShiftLocation }}院
 {{ $applicantShiftName }}班，
 同意與否請至排班系統網站中確認，如果有任何疑問或是狀況，請儘速於3日內提出，謝謝!
