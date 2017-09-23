@@ -95,11 +95,9 @@
                                         <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
                                         <td class="td-padding td-w-20">{{ $leave['remark'] }}</td>
                                         <td class="td-padding td-w-5">{{ $leave['hour'] }}</td>
-                                        <td class="td-padding td-w-5">{{ $leave['status'] }}</td>
-                                       
+                                        <td class="td-padding td-w-5">{{ $leave['status'] }}</td>   
                                     </tr>
-                                     @endforeach
-                                   
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

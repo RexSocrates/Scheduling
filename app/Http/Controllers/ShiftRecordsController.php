@@ -751,7 +751,23 @@ class ShiftRecordsController extends Controller
         ));
 
     }
-
-
+    
+    // 調整班表 初班版表 醫生排班現況(Ben)
+    public function firstEditionSituation($date=null){
+        
+        return view('pages.first-edition-situation');
+    }
+    
+    // 調整班表 初班版表 個人(Ben)
+    public function shiftFirstEditionPersonal($date=null){
+        
+        return view('pages.shift-first-edition-personal');
+    }
+    
+    // 調整班表 正式班表 個人(Ben)
+    public function shiftSchedulerPersonal($date=null){
+        
+        return view('pages.shift-scheduler-personal');
+    }
 
 }

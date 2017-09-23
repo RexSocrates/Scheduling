@@ -28,6 +28,13 @@ class ScheduleController extends Controller
         
         return view('pages.first-edition-all', array('schedule' => $scheduleData));
     }
+    
+    //初版班表 指定一人 (Ben)
+    public function firstEditionAllPersonal() {
+        
+        return view('pages.first-edition-all-personal');
+    }
+    
      //查看正式全部班表 
     public function schedule() {
         $schedule = new Schedule();
@@ -42,6 +49,13 @@ class ScheduleController extends Controller
         
         return view('pages.schedule-all', array('schedule' => $scheduleData));
     }
+    
+    //正式班表 指定一人 (Ben)
+    public function scheduleAllPersonal() {
+        
+        return view('pages.schedule-all-personal');
+    }
+    
     // 初版班表 個人
     public function firstEditionSchedule() {
         $schedule = new Schedule();
