@@ -744,7 +744,7 @@ tbody td:last-child, thead th:last-child {
 }
 
 .inline {
-    display: inline !important;
+/*    display: inline !important;*/
 }
 
 #slider {
