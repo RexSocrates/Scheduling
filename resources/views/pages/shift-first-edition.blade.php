@@ -174,7 +174,7 @@
                             scheduler.config.drag_create = false;   //拖拉新增
                             scheduler.xy.margin_left = -19;
                             scheduler.config.container_autoresize = true;
-                            scheduler.config.collision_limit = 1; 
+                            scheduler.config.collision_limit = 2; 
                             scheduler.config.drag_resize= false;
 
                             scheduler.form_blocks["hidden"] = {
@@ -397,9 +397,22 @@
                                 type: "dhx_time_block"
                             
                             });
-                           
+                            
+                            //target是用來看拖拉後，放下的位置是第幾行。
+                            var dragged_event;
+                            var target;
+                            scheduler.attachEvent("onBeforeDrag", function (id, mode, e){
+                                dragged_event = scheduler.getEvent(id); //use it to get the object of the dragged event
+                                return true;
+                            });
 
-
+                            scheduler.attachEvent("onDragEnd", function(){
+                                var event_obj = dragged_event;
+                                target = event_obj.section_id;
+                                console.log("target: "+target);
+                                //把這個target放到陣列裡
+                            });
+                            
                             //scheduler.updateView();
 
                            //  scheduler.attachEvent("onEventCollision", function (ev, evs){
