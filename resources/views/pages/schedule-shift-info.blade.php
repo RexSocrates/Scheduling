@@ -50,7 +50,7 @@
                                     </tr>
                                 </thead>
 
-                                <tbody>
+                                <tbody id="shiftRecordsTableBody">
                                     @foreach($shiftRecords as $record)
                                     <tr>
                                         <td class="td-padding td-w-5">{{ $record[0] }}</td> <!--申請人-->
@@ -310,15 +310,32 @@
                
         }
 
-         function changeShiftMonth() {
-
-            console.log("Month : " + document.getElementById('shiftMonth').value);
-            $.get('changeShiftMonth', {
-                month : document.getElementById('shiftMonth').value
-            }, function(str) {
-                console.log(str);
-            });
-            // console.log(document.getElementById('shiftMonth').value);
+        function changeShiftMonth() {
+             console.log("Month : " + document.getElementById('shiftMonth').value);
+             $.get('changeShiftMonth', {
+                 month : document.getElementById('shiftMonth').value
+             }, function(array) {
+                 // 更新html內容
+                 htmlTableBody = "";
+                 for(i = 0; i < array.length; i++) {
+                     htmlDoc = "<tr>";
+                     htmlDoc += "<td class='td-padding td-w-5'>" + array[i][0] + "</td>"; // 申請人
+                     htmlDoc += "<td class='td-padding td-w-5'>" + array[i][7] + "</td>"; // 申請日期
+                     htmlDoc += "<td class='td-padding td-w-20'>" + array[i][2]; // schedule 1 的日期
+                     
+                     // 申請人的名字, 申請人的班的名稱
+                     htmlDoc += "<font class='font-w-b'>" + array[i][0] + " " + array[i][4] + "</font>";
+                     
+                     // 申請對象的班的日期, 申請對象的名字, 班的名稱
+                     htmlDoc += " 與 " + array[i][3] + " <font class='font-w-b'>" + array[i][1] + " " + array[i][5] + "</font> 互換 </td>";
+                     
+                     htmlDoc += "</tr>";
+                     
+                     htmlTableBody += htmlDoc;
+                 }
+                 
+                 document.getElementById("shiftRecordsTableBody").innerHTML = htmlTableBody;
+             });
         }
 
         // 依照月份取得備註

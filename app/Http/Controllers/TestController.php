@@ -880,9 +880,6 @@ class TestController extends Controller
         echo $mustOnDuty;
 
     }
-
- public function getMoreCheckShiftsRecordsInformationBymonth(){
-
     
     // 測試刪除醫生上班時間的通知信件寄送工作
     public function deleteDoctorSchedule() {
@@ -906,38 +903,48 @@ class TestController extends Controller
         
         echo 'The job has been put onto the queue';
     }
-
-
-    //$data = $request->all();
+    
+    // 測試依據月份取得換班資訊
+    public function getShiftRecordByMonth() {
         $month = '2017-09';
-
+        
+        // 依照月份取得排班人員已經認可的換班資訊
         $shiftRecordObj = new ShiftRecords();
-        $user = new User();
-        $shiftCategory = new ScheduleCategory(); 
-        $schedule = new Schedule();
-
         $shiftRecordsData = $shiftRecordObj->getShiftRecordsByMonth($month);
-
-        $dataInschedule = [];
-
-        foreach ($shiftRecordsData as $record) {
-
-            $doctor1 = $user->getDoctorInfoByID($record->schID_1_doctor);
-            $doctor2 = $user->getDoctorInfoByID($record->schID_2_doctor);
-
-            $schedule1 = $schedule->getScheduleDataByID($record->scheduleID_1);
-            $schedule2 = $schedule->getScheduleDataByID($record->scheduleID_2);
+        
+        // 建立顯示資料使用的model
+        $userObj = new User();
+        $schCateObj = new ScheduleCategory();
+        $scheduleObj = new Schedule();
+        
+        // 將資料庫資料轉換為顯示用的資料
+        $recordData = [];
+        foreach($shiftRecordsData as $record) {
+            // 取得醫生資料
+            $doctor1 = $userObj->getDoctorInfoByID($record->schID_1_doctor);
+            $doctor2 = $userObj->getDoctorInfoByID($record->schID_2_doctor);
             
-            $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial);
-            $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial);
-
-            array_push($dataInschedule, array($doctor1->name, $doctor2->name, $schedule1->date, $schedule2->date, $catName1, $catName2, $record->date, $record->changeSerial));
+            // 取得上班資料
+            $schedule1 = $scheduleObj->getScheduleDataByID($record->scheduleID_1);
+            $schedule2 = $scheduleObj->getScheduleDataByID($record->scheduleID_2);
+            
+            // 取得上班種類名稱
+            $sch1Name = $schCateObj->getSchCateName($schedule1->schCategorySerial);
+            $sch2Name = $schCateObj->getSchCateName($schedule2->schCategorySerial);
+            
+            array_push($recordData, [
+                $doctor1->name,
+                $doctor2->name,
+                $schedule1->date,
+                $schedule2->date,
+                $sch1Name,
+                $sch2Name,
+                $record->changeSerial,
+                $record->date
+            ]);
         }
-
-        echo print_r($dataInschedule);
-
-
-
+        
+        return $recordData;
     }
 }
 

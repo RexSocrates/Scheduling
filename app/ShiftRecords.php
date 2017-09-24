@@ -120,11 +120,13 @@ class ShiftRecords extends Model
         return $records;
     }
 
+    // 依據月份取指定醫生ID的換班資訊
     public function getShiftRecordsByDoctorIDandMonth($doctorID,$month){
-        $records = DB::table('ShiftRecords')
-            ->where('doctorID', $doctorID)
-            ->where('date', 'like', $month.'%')
-            ->get();
+        $records = DB::SELECT('SELECT * FROM ShiftRecords WHERE date LIKE ? AND (schID_1_doctor=? OR schID_2_doctor=?)', [
+            $month.'%',
+            $doctorID,
+            $doctorID
+        ]);
         
         return $records;
     }
@@ -139,7 +141,7 @@ class ShiftRecords extends Model
         return $records;
     }
 
-      // 更多資訊的換班紀錄(已確認) 月份查詢
+    // 更多資訊的換班紀錄(已確認) 月份查詢
     public function getMoreCheckShiftsRecordsInformationBymonth($month){
 
         $schedule = new Schedule();
