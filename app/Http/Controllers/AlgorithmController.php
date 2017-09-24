@@ -84,33 +84,33 @@ class AlgorithmController extends Controller
         
         // 測試：取得資料庫並轉譯為json
         $onResList = $this->getOnReservation();
-        foreach($onResList as $res) {
-            $res->printData();
-        }
+//        foreach($onResList as $res) {
+//            $res->printData();
+//        }
         echo '<br>==================================================<br>';
         echo json_encode($onResList);
         
         echo '<br>==================================================<br>';
         
         $offResList = $this->getOffReservation();
-        foreach($offResList as $res) {
-            $res->printData();
-        }
+//        foreach($offResList as $res) {
+//            $res->printData();
+//        }
         echo json_encode($offResList);
         
         echo '<br>==================================================<br>';
         
         $doctors = $this->getDoctorsInfo();
-        foreach($doctors as $doctor) {
-            $doctor->printData();
-        }
+//        foreach($doctors as $doctor) {
+//            $doctor->printData();
+//        }
         
         echo json_encode($doctors);
         
         echo '<br>==================================================<br>';
         
         $monthInfo = $this->getMonthInfo();
-        $monthInfo->printData();
+//        $monthInfo->printData();
         echo json_encode($monthInfo);
     }
     
