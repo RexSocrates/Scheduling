@@ -9,6 +9,7 @@ use App\User;
 use App\ScheduleCategory;
 use App\ShiftRecords;
 use App\Schedule;
+use App\ReservationData;
 
 use App\Jobs\SendDeleteShiftMail;
 class ScheduleController extends Controller
@@ -360,9 +361,11 @@ class ScheduleController extends Controller
     public function announceSchedule(Request $request){
             
         $schedule = new Schedule();
+        $reservationData = new ReservationData();
 
         $schedule->confirmNextMonthSchedule();
- 
+        $reservationData->setScheduleAnnounceStatus();
+
     }
 
     public function getDoctorInfoByScheduleID(Request $request){

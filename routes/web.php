@@ -48,6 +48,10 @@ Route::get('setDate', 'SettingController@setDate');
 //公布正式班表
 Route::get('announceSchedule','ScheduleController@announceSchedule');
 
+//公布初版班表
+Route::get('announceFirstSchedule','SettingController@setfirstSchedule');
+
+
 // 新增公告
 Route::post('addAnnouncement', 'AnnouncementController@addOrUpdateAnnouncement');
 
@@ -230,6 +234,7 @@ Route::get('changeDoctorSchedule','AccountController@getDoctorSheduleInfoByID');
 // 調整班表的換班資訊
 Route::get('shift-info', 'ShiftRecordsController@adminShiftRecords');
 
+
 //確認醫生是否有在當日上班
 Route::get('getScheduleInfo','ShiftRecordsController@getShiftRecordsBySerial');
 
@@ -382,7 +387,7 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 //Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
 
-Route::get("info",'TestController@getMoreCheckShiftsRecordsInformationBymonth');
+Route::get("info",'TestController@announceSchedule');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 
 Route::get('getShiftRecordByMonth', 'TestController@getShiftRecordByMonth');

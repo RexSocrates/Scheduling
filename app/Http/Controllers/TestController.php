@@ -15,6 +15,7 @@ use App\Schedule;
 use App\ShiftRecords;
 use App\OfficialLeave;
 use App\ScheduleCategory;
+use App\ReservationData;
 
 use App\Jobs\SendDeleteShiftMail;
 use App\Jobs\SendApplyShiftExchangeMail;
@@ -825,21 +826,21 @@ class TestController extends Controller
         
     }
     
-    //公布正式班表
-    public function announceSchedule(){
+    // //公布正式班表
+    // public function announceSchedule(){
         
-        $schedule = new Schedule();
+    //     $schedule = new Schedule();
 
     
-        $date2 = $schedule->getScheduleDataByID(2)->date;
-        $weekday2 = (int)date('N', strtotime($date2));
+    //     $date2 = $schedule->getScheduleDataByID(2)->date;
+    //     $weekday2 = (int)date('N', strtotime($date2));
 
-        echo $weekday2;
+    //     echo $weekday2;
        
 
 
  
-    }
+    // }
      public function firstEditionShiftAddShifts(Request $request){
         $data = $request->all();
 
@@ -945,6 +946,16 @@ class TestController extends Controller
         }
         
         return $recordData;
+    }
+
+   public function announceSchedule(){
+            
+        $schedule = new Schedule();
+        $reservationData = new ReservationData();
+
+        $schedule->confirmNextMonthSchedule();
+        $reservationData->setScheduleAnnounceStatus();
+
     }
 }
 

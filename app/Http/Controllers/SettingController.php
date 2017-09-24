@@ -11,21 +11,23 @@ class SettingController extends Controller
     public function getSettingPage(){
 
 
-        $nextMonth=date("m");
+        $month=date("m");
         $reservationData = new ReservationData();
-        $strDate = $reservationData->getDate($nextMonth)->startDate;
-        $endDate = $reservationData->getDate($nextMonth)->endDate;
+        $strDate = $reservationData->getDate($month)->startDate;
+        $endDate = $reservationData->getDate($month)->endDate;
+        $status = $reservationData->getDate($month)->status;
 
 
-        return view('pages.setting', array('month'=> $nextMonth,'strDate'=>$strDate,'endDate'=>$endDate));
+        return view('pages.setting', array('month'=> $month,'strDate'=>$strDate,'endDate'=>$endDate,'status'=>$status ));
 
     }
 
     public function getDate(){
-    	$nextMonth=date("m");
+    	$month=date("m");
         $reservationData = new ReservationData();
-        $strDate = $reservationData->getDate($nextMonth)->startDate;
-        $endDate = $reservationData->getDate($nextMonth)->endDate;
+        $strDate = $reservationData->getDate($month)->startDate;
+        $endDate = $reservationData->getDate($month)->endDate;
+        
 
         $date = [$strDate,$endDate];
 
@@ -72,5 +74,14 @@ class SettingController extends Controller
         // echo $yearMonth.'-'.$endDate;
         return redirect('setting');
 
+    }
+
+    public function setfirstSchedule(Request $request){
+
+        $reservationData = new ReservationData();
+
+        $reservationData->setFirstScheduleAnnounceStatus();
+
+        return redirect('setting');
     }
 }
