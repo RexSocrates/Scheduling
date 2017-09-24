@@ -26,13 +26,11 @@
     </style>
    	
 </head>
-<body>
+<body class="login-body">
     <div id="particles-js" style="position: absolute"></div>
-<!--        <div style="top: 140px;position: relative;">-->
-        <div style="-webkit-transform: translate(-50%,-50%);transform: translate(-50%,-50%);position: absolute;top: 50%;left: 50%;width: 33%;">
-            <div class="row" style="margin: 0px;">
-                
-                <div class="col s12 m12 card" style="margin: 0px;">
+        <div class="login-box">
+            <div class="row margin-0">
+                <div class="col s12 m12 card margin-0">
                     <div class="card-action">
                         <center>
                             <p class="card-title margin-b0" style="font-weight: 400">馬階醫院急診室排班系統</p>
@@ -40,7 +38,7 @@
                         </center>
                     </div>
 
-                    <div class="card-content" style="padding: 0px 24px 0px 24px">
+                    <div class="card-content" style="padding: 0px 24px;">
                         <div class="row">
                             <form class="col s12" action="{{ route('login') }}" method="post">
                                 <div class="row margin-b0 inline">
