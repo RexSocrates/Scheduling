@@ -20,23 +20,15 @@ class AnnouncementController extends Controller
         $leavehours = $userObj->getCurrentUserInfo()->currentOfficialLeaveHours;
 
         $reservationData = new ReservationData();
-        $month=date("m");
-        $year = date('Y');
-        $startDate = $reservationData->getDate($month)->startDate;
-        $endDate = $reservationData->getDate($month)->endDate;
-
-//        foreach($announcements as $obj) {
-//            echo 'Serial : '.$obj->announcementSerial.'<br>';
-//            echo 'Title : '.$obj->title.'<br>';
-//            echo 'Content : '.$obj->content.'<br>';
-//            echo '<br>';
-//        }
+        $currentMonth = date('Y-m');
+        $startDate = $reservationData->getDate($currentMonth)->startDate;
+        $endDate = $reservationData->getDate($currentMonth)->endDate;
         
         return view('pages.index', [
             'announcements' => $announcements,
             'currentOfficialLeaveHours' => $leavehours,
-            'startDate' => $year.'/'.$month.'/'.$startDate,
-            'endDate' => $year.'/'.$month.'/'.$endDate,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
         ]);
     }
     
