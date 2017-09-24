@@ -136,17 +136,25 @@
                             <div class="dhx_cal_navline">
                                 <div class="dhx_cal_prev_button"></div>
                                 <div class="dhx_cal_next_button"></div>
-                                <div class="dhx_cal_today_button"></div>
+                                <div class="dhx_cal_today_button today-btn"></div>
+                                <div class="dhx_cal_tab situation">
+                                    <a class="dhx_cal_tab red-text text-lighten-1" href="first-edition-situation">醫生排班現況</a>
+                                </div>
                                 <div class="dhx_cal_date"></div>
-                                
+                                <div class="dhx_cal_tab margin-l20 noUnderline">
+                                    <form action="shift-first-edition-personal">
+                                        <font class="dhx-font">醫師:</font>
+                                        <select class="browser-default select-custom">
+                                            <option value="" disabled selected>選擇醫師</option>
+                                            <option value="0">全部</option>
+                                            <option value="1">陳常樂</option>
+                                            <option value="2">蔡維德</option>
+                                            <option value="3">謝尚霖</option>
+                                        </select>
+                                        <button class="dhx_cal_tab submit-inline" type="submit">確認</button>
+                                    </form>
+                                </div>
 <!--                                <div class="dhx_cal_tab margin-l10"><a class="dhx_cal_tab display-b" href="#modal1">新增</a></div>-->
-                                
-        <!--
-                                <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
-                                <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
-                                <div class="dhx_cal_tab" name="timeline_tab" style="right:280px;"></div>
-                                <div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
-        -->
                             </div>
                             <div class="dhx_cal_header">
                             </div>
@@ -166,7 +174,7 @@
                             scheduler.config.drag_create = false;   //拖拉新增
                             scheduler.xy.margin_left = -19;
                             scheduler.config.container_autoresize = true;
-                            scheduler.config.collision_limit = 1; 
+                            scheduler.config.collision_limit = 2; 
                             scheduler.config.drag_resize= false;
 
                             scheduler.form_blocks["hidden"] = {
@@ -389,9 +397,22 @@
                                 type: "dhx_time_block"
                             
                             });
-                           
+                            
+                            //target是用來看拖拉後，放下的位置是第幾行。
+                            var dragged_event;
+                            var target;
+                            scheduler.attachEvent("onBeforeDrag", function (id, mode, e){
+                                dragged_event = scheduler.getEvent(id); //use it to get the object of the dragged event
+                                return true;
+                            });
 
-
+                            scheduler.attachEvent("onDragEnd", function(){
+                                var event_obj = dragged_event;
+                                target = event_obj.section_id;
+                                console.log("target: "+target);
+                                //把這個target放到陣列裡
+                            });
+                            
                             //scheduler.updateView();
 
                            //  scheduler.attachEvent("onEventCollision", function (ev, evs){

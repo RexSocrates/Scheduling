@@ -350,14 +350,7 @@
         }
         
         $(document).ready(function() {
-            $('#doctor').DataTable( {
-                columnDefs: [
-                    {
-                        targets: [ 0, 1, 2 ],
-                        className: 'mdl-data-table__cell--non-numeric'
-                    }
-                ]
-            });
+            $('#doctor').DataTable();
             
             $('select').material_select();
             

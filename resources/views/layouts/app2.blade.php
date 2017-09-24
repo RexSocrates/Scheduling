@@ -83,6 +83,7 @@
                                 <ul>
                                     <li><a href="shift-first-edition">初版班表</a></li>
                                     <li><a href="shift-scheduler">正式班表</a></li>
+                                    <li><a href="first-edition-situation">醫生排班現況</a></li>
                                     <li><a href="shift-info">換班資訊</a></li>
                                 </ul>
                             </div>

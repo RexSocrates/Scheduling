@@ -180,14 +180,7 @@
         $(document).ready(function(){
             $('select').material_select();
             
-            $('#officialLeave').DataTable( {
-                columnDefs: [
-                    {
-                        targets: [ 0, 1, 2 ],
-                        className: 'mdl-data-table__cell--non-numeric'
-                    }
-                ]
-            });
+            $('#officialLeave').DataTable();
             
             document.getElementById("officialLeave_length").style.display = 'none';
             

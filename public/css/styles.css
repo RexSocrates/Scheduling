@@ -744,7 +744,7 @@ tbody td:last-child, thead th:last-child {
 }
 
 .inline {
-/*    display: inline;*/
+/*    display: inline !important;*/
 }
 
 #slider {
@@ -756,9 +756,47 @@ tbody td:last-child, thead th:last-child {
     text-align: justify;
 }
 
-
 .slider-text:after {
   content: "";
   display: inline-block;
   width: 100%;
+}
+
+.select-custom {
+    height: 2rem;
+    width: 80px;
+    margin-left: 7px;
+    display: inline !important;
+    color: black !important;
+    font-weight: 400;
+}
+
+.noUnderline:hover {
+    text-decoration: none !important;
+}
+
+.submit-inline {
+    display: inline !important;
+    width: 30px !important;
+}
+
+.submit-inline:focus {
+    background-color: #ffffff !important;
+}
+
+.dhx-font{
+    cursor: auto !important;
+    color: black;
+    font-weight: 400;
+}
+
+.today-btn {
+    width: 60px !important;
+    right: 110px !important;
+}
+
+.situation {
+    left: auto;
+    right: 174px;
+    width: 95px !important;
 }
