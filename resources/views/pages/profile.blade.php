@@ -101,11 +101,9 @@
                                             <td class="td-padding td-w-5">減少</td>
                                         @endif
                                         <td class="td-padding td-w-5">{{ $leave['hour'] }}</td>
-                                        <td class="td-padding td-w-5">{{ $leave['status'] }}</td>
-                                       
+                                        <td class="td-padding td-w-5">{{ $leave['status'] }}</td>   
                                     </tr>
-                                     @endforeach
-                                   
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
