@@ -83,8 +83,9 @@
                                 <thead>
                                     <tr>
                                         <th class="td-w-5">申請日期</th>
-                                        <th class="td-w-20">申請原因</th>
+                                        <th class="td-w-15">申請原因</th>
                                         <th class="td-w-5">增加/減少</th>
+                                        <th class="td-w-5">時數</th>
                                         <th class="td-w-5">狀態</th>
                                     </tr>
                                 </thead>
@@ -93,7 +94,12 @@
                                     @foreach($doctorOfficialLeave as $leave)
                                     <tr>
                                         <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
-                                        <td class="td-padding td-w-20">{{ $leave['remark'] }}</td>
+                                        <td class="td-padding td-w-15">{{ $leave['remark'] }}</td>
+                                        @if ( $leave['hour'] >0 )
+                                            <td class="td-padding td-w-5">增加</td>
+                                        @else
+                                            <td class="td-padding td-w-5">減少</td>
+                                        @endif
                                         <td class="td-padding td-w-5">{{ $leave['hour'] }}</td>
                                         <td class="td-padding td-w-5">{{ $leave['status'] }}</td>
                                        
