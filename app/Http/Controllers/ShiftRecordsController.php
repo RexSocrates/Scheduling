@@ -764,10 +764,5 @@ class ShiftRecordsController extends Controller
         return view('pages.shift-first-edition-personal');
     }
     
-    // 調整班表 正式班表 個人(Ben)
-    public function shiftSchedulerPersonal($date=null){
-        
-        return view('pages.shift-scheduler-personal');
-    }
-
+    
 }

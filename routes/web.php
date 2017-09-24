@@ -86,8 +86,12 @@ Route::match(['get', 'post'], '/reservation_data', "ReservationController@render
 //列出全部班表資訊
 Route::get('/schedule-all', 'ScheduleController@schedule');
 
-//正式班表 指定一人(Ben)
-Route::get('/schedule-all-personal', 'ScheduleController@scheduleAllPersonal');
+//正式班表 查詢醫生
+Route::post('/schedule-all-personal','ScheduleController@schedulerPersonal');
+Route::get('/schedule-all-personal','ScheduleController@schedulerPersonal');
+
+
+
 
 //列出個人班表資訊
 Route::get('/schedule', 'ScheduleController@getScheduleByDoctorID');
@@ -98,8 +102,10 @@ Route::get('first-edition', 'ScheduleController@firstEditionSchedule');
 //初版班表 全部醫生
 Route::get('/first-edition-all', 'ScheduleController@firstSchedule');
 
-//初版班表 指定一人(Ben)
-Route::get('/first-edition-all-personal', 'ScheduleController@firstEditionAllPersonal');
+//初版班表 查詢醫生
+Route::get('/first-edition-all-personal', 'ScheduleController@firstEditionByDoctorID');
+Route::post('/first-edition-all-personal','ScheduleController@firstEditionByDoctorID');
+
 
 //初版班表->換班資訊-
 Route::get('first-edition-shift-info','ShiftRecordsController@shiftRecords');
@@ -144,6 +150,8 @@ Route::post('sendReservationDelete', 'ReservationController@deleteReservation');
 Route::get('schedule-shift-info', 'ShiftRecordsController@getShiftRecords');
 Route::get('addShifts','ShiftRecordsController@firstEditionShiftAddShifts');
 
+
+
 //根據月份選擇列出備註
 Route::get('changeRemarkMonth','RemarkController@getRemarkByMonth');
 
@@ -165,7 +173,8 @@ Route::get('change-shift-first-edition','ShiftRecordsController@shiftFirstEditio
 Route::get('/first-edition-situation','ShiftRecordsController@firstEditionSituation');
 
 //調整班表->初版班表->指定一人(Ben)
-Route::get('/shift-first-edition-personal','ShiftRecordsController@shiftFirstEditionPersonal');
+Route::get('/shift-first-edition-personal','ScheduleController@shiftFirstEditionByDoctorID');
+Route::post('/shift-first-edition-personal','ScheduleController@shiftFirstEditionByDoctorID');
 
 //調整班表->初版班表 確認醫生換班狀態
 Route::get('checkDocStatus','ShiftRecordsController@checkDoc1ShiftStatus');
@@ -212,7 +221,8 @@ Route::get('updateSchedule','ScheduleController@updateSchedule');
 Route::get('/shift-scheduler','ShiftRecordsController@shiftScheduler');
 
 //調整班表->正式班表->指定一人(Ben)
-Route::get('/shift-scheduler-personal','ShiftRecordsController@shiftSchedulerPersonal');
+Route::post('/shift-scheduler-personal','ScheduleController@shiftSchedulerPersonal');
+Route::get('/shift-scheduler-personal','ScheduleController@shiftSchedulerPersonal');
 
 //調整班表->正式班表 彈出視窗醫生2資訊
 Route::get('changeDoctorSchedule','AccountController@getDoctorSheduleInfoByID');

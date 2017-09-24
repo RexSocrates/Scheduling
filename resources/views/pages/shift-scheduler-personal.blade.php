@@ -18,7 +18,7 @@
 @endsection
 
 @section('navbar')
-    <font class="brand-logo light">調整班表<i class="material-icons arrow_right-icon">keyboard_arrow_right</i>正式班表<i class="material-icons arrow_right-icon">keyboard_arrow_right</i>張國頌</font>
+    <font class="brand-logo light">調整班表<i class="material-icons arrow_right-icon">keyboard_arrow_right</i>正式班表<i class="material-icons arrow_right-icon">keyboard_arrow_right</i>{{$doctor->name}}</font>
 @endsection
 
 @section('content')
@@ -31,7 +31,63 @@
             <div class="row">
                 <div class="col s12 m12">
                     <div class="card border-t">
-                         
+                         <div id="my_form">
+                            <!-- <form action="change-shift-first-edition" method="post" > -->
+                            <div class="modal-header">
+                                <h5 class="modal-announcement-title">換班調整</h5>
+                            </div>
+                            <div class="lightbox">
+                                <div class="row margin-b0">
+                                    <div class="col s12 center padding-b10">
+                                        <img src="../img/exchange.svg" style="height: 220px;width: 220px;">
+                                    </div>
+                                     <div class="col s6">
+                                        <label>醫生:</label>
+                                        <select name= 'schID_1_doctor' class="browser-default" id="schID_1_doctor" onchange="changeDoctor_1()" required>
+                                            <option  disabled selected>請選擇醫生</option>
+                                                <option disabled value=""></option>
+                                                @foreach($allDoctor as $name)
+                                                <option value="{{$name->doctorID}}">{{$name->name}}</option>
+                                                @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col s6">
+                                        <label>醫生:</label>
+                                        <select name= 'schID_2_doctor' class="browser-default" id="schID_2_doctor" onchange="changeDoctor()" required>
+                                            <option value="" disabled selected>請選擇醫生</option> 
+                                            @foreach($allDoctor as $name)
+                                            <option value="{{$name->doctorID}}">{{$name->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col s6">
+                                        <label>日期:</label>
+                                        <select name="scheduleID_1" class="browser-default" id="date1" required>
+                                            <option value="" disabled selected>請選擇日期</option>
+                                            <option value=""></option>
+
+                                        </select>
+                                    </div>
+
+                                    <div class="col s6">
+                                        <label>日期:</label>
+                                        <select  name='scheduleID_2' class="browser-default" id="date2" required>
+                                            <option value="" disabled selected>請選擇日期</option>
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="lightbox-footer">
+                                
+                                <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn" onclick="save_form_alert()">Save</button>
+                                <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel modal-btn" onclick="close_form()">Cancel</button>
+                            </div>
+
+                        </div>
+
                         <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
                             <div class="dhx_cal_navline">
                                 <div class="dhx_cal_prev_button"></div>
@@ -39,16 +95,16 @@
                                 <div class="dhx_cal_today_button"></div>
                                 <div class="dhx_cal_date"></div>
                                 <div class="dhx_cal_tab margin-l20 noUnderline">
-                                    <form action="">
+                                    <form action="shift-scheduler-personal" method="post">
                                         <font class="dhx-font">醫師:</font>
-                                        <select class="browser-default select-custom">
-                                            <option value="" disabled selected>選擇醫師</option>
-                                            <option value="0">全部</option>
-                                            <option value="1">陳常樂</option>
-                                            <option value="2">蔡維德</option>
-                                            <option value="3">謝尚霖</option>
+                                        <select  name="doctor" class="browser-default select-custom" required>
+                                            <option value="" disabled selected required>選擇醫師</option>
+                                            <@foreach($allDoctor as $name)
+                                                <option value="{{$name->doctorID}}">{{$name->name}} </option>
+                                            @endforeach
                                         </select>
                                         <button class="dhx_cal_tab submit-inline" type="submit">確認</button>
+                                        {{ csrf_field() }}
                                     </form>
                                 </div>
         <!--
@@ -192,9 +248,13 @@
                                 
                                 window.scrollTo(0,0);  //開啟後移動到最上面
                                 
-                                if(ev.text == "New"){
+                                 if(ev.text == "New"){
                                     scheduler.startLightbox(id, html("my_form1"));
-                                } else {
+                                } 
+                                else if(date>today){
+                                    console.log('nothing');
+                                }
+                                else {
                                     scheduler.startLightbox(id, html("my_form"));
                                 }
                                 
@@ -273,32 +333,28 @@
                                     month = 12;
                                     break;
                             }
-                             //鎖定時間
-                            var startd =new Date(res[3], month, 1); 
-                            var endd = new Date(res[3], month+1, 1); 
 
+                            var startd =new Date(res[3], month-1, 1); 
+                            var endd = new Date(res[3], month, 1); 
                             var block_startd =new Date(res[3], month-1, 1); 
                             var block_endd = new Date(res[3], month, 1); 
-
                             console.log("startd "+startd);
                             console.log("endd "+endd);
-
                             scheduler.config.limit_start = new Date(startd);
                             scheduler.config.limit_end = new Date(endd);
-
                             scheduler.attachEvent("onLimitViolation", function  (id, obj){
-                                dhtmlx.message({ type:"error", text:"此時段無法接受換班" })
+                                //dhtmlx.message({ type:"error", text:"此時段無法接受換班" })
                             });
 
                              //限制非當月利用點擊視窗換班
                             scheduler.addMarkedTimespan({  
                                 start_date: '1900-1-1',
-                                end_date:   block_endd,
+                                end_date:  new Date(res[3], month-1, 1),
                                 zones: "fullday", 
                                 css: "block_section", 
                                 type: "dhx_time_block"
                             
-                            });
+                             });
                            
 
 
@@ -364,32 +420,7 @@
                            //      return true;
                            //  });
                             
-                            
-                            //空白處新增醫生班表
-                            scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
-                                
-                                addNewSchedule(ev.start_date,ev.section_id);
-
-                                showScheduleInfo(ev.start_date,ev.section_id);
-
-                                console.log("111"+ev.text);
-                                console.log("111"+ev.start_date);
-
-                                return true;
-                            });
-
-                            scheduler.attachEvent("onEventChanged", function (id, e){
-                                var event = scheduler.getEvent(id);
-
-                                checkDoctorSchedule(event.hidden); //schedule id
-
-                                console.log("124"+event.text); 
-                                console.log("111"+event.start_date);
-
-                                return true;
-                            });
-
-
+                        
                             scheduler.attachEvent("onClick", function (id, e){
                                 var event = scheduler.getEvent(id);
                             
@@ -404,9 +435,13 @@
                            
 
                             //進入畫面後顯示的東西
-                            scheduler.init('scheduler_here',new Date(res[3], month),"timeline");
+                            scheduler.init('scheduler_here',new Date(res[3], month-1),"timeline");
 
                             scheduler.parse([
+                                 @foreach($scheduleData as $data)
+                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}" },
+                               
+                                @endforeach
                                 
                             ],"json");
 
@@ -425,6 +460,166 @@
         $(document).ready(function(){
             $('select').material_select();
         });
+    
+     function changeDoctor_1(id){
+            $.get('changeDoctor1',{
+                id : id
+            }, function(array){
+                document.getElementById("schID_1_doctor").innerHTML= "<option value="+array[0]+">"+array[1]+"</option>";
+                changeDate1(array);
+            });
+        }
+        function changeDoctor() {
+            $.get('changeDoctorSchedule', {
+                id : document.getElementById('schID_2_doctor').value
+            }, function(array) {
+                changeDate2(array);
+            });
+        }
+        function changeDate1(array) {
+                document.getElementById("date1").innerHTML= "<option value="+array[3]+">"+array[2]+"</option>",
+                document.getElementById("getDate").value=array[2]     
+        }
+        function changeDate2(array) {
+                var date = "";
+                for(i=0 ; i<array.length ; i++){
+                    date += "<option value="+array[i][0]+">"+array[i][2]+"</option>";
+                    console.log('1'+array[i][0]);
+                }
+                document.getElementById("date2").innerHTML  = date;
+        }
+        function alert1() {
+                alert("不可選擇相同醫生相同時段");
+        }
+        function updateShift(scheduleID_1,scheduleID_2){
+            $.post('sendShiftUpdate',{
+                scheduleID_1:scheduleID_1,
+                scheduleID_2:scheduleID_2
+            }, function(){
+                //alert("換班成功");
+                //refresh();
+                showInfo(scheduleID_1,scheduleID_2);   
+            });
+            //alert(schedule_1+"和"+schedule_2+"換班成功");
+        }
+        
+         function showInfo(scheduleID_1,scheduleID_2) {
+            $.get('showInfo', {
+                id : scheduleID_1,
+                id2 : scheduleID_2
+            }, function (array){
+                 dhtmlx.message({ type:"error", text: array[2]+array[1]+"\n和\n"+array[0]+array[3]+"換班成功" })
+                 refresh();
+            });
+        }
+        function refresh() {
+            location.reload();
+        }
+        function save_form_alert(){
+            $.get('checkDocStatus',{
+            scheduleID_1 : document.getElementById('date1').value,
+            scheduleID_2 : document.getElementById('date2').value,
+            }, function(array){
+                var ID_1 = document.getElementById('date1').value;
+                var ID_2 = document.getElementById('date2').value;
+                var date = new Date();
+                var dateStr=date.getFullYear()+"-"+(date.getMonth()+1) + "-" + date.getDate();
+                 if(ID_1 == ID_2){
+                     dhtmlx.message({ type:"error", text:"請選擇不同時段醫生" });
+                }
+                else if(ID_2 == ""){
+                    dhtmlx.message({ type:"error", text:"請選擇醫生" });
+                }
+                else if(Date.parse(dateStr)<Date.parse(array[0]['date2']) || Date.parse(dateStr)<Date.parse(array[0]['date1'])){
+                    dhtmlx.message({ type:"error", text:"還不能換班" });
+                    console.log(dateStr);
+                }
+                else if(array[0]['count1']!=0){
+                    dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date2']+"已有班" });
+                    console.log("doc1"+array[0]['count1']);
+                }
+                else if(array[0]['count2']!=0){
+                    dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生"+array[0]['date1']+"已有班" });
+                    console.log("doc2"+array[0]['count2']);
+                }
+                else{
+                save_form();
+                }
+            
+           });
+           
+        }
+        function save_form() {
+            $.get('change-shift-first-edition', {
+                scheduleID_1 : document.getElementById('date1').value,
+                scheduleID_2 : document.getElementById('date2').value
+                
+            }, function (){
+                scheduler.endLightbox(true, html("my_form"));
+                refresh();
+            });
+        }
+        function save_form_alert_addSchedule(){
+            var id = document.getElementById('doctor').value;
+            var date =document.getElementById('date_1').innerText;
+            var classification = document.getElementById('section_id').innerText;
+            if(id == ""){
+                dhtmlx.message({ type:"error", text:"請選擇醫生" });
+            }
+           else{
+            saveSchedule(id,date,classification);
+           }
+            
+        }
+    
+    
+        function save_form() {
+            $.get('change-shift-first-edition', {
+                scheduleID_1 : document.getElementById('date1').value,
+                scheduleID_2 : document.getElementById('date2').value
+                
+            }, function (){
+                scheduler.endLightbox(true, html("my_form"));
+                refresh();
+            });
+        }
+        function close_form() {               
+            scheduler.endLightbox(false, html("my_form"));             
+        }
+        
+         function checkDocStatus(scheduleID_1,scheduleID_2){
+            $.get('checkDocStatus',{
+                scheduleID_1:scheduleID_1,
+                scheduleID_2:scheduleID_2
+                
+            }, function(array){
+                 if(array[0]['count1']!=0){
+                    dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date2']+"已有班" });
+                    console.log("doc1"+array[0]['count1']);
+                }
+                if(array[0]['count2']!=0){
+                    dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生"+array[0]['date1']+"已有班" });
+                    console.log("doc2"+array[0]['count2']);
+                }
+                else{
+                    updateShift(scheduleID_1,scheduleID_2);
+                }
+            });
+            
+        }
+        function updateShift(scheduleID_1,scheduleID_2){
+            $.post('sendShiftUpdate',{
+                scheduleID_1:scheduleID_1,
+                scheduleID_2:scheduleID_2
+            }, function(){
+                //alert("換班成功");
+                //refresh();
+                showInfo(scheduleID_1,scheduleID_2);   
+            });
+            //alert(schedule_1+"和"+schedule_2+"換班成功");
+        }
+    
+        
     
         
 

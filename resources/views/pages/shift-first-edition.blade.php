@@ -142,17 +142,18 @@
                                 </div>
                                 <div class="dhx_cal_date"></div>
                                 <div class="dhx_cal_tab margin-l20 noUnderline">
-                                    <form action="shift-first-edition-personal">
+                                    <form action="shift-first-edition-personal" method="post">
                                         <font class="dhx-font">醫師:</font>
-                                        <select class="browser-default select-custom">
+                                        <select  name="doctor" class="browser-default select-custom" required>
                                             <option value="" disabled selected>選擇醫師</option>
-                                            <option value="0">全部</option>
-                                            <option value="1">陳常樂</option>
-                                            <option value="2">蔡維德</option>
-                                            <option value="3">謝尚霖</option>
+                                            @foreach($doctorName as $name)
+                                                <option value="{{$name->doctorID}}">{{$name->name}}</option>
+                                            @endforeach
                                         </select>
                                         <button class="dhx_cal_tab submit-inline" type="submit">確認</button>
+                                        {{ csrf_field() }}
                                     </form>
+                                     
                                 </div>
 <!--                                <div class="dhx_cal_tab margin-l10"><a class="dhx_cal_tab display-b" href="#modal1">新增</a></div>-->
                             </div>

@@ -25,8 +25,11 @@ class ScheduleController extends Controller
             $data->doctorID = $doctorName->name;
         }
         $currentDoctorSchedule=$schedule->getScheduleByCurrentDoctorID();
+
+        $doctorName = $user->getAtWorkDoctors();
+
         
-        return view('pages.first-edition-all', array('schedule' => $scheduleData));
+        return view('pages.first-edition-all', array('schedule' => $scheduleData , 'doctorName'=>$doctorName));
     }
     
     //初版班表 指定一人 (Ben)
@@ -46,15 +49,91 @@ class ScheduleController extends Controller
             $data->doctorID = $doctorName->name;
         }
        // $data = $shiftRecords->getMoreCheckShiftsRecordsInformation(false); 
+
+        $doctor = $user->getAtWorkDoctors();
         
-        return view('pages.schedule-all', array('schedule' => $scheduleData));
+        return view('pages.schedule-all', array('schedule' => $scheduleData,'doctorName'=>$doctor));
     }
     
-    //正式班表 指定一人 (Ben)
-    public function scheduleAllPersonal() {
-        
-        return view('pages.schedule-all-personal');
+    //初版班表 查詢醫生
+     public function firstEditionByDoctorID(Request $request) {
+        $data = $request->all();
+        $schedule = new Schedule();
+        $user = new User();
+
+        $scheduleData = $schedule->getFirstEditionScheduleByDoctorID($data['doctor']);
+
+        foreach ($scheduleData as $data) {
+            $doctorName = $user->getDoctorInfoByID($data->doctorID);
+            $data->doctorID = $doctorName->name;
+        }
+        $doctor = $user->getAtWorkDoctors();
+       
+       
+        return view('pages.first-edition-all-personal',array('scheduleData' => $scheduleData,
+            'doctor'=> $doctorName, 'allDoctor'=>$doctor));
     }
+
+    //  正式班表  查詢醫生
+    public function schedulerPersonal(Request $request){
+         $data = $request->all();
+        $schedule = new Schedule();
+        $user = new User();
+
+        $scheduleData = $schedule->getScheduleByDoctorID($data['doctor']);
+
+        foreach ($scheduleData as $data) {
+            $doctorName = $user->getDoctorInfoByID($data->doctorID);
+            $data->doctorID = $doctorName->name;
+        }
+        $doctor = $user->getAtWorkDoctors();
+       
+       
+        return view('pages.schedule-all-personal',array('scheduleData' => $scheduleData,
+            'doctor'=> $doctorName, 'allDoctor'=>$doctor));
+    }
+
+     //調整班表 初版班表 查詢醫生
+    public function shiftFirstEditionByDoctorID(Request $request) {
+        $data = $request->all();
+        $schedule = new Schedule();
+        $user = new User();
+
+        $scheduleData = $schedule->getFirstEditionScheduleByDoctorID($data['doctor']);
+
+        foreach ($scheduleData as $data) {
+            $doctorName = $user->getDoctorInfoByID($data->doctorID);
+            $data->doctorID = $doctorName->name;
+        }
+        $doctor = $user->getAtWorkDoctors();
+       
+       
+        return view('pages.shift-first-edition-personal',array('scheduleData' => $scheduleData,
+            'doctor'=> $doctorName, 'allDoctor'=>$doctor));
+    }
+
+
+
+    // 調整班表 正式班表  查詢醫生
+    public function shiftSchedulerPersonal(Request $request){
+         $data = $request->all();
+        $schedule = new Schedule();
+        $user = new User();
+
+        $scheduleData = $schedule->getScheduleByDoctorID($data['doctor']);
+
+        foreach ($scheduleData as $data) {
+            $doctorName = $user->getDoctorInfoByID($data->doctorID);
+            $data->doctorID = $doctorName->name;
+        }
+        $doctor = $user->getAtWorkDoctors();
+       
+       
+        return view('pages.shift-scheduler-personal',array('scheduleData' => $scheduleData,
+            'doctor'=> $doctorName, 'allDoctor'=>$doctor));
+    }
+    
+
     
     // 初版班表 個人
     public function firstEditionSchedule() {
