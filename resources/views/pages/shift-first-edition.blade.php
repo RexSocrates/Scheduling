@@ -994,7 +994,8 @@
                 }
 
                 else if(array[0]['count']!=0){
-                    dhtmlx.message({ type:"error", text:array[0]['docName']+"醫生"+array[0]['date']+"已有班" });
+                    alert(array[0]['docName']+"醫生"+array[0]['date']+"已有班" );
+                    //dhtmlx.message({ type:"error", text:array[0]['docName']+"醫生"+array[0]['date']+"已有班" });
                     refresh();
                 }
 

@@ -458,22 +458,66 @@ class ScheduleController extends Controller
         $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
 
         if($count!=0){
-
-            $mustOnDutyArr['totalShift']=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift;
+            $totalShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift;
+            $mustOnDutyArr['totalShift']=$totalShift;
             if($user->getDoctorInfoByID($name->doctorID)->location == "台北"){
-                if($mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift/2==0){
-                    $taipei = (int)$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift/2;
+                if($totalShift/2==0){
+                    $taipei = (int)$totalShift/2;
                     $mustOnDutyArr['taipei']= ceil($taipei)+2;
-                    $tamsui=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift-ceil($taipei)+2;
+                    $tamsui=$totalShift-ceil($taipei)+2;
                     $mustOnDutyArr['tamsui']=(int)$tamsui;
                 }
                 else{
-                $taipei = (int)$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift/2;
+                $taipei = (int)$totalShift/2;
                 $mustOnDutyArr['taipei']= ceil($taipei)+1;
-                $tamsui=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift-ceil($taipei)+1;
+                $tamsui=$totalShift-ceil($taipei)+1;
                 $mustOnDutyArr['tamsui']=(int)$tamsui;
                 }
          }
+
+         if($user->getDoctorInfoByID($name->doctorID)->level == "A1" || $user->getDoctorInfoByID($name->doctorID)->level == "A5"){
+            if($totalShift /2 == 0){
+                $mustOnDutyArr['day'] = $totalShift/2;
+                $mustOnDutyArr['night']  = $totalShift- $totalShift/2;
+            }
+            else{
+                $mustOnDutyArr['day'] = floor($totalShift/2);
+                $mustOnDutyArr['night']  = $totalShift-$mustOnDutyArr['day'];
+            }
+         }
+         else if($user->getDoctorInfoByID($name->doctorID)->level == "A6" || $user->getDoctorInfoByID($name->doctorID)->level == "S4"){
+            if($totalShift /2 == 0){
+                $mustOnDutyArr['day'] = ($totalShift/2)+1;
+                $mustOnDutyArr['night']  = $totalShift- $mustOnDutyArr['day'];
+            }
+            else{
+                $mustOnDutyArr['day'] = ceil($totalShift/2);
+                $mustOnDutyArr['night']  = $totalShift-$mustOnDutyArr['day'];
+            }
+         }
+        
+         else if($user->getDoctorInfoByID($name->doctorID)->level == "S5" || $user->getDoctorInfoByID($name->doctorID)->level == "S9"){
+            if($totalShift /2 == 0){
+                $mustOnDutyArr['day'] = ($totalShift/2)+1;
+                $mustOnDutyArr['night']  = $totalShift- $mustOnDutyArr['day'];
+            }
+            else{
+                $mustOnDutyArr['day'] = ceil($totalShift/2)+1;
+                $mustOnDutyArr['night']  = $totalShift-$mustOnDutyArr['day'];
+            }
+         }
+         else{
+            if($totalShift /2 == 0){
+                $mustOnDutyArr['day'] = ($totalShift/2)+2;
+                $mustOnDutyArr['night']  = $totalShift- $mustOnDutyArr['day'];
+            }
+            else{
+                $mustOnDutyArr['day'] = (ceil($totalShift/2))+2;
+                $mustOnDutyArr['night']  = $totalShift-$mustOnDutyArr['day'];
+            }
+
+         }
+
 
             $medical=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift*11/15;
             $mustOnDutyArr['medical']=ceil($medical);
