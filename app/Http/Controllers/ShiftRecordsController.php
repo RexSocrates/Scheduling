@@ -328,6 +328,8 @@ class ShiftRecordsController extends Controller
         $doc2weekend = $schedule->checkDocScheduleInWeekend($doctorID2);
 
         $countDic=[
+            "scheduleID_1"=>$scheduleID1,
+            "scheduleID_2"=>$scheduleID2,
             "count1"=>$count1,
             "count2"=>$count2,
             "doc1"=>$user->getDoctorInfoByID($doctorID1)->name,

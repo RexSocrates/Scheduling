@@ -51,7 +51,8 @@ class ReservationData extends Model
     }
 
     public function setFirstScheduleAnnounceStatus(){
-        $month=date('m');
+        $month=date('Y-m');
+
         $affectedRows = DB::table('ReservationData')
             ->where('month', $month)
             ->update([
@@ -61,7 +62,7 @@ class ReservationData extends Model
     }
 
     public function setScheduleAnnounceStatus(){
-        $month=date('m');
+        $month=date('Y-m');
         $affectedRows = DB::table('ReservationData')
             ->where('month', $month)
             ->update([

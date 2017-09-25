@@ -368,8 +368,9 @@
                                 var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
                                 console.log("ev "+ev.start_date)
                                 console.log("evs "+evs.start_date);
+                                console.log("evs "+evs.text);
                                 
-                                checkDocStatus(ev.hidden,evs.hidden);
+                                //checkDocStatus(ev.hidden,evs.hidden);
                                 return true;
                             });
                             

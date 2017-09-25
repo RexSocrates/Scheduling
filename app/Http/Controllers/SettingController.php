@@ -11,14 +11,14 @@ class SettingController extends Controller
     public function getSettingPage(){
 
 
-        $month=date("m");
+        $month=date("Y-m");
         $reservationData = new ReservationData();
         $strDate = $reservationData->getDate($month)->startDate;
         $endDate = $reservationData->getDate($month)->endDate;
         $status = $reservationData->getDate($month)->status;
+        $m = (int)date('m', strtotime($month));
 
-
-        return view('pages.setting', array('month'=> $month,'strDate'=>$strDate,'endDate'=>$endDate,'status'=>$status ));
+        return view('pages.setting', array('month'=> $m,'strDate'=>$strDate,'endDate'=>$endDate,'status'=>$status ));
 
     }
 
@@ -43,8 +43,7 @@ class SettingController extends Controller
         $endDate = (int)$data['endDate'];
         $startDate = (int)$data['startDate'];
         $yearMonth = date('Y-m');
-        $month = date('m');
-
+    
         if($startDate<10){
             $strDate='0'.$startDate;
         }
@@ -60,13 +59,13 @@ class SettingController extends Controller
         }
 
         $reservationData = new ReservationData();
-        $count = $reservationData->countMonth($month);
+        $count = $reservationData->countMonth($yearMonth);
 
         if($count==1){
-        	$reservationData->updateDate($month,$strDate,$enDate);
+        	$reservationData->updateDate($yearMonth,$strDate,$enDate);
         }
         else{
-        	$reservationData->addDate($month,$strDate,$enDate);
+        	$reservationData->addDate($yearMonth,$strDate,$enDate);
         }
 
         //echo $month;

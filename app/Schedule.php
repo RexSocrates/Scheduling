@@ -154,6 +154,7 @@ class Schedule extends Model
             ->get();
         return $shifts;
     }
+    
     // 透過班ID更新單一個班
     public function updateScheduleByID($scheduleID, array $data) {
         $reservation = new Reservation();

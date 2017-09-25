@@ -12,6 +12,8 @@ use App\Schedule;
 use App\ReservationData;
 
 use App\Jobs\SendDeleteShiftMail;
+use App\Jobs\SendNewShiftAssignmentMail;
+use App\Jobs\SendShiftExchangeMail;
 class ScheduleController extends Controller
 {
     //查看初版全部班表 
@@ -221,6 +223,7 @@ class ScheduleController extends Controller
 
         return $dataArr;
         
+
     }
     //新增班表
     public function addSchedule(Request $request){
@@ -247,7 +250,12 @@ class ScheduleController extends Controller
           $schInfo['isWeekday'] = false;
         }
         $schedule = new Schedule();
-        $schedule->addSchedule($schInfo);
+        $scheduleID=$schedule->addSchedule($schInfo);
+
+        $job = new SendNewShiftAssignmentMail($doctorID,$scheduleID);
+
+        dispatch($job);
+
         
     }
     
@@ -334,11 +342,14 @@ class ScheduleController extends Controller
     //更新班表
     public function updateSchedule(Request $request){
         $scheduleCategory = new ScheduleCategory();
+        $schedule = new Schedule();
         $data = $request->all();
         $id = $data['id']; //schedule ID
         $sessionID = $data['newSessionID'];
         $newDate = $data['newDate'];
-        
+
+
+        $doctorID = $schedule->getScheduleDataByID($id)->doctorID;        
         $date = $this->processDateStr($newDate);
         $location = $scheduleCategory->getSchCategoryInfo($sessionID);
         $schInfo = [
@@ -348,12 +359,18 @@ class ScheduleController extends Controller
               'date' => $date,
               'confirmed'=>1
             ];
+
         $weekDay = (int)date('N', strtotime($date));
+
         if($weekDay == 6 || $weekDay == 7){
           $schInfo['isWeekday'] = false;
         }
-        $schedule = new Schedule();
-        $schedule->updateScheduleByID($id,$schInfo);
+
+        $newScheduleID=$schedule->updateScheduleByID($id,$schInfo);
+
+        $job = new SendShiftExchangeMail($doctorID,$id,$newScheduleID);
+        dispatch($job);
+
 
     }
 
