@@ -20,7 +20,8 @@
       		  	  		<div class="divider"></div>
       		  	  	  	<div class="card-content">
       		  	  	  	    <table id="doctor" class="mdl-data-table striped highlight" cellspacing="0" width="100%">
-                                <thead>
+                                <thead> 
+                                               
                                     <tr>
 <!--                                    多加一個欄位叫做id-->
                                         <th>名稱</th>
@@ -36,198 +37,41 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                 @foreach($mustOnDuty as $duty)
                                     <tr>
-                                        <th>張國頌</th>
+                                   
+                                        <th>{{ $duty['doctorName'] }}</th>
                                         <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
+                                        <th>{{ $duty['totalShift'] }}</th>
+                                        <th>{{ $duty['taipei'] }}</th>
+                                        <th>{{ $duty['tamsui'] }}</th>
+                                        <th>{{ $duty['medical'] }}</th>
+                                        <th>{{ $duty['surgical'] }}</th>
+                                        <th>{{ $duty['day'] }}</th>
+                                        <th>{{ $duty['night'] }}</th>
+                                        <th>{{ $duty['weekendShifts'] }}</th>
+                                   
                                     </tr>
+                                     @endforeach
+                                    
+                                     @foreach($onDuty as $duty)
                                     <tr>
-                                        <th>張國頌</th>
+                                   
+                                        <th>{{ $duty['doctorName'] }}</th>
                                         <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
+                                        <th>{{ $duty['totalShift'] }}</th>
+                                        <th>{{ $duty['taipei'] }}</th>
+                                        <th>{{ $duty['tamsui'] }}</th>
+                                        <th>{{ $duty['medical'] }}</th>
+                                        <th>{{ $duty['surgical'] }}</th>
+                                        <th>{{ $duty['day'] }}</th>
+                                        <th>{{ $duty['night'] }}</th>
+                                        <th>{{ $duty['weekendShifts'] }}</th>
+                                   
                                     </tr>
-                                    <tr>
-                                        <th>沈靜宜</th>
-                                        <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                    </tr>
-                                    <tr>
-                                        <th>沈靜宜</th>
-                                        <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
-                                    </tr>
-                                    <tr>
-                                        <th>周敬堯</th>
-                                        <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                    </tr>
-                                    <tr>
-                                        <th>周敬堯</th>
-                                        <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
-                                    </tr>
-                                    <tr>
-                                        <th>解晉一</th>
-                                        <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                    </tr>
-                                    <tr>
-                                        <th>解晉一</th>
-                                        <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
-                                    </tr>
-                                    <tr>
-                                        <th>黃書田</th>
-                                        <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                    </tr>
-                                    <tr>
-                                        <th>黃書田</th>
-                                        <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
-                                    </tr>
-                                    <tr>
-                                        <th>邱毓惠</th>
-                                        <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                    </tr>
-                                    <tr>
-                                        <th>邱毓惠</th>
-                                        <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
-                                    </tr>
-                                    <tr>
-                                        <th>鄧立明</th>
-                                        <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                    </tr>
-                                    <tr>
-                                        <th>鄧立明</th>
-                                        <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
-                                    </tr>
-                                    <tr>
-                                        <th>謝尚霖</th>
-                                        <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                    </tr>
-                                    <tr>
-                                        <th>謝尚霖</th>
-                                        <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
-                                    </tr>
+                                     @endforeach
+                                   
+                                    
                                     
                                 </tbody>
                             </table>

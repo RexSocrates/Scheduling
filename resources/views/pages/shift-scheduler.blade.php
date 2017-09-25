@@ -23,6 +23,10 @@
 
 @section('content')
 <input type='hidden' id="getDate">
+ <input type="hidden" id="scheduleID_2" value=""><!--不能刪 -->
+  <input type="hidden" id="scheduleID_1" value=""><!--不能刪 -->
+  <input type="hidden" id="shiftDate" value=""> <!--不能刪 -->
+ <input type="hidden" id="shiftSessionID" value=""> <!--不能刪 -->
     <div id="section" class="container-fix trans-left-five">    <!--     style="background-color:red;"-->
         <div class="container-section">
             <div class="row">
@@ -126,18 +130,19 @@
 
                         <script type="text/javascript" charset="utf-8">
                     
-                            scheduler.locale.labels.timeline_tab = "Timeline";
+                             scheduler.locale.labels.timeline_tab = "Timeline";
                             scheduler.locale.labels.section_custom="Section";
                             scheduler.config.details_on_create=true;
                             scheduler.config.details_on_dblclick = true;
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
 //                            scheduler.config.readonly = true;   //唯讀，不能修改東西
-                            scheduler.config.dblclick_create = false;   //雙擊新增
+//                            scheduler.config.dblclick_create = false;   //雙擊新增
                             scheduler.config.drag_create = false;   //拖拉新增
                             scheduler.xy.margin_left = -19;
                             scheduler.config.container_autoresize = true;
-                            scheduler.config.collision_limit = 1; 
+                            scheduler.config.collision_limit = 2; 
                             scheduler.config.drag_resize= false;
+
                             scheduler.form_blocks["hidden"] = {
                                 render:function(sns) {
                                     return "<div class='dhx_cal_ltext'><input type='hidden'></div>";
@@ -387,6 +392,28 @@
                             //     getScheduleID(event.hidden);
                             //     return true;
                             // });
+
+
+                            //空白處新增醫生班表
+                            scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
+
+                                showScheduleInfo(ev.start_date,ev.section_id,ev.hidden);
+
+                                console.log("111"+ev.text);
+                                console.log("111"+ev.start_date+ev.hidden);
+
+                                return true;
+                            });
+
+                            scheduler.attachEvent("onEventChanged", function (id, e){
+                                var event = scheduler.getEvent(id);
+                               
+                                checkDoctorSchedule(event.hidden); //schedule id
+
+                                return true;
+                            });
+
+
                             scheduler.attachEvent("onClick", function (id, e){
                                 var event = scheduler.getEvent(id);
                             
@@ -634,27 +661,91 @@
             scheduler.endLightbox(false, html("my_form"));             
         }
         
+       function checkDoctorSchedule(id){
+            document.getElementById("scheduleID_1").value=id;
+            $.get('checkDoctorSchedule',{
+                scheduleID : id, // event id
+                date: document.getElementById("shiftDate").value, //空格日期
+                classification:document.getElementById("shiftSessionID").value //空格
+    
+            }, function(array){
+                var scheduleID = id;
+                var classification = document.getElementById("shiftSessionID").value;
+                var date = document.getElementById("shiftDate").value;
+
+                var weekday = array[0]['weekDay'];
+                var weekDayInSchedule =array[0]['weekDayInSchedule'];
+
+
+                if(array[0]['date'] == array[0]['dateInSchedule'] && array[0]['scheduleID']!=0 ){
+                    checkDocStatus(id,array[0]['scheduleID']);
+                }
+                
+                else if(array[0]['count']!=0){
+                    dhtmlx.message({ type:"error", text:array[0]['docName']+"醫生"+array[0]['date']+"已有班" });
+                    refresh();
+                }
+
+                else if(array[0]['scheduleID']!=0){
+                    document.getElementById("scheduleID_2").value=array[0]['scheduleID'];
+                    checkDocStatus(id,array[0]['scheduleID']);
+                }
+                
+                else{
+
+                }
+
+                console.log(id);
+                console.log(array[0]['scheduleID']);
+               
+            });
+
+
+         }
+
          function checkDocStatus(scheduleID_1,scheduleID_2){
             $.get('checkDocStatus',{
                 scheduleID_1:scheduleID_1,
                 scheduleID_2:scheduleID_2
                 
-            }, function(array){
-                 if(array[0]['count1']!=0){
-                    dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date2']+"已有班" });
-                    console.log("doc1"+array[0]['count1']);
+            }, function(array){ 
+        
+                // var scheduleID_1= document.getElementById('scheduleID_1').value;
+                // var scheduleID_2= document.getElementById('scheduleID_2').value;
+
+                var weekday1 = array[0]['weekday1'];
+                var weekday2 = array[0]['weekday2'];
+
+                if(array[0]['date2'] == array[0]['date1']  ){
+                     updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
                 }
-                if(array[0]['count2']!=0){
-                    dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生"+array[0]['date1']+"已有班" });
+
+                else if(array[0]['count1']!=0){
+                    alert(array[0]['doc1']+"醫生"+array[0]['date1']+"已有班");
+                    //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date1']+"已有班" });
+                    refresh();
+                    console.log("doc1"+array[0]['count1']);
+
+                }
+                else if(array[0]['count2']!=0){
+                    alert(array[0]['doc2']+"醫生"+array[0]['date2']+"已有班");
+                    //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生"+array[0]['date2']+"已有班" });
+                    refresh();
                     console.log("doc2"+array[0]['count2']);
                 }
+
                 else{
                     updateShift(scheduleID_1,scheduleID_2);
                 }
-            });
-            
+
+               
+             });
+
+                console.log("aa"+document.getElementById('scheduleID_1').value);
+                console.log("bb"+document.getElementById('scheduleID_2').value);
         }
-        function updateShift(scheduleID_1,scheduleID_2){
+
+         function updateShift(scheduleID_1,scheduleID_2){
             $.post('sendShiftUpdate',{
                 scheduleID_1:scheduleID_1,
                 scheduleID_2:scheduleID_2
@@ -665,7 +756,87 @@
             });
             //alert(schedule_1+"和"+schedule_2+"換班成功");
         }
-       
+       function showScheduleInfo(date,section_id,id) {
+             document.getElementById("shiftDate").value=date;
+             document.getElementById("shiftSessionID").value=section_id;
+             document.getElementById("scheduleID_1").value=id;
+
+             console.log("scheduleID_1");
+
+        }
+function addNewSchedule(date,id){
+
+           var text = null;
+
+           if(id == 1){
+               text = "行政";
+           }else if(id == 2){
+               text = "教學";
+           }else if(id== 3){
+               text = "北白急救";
+           }else if(id == 4){
+               text = "北白發燒";
+           }else if(id == 5){
+               text = "北白內1";
+           }else if(id == 6){
+               text = "北白內2";
+           }else if(id == 7){
+               text = "北白外1";
+           }else if(id == 8){
+               text = "北白外2";
+           }else if(id == 9){
+               text = "淡白內1";
+           }else if(id == 10){
+               text = "淡白內2";
+           }else if(id == 11){
+               text = "淡白外1";
+           }else if(id == 12){
+               text = "淡白外1";
+           }else if(id == 13){
+               text = "北夜急救";
+           }else if(id == 14){
+               text = "北夜發燒";
+           }else if(id == 15){
+               text = "北夜內1";
+           }else if(id == 16){
+               text = "北夜內2";
+           }else if(id == 17){
+               text = "北夜外1";
+           }else if(id == 18){
+               text = "北夜外2";
+           }else if(id == 19){
+               text = "淡夜內1";
+           }else if(id == 20){
+               text = "淡夜內2";
+           }else if(id == 21){
+               text = "淡夜外";
+           }
+           
+           var day = date.getDay();
+           if((date.getMonth()+1)<10){
+                if(date.getDate()<10){
+                     var date2=date.getFullYear()+"-0"+(date.getMonth()+1) + "-0" + date.getDate();
+                }
+                else{
+                    var date2=date.getFullYear()+"-0"+(date.getMonth()+1) + "-" + date.getDate();
+                }
+
+           }
+           else{
+                if(date.getDate()<10){
+                    var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-0" + date.getDate();
+                }
+                else{
+                var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-" + date.getDate();
+                }
+            
+           }
+        
+           // document.getElementById("section_id").innerHTML= "<input>"+id;
+           // document.getElementById("date_1").innerHTML= "<h5 value="+date2+">"+date2+"</h5>";
+           // document.getElementById("classification").innerHTML="<h5 value="+id+"> "+text+"</h5>";
+           
+       }
         
     </script>
 @endsection

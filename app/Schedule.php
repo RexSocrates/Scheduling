@@ -45,6 +45,28 @@ class Schedule extends Model
         return $schedule;
     }
 
+    //透過班ID取得單一班表資訊
+    public function countScheduleDataByDateAndSessionID($date,$session) {
+        $count = DB::table('Schedule')
+            ->whereNotNull('doctorID')
+            ->where('schCategorySerial', $session)
+            ->where('date', 'like', $date.'%')
+            ->count();
+        
+        return $count;
+    }
+
+     //透過班ID取得單一班表資訊
+    public function getScheduleDataByDateAndSessionID($date,$session) {
+        $schedule = DB::table('Schedule')
+            ->whereNotNull('doctorID')
+            ->where('schCategorySerial', $session)
+            ->where('date', 'like', $date.'%')
+            ->first();
+        
+        return $schedule;
+    }
+
      //查看目前登入的醫生班表資訊
     public function getScheduleByCurrentDoctorID()
     {
@@ -91,10 +113,14 @@ class Schedule extends Model
 
     //確認醫生假日班數 醫生id
     public function checkDocScheduleInWeekend($id){
+        $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+
         $schedule = DB::table('Schedule')
             ->whereNotNull('doctorID')
             ->where('doctorID', $id)
             ->where('isWeekday', 0)
+            ->where('date', 'like', $nextMonth.'%')
             ->count();
         
         return $schedule;
@@ -154,7 +180,7 @@ class Schedule extends Model
             ->get();
         return $shifts;
     }
-    
+
     // 透過班ID更新單一個班
     public function updateScheduleByID($scheduleID, array $data) {
         $reservation = new Reservation();
@@ -347,5 +373,109 @@ class Schedule extends Model
         $this->updateDoctorForSchedule($scheduleID_1, $doctor2);
         $this->updateDoctorForSchedule($scheduleID_2, $doctor1);
         
+    }
+
+    //計算醫生已上白班數
+    public function totalDayShiftFirstEdition($doctorID){
+        $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+
+        $count = DB::table('Schedule')
+        ->whereNotNull('doctorID')
+        ->where('doctorID',$doctorID)
+        ->where('date', 'like', $nextMonth.'%')
+        ->whereIn('schCategorySerial', [3, 4, 5, 6,7,8,10,11,12])
+        ->count();
+
+        return $count;
+    }
+    //計算醫生已上夜班數
+    public function totalNightShiftFirstEdition($doctorID){
+        $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+
+        $count = DB::table('Schedule')
+        ->whereNotNull('doctorID')
+        ->where('doctorID',$doctorID)
+        ->where('date', 'like', $nextMonth.'%')
+        ->whereIn('schCategorySerial', [13, 14, 15, 16,17,18,19,20,21])
+        ->count();
+
+        return $count;
+    }
+
+     //計算醫生已上台北數
+    public function totalTaipeiShiftFirstEdition($doctorID){
+        $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+
+        $count = DB::table('Schedule')
+        ->whereNotNull('doctorID')
+        ->where('doctorID',$doctorID)
+        ->where('date', 'like', $nextMonth.'%')
+        ->whereIn('schCategorySerial', [3,4,5,6,7,8,13, 14, 15, 16,17,18])
+        ->count();
+
+        return $count;
+    }
+
+     //計算醫生已上淡水數
+    public function totalTamsuiShiftFirstEdition($doctorID){
+        $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+
+        $count = DB::table('Schedule')
+        ->whereNotNull('doctorID')
+        ->where('doctorID',$doctorID)
+        ->where('date', 'like', $nextMonth.'%')
+        ->whereIn('schCategorySerial', [9,10,11,12,19,20,21])
+        ->count();
+
+        return $count;
+    }
+
+    //計算醫生已上內科數
+    public function totalMedicalShiftFirstEdition($doctorID){
+        $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+
+        $count = DB::table('Schedule')
+        ->whereNotNull('doctorID')
+        ->where('doctorID',$doctorID)
+        ->where('date', 'like', $nextMonth.'%')
+        ->whereIn('schCategorySerial', [3,4,13,14,5,6,9,10,15,16,19,20])
+        ->count();
+
+        return $count;
+    }
+
+    //計算醫生已上外科數
+    public function totalSurgicalShiftFirstEdition($doctorID){
+        $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+
+        $count = DB::table('Schedule')
+        ->whereNotNull('doctorID')
+        ->where('doctorID',$doctorID)
+        ->where('date', 'like', $nextMonth.'%')
+        ->whereIn('schCategorySerial', [7,8,11,12,17,18,21])
+        ->count();
+
+        return $count;
+    }
+
+       //計算醫生已上班書
+    public function totalShiftFirstEdition($doctorID){
+        $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+
+        $count = DB::table('Schedule')
+        ->whereNotNull('doctorID')
+        ->where('doctorID',$doctorID)
+        ->where('date', 'like', $nextMonth.'%')
+        ->whereNotIn('schCategorySerial', [1,2])
+        ->count();
+
+        return $count;
     }
 }

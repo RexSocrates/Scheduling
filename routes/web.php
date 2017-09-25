@@ -174,7 +174,7 @@ Route::get('/shift-first-edition','ShiftRecordsController@shiftFirstEdition');//
 Route::get('change-shift-first-edition','ShiftRecordsController@shiftFirstEditionAddShifts');
 
 //調整班表->初版班表->醫生排班現況(Ben)
-Route::get('/first-edition-situation','ShiftRecordsController@firstEditionSituation');
+Route::get('/first-edition-situation','ScheduleController@firstEditionScheduleSituation');
 
 //調整班表->初版班表->指定一人(Ben)
 Route::get('/shift-first-edition-personal','ScheduleController@shiftFirstEditionByDoctorID');
