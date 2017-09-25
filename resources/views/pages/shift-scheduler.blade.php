@@ -764,79 +764,7 @@
              console.log("scheduleID_1");
 
         }
-function addNewSchedule(date,id){
 
-           var text = null;
-
-           if(id == 1){
-               text = "行政";
-           }else if(id == 2){
-               text = "教學";
-           }else if(id== 3){
-               text = "北白急救";
-           }else if(id == 4){
-               text = "北白發燒";
-           }else if(id == 5){
-               text = "北白內1";
-           }else if(id == 6){
-               text = "北白內2";
-           }else if(id == 7){
-               text = "北白外1";
-           }else if(id == 8){
-               text = "北白外2";
-           }else if(id == 9){
-               text = "淡白內1";
-           }else if(id == 10){
-               text = "淡白內2";
-           }else if(id == 11){
-               text = "淡白外1";
-           }else if(id == 12){
-               text = "淡白外1";
-           }else if(id == 13){
-               text = "北夜急救";
-           }else if(id == 14){
-               text = "北夜發燒";
-           }else if(id == 15){
-               text = "北夜內1";
-           }else if(id == 16){
-               text = "北夜內2";
-           }else if(id == 17){
-               text = "北夜外1";
-           }else if(id == 18){
-               text = "北夜外2";
-           }else if(id == 19){
-               text = "淡夜內1";
-           }else if(id == 20){
-               text = "淡夜內2";
-           }else if(id == 21){
-               text = "淡夜外";
-           }
-           
-           var day = date.getDay();
-           if((date.getMonth()+1)<10){
-                if(date.getDate()<10){
-                     var date2=date.getFullYear()+"-0"+(date.getMonth()+1) + "-0" + date.getDate();
-                }
-                else{
-                    var date2=date.getFullYear()+"-0"+(date.getMonth()+1) + "-" + date.getDate();
-                }
-
-           }
-           else{
-                if(date.getDate()<10){
-                    var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-0" + date.getDate();
-                }
-                else{
-                var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-" + date.getDate();
-                }
-            
-           }
-        
-           // document.getElementById("section_id").innerHTML= "<input>"+id;
-           // document.getElementById("date_1").innerHTML= "<h5 value="+date2+">"+date2+"</h5>";
-           // document.getElementById("classification").innerHTML="<h5 value="+id+"> "+text+"</h5>";
-           
-       }
         
     </script>
 @endsection

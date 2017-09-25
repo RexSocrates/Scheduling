@@ -412,8 +412,6 @@
                             scheduler.attachEvent("onDragEnd", function(){
                                 var event_obj = dragged_event;
                                 target = event_obj.section_id;
-                                //getScheduleID(event_obj.hidden);
-                                //checkDocStatus();
                                 console.log("target: "+event_obj.text);
                                 //把這個target放到陣列裡
                             });
@@ -737,11 +735,10 @@
                 id : scheduleID_1,
                 id2 : scheduleID_2
             }, function (array){
-
-
                 // dhtmlx.message({ type:"error", text: array[2]+array[1]+"\n和\n"+array[0]+array[3]+"換班成功" })
-                refresh();
+                
                 alert(array[2]+array[1]+"和"+array[0]+array[3]+"換班成功");
+                refresh();
             });
         }
 
@@ -1053,11 +1050,6 @@
              console.log("scheduleID_1");
 
         }
-
-        // function getScheduleID(id) {
-        //      document.getElementById("scheduleID_2").value=id;
-
-        // }
 
         function close_form() {               
             scheduler.endLightbox(false, html("my_form"));             
