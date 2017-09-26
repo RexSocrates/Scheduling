@@ -15,7 +15,8 @@ class ReservationData extends Model
             ->where('month', $month)
             ->update([
                 'startDate' =>$startDate,
-                'endDate' => $endDate   
+                'endDate' => $endDate,
+                'status'=>1
             ]);
         
         return $affectedRows;
@@ -27,6 +28,7 @@ class ReservationData extends Model
             'month' => $month,
             'startDate' => $startDate,
             'endDate' => $endDate,
+            'status'=>1
         ]);
     }
     
@@ -46,5 +48,26 @@ class ReservationData extends Model
             ->first();
         
         return $date;
+    }
+
+    public function setFirstScheduleAnnounceStatus(){
+        $month=date('Y-m');
+
+        $affectedRows = DB::table('ReservationData')
+            ->where('month', $month)
+            ->update([
+                'status'=>2
+            ]);
+        return $affectedRows;
+    }
+
+    public function setScheduleAnnounceStatus(){
+        $month=date('Y-m');
+        $affectedRows = DB::table('ReservationData')
+            ->where('month', $month)
+            ->update([
+                'status'=>3
+            ]);
+        return $affectedRows;
     }
 }

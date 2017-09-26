@@ -135,6 +135,53 @@ class ShiftRecordsController extends Controller
         return $recordData;
     }
 
+ // 依據使用者選擇的月份顯示換班資訊 暫時沒用到
+    public function getUncheckShiftByMonth(Request $request){
+        $data = $request->all();
+
+        $month = $data['month'];
+        
+        // 依照月份取得排班人員已經認可的換班資訊
+        $shiftRecordObj = new ShiftRecords();
+        $shiftRecordsData = $shiftRecordObj->getUncheckShiftRecordsByMonth($month);
+        
+        // 建立顯示資料使用的model
+        $userObj = new User();
+        $schCateObj = new ScheduleCategory();
+        $scheduleObj = new Schedule();
+        
+        // 將資料庫資料轉換為顯示用的資料
+        $recordData = [];
+        foreach($shiftRecordsData as $record) {
+            // 取得醫生資料
+            $doctor1 = $userObj->getDoctorInfoByID($record->schID_1_doctor);
+            $doctor2 = $userObj->getDoctorInfoByID($record->schID_2_doctor);
+            
+            // 取得上班資料
+            $schedule1 = $scheduleObj->getScheduleDataByID($record->scheduleID_1);
+            $schedule2 = $scheduleObj->getScheduleDataByID($record->scheduleID_2);
+            
+            // 取得上班種類名稱
+            $sch1Name = $schCateObj->getSchCateName($schedule1->schCategorySerial);
+            $sch2Name = $schCateObj->getSchCateName($schedule2->schCategorySerial);
+
+
+            
+            array_push($recordData, [
+                $doctor1->name,
+                $doctor2->name,
+                $schedule1->date,
+                $schedule2->date,
+                $sch1Name,
+                $sch2Name,
+                $record->changeSerial,
+                $record->date,
+                $record->adminConfirm
+            ]);
+        }
+        
+        return $recordData;
+    }
 
     //醫生確認換班
     public function checkShift(Request $request){
@@ -281,6 +328,8 @@ class ShiftRecordsController extends Controller
         $doc2weekend = $schedule->checkDocScheduleInWeekend($doctorID2);
 
         $countDic=[
+            "scheduleID_1"=>$scheduleID1,
+            "scheduleID_2"=>$scheduleID2,
             "count1"=>$count1,
             "count2"=>$count2,
             "doc1"=>$user->getDoctorInfoByID($doctorID1)->name,
@@ -457,7 +506,7 @@ class ShiftRecordsController extends Controller
         
         $displayConfirmedArr = [];
         
-        $allShiftData = $shiftRecordObj->getMoreCheckShiftsRecordsInformation(true);  // 列出與自己相關的確認換班資訊
+        $allShiftData = $shiftRecordObj->getMoreCheckShiftsRecordsInformationByMonth(false);  // 列出確認換班資訊
 
         $allRejectShiftData = $shiftRecordObj->getRejectShiftsRecordsInformation(true);  // 列出與自己相關的被拒絕換班資訊
 
@@ -615,7 +664,7 @@ class ShiftRecordsController extends Controller
 
         $schCateObj = new ScheduleCategory();
 
-        $shiftRecords = $shiftRecordObj->doc2CheckShifts();
+        $shiftRecords = $shiftRecordObj->doc2CheckShifts(); //只顯示當月
         
         $displayArr = [];
         
@@ -667,17 +716,16 @@ class ShiftRecordsController extends Controller
             array_push($displayRemarksArr, $remarkDic);
         }
 
-        //選擇備註月份
-        $currentMonth = date('Y-m');
-        $preMonth=date("Y-m", strtotime('-1 month'));
-        $beforePreMonth=date("Y-m", strtotime('-2 month'));
+       //選擇備註月份
+        $monthList = [date('Y-m')];
+        for($i = 1; $i <= 11; $i++) {
+            array_push($monthList, date('Y-m', strtotime((-1 * $i).' month')));
+        }
         
         return view('pages.shift-info', [
             'shiftRecords' => $displayArr,
             'remarks' => $displayRemarksArr,
-            'currentMonth'=>$currentMonth,
-            'preMonth'=>$preMonth,
-            'beforePreMonth'=>$beforePreMonth
+            'monthList' =>$monthList
         ]);
     }
     
@@ -779,10 +827,5 @@ class ShiftRecordsController extends Controller
         return view('pages.shift-first-edition-personal');
     }
     
-    // 調整班表 正式班表 個人(Ben)
-    public function shiftSchedulerPersonal($date=null){
-        
-        return view('pages.shift-scheduler-personal');
-    }
-
+    
 }

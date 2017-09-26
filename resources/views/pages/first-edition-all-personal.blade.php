@@ -18,7 +18,7 @@
 @endsection
 
 @section('navbar')
-    <font class="brand-logo light">初版班表<i class="material-icons arrow_right-icon">keyboard_arrow_right</i>張國頌</font>
+    <font class="brand-logo light">初版班表<i class="material-icons arrow_right-icon">keyboard_arrow_right</i>{{$doctor->name}}</font>
 @endsection
 
 @section('content')
@@ -41,14 +41,14 @@
                                 <div class="dhx_cal_tab margin-l20 noUnderline">
                                     <form action="">
                                         <font class="dhx-font">醫師:</font>
-                                        <select class="browser-default select-custom">
+                                        <select name="doctor" class="browser-default select-custom"  required>
                                             <option value="" disabled selected>選擇醫師</option>
-                                            <option value="0">全部</option>
-                                            <option value="1">陳常樂</option>
-                                            <option value="2">蔡維德</option>
-                                            <option value="3">謝尚霖</option>
+                                             @foreach($allDoctor as $name)
+                                                <option value="{{$name->doctorID}}">{{$name->name}}</option>
+                                            @endforeach
                                         </select>
                                         <button class="dhx_cal_tab submit-inline" type="submit">確認</button>
+                                        {{ csrf_field() }}
                                     </form>
                                 </div>
         <!--
@@ -71,7 +71,7 @@
                             scheduler.config.details_on_create=true;
                             scheduler.config.details_on_dblclick = true;
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
-//                            scheduler.config.readonly = true;   //唯讀，不能修改東西
+                            scheduler.config.readonly = true;   //唯讀，不能修改東西
 //                            scheduler.config.dblclick_create = false;   //雙擊新增
                             scheduler.config.drag_create = false;   //拖拉新增
                             scheduler.xy.margin_left = -19;
@@ -407,6 +407,11 @@
                             scheduler.init('scheduler_here',new Date(res[3], month),"timeline");
 
                             scheduler.parse([
+                                 @foreach($scheduleData as $data)
+                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}" },
+                               
+                                @endforeach
+                                
                                 
                             ],"json");
 

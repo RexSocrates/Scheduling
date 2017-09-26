@@ -15,12 +15,13 @@
                 <div class="col s12 m12">
       		  	  	<div class="card">
       		  	  		<div class="card-action">
-      		  	  			<font class="card-title">初版班表XX</font>
+      		  	  			<font class="card-title">初版班表排班現況</font>
       		  	  		</div>
       		  	  		<div class="divider"></div>
       		  	  	  	<div class="card-content">
       		  	  	  	    <table id="doctor" class="mdl-data-table striped highlight" cellspacing="0" width="100%">
-                                <thead>
+                                <thead> 
+                                               
                                     <tr>
 <!--                                    多加一個欄位叫做id-->
                                         <th>名稱</th>
@@ -36,199 +37,86 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach($mustOnDuty as $duty)
                                     <tr>
-                                        <th>張國頌</th>
+                                        <th>{{ $duty['doctorName'] }}</th>
                                         <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
+                                        <th>{{ $duty['totalShift'] }}</th>
+                                        <th>{{ $duty['taipei'] }}</th>
+                                        <th>{{ $duty['tamsui'] }}</th>
+                                        <th>{{ $duty['medical'] }}</th>
+                                        <th>{{ $duty['surgical'] }}</th>
+                                        <th>{{ $duty['day'] }}</th>
+                                        <th>{{ $duty['night'] }}</th>
+                                        <th>{{ $duty['weekendShifts'] }}</th>
+                                   
                                     </tr>
-                                    <tr>
-                                        <th>張國頌</th>
-                                        <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
-                                    </tr>
-                                    <tr>
-                                        <th>沈靜宜</th>
-                                        <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                    </tr>
-                                    <tr>
-                                        <th>沈靜宜</th>
-                                        <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
-                                    </tr>
-                                    <tr>
-                                        <th>周敬堯</th>
-                                        <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                    </tr>
-                                    <tr>
-                                        <th>周敬堯</th>
-                                        <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
-                                    </tr>
-                                    <tr>
-                                        <th>解晉一</th>
-                                        <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                    </tr>
-                                    <tr>
-                                        <th>解晉一</th>
-                                        <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
-                                    </tr>
-                                    <tr>
-                                        <th>黃書田</th>
-                                        <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                    </tr>
-                                    <tr>
-                                        <th>黃書田</th>
-                                        <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
-                                    </tr>
-                                    <tr>
-                                        <th>邱毓惠</th>
-                                        <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                    </tr>
-                                    <tr>
-                                        <th>邱毓惠</th>
-                                        <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
-                                    </tr>
-                                    <tr>
-                                        <th>鄧立明</th>
-                                        <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                    </tr>
-                                    <tr>
-                                        <th>鄧立明</th>
-                                        <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
-                                    </tr>
-                                    <tr>
-                                        <th>謝尚霖</th>
-                                        <th>應上</th>
-                                        <th>15</th>
-                                        <th>8</th>
-                                        <th>7</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>10</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                    </tr>
-                                    <tr>
-                                        <th>謝尚霖</th>
-                                        <th>已上</th>
-                                        <th>8</th>
-                                        <th>4</th>
-                                        <th>5</th>
-                                        <th>5</th>
-                                        <th>3</th>
-                                        <th>9</th>
-                                        <th>3</th>
-                                        <th>2</th>
-                                    </tr>
+                                    @endforeach
                                     
+                                    @foreach($onDuty as $duty)
+                                    <tr>
+                                        <th>{{ $duty['doctorName'] }}</th>
+                                        <th>已上</th>
+                                        @if($duty['totalShift'] != $duty['mustTotalShift'])
+                                        <th><font color="red">{{ $duty['totalShift'] }}</th>
+                                        @else
+                                        <th>{{ $duty['totalShift'] }}</th>
+                                        @endif
+
+                                        @if($duty['taipei'] != $duty['mustTaipei'] )
+                                        <th><font color="red">{{ $duty['taipei'] }}</th>
+                                        @else
+                                        <th>{{ $duty['taipei'] }}</th>
+                                        @endif
+
+                                        @if($duty['tamsui'] != $duty['mustTamsui'] )
+                                        <th><font color="red">{{ $duty['tamsui'] }}</th>
+                                        @else
+                                        <th>{{ $duty['tamsui'] }}</th>
+                                        @endif
+
+                                        @if($duty['medical'] != $duty['mustMedical'] )
+                                        <th><font color="red">{{ $duty['medical'] }}</th>
+                                        @else
+                                        <th>{{ $duty['medical'] }}</th>
+                                        @endif
+
+                                        @if($duty['surgical'] != $duty['mustSurgical'] )
+                                        <th><font color="red">{{ $duty['surgical'] }}</th>
+                                        @else
+                                        <th>{{ $duty['surgical'] }}</th>
+                                        @endif
+
+                                        @if($duty['day'] != $duty['mustDay'] )
+                                        <th><font color="red">{{ $duty['medical'] }}</th>
+                                        @else
+                                        <th>{{ $duty['day'] }}</th>
+                                        @endif
+
+                                        @if($duty['night'] != $duty['mustNight'] )
+                                        <th><font color="red">{{ $duty['night'] }}</th>
+                                        @else
+                                        <th>{{ $duty['night'] }}</th>
+                                        @endif
+
+                                       
+
+                                        @if($duty['weekendShifts'] != 4 )
+                                        <th><font color="red">{{ $duty['weekendShifts'] }}</th>
+                                        @else
+                                        <th>{{ $duty['weekendShifts'] }}</th>
+
+                                        @endif
+                                   
+                                    </tr>
+                                     @endforeach
+
+                                   
+                                    
+                                    
+
+                                  
+
                                 </tbody>
                             </table>
       		  	  	  	</div>
@@ -237,7 +125,6 @@
       		</div>
 		</div>
 	</div>
-	
 @endsection
 
 @section('script')

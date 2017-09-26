@@ -44,8 +44,10 @@ class ShiftRecords extends Model
 
     //查看 醫生2確認換班申請
     public function doc2CheckShifts() {
+        $month = date('Y-m');
         $records = DB::table('ShiftRecords')
             ->where('doc2Confirm',1)
+            ->where('date', 'like', $month.'%')
             ->orderBy('date','desc')
             ->get();
         
@@ -72,6 +74,20 @@ class ShiftRecords extends Model
         ->orwhere('schID_2_doctor',$doctorID)
         ->where('doc2Confirm',1)
         ->where('adminConfirm',1)
+        ->get();
+
+        return $shiftRecords;
+    }
+
+     //查詢 單一醫生換班紀錄(已確認)
+    public function getCheckShiftRecordsByCurrentMonth(){
+        $user = new User();
+        $month = date('Y-M');
+        $doctorID = $user->getCurrentUserID();
+        $shiftRecords=DB::table('ShiftRecords')
+        ->where('doc2Confirm',1)
+        ->where('adminConfirm',1)
+        ->where('date', 'like', $month.'%')
         ->get();
 
         return $shiftRecords;
@@ -141,31 +157,51 @@ class ShiftRecords extends Model
         return $records;
     }
 
+    //暫時沒用 調整班表 換班資訊 選閱
+     public function getUncheckShiftRecordsByMonth($month){
+        $records = DB::table('ShiftRecords')
+            ->where('date', 'like', $month.'%')
+            ->where('doc2Confirm',1)
+            ->where('adminConfirm',1)
+            ->orwhere('adminConfirm',0)
+            ->orwhere('adminConfirm',2)
+            ->get();
+        
+        return $records;
+    }
+
     // 更多資訊的換班紀錄(已確認) 月份查詢
-    public function getMoreCheckShiftsRecordsInformationBymonth($month){
+    public function getMoreCheckShiftsRecordsInformationByMonth($single){
 
         $schedule = new Schedule();
         $user = new User();
         $shiftCategory = new ScheduleCategory();      
-        
-        $shiftRecordsData = $this->getShiftRecordsByMonth($month);
 
-       // $dataInschedule = array();
+        $shiftRecordsData;
 
-       //  foreach ($shiftRecordsData as $record) {
+        if($single) {
+            // 只搜尋個人
+            $shiftRecordsData = $this->getShiftRecordsByDoctorID(); 
+        }else {
+            $shiftRecordsData = $this->checkShiftRecordsList();
+        }
 
-       //      $doctor1 = $user->getDoctorInfoByID($record->schID_1_doctor);
-       //      $doctor2 = $user->getDoctorInfoByID($record->schID_2_doctor);
+       $dataInschedule = array();
 
-       //      $schedule1 = $schedule->getScheduleDataByID($record->scheduleID_1);
-       //      $schedule2 = $schedule->getScheduleDataByID($record->scheduleID_2);
+        foreach ($shiftRecordsData as $record) {
+
+            $doctor1 = $user->getDoctorInfoByID($record->schID_1_doctor);
+            $doctor2 = $user->getDoctorInfoByID($record->schID_2_doctor);
+
+            $schedule1 = $schedule->getScheduleDataByID($record->scheduleID_1);
+            $schedule2 = $schedule->getScheduleDataByID($record->scheduleID_2);
             
-       //      $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial);
-       //      $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial);
+            $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial);
+            $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial);
 
-       //      array_push($dataInschedule, array($doctor1->name, $doctor2->name, $schedule1->date, $schedule2->date, $catName1, $catName2, $record->date, $record->changeSerial));
-       //  }
-        return $shiftRecordsData;
+            array_push($dataInschedule, array($doctor1->name, $doctor2->name, $schedule1->date, $schedule2->date, $catName1, $catName2, $record->date, $record->changeSerial));
+        }
+        return $dataInschedule;
     }
 
     // 更多資訊的換班紀錄(已確認)
@@ -181,7 +217,7 @@ class ShiftRecords extends Model
             // 只搜尋個人
             $shiftRecordsData = $this->getShiftRecordsByDoctorID(); 
         }else {
-            $shiftRecordsData = $this->checkShiftRecordsList();
+            $shiftRecordsData = $this->getCheckShiftRecordsByCurrentMonth();
         }
 
        $dataInschedule = array();

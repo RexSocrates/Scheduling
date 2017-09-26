@@ -39,6 +39,20 @@ header, main, footer {
     }
 }
 
+.login-body {
+    position: static;
+}
+
+.login-box {
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 33%;
+    min-width: 370px;
+}
+
 #header {
     position: fixed;
     z-index: 1002;
@@ -578,12 +592,6 @@ header, main, footer {
 
 .profile-img {
     width:225px;height:225px;margin: 0px 0px 20px 0px;border:7px solid #546e7a; border-radius:50%;
-}
-
-.login-box {
-    width: 400px;
-    height: 700px;
-    background-color: red;
 }
 
 input.select-dropdown {

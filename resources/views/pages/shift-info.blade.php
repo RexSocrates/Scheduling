@@ -18,8 +18,10 @@
                 <div class="col s12 m12">
                     <div class="card">
                         <div class="card-action">
+                            
       		  	  			<font class="card-title">換班資訊區</font>
-      		  	  		</div>
+                        </div>
+                         
       		  	  		<div class="divider"></div>
       		  	  	  	
       		  	  	  	<div class="card-content">
@@ -33,7 +35,7 @@
                                     </tr>
                                 </thead>
 
-                               <tbody>
+                              <tbody id="shiftRecordsTableBody">
                                    @foreach($shiftRecords as $record)
                                         <tr>
                                             <td class="td-padding">{{ $record['applier'] }}</td>
@@ -72,19 +74,7 @@
                             <div class="title1">
                                 <font class="card-title">備註</font>
                             </div>
-                            <div class="right">
-                                時間：
-                                <div class="input-field inline">
-                                    <select id=month onchange="changeMonth()">
-                                        <option value="" disabled selected>請選擇月份</option>
-                                        <option value="{{ $currentMonth }}">{{ $currentMonth }}</option>
-                                        <option value="{{ $preMonth }}">{{ $preMonth }}</option>
-                                        <option value="{{ $beforePreMonth }}">{{ $beforePreMonth }}</option>
-                                    </select>
-                                </div>
-                            </div>
-      		  	  		</div>
-      		  	  		
+                           
       		  	  		<div class="divider"></div>
       		  	  	  	
       		  	  	  	<div class="card-content">
@@ -171,5 +161,47 @@
             });
 
         }
+
+        //      function changeShiftMonth() {
+        //      console.log("Month : " + document.getElementById('shiftMonth').value);
+        //      $.get('shiftMonth', {
+        //          month : document.getElementById('shiftMonth').value
+        //      }, function(array) {
+        //          // 更新html內容
+        //          htmlTableBody = "";
+        //          for(i = 0; i < array.length; i++) {
+        //              htmlDoc = "<tr>";
+        //              htmlDoc += "<td class='td-padding'>" + array[i][0] + "</td>"; // 申請人
+        //              htmlDoc += "<td class='td-padding'>" + array[i][7] + "</td>"; // 申請日期
+        //              htmlDoc += "<td class='td-padding'>" + array[i][2]; // schedule 1 的日期
+                     
+        //              // 申請人的名字, 申請人的班的名稱
+        //              htmlDoc += "<font class='font-w-b'>" + array[i][0] + " " + array[i][4] + "</font>";
+                     
+        //              // 申請對象的班的日期, 申請對象的名字, 班的名稱
+        //              htmlDoc += " 與 " + array[i][3] + " <font class='font-w-b'>" + array[i][1] + " " + array[i][5] + "</font> 互換 </td>";
+
+        //              if(array[i][8]==1){
+        //                 htmlDoc += "<td class='td-padding class=waves-effect waves-light btn pad-btn disabled'>已確認</td>";
+        //              }
+
+        //              else if(array[i][8]==2){
+        //                 htmlDoc += "<td class='td-padding class=waves-effect waves-light btn pad-btn disabled'>已拒絕</td>";
+        //              }
+
+        //              else{
+        //                 htmlDoc += "<td class='td-padding'><a class='waves-effect waves-light btn''onclick=checkStatus(array[i][6])'>確認</a>"+
+        //                 "<a href='adminDisagreeShiftRecord/array[i][6]' class='waves-effect waves-light btn deep-orange darken-3' 'name=reject'>拒絕</a></td>"
+        //              }
+                     
+        //              htmlDoc += "</tr>";
+                     
+        //              htmlTableBody += htmlDoc;
+        //              console.log(array[i][8]);
+        //          }
+                 
+        //          document.getElementById("shiftRecordsTableBody").innerHTML = htmlTableBody;
+        //      });
+        // }
     </script>
 @endsection

@@ -83,8 +83,9 @@
                                 <thead>
                                     <tr>
                                         <th class="td-w-5">申請日期</th>
-                                        <th class="td-w-20">申請原因</th>
+                                        <th class="td-w-15">申請原因</th>
                                         <th class="td-w-5">增加/減少</th>
+                                        <th class="td-w-5">時數</th>
                                         <th class="td-w-5">狀態</th>
                                     </tr>
                                 </thead>
@@ -93,7 +94,12 @@
                                     @foreach($doctorOfficialLeave as $leave)
                                     <tr>
                                         <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
-                                        <td class="td-padding td-w-20">{{ $leave['remark'] }}</td>
+                                        <td class="td-padding td-w-15">{{ $leave['remark'] }}</td>
+                                        @if ( $leave['hour'] >0 )
+                                            <td class="td-padding td-w-5">增加</td>
+                                        @else
+                                            <td class="td-padding td-w-5">減少</td>
+                                        @endif
                                         <td class="td-padding td-w-5">{{ $leave['hour'] }}</td>
                                         <td class="td-padding td-w-5">{{ $leave['status'] }}</td>   
                                     </tr>
@@ -142,7 +148,7 @@
             <div class="modal-content modal-content-customize1">
                 <div class="row margin-b0">
                     <div class="input-field col s12 margin-b20">
-                        <select name="date" required id='date'>
+                       <select name="leaveMonth" required id='leaveMonth'>
                             <option value="" selected disabled>選擇月份</option>
                             <option value="{{ $currentMonth }}">{{ $currentMonth }}</option>
                             <option value="{{ $nextMonth }}">{{ $nextMonth }}</option>
@@ -165,12 +171,7 @@
 
                     <div class="input-field col s12 margin-t0">
 
-                        <select name="leaveMonth" required id='leaveMonth'>
-                            <option value="" selected disabled>選擇月份</option>
-                            <option value="{{ $currentMonth }}">{{ $currentMonth }}</option>
-                            <option value="{{ $nextMonth }}">{{ $nextMonth }}</option>
-                        </select>
-                        <label>月份</label>
+                        
                         <!-- <br><br><input type="month" name="bday" min="2017-09-01" required><br>
                         <label>選擇月份</label -->
                     </div>

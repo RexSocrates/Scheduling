@@ -35,6 +35,7 @@
                         <!-- </form> -->
                     </div>
                 </div>
+                @if( $status ==1)
       		  	<div class="col s5">                 
                     <div class="card">
                         <div class="card-action">
@@ -45,11 +46,11 @@
                             <h5 class="margin-t0">預班進行中</h5>
                             <p>系統將會關閉X小時</p>
                             <p>除排班人員外，所有醫生將不能進入系統</p>
-                            <button type="button" class="btn btn-secondary margin-t10">產生初版班表</button>
+                            <button type="button" class="btn btn-secondary margin-t10" onclick="announceFirstSchedule()">產生初版班表</button>
                         </div>
                     </div>
                 </div>
-                
+                @elseif(  $status ==2 )
                 <div class="col s5">                 
                     <div class="card">
                         <div class="card-action">
@@ -64,7 +65,7 @@
                         </div>
                     </div>
                 </div>
-                
+                @else
                 <div class="col s5">                 
                     <div class="card">
                         <div class="card-action">
@@ -74,11 +75,11 @@
                         <div class="card-content center">
                             <h5 class="margin-t0">正式班表已公佈</h5>
                             <p>當預班時段到達時，請按下面按鈕開放預班</p>
-                            <button type="button" class="btn btn-secondary margin-t10">開放下一次預班</button>
+                            <button type="button" class="btn btn-secondary margin-t10" onclick="reservation()">開放下一次預班</button>
                         </div>
                     </div>
                 </div>
-				
+				@endif
       		</div>
 		</div>
 	</div>
@@ -113,7 +114,7 @@
 
                 document.getElementById('startFont').innerHTML = start;
                 document.getElementById('endFont').innerHTML = end;
-                
+                location.reload();
             });
         }
 
@@ -151,11 +152,30 @@
                 
             }, function(){
                alert("正式班表公布成功");
-
+               location.reload();
             });
-            console.log("111");
         }
 
+
+        function announceFirstSchedule(){
+            $.get('announceFirstSchedule',{
+                
+            }, function(){
+               alert("初版班表公布成功");
+               location.reload();
+            });
+           
+        }
+
+        function reservation(){
+            $.get('toReservation',{
+                
+            }, function(){
+               alert("開放預班");
+               location.reload();
+            });
+           
+        }
         
 
 
