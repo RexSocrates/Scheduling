@@ -75,7 +75,7 @@
                         <div class="card-content center">
                             <h5 class="margin-t0">正式班表已公佈</h5>
                             <p>當預班時段到達時，請按下面按鈕開放預班</p>
-                            <button type="button" class="btn btn-secondary margin-t10">開放下一次預班</button>
+                            <button type="button" class="btn btn-secondary margin-t10" onclick="reservation()">開放下一次預班</button>
                         </div>
                     </div>
                 </div>
@@ -167,6 +167,15 @@
            
         }
 
+        function reservation(){
+            $.get('toReservation',{
+                
+            }, function(){
+               alert("開放預班");
+               location.reload();
+            });
+           
+        }
         
 
 

@@ -51,6 +51,10 @@ Route::get('announceSchedule','ScheduleController@announceSchedule');
 //公布初版班表
 Route::get('announceFirstSchedule','SettingController@setfirstSchedule');
 
+//開放預班
+Route::get('toReservation','SettingController@toReservation');
+
+
 
 // 新增公告
 Route::post('addAnnouncement', 'AnnouncementController@addOrUpdateAnnouncement');

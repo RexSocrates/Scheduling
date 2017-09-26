@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\ReservationData;
+use\App\User;
+use\App\Announcement;
 
 class SettingController extends Controller
 {
@@ -78,9 +80,34 @@ class SettingController extends Controller
     public function setfirstSchedule(Request $request){
 
         $reservationData = new ReservationData();
+        $user = new User();
+        $announcement = new Announcement();
 
         $reservationData->setFirstScheduleAnnounceStatus();
 
+        $data=[
+            'title'=>"公布初版班表",
+            'content'=>"已公布初版班表",
+            'doctorID'=> $user->getCurrentUserID()
+        ];
+
+        $announcement->addAnnouncement($data);
+
+
         return redirect('setting');
+    }
+
+    public function toReservation(){
+        $user = new User();
+        $announcement = new Announcement();
+
+        $data=[
+            'title'=>"預班已開放",
+            'content'=>"開放預班",
+            'doctorID'=> $user->getCurrentUserID()
+        ];
+
+        $announcement->addAnnouncement($data);
+
     }
 }

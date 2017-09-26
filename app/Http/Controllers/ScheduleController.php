@@ -11,6 +11,7 @@ use App\ShiftRecords;
 use App\Schedule;
 use App\ReservationData;
 use App\MustOnDutyShiftPerMonth;
+use App\Announcement;
 
 use App\Jobs\SendDeleteShiftMail;
 use App\Jobs\SendNewShiftAssignmentMail;
@@ -391,9 +392,20 @@ class ScheduleController extends Controller
             
         $schedule = new Schedule();
         $reservationData = new ReservationData();
+        $user = new User();
+        $announcement = new Announcement();
 
         $schedule->confirmNextMonthSchedule();
         $reservationData->setScheduleAnnounceStatus();
+
+        $data=[
+            'title'=>"公布正式班表",
+            'content'=>"已公布正式班表",
+            'doctorID'=> $user->getCurrentUserID()
+        ];
+
+        $announcement->addAnnouncement($data);
+
 
     }
 
