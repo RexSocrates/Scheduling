@@ -59,17 +59,59 @@
                                    
                                         <th>{{ $duty['doctorName'] }}</th>
                                         <th>已上</th>
+                                        @if($duty['totalShift'] != $duty['mustTotalShift'])
+                                        <th><font color="red">{{ $duty['totalShift'] }}</th>
+                                        @else
                                         <th>{{ $duty['totalShift'] }}</th>
+                                        @endif
+
+                                        @if($duty['taipei'] != $duty['mustTaipei'] )
+                                        <th><font color="red">{{ $duty['taipei'] }}</th>
+                                        @else
                                         <th>{{ $duty['taipei'] }}</th>
+                                        @endif
+
+                                        @if($duty['tamsui'] != $duty['mustTamsui'] )
+                                        <th><font color="red">{{ $duty['tamsui'] }}</th>
+                                        @else
                                         <th>{{ $duty['tamsui'] }}</th>
+                                        @endif
+
+                                        @if($duty['medical'] != $duty['mustMedical'] )
+                                        <th><font color="red">{{ $duty['medical'] }}</th>
+                                        @else
                                         <th>{{ $duty['medical'] }}</th>
+                                        @endif
+
+                                        @if($duty['surgical'] != $duty['mustSurgical'] )
+                                        <th><font color="red">{{ $duty['surgical'] }}</th>
+                                        @else
                                         <th>{{ $duty['surgical'] }}</th>
+                                        @endif
+
+                                        @if($duty['day'] != $duty['mustDay'] )
+                                        <th><font color="red">{{ $duty['medical'] }}</th>
+                                        @else
                                         <th>{{ $duty['day'] }}</th>
+                                        @endif
+
+                                        @if($duty['night'] != $duty['mustNight'] )
+                                        <th><font color="red">{{ $duty['night'] }}</th>
+                                        @else
                                         <th>{{ $duty['night'] }}</th>
+                                        @endif
+
+                                       
+
+                                        @if($duty['weekendShifts'] != 4 )
+                                        <th><font color="red">{{ $duty['weekendShifts'] }}</th>
+                                        @else
                                         <th>{{ $duty['weekendShifts'] }}</th>
+                                        @endif
                                    
                                     </tr>
                                      @endforeach
+
                                    
                                     
                                     

@@ -461,16 +461,15 @@ class ScheduleController extends Controller
             $totalShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift;
             $mustOnDutyArr['totalShift']=$totalShift;
             if($user->getDoctorInfoByID($name->doctorID)->location == "台北"){
-                if($totalShift/2==0){
+                if($totalShift/ 2== 0){
                     $taipei = (int)$totalShift/2;
-                    $mustOnDutyArr['taipei']= ceil($taipei)+2;
-                    $tamsui=$totalShift-ceil($taipei)+2;
-                    $mustOnDutyArr['tamsui']=(int)$tamsui;
+                    $mustOnDutyArr['taipei']= ceil($taipei)+1;
+                    $mustOnDutyArr['tamsui']=$totalShift-$mustOnDutyArr['taipei'];
                 }
                 else{
                 $taipei = (int)$totalShift/2;
                 $mustOnDutyArr['taipei']= ceil($taipei)+1;
-                $tamsui=$totalShift-ceil($taipei)+1;
+                $tamsui=$totalShift-$mustOnDutyArr['taipei'];
                 $mustOnDutyArr['tamsui']=(int)$tamsui;
                 }
          }
@@ -551,7 +550,15 @@ class ScheduleController extends Controller
             'night'=>$schedule->totalNightShiftFirstEdition($name->doctorID),
             'medical'=>$schedule->totalMedicalShiftFirstEdition($name->doctorID),
             'surgical'=>$schedule->totalSurgicalShiftFirstEdition($name->doctorID),
-            'weekendShifts'=>$schedule->checkDocScheduleInWeekend($name->doctorID)
+            'weekendShifts'=>$schedule->checkDocScheduleInWeekend($name->doctorID),
+            'mustTotalShift'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTotalShifts,
+            'mustTaipei'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTaipeiShifts,
+            'mustTamsui'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTamsuiShifts,
+            'mustDay'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyDayShifts,
+            'mustNight'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyNightShifts,
+            'mustMedical'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyMedicalShifts,
+            'mustSurgical'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutySurgicalShifts
+
         ];
          array_push($onDuty,$onDutyArr);
     }
