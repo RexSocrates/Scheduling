@@ -15,7 +15,7 @@
                 <div class="col s12 m12">
       		  	  	<div class="card">
       		  	  		<div class="card-action">
-      		  	  			<font class="card-title">初版班表XX</font>
+      		  	  			<font class="card-title">初版班表排班現況</font>
       		  	  		</div>
       		  	  		<div class="divider"></div>
       		  	  	  	<div class="card-content">
@@ -37,9 +37,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                 @foreach($mustOnDuty as $duty)
+                                    @foreach($mustOnDuty as $duty)
                                     <tr>
-                                   
                                         <th>{{ $duty['doctorName'] }}</th>
                                         <th>應上</th>
                                         <th>{{ $duty['totalShift'] }}</th>
@@ -52,11 +51,10 @@
                                         <th>{{ $duty['weekendShifts'] }}</th>
                                    
                                     </tr>
-                                     @endforeach
+                                    @endforeach
                                     
-                                     @foreach($onDuty as $duty)
+                                    @foreach($onDuty as $duty)
                                     <tr>
-                                   
                                         <th>{{ $duty['doctorName'] }}</th>
                                         <th>已上</th>
                                         @if($duty['totalShift'] != $duty['mustTotalShift'])
@@ -107,6 +105,7 @@
                                         <th><font color="red">{{ $duty['weekendShifts'] }}</th>
                                         @else
                                         <th>{{ $duty['weekendShifts'] }}</th>
+
                                         @endif
                                    
                                     </tr>
@@ -115,6 +114,9 @@
                                    
                                     
                                     
+
+                                  
+
                                 </tbody>
                             </table>
       		  	  	  	</div>
@@ -123,7 +125,6 @@
       		</div>
 		</div>
 	</div>
-	
 @endsection
 
 @section('script')

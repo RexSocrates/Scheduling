@@ -33,7 +33,7 @@
                 <div class="col s12 m12 card margin-0">
                     <div class="card-action">
                         <center>
-                            <p class="card-title margin-b0" style="font-weight: 400">馬階醫院急診室排班系統</p>
+                            <p class="card-title margin-b0" style="font-weight: 400">馬偕醫院急診室排班系統</p>
 <!--                            <img src="../img/logo.jpg" style="width: 320px;height: 90px;">-->
                         </center>
                     </div>
