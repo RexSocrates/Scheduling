@@ -72,8 +72,8 @@ class ReservationController extends Controller
 
         $data = array();
 
-        $month=date("m");
-        $year = date('Y');
+        
+        $month = date('Y-m');
         $startDate = $reservationData->getDate($month)->startDate;
         $endDate = $reservationData->getDate($month)->endDate;
 
@@ -112,8 +112,8 @@ class ReservationController extends Controller
 
 
         return view('pages.reservation', [
-            'startDate' => $year.'/'.$month.'/'.$startDate,
-            'endDate' => $year.'/'.$month.'/'.$endDate,
+            'startDate' => $month.'-'.$startDate,
+            'endDate' =>  $month.'-'.$endDate,
             'reservations' => $data,
             'countDay' => $countDay,
             'countNight' => $countNight,

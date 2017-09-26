@@ -43,7 +43,7 @@
                             <form action="addRemark" method="post">
                                 <div class="row margin-b0">
                                     <div class="col s5">
-                                        <p class="information">開放時間: {{ $startDate }} - {{ $endDate }}</p>
+                                        <p class="information">開放時間: {{ $startDate }} ~ {{ $endDate }}</p>
                                         
                                         <p class="information">可排天班數: on班:{{$onAmount}} off班:{{$offAmount}}</p>
                                         <!-- <p class="information" id='countDay'>尚需排班數: 白班:{{$countDay}} 夜班:{{$countNight}}</p> 
@@ -196,7 +196,8 @@
                                       }
                                       else {
                                         // 剩餘可預約班數為0，無法預班
-                                        dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
+                                        alert("可預約班數不足，無法預班");
+                                        //dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
                                     }
                                   }else {
                                       // 預約off班
@@ -205,7 +206,8 @@
                                       }
                                       else {
                                         // 剩餘可預約班數為0，無法預班
-                                        dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
+                                        alert("可預約班數不足，無法預班");
+                                        //dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
                                     }
                                   }
                               }
@@ -256,8 +258,9 @@
                                     if(checkResAmount(true, String(event.start_date), String(event.end_date)) || document.getElementById("originalEventStartDate").value != event.start_date) {
                                         updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
                                     }else {
-                                        // 剩餘可預約班數為0，無法預班
-                                        dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
+                                        // 剩餘可預約班數為0，無法預班;
+                                        alert("可預約班數不足，無法預班");
+                                        //dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
                                     }
                                 }else {
                                     // 預約off班
@@ -265,7 +268,8 @@
                                         updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
                                     }else {
                                         // 剩餘可預約班數為0，無法預班
-                                        dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
+                                        alert("可預約班數不足，無法預班");
+                                        //dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
                                     }
                                 }
 
