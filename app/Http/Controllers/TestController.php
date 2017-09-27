@@ -949,12 +949,14 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
+        $reservation = new Reservation();
             
-        $schedule = new Schedule();
-        $reservationData = new ReservationData();
+        //確認醫生是否有off班
+        $doc1off = $reservation->getResrvationByDateandDoctorID(3,'2017-10-03');
+        $doc2off = $reservation->getResrvationByDateandDoctorID(4,'2017-10-04');
 
-        $schedule->confirmNextMonthSchedule();
-        $reservationData->setScheduleAnnounceStatus();
+        echo $doc1off;
+        echo $doc2off;
 
     }
 }

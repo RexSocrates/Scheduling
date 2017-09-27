@@ -11,6 +11,7 @@ use App\Schedule;
 use App\User;
 use App\ScheduleCategory;
 use App\Remark;
+use App\Reservation;
 
 // import jobs
 use App\Jobs\SendAgreeShiftExchangeMail;
@@ -236,8 +237,8 @@ class ShiftRecordsController extends Controller
     public function firstEditionShiftAddShifts(Request $request){
         $data = $request->all();
 
-        $scheduleID1 = (int)$data['scheduleID_1'];
-        $scheduleID2 = (int)$data['scheduleID_2'];
+        $scheduleID1 = (int)$data['scheduleID_1']; //提出
+        $scheduleID2 = (int)$data['scheduleID_2']; // 要換
 
         $schedule = new Schedule();
 
@@ -260,14 +261,14 @@ class ShiftRecordsController extends Controller
 
         $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
 
-        $receiver = $schedule_2_Info->doctorID; 
-        $applier = $schedule_1_Info->doctorID;
-        $applier_ScheduleID = $schedule_1_Info->scheduleID;
-        $receiver_ScheduleID = $schedule_2_Info->scheduleID;
+        // $receiver = $schedule_2_Info->doctorID; 
+        // $applier = $schedule_1_Info->doctorID;
+        // $applier_ScheduleID = $schedule_1_Info->scheduleID;
+        // $receiver_ScheduleID = $schedule_2_Info->scheduleID;
 
-        // $job = new SendApplyShiftExchangeMail($receiver,$applier,$applier_ScheduleID,$receiver_ScheduleID);
+        $job = new SendApplyShiftExchangeMail($newChangeSerial);
 
-        // dispatch($job);
+        dispatch($job);
 
 
     }
@@ -307,6 +308,7 @@ class ShiftRecordsController extends Controller
 
         $schedule = new Schedule();
         $user =new User();
+        $reservation = new Reservation();
 
 
         //判斷醫生1班
@@ -327,6 +329,10 @@ class ShiftRecordsController extends Controller
         $doc1weekend = $schedule->checkDocScheduleInWeekend($doctorID1);
         $doc2weekend = $schedule->checkDocScheduleInWeekend($doctorID2);
 
+        //確認醫生是否有off班
+        $doc1off = $reservation->getResrvationByDateandDoctorID($doctorID1,$date1);
+        $doc2off = $reservation->getResrvationByDateandDoctorID($doctorID2,$date2);
+
 
         $countDic=[
             "scheduleID_1"=>$scheduleID1,
@@ -341,7 +347,8 @@ class ShiftRecordsController extends Controller
             'weekday2'=>$weekday2,
             'doc1weekend'=> $doc1weekend,
             'doc2weekend' => $doc2weekend,
-            
+            'doc1off' => $doc1off,
+            'doc2off' => $doc2off  
         ];
 
         

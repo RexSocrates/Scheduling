@@ -436,6 +436,26 @@
                     console.log("doc2"+array[0]['date2']);
                 }
 
+                else if (array[0]['doc1off']!=0){
+                    var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n確定要換班嗎");
+                        if (r == true) {
+                            save_form();
+                        } 
+                        else {
+                         alert("已取消");
+                     }
+                }
+
+                else if(array[0]['doc2off']!=0){
+                    var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"已有off班?\n確定要換班嗎");
+                        if (r == true) {
+                            save_form();
+                        } 
+                        else {
+                         alert("已取消");
+                     }
+                }
+
                 // else if( (array[0]['doc1weekend']<=4) && ( weekday2==6 || weekday2 ==7)  && ( weekday1!=6 && weekday1!=7) ){
                 //     dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生假日班不得少於4" });
                 //     console.log("$week1"+weekday1);

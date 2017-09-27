@@ -12,6 +12,7 @@ use App\Schedule;
 use App\ReservationData;
 use App\MustOnDutyShiftPerMonth;
 use App\Announcement;
+use App\Reservation;
 
 use App\Jobs\SendDeleteShiftMail;
 use App\Jobs\SendNewShiftAssignmentMail;
@@ -180,24 +181,37 @@ class ScheduleController extends Controller
         }
         return view('pages.schedule', array('schedule' => $scheduleData));
     }
-    //調整班表->新增班 驗證醫生id
+    //調整班表->新增班 驗證醫生id與off班
     public function confirmscheduleStatus(Request $request){
         $data = $request->all();
+
         
         $id = $data['id'];
         $date = $data['date'];
         $categoryID = $data['classification'];
         $schedule = new Schedule();
-        $count = $schedule->checkDocStatus($id,$date);
+        $user = new User();
+        $reservation = new Reservation();
+        //$count = $schedule->checkDocStatus($id,$date);
         
-        return $count;
+        $infoArr=[];
+        $info=[
+            "doc"=>$user->getDoctorInfoByID($id)->name,
+            "date"=>$data['date'],
+            "countShedule"=>$schedule->checkDocStatus($id,$date),
+            "countOff"=>$reservation->getResrvationByDateandDoctorID($id,$date)
+        ];
+        array_push($infoArr,$info);
+        
+        return $infoArr;
     }
     //調整班表->更新班 驗證 班id
     public function confirmscheduleStatusBySerial(Request $request){
         $data = $request->all();
         $schedule = new Schedule();
         $user = new User();
-        
+        $reservation = new Reservation();
+
         $scheduleID = $data['scheduleID'];
         $date = $data['date']; //移動到哪一天
         $session= $data['classification'];
@@ -210,6 +224,7 @@ class ScheduleController extends Controller
         $count = $schedule->checkDocStatus($doctorID,$dateStr);
         $weekDay = (int)date('N', strtotime($dateStr));  //移動的
         $weekDayInSchedule = (int)date('N', strtotime($dateInSchedule));
+        $countOff = $reservation->getResrvationByDateandDoctorID($doctorID,$dateStr);
 
         if($schedule->countScheduleDataByDateAndSessionID($dateStr,$session)!=0){
             $scheduleSerial=$schedule->getScheduleDataByDateAndSessionID($dateStr,$session)->scheduleID;
@@ -230,7 +245,8 @@ class ScheduleController extends Controller
             "date"=>$dateStr,
             'weekDayInSchedule' => $weekDayInSchedule,
             'dateInSchedule' =>$dateInSchedule,
-            'scheduleID'=>$scheduleSerial
+            'scheduleID'=>$scheduleSerial,
+            "countOff"=>$countOff
         ];
 
         array_push($dataArr,$info);

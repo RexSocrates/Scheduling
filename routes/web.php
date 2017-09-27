@@ -154,7 +154,7 @@ Route::post('sendReservationUpdate', 'ReservationController@updateReservation');
 // 刪除預班
 Route::post('sendReservationDelete', 'ReservationController@deleteReservation');
 
-// 列出正式班表的換班資訊
+// 列出換班資訊(一般醫生) 
 Route::get('schedule-shift-info', 'ShiftRecordsController@getShiftRecords');
 Route::get('addShifts','ShiftRecordsController@firstEditionShiftAddShifts');
 
