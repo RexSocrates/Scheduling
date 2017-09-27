@@ -15,6 +15,9 @@ class LeaveController extends Controller
         $mustOnDutyShiftPerMonth =new MustOnDutyShiftPerMonth();
     	$user = new User();
 
+        $dutyInfo=[];
+        $countOnDutyShift=[];
+
         $leave = $officialLeave->getLeaveBySerial($serial);
         $doctorID = $officialLeave->getLeaveBySerial($serial)->doctorID;
     	$leaveDic=[
@@ -27,9 +30,11 @@ class LeaveController extends Controller
 
         $leaveDic['updatedLeaveHours'] = $user->getDoctorInfoByID($leave->doctorID)->currentOfficialLeaveHours+$leave->leaveHours;
 
+
     	$doctor = $user->getDoctorInfoByID($leave->doctorID);
     	$officialLeave->changeConfirmStatus($leaveDic);
     	$officialLeave->updateLeaveHours($leave->doctorID,$doctor->currentOfficialLeaveHours+$leave->leaveHours);
+
 
         $onDutyInfo=[
             'doctorID' => $doctorID,
@@ -39,21 +44,18 @@ class LeaveController extends Controller
 
         $onDutyInfo['mustOnDutyShift']=($user->getDoctorInfoByID($doctorID)->mustOnDutyTotalShifts)-(abs($leave->leaveHours))/12;
 
-
-        $updateOnDutyInfo=[
-            'doctorID' => $doctorID,
-            'month'=>$leave->leaveMonth,
-            'updateMustOnDutyShift'=>""
-        ];
-
-        $updateOnDutyInfo['updateMustOnDutyShift']=($mustOnDutyShiftPerMonth->getOnDutyShift($onDutyInfo)->mustOnDutyShift)-(abs($leave->leaveHours))/12;
-       
-
         $count = $mustOnDutyShiftPerMonth->countOnDutyShift($onDutyInfo);
         if($count == 0){
             $mustOnDutyShiftPerMonth->addOnDutyShift($onDutyInfo);
         }
         else{
+
+         $updateOnDutyInfo=[
+                'doctorID' => $doctorID,
+                'month'=>$leave->leaveMonth,
+                'updateMustOnDutyShift'=>""
+            ];
+        $updateOnDutyInfo['updateMustOnDutyShift']=($mustOnDutyShiftPerMonth->getOnDutyShift($onDutyInfo)->mustOnDutyShift)-(abs($leave->leaveHours))/12;
             $mustOnDutyShiftPerMonth->updateOnDutyShift($updateOnDutyInfo);
             
         }

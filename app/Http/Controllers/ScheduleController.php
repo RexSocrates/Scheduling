@@ -475,12 +475,12 @@ class ScheduleController extends Controller
             if($user->getDoctorInfoByID($name->doctorID)->location == "台北"){
                 if($totalShift/ 2== 0){
                     $taipei = (int)$totalShift/2;
-                    $mustOnDutyArr['taipei']= ceil($taipei)+1;
+                    $mustOnDutyArr['taipei']= ceil($taipei);
                     $mustOnDutyArr['tamsui']=$totalShift-$mustOnDutyArr['taipei'];
                 }
                 else{
                 $taipei = (int)$totalShift/2;
-                $mustOnDutyArr['taipei']= ceil($taipei)+1;
+                $mustOnDutyArr['taipei']= ceil($taipei);
                 $tamsui=$totalShift-$mustOnDutyArr['taipei'];
                 $mustOnDutyArr['tamsui']=(int)$tamsui;
                 }

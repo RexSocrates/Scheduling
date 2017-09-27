@@ -671,6 +671,8 @@
                 var weekday1 = array[0]['weekday1'];
                 var weekday2 = array[0]['weekday2'];
 
+                var date = array[0]['date2'];
+
                 if(array[0]['date2'] == array[0]['date1']  ){
                      updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
                 }
@@ -692,10 +694,11 @@
                 else{
                     updateShift(scheduleID_1,scheduleID_2);
                 }
-
+                
                
              });
 
+                
                 console.log("aa"+document.getElementById('scheduleID_1').value);
                 console.log("bb"+document.getElementById('scheduleID_2').value);
         }
@@ -738,7 +741,7 @@
                 // dhtmlx.message({ type:"error", text: array[2]+array[1]+"\n和\n"+array[0]+array[3]+"換班成功" })
                 
                 alert(array[2]+array[1]+"和"+array[0]+array[3]+"換班成功");
-                refresh();
+                //refresh();
             });
         }
 
