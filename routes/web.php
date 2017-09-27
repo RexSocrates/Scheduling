@@ -390,7 +390,6 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 //Route::post('/doctorCheckShift', 'ShiftRecordsController@doc2Confirm');
 //Route::post('/doctorCheck', 'ShiftRecordsController@getDataByID');
 
-
 Route::get("info",'TestController@announceSchedule');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 
