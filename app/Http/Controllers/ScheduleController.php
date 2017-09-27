@@ -551,33 +551,41 @@ class ScheduleController extends Controller
     }
 
     $onDuty=[];
-    foreach($doctorName as $name){
 
-        $onDutyArr=[
-            'doctorName'=> $name->name,
-            'totalShift'=>$schedule->totalShiftFirstEdition($name->doctorID),
-            'taipei'=>$schedule->totalTaipeiShiftFirstEdition($name->doctorID),
-            'tamsui'=>$schedule->totalTamsuiShiftFirstEdition($name->doctorID),
-            'day'=> $schedule->totalDayShiftFirstEdition($name->doctorID),
-            'night'=>$schedule->totalNightShiftFirstEdition($name->doctorID),
-            'medical'=>$schedule->totalMedicalShiftFirstEdition($name->doctorID),
-            'surgical'=>$schedule->totalSurgicalShiftFirstEdition($name->doctorID),
-            'weekendShifts'=>$schedule->checkDocScheduleInWeekend($name->doctorID),
-            'mustTotalShift'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTotalShifts,
-            'mustTaipei'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTaipeiShifts,
-            'mustTamsui'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTamsuiShifts,
-            'mustDay'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyDayShifts,
-            'mustNight'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyNightShifts,
-            'mustMedical'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyMedicalShifts,
-            'mustSurgical'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutySurgicalShifts
+    if($schedule->getScheduleDataByDate($date) !=0){
 
-        ];
+        foreach($doctorName as $name){
+
+            $onDutyArr=[
+                'doctorName'=> $name->name,
+                'totalShift'=>$schedule->totalShiftFirstEdition($name->doctorID),
+                'taipei'=>$schedule->totalTaipeiShiftFirstEdition($name->doctorID),
+                'tamsui'=>$schedule->totalTamsuiShiftFirstEdition($name->doctorID),
+                'day'=> $schedule->totalDayShiftFirstEdition($name->doctorID),
+                'night'=>$schedule->totalNightShiftFirstEdition($name->doctorID),
+                'medical'=>$schedule->totalMedicalShiftFirstEdition($name->doctorID),
+                'surgical'=>$schedule->totalSurgicalShiftFirstEdition($name->doctorID),
+                'weekendShifts'=>$schedule->checkDocScheduleInWeekend($name->doctorID),
+                'mustTotalShift'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTotalShifts,
+                'mustTaipei'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTaipeiShifts,
+                'mustTamsui'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTamsuiShifts,
+                'mustDay'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyDayShifts,
+                'mustNight'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyNightShifts,
+                'mustMedical'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyMedicalShifts,
+                'mustSurgical'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutySurgicalShifts
+
+            ];
          array_push($onDuty,$onDutyArr);
+        }
+    }
+    else{
+
     }
         return view ('pages.first-edition-situation',array('mustOnDuty'=>$mustOnDuty,'onDuty'=>$onDuty));
+    }
 
 
-}
+
     // 從scheduler 傳回資料後將日期的字串分解
     private function processDateStr($dateStr) {
         $dateArr = explode(' ', $dateStr);

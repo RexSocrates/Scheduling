@@ -67,6 +67,16 @@ class Schedule extends Model
         return $schedule;
     }
 
+    //計算月份班數
+    public function getScheduleDataByDate($date) {
+        $count = DB::table('Schedule')
+            ->whereNotNull('doctorID')
+            ->where('date', 'like', $date.'%')
+            ->count();
+        
+        return $count;
+    }
+
      //查看目前登入的醫生班表資訊
     public function getScheduleByCurrentDoctorID()
     {
