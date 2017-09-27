@@ -7,6 +7,7 @@ use DB;
 
 use App\ShiftRecords;
 use App\Reservation;
+use App\User;
 
 class Schedule extends Model
 {
@@ -472,7 +473,7 @@ class Schedule extends Model
         return $count;
     }
 
-       //計算醫生已上班書
+    //計算醫生已上班書
     public function totalShiftFirstEdition($doctorID){
         $currentMonth = date('Y-m');
         $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
@@ -486,6 +487,7 @@ class Schedule extends Model
 
         return $count;
     }
+
 
     //確認醫生前一天班是否為夜班
      public function getNightScheduleByDoctorIDandDate($doctorID,$date){
@@ -510,4 +512,46 @@ class Schedule extends Model
         return $preNightcount;
 
     }
+
+    
+    // 檢查一位醫生在當週非職登院區的班數
+    public function getAnotherLocationShifts($doctorID, $date) {
+        // date 日期格式 : 2017-01-01
+        
+        // 取得此日期是星期幾
+        $week = intval(date('N', strtotime($date)));
+        
+        // 取得與星期一的差距
+        $mondayGap = $week - 1;
+        $modayDate = date('Y-m-d', strtotime($date.'-'.$mondayGap.' days'));
+        
+        // 與星期日的差距
+        $sundayGap = 7 - $week;
+        $sundayDate = date('Y-m-d', strtotime($date.'+'.$sundayGap.' days'));
+        
+        // 取得醫師職登院區
+        $userObj = new User();
+        $doctor = $userObj->getDoctorInfoByID($doctorID);
+        
+        $doctorLocation = $doctor->location;
+        
+        // 取得非職登院區
+        $anotherLocation = '';
+        if($doctorLocation == '台北') {
+            $anotherLocation = 'Tamsui';
+        }else {
+            $anotherLocation = 'Taipei';
+        }
+        
+        // 取得在這一週目前在非職登院區的上班數
+        $count = DB::table('Schedule')
+            ->where('doctorID', $doctorID)
+            ->where('location', $anotherLocation)
+            ->whereBetween('date', [$modayDate, $sundayDate])
+            ->count();
+        
+        return $count;
+    }
+    
+
 }

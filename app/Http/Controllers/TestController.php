@@ -960,5 +960,28 @@ class TestController extends Controller
         echo $doc2Night;
 
     }
+    
+    // 取得特定醫師在那一週的非職登院區上班班數
+    public function getAnotherLocationShifts() {
+        $doctorID = 1;
+        $date = '2017-10-06';
+        
+        echo 'Week number : '.date('W', strtotime($date)).'<br>';
+        
+        echo '星期：'.date('N', strtotime($date)).'<br>';
+        
+        $week = intval(date('N', strtotime($date)));
+        
+        //  get monday
+        // 與星期一的差距
+        $mondayGap = $week - 1;
+        // 顯示星期一的日期
+        echo date('Y-m-d', strtotime($date.'-'.$mondayGap.' days')).'<br>';
+        
+        // get sunday
+        // 與星期日的差距
+        $sundayGap = 7 - $week;
+        echo date('Y-m-d', strtotime($date.'+'.$sundayGap.' days')).'<br>';
+    }
 }
 
