@@ -486,4 +486,28 @@ class Schedule extends Model
 
         return $count;
     }
+
+    //確認醫生前一天班是否為夜班
+     public function getNightScheduleByDoctorIDandDate($doctorID,$date){
+        $predate= date("Y-m-d",strtotime($date."-1 day"));
+
+         $preNightcount = DB::table('Schedule')
+                ->where('doctorID',$doctorID)
+                ->where('date', $predate)
+                ->whereIn('schCategorySerial',[13,14,15,16,17,18,19,20,21])
+                ->count();
+
+       //  $count=0;
+        
+       //  if($preNightcount!=0){
+       //       $count = DB::table('Schedule')
+       //          ->where('doctorID',$doctorID)
+       //          ->where('date', $date)
+       //          ->whereIn('schCategorySerial',[3,4,5,6,7,8,9,10,11,12])
+       //          ->count();
+
+       // }
+        return $preNightcount;
+
+    }
 }

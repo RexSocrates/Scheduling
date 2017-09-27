@@ -310,4 +310,6 @@ class Reservation extends Model
         return $count;
 
     }
+    
+   
 }

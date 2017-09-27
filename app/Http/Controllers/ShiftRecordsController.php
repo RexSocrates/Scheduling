@@ -314,11 +314,13 @@ class ShiftRecordsController extends Controller
         //判斷醫生1班
         $doctorID1 = $schedule->getScheduleDataByID($scheduleID1)->doctorID;//2
         $date1 = $schedule->getScheduleDataByID($scheduleID2)->date;
+        $categoryID1 =$schedule->getScheduleDataByID($scheduleID2)->schCategorySerial;
         $weekday1 = (int)date('N', strtotime($date1));
 
         //判斷醫生2班
         $doctorID2 = $schedule->getScheduleDataByID($scheduleID2)->doctorID;
         $date2 = $schedule->getScheduleDataByID($scheduleID1)->date;
+        $categoryID2 =$schedule->getScheduleDataByID($scheduleID1)->schCategorySerial;
         $weekday2 = (int)date('N', strtotime($date2));
 
         //確認當天一位醫生是否有上班 醫生id
@@ -333,6 +335,21 @@ class ShiftRecordsController extends Controller
         $doc1off = $reservation->getResrvationByDateandDoctorID($doctorID1,$date1);
         $doc2off = $reservation->getResrvationByDateandDoctorID($doctorID2,$date2);
 
+        //確認醫生前一天是否為夜班
+        $doc1PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID1,$date1);
+        $doc2PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID2,$date2);
+
+        $doc1Night=0;
+
+        if($doc1PreNight != 0 and ($categoryID1==3 or $categoryID1==4 or $categoryID1==5 or $categoryID1==6 or $categoryID1==7 or $categoryID1==8 or $categoryID1==9 or $categoryID1==10 or $categoryID1==11 or $categoryID1==12)){
+            $doc1Night=1;
+        }
+
+        $doc2Night=0;
+
+        if($doc2PreNight != 0 and ($categoryID2==3 or $categoryID2==4 or $categoryID2==5 or $categoryID2==6 or $categoryID2==7 or $categoryID2==8 or $categoryID2==9 or $categoryID2==10 or $categoryID2==11 or $categoryID2==12)){
+            $doc2Night=1;
+        }
 
         $countDic=[
             "scheduleID_1"=>$scheduleID1,
@@ -348,7 +365,9 @@ class ShiftRecordsController extends Controller
             'doc1weekend'=> $doc1weekend,
             'doc2weekend' => $doc2weekend,
             'doc1off' => $doc1off,
-            'doc2off' => $doc2off  
+            'doc2off' => $doc2off,
+            'doc1Night' => $doc1Night,
+            'doc2Night' => $doc2Night
         ];
 
         

@@ -950,13 +950,14 @@ class TestController extends Controller
 
    public function announceSchedule(){
         $reservation = new Reservation();
+        $schedule = new Schedule();
             
         //確認醫生是否有off班
-        $doc1off = $reservation->getResrvationByDateandDoctorID(3,'2017-10-03');
-        $doc2off = $reservation->getResrvationByDateandDoctorID(4,'2017-10-04');
+        $doc1Night = $schedule->getNightScheduleByDoctorIDandDate(3,'2017-10-03');
+        $doc2Night = $schedule->getNightScheduleByDoctorIDandDate(4,'2017-10-05');
 
-        echo $doc1off;
-        echo $doc2off;
+        echo $doc1Night;
+        echo $doc2Night;
 
     }
 }
