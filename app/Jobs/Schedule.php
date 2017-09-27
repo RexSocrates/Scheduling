@@ -373,7 +373,277 @@ class Schedule implements ShouldQueue
                             }
                         }
                     }
+                }else if($X <= $Y) {
+                    array_merge($med_list, $all_list);
                     
+                    while(count($med_list) < $x) {
+                        $a = '';
+                        array_push($med_list, $a);
+                    }
+                    
+                    // 塞入內科醫師
+                    shuffle($med_list);
+                    for($j = 0; $j < $x; $j++) {
+                        // 抓出該醫生在doctor_list中的index和class_table在schedule中的index
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當med_list中抓到的不是空白醫生
+                        if($med_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($med_list[$j] == $doctor_list[$l]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = ($on_class_list[$i]->day - 1) * 19 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index], $doctor_list($doctor_index));
+                        }
+                    }
+                    
+                    // 如果能上綜合的醫生沒有被選入內科，則要讓他繼續有機會選上外科
+                    if(count($med_list) > $x) {
+                        for($j = $x; $j < count($med_list); $j++) {
+                            for($k = 0; $k < count($all_list); $k++) {
+                                if($med_list[$j] == $all_list[$k]) {
+                                    array_merge($sur_list, $all_list[$k]);
+                                }
+                            }
+                        }
+                    }
+                    
+                    // 放入外科醫生
+                    while(count($sur_list) < $y) {
+                        $a = '';
+                        array_push($sur_list, $a);
+                    }
+                    
+                    shuffle($sur_list);
+                    
+                    for($j = 0; $j < $y; $j++) {
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當sur_list中抓到的不是空白醫生
+                        if($sur_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $ < count($doctor_list); $k++) {
+                                if($sur_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = ($on_class_list[$i]->day - 1) * 19 + 4 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index], $doctor_list($doctor_index));
+                        }
+                    }
+                }
+                // 當醫生有預班沒被排到，則doctor中的pre_c屬性+1
+            }else if($on_class_list[$i]->location == 'T' and $on_class_list[$i]->dayOrNight) {
+                // 台北夜班
+                
+                // 內外科需求為4人:2人，x為內科需求，y為外科需求，X為預班醫師的內科人數，Y為預班醫師的外科人數
+                $x = 4;
+                $y = 2;
+                $X = 0;
+                $Y = 0;
+                
+                // 計算預班的醫師有幾個內科幾個外科,用List去接醫生的專職科別後再去計算
+                $doctor_ex_list = [];
+                $med_list = [];
+                $sur_list = [];
+                $all_list = [];
+                
+                for($j = 0; $j < count($doctor_list); $j++) {
+                    for($k = 0; $k < count($on_class_list[$i]->doctorsID); $k++) {
+                        if($doctor_list[$j]->doctorID == $on_class_list[$j]->doctorsID[$k]) {
+                            array_push($doctor_ex_list, $doctor_list[$j]->major);
+                            
+                            // 將不同專職的的醫師id複製到各別的list中
+                            if($doctor_list[$j]->major == 'med') {
+                                array_push($med_list, $doctor_list[$j]->doctorID);
+                            }else if($doctor_list[$j]->major == 'sur') {
+                                array_push($sur_list, $doctor_list[$j]->doctorID);
+                            }else if($doctor_list[$j]->major == 'all') {
+                                array_push($all_list, $doctor_list[$j]->doctorID);
+                            }
+                            break;
+                        }
+                    }
+                }
+                
+                for($j = 0; $j < count($doctor_ex_list); $j++) {
+                    if($doctor_ex_list[$j] == 'all') {
+                        $X = $X + 1;
+                        $Y = $Y + 1;
+                    }else if($doctor_ex_list[$j] == 'med') {
+                        $X = $X + 1;
+                    }else if($doctor_ex_list[$j] == 'sur') {
+                        $Y = $Y + 1;
+                    }
+                }
+                
+                if($X > $Y) {
+                    array_merge($sur_list, $all_list);
+                    
+                    while(count($sur_list) < $y) {
+                        $a = '';
+                        array_push($sur_list, $a);
+                    }
+                    
+                    // 放入外科醫生
+                    shuffle($sur_list);
+                    
+                    for($j = 0; $j < $y; $j++) {
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當sur_list中抓到的不是空白醫生
+                        if($sur_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($sur_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = (($on_class_list[$i]->day - 1) * 19) + 14 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index],$doctor_list[$doctor_index]);
+                        }
+                    }
+                    
+                    // 如果能上綜合的醫生沒有被選入外科，則要讓他繼續有機會選上外科
+                    if(count($sur_list) > $y) {
+                        for($j = $y; $j < count($sur_list); $j++) {
+                            for($k = 0; $k < count($all_list); $k++) {
+                                if($sur_list[$j] == $all_list[$k]) {
+                                    array_merge($med_list, $all_list);
+                                }
+                            }
+                        }
+                    }
+                    
+                    // 如果med_list長度少於x，則補上空的物件
+                    while(count($med_list) < $x) {
+                        $a = '';
+                        array_push($med_list, $a);
+                    }
+                    
+                    // 塞入內科醫師
+                    for($j = 0; $j < $x; $j++) {
+                        // 抓出該醫生在doctor_list中的index和class_table在schedule中的index
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當med_list中抓到的不是空白醫生
+                        if($med_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($med_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = (($on_class_list[i]->day -1) * 19) + 10 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index],$doctor_list[$doctor_index]);
+                        }
+                    }
+                    
+                    //  如果能上綜合的醫生沒有被選入內科，則要讓他繼續有機會選上外科
+                    if(count($med_list) > $x) {
+                        for($j = $x; $j < count($med_list); $j++) {
+                            for($k = 0; $k < count($all_list); $k++) {
+                                if($med_list[$j] == $all_list[$k]) {
+                                    array_merge($sur_list, $all_list[$k]);
+                                }
+                            }
+                        }
+                    }
+                }else if($X <= $Y) {
+                    array_merge($med_list, $all_list);
+                    
+                    while(count($med_list) < $x) {
+                        $a = '';
+                        array_push($med_list, $a);
+                    }
+                    
+                    // 塞入內科醫師
+                    shuffle($med_list);
+                    
+                    for($j = 0; $j < $x; $j++) {
+                        // 抓出該醫生在doctor_list中的index和class_table在schedule中的index
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當med_list中抓到的不是空白醫生
+                        if($med_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($med_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = (($on_class_list[$i]->day -1) * 19) + 10 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index], $doctor_list[$doctor_index]);
+                        }
+                    }
+                    
+                    // 如果能上綜合的醫生沒有被選入內科，則要讓他繼續有機會選上外科
+                    if(count($med_list) > $x) {
+                        for($j = $x; $j < count($med_list); $j++) {
+                            for($k = 0; $k < count($all_list); $k++) {
+                                if($med_list[$j] == $all_list[$k]) {
+                                    array_merge($sur_list, $all_list[$k]);
+                                }
+                            }
+                        }
+                    }
+                    
+                    // 放入外科醫生
+                    while(count($sur_list) < $y) {
+                        $a = '';
+                        array_push($sur_list, $a);
+                    }
+                    
+                    shuffle($sur_list);
+                    
+                    for($j = 0; $j < $y; $j++) {
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當sur_list中抓到的不是空白醫生
+                        if($sur_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($sur_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = (($on_class_list[$i]->day -1) * 19) + 14 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index], $doctor_list[$doctor_index]);
+                        }
+                    }
                 }
             }
         }
