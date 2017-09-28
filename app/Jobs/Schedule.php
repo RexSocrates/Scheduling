@@ -125,7 +125,43 @@ class Schedule implements ShouldQueue
                 
                 // 建立預ON班表
                 creat_on_class_list();
-                pre_on_class();
+                pre_on_class(); // 2483
+                
+                // 建立填班表順序
+                input_order_list($schedule);
+                
+                // 建立假日班填班順序
+                input_holiday_order_list($schedule); // 2488
+                
+                // 先將預班完的班表和醫生列表複製起來
+                // 取代 deep copy
+                $copy_pre_schedule = [];
+                foreach($schedule as $sch) {
+                    array_push($copy_pre_schedule, $sch);
+                }
+                
+                $copy_pre_doctor_list = [];
+                foreach($doctor_list as $doctor) {
+                    array_push($copy_pre_doctor_list, $doctor);
+                }
+                
+                // 先將假日班填完
+                $switch_switch = 1;
+                $run_run_again = false;
+                $doctor_holiday_amount = 0;
+                $class_holiday_amount = 0;
+                
+                // 計算所有醫生的假日班數
+                for($j = 0; $j < count($doctor_list); $j++) {
+                    $doctor_holiday_amount = $doctor_holiday_amount + $doctor_list[$j]->weekendShifts;
+                }
+                
+                // 計算表格中的假日班數
+                for($j = 0; $j < count($schedule); $j++) {
+                    if($schedule[$j]->holiday == 1 and $schedule[$j]->doctor_id) {
+                        $class_holiday_amount = $class_holiday_amount + 1; // 2507
+                    }
+                }
             }
         }
     }
@@ -847,11 +883,86 @@ class Schedule implements ShouldQueue
                             }
                         }
                     }
+                }else if($X <= $Y) {
+                    array_merge($med_list, $all_list);
+                    
+                    while(count($med_list) < $x) {
+                        $a = '';
+                        array_push($med_list, $a);
+                    }
+                    
+                    // 塞入內科醫師
+                    shuffle($med_list);
+                    
+                    for($j = 0; $j < $x; $j++) {
+                        // 抓出該醫生在doctor_list中的index和class_table在schedule中的index
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當med_list中抓到的不是空白醫生
+                        if($med_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($med_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = (($on_class_list[$i]->day -1) * 19) + 16 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index], $doctor_list[$doctor_index]);
+                            
+                            
+                        }
+                    }
+                    
+                    // 如果能上綜合的醫生沒有被選入內科，則要讓他繼續有機會選上外科
+                    if(count($med_list) > $x) {
+                        for($j = $x; $j < count($med_list); $j++) {
+                            for($k = 0; $k < count($all_list); $k++) {
+                                if($med_list[$j] == $all_list[$k]) {
+                                    array_merge($sur_list, $all_list[$k]);
+                                }
+                            }
+                        }
+                    }
+                    
+                    // 放入外科醫生
+                    while(count($sur_list) < $y) {
+                        $a = '';
+                        array_push($sur_list, $a);
+                    }
+                    
+                    shuffle($sur_list);
+                    
+                    for($j = 0; $j < $y; $j++) {
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當sur_list中抓到的不是空白醫生
+                        if($sur_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($sur_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = (($on_class_list[$i]->day -1) * 19) + 18 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index], $doctor_list[$doctor_index]);
+                        }
+                    }
                 }
             }
         }
     }
     
+    // 當醫生預班成功將醫師放入班表
     public function pre_put_doc_in($class_table, $doctor) {
         // 在該班表格中放入該醫師
         $class_table->doctor_id = $doctor->doctorID;
@@ -889,6 +1000,60 @@ class Schedule implements ShouldQueue
                 $doctor->taipeiShiftsLimit = $doctor->taipeiShiftsLimit - 1;
             }else if($class_table_property_list[$i] == 'D') {
                 $doctor->tamsuiShiftsLimit = $doctor->tamsuiShiftsLimit - 1;
+            }
+        }
+    }
+    
+    // 建立排班順序的index
+    public function input_order_list($schedule) {
+        // 淡水夜班先排
+        for($i = 0; $i < count($schedule); $i++) {
+            if($schedule[$i]->hospital_area == 'D' and $schedule[$i]->class_sort == 'n') {
+                array_push($order_list, $i);
+            }
+        }
+        
+        // 再排台北夜班
+        for($i = 0; $i < count($schedule); $i++) {
+            if($schedule[$i]->hospital_area == 'T' and $schedule[$i]->class_sort == 'n') {
+                array_push($order_list, $i);
+            }
+        }
+        
+        // 再排淡水假日班
+        for($i = 0; $i < count($schedule); $i++) {
+            if($schedule[$i]->holiday == 1 and $schedule[$i]->hospital_area == 'D' and $schedule[$i]->class_sort == 'd') {
+                array_push($order_list, $i);
+            }
+        }
+        
+        // 再排台北假日班
+        for($i = 0; $i < count($schedule); $i++) {
+            if($schedule[$i]->holiday == 1 and $schedule[$i]->hospital_area == 'T' and $schedule[$i]->class_sort == 'd') {
+                array_push($order_list, $i);
+            }
+        }
+        
+        // 再排淡水白班
+        for($i = 0; $i < count($schedule); $i++) {
+            if($schedule[$i]->holiday == 0 and $schedule[$i]->hospital_area == 'D' and $schedule[$i]->class_sort == 'd') {
+                array_push($order_list, $i);
+            }
+        }
+        
+        // 再排台北白班
+        for($i = 0; $i < count($schedule); $i++) {
+            if($schedule[$i]->holiday == 0 and $schedule[$i]->hospital_area == 'T' and $schedule[$i]->class_sort == 'd') {
+                array_push($order_list, $i);
+            }
+        }
+    }
+    
+    // 建立假日班的排班順序
+    public function input_holiday_order_list($schedule) {
+        for($i = 0; $i < count($schedule); $i++) {
+            if($schedule[$i]->holiday == 1) {
+                array_push($holiday_order_list, $i);
             }
         }
     }
