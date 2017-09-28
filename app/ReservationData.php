@@ -70,4 +70,14 @@ class ReservationData extends Model
             ]);
         return $affectedRows;
     }
+
+
+    public function getStatus($month){
+
+        $status = DB::table('ReservationData')
+            ->where('month', $month)
+            ->first();
+
+        return $status;
+    }
 }
