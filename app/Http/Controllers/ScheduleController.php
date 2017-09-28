@@ -198,13 +198,22 @@ class ScheduleController extends Controller
             $countNight=1;
         }
 
+         $location=0;
+            if($schedule->getAnotherLocationShifts($id,$date)>= 2){
+                $location=1;
+            }
+            
+        
+
+
         $infoArr=[];
         $info=[
             "doc"=>$user->getDoctorInfoByID($id)->name,
             "date"=>$data['date'],
             "countShedule"=>$schedule->checkDocStatus($id,$date),
             "countOff"=>$reservation->getResrvationByDateandDoctorID($id,$date),
-            "countNight"=>$countNight
+            "countNight"=>$countNight,
+            "location" => $location
         ];
         array_push($infoArr,$info);
         
@@ -216,6 +225,7 @@ class ScheduleController extends Controller
         $schedule = new Schedule();
         $user = new User();
         $reservation = new Reservation();
+        $scheduleCategory = new ScheduleCategory();
 
         $scheduleID = $data['scheduleID'];
         $date = $data['date']; //移動到哪一天
@@ -231,12 +241,19 @@ class ScheduleController extends Controller
         $weekDayInSchedule = (int)date('N', strtotime($dateInSchedule));
         $countOff = $reservation->getResrvationByDateandDoctorID($doctorID,$dateStr);
 
+
         $countNight=0;
         if($schedule->getNightScheduleByDoctorIDandDate($doctorID,$dateStr) != 0 and ($categoryID==3 or $categoryID==4 or $categoryID==5 or $categoryID==6 or $categoryID==7 or $categoryID==8 or $categoryID==9 or $categoryID==10 or $categoryID==11 or $categoryID==12)){
             $countNight=1;
         }
 
-        
+        $location=0;
+        if($schedule->getScheduleDataByID($scheduleID)->location != $scheduleCategory->getSchCategoryInfo($categoryID)){
+            if($schedule->getAnotherLocationShifts($doctorID,$dateStr)>= 2){
+                $location=1;
+            }
+            
+        }
         if($schedule->countScheduleDataByDateAndSessionID($dateStr,$categoryID)!=0){
             $scheduleSerial=$schedule->getScheduleDataByDateAndSessionID($dateStr,$categoryID)->scheduleID;
         }
@@ -257,7 +274,8 @@ class ScheduleController extends Controller
             'dateInSchedule' =>$dateInSchedule,
             'scheduleID'=>$scheduleSerial,
             "countOff"=>$countOff,
-            "countNight"=>$countNight
+            "countNight"=>$countNight,
+            'location'=>$location
         ];
 
         array_push($dataArr,$info);

@@ -344,8 +344,14 @@ class ShiftRecordsController extends Controller
         $doc2Location =0;
         
         if($schedule->getScheduleDataByID($scheduleID1)->location !=  $schedule->getScheduleDataByID($scheduleID2)->location){
-            $doc1Location = $schedule->getAnotherLocationShifts($doctorID1,$date1);
-            $doc2Location = $schedule->getAnotherLocationShifts($doctorID2,$date2);
+            if($schedule->getScheduleDataByID($scheduleID2)->location != $user->getDoctorInfoByID($doctorID1)->location){
+                $doc1Location = $schedule->getAnotherLocationShifts($doctorID1,$date1);
+            }
+
+            if($schedule->getScheduleDataByID($scheduleID1)->location != $user->getDoctorInfoByID($doctorID2)->location){
+                $doc2Location = $schedule->getAnotherLocationShifts($doctorID2,$date2);
+            }
+        
         }
         
 

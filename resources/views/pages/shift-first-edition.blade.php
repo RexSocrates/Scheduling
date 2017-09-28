@@ -668,12 +668,27 @@
                 // var scheduleID_1= document.getElementById('scheduleID_1').value;
                 // var scheduleID_2= document.getElementById('scheduleID_2').value;
 
+                console.log("abc"+array[0]['doc1']+array[0]['doc1Location']);
+                console.log("abc"+array[0]['doc2']+array[0]['doc2Location']);
+
                 var weekday1 = array[0]['weekday1'];
                 var weekday2 = array[0]['weekday2'];
 
                 var date = array[0]['date2'];
 
-                if(array[0]['date2'] == array[0]['date1']  ){
+                if(array[0]['doc1Location']>=2){
+                    alert(array[0]['doc1']+"醫生本週已有2班非值登院區班");
+                    //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生本週已有2班非值登院區班" });
+                    refresh();
+                }
+
+                else if(array[0]['doc2Location']>=2){
+                    alert(array[0]['doc2']+"醫生本週已有2班非值登院區班");
+                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                     refresh();
+                }
+
+                else if(array[0]['date2'] == array[0]['date1']  ){
                      updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
                 }
 
@@ -691,17 +706,7 @@
                     console.log("doc2"+array[0]['count2']);
                 }
 
-                 else if(array[0]['doc1Location']>=2){
-                    alert(array[0]['doc1']+"醫生本週已有2班非值登院區班");
-                    //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生本週已有2班非值登院區班" });
-                    refresh();
-                }
-
-                else if(array[0]['doc2Location']>=2){
-                    alert(array[0]['doc2']+"醫生本週已有2班非值登院區班");
-                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
-                     refresh();
-                }
+                 
 
                 else if (array[0]['doc1off']!=0 || array[0]['doc1Night']!=0 ){
                     if(array[0]['doc1off']!=0 && array[0]['doc1Night']!=0 ){
@@ -873,7 +878,22 @@
                 var weekday1 = array[0]['weekday1'];
                 var weekday2 = array[0]['weekday2'];
 
-                if(array[0]['date2'] == array[0]['date1']  ){
+                console.log("abc"+array[0]['doc1Location']);
+                console.log("abc"+array[0]['doc2Location']);
+
+                if(array[0]['doc1Location']>=2){
+                    alert(array[0]['doc1']+"醫生本週已有2班非值登院區班");
+                    //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生本週已有2班非值登院區班" });
+                    refresh();
+                }
+
+                else if(array[0]['doc2Location']>=2){
+                    alert(array[0]['doc2']+"醫生本週已有2班非值登院區班");
+                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                     refresh();
+                }
+
+                else if(array[0]['date2'] == array[0]['date1']  ){
                      save_form();
                 }
                 else if(array[0]['count1']!=0){
@@ -886,17 +906,7 @@
                     console.log("doc2"+array[0]['count2']);
                 }
 
-                else if(array[0]['doc1Location']>=2){
-                    alert(array[0]['doc1']+"醫生本週已有2班非值登院區班");
-                    //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生本週已有2班非值登院區班" });
-                    refresh();
-                }
-
-                else if(array[0]['doc2Location']>=2){
-                    alert(array[0]['doc2']+"醫生本週已有2班非值登院區班");
-                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
-                     refresh();
-                }
+                
 
                 else if (array[0]['doc1off']!=0 || array[0]['doc1Night']!=0 ){
                     if(array[0]['doc1off']!=0 && array[0]['doc1Night']!=0 ){
@@ -1036,7 +1046,12 @@
                 var date =document.getElementById('date_1').innerText;
                 var classification = document.getElementById('section_id').innerText;
 
-                if(array[0]['countShedule']!=0){
+                if(array[0]['location'] != 0 ){
+                    alert(array[0]['doc']+ " 在當週已有2班在非直登院區");
+                    refresh();
+                }
+
+                else if(array[0]['countShedule']!=0){
                     dhtmlx.message({ type:"error", text: array[0]['doc']+ " 在 " + array[0]['date']+"已有班" });
                 }
 
@@ -1185,9 +1200,14 @@
 
                 var weekday = array[0]['weekDay'];
                 var weekDayInSchedule =array[0]['weekDayInSchedule'];
+                console.log("aa"+array[0]['location']);
 
+                if (array[0]['location'] !=0){
+                    alert(array[0]['docName']+"醫生這週已有2班非直登院區班" );
+                    refresh();
+                }
 
-                if(array[0]['date'] == array[0]['dateInSchedule'] && array[0]['scheduleID']!=0 ){
+                else if(array[0]['date'] == array[0]['dateInSchedule'] && array[0]['scheduleID']!=0 ){
                     checkDocStatus(id,array[0]['scheduleID']);
                 }
                 
@@ -1201,11 +1221,12 @@
                     refresh();
                 }
 
+                
                 else if(array[0]['scheduleID']!=0){
                     document.getElementById("scheduleID_2").value=array[0]['scheduleID'];
                     checkDocStatus(id,array[0]['scheduleID']);
                 }
-
+                 
                 else if (array[0]['countOff']!=0 || array[0]['countNight']!=0){
 
                     if(array[0]['countOff']!=0 && array[0]['countNight']!=0){
@@ -1284,7 +1305,7 @@
             }, function(id){
                 console.log(id);
                 dhtmlx.message({ type:"error", text:"修改成功" });
-                refresh();
+                //refresh();
                 console.log("1111");
             });
         }
