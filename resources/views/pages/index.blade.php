@@ -1,7 +1,10 @@
 @extends("layouts.app2")
 
 @section('head')
-
+<!--
+    <link rel="stylesheet" href="../css/dropload.css">
+    <script src="../js/dropload.min.js"></script>
+-->
 @endsection
 
 @section('navbar')
@@ -17,7 +20,7 @@
       		  	  		<div class="card-action">
       		  	  			<font class="card-title">系統公告</font>
       		  	  			@if(Auth::user()->identity == 'Admin')
-      		  	  			<a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1"><i class="material-icons">add</i></a>
+      		  	  			<a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1" onclick="reset()"><i class="material-icons">add</i></a>
       		  	  			@endif
       		  	  		</div>
       		  	  		<div class="divider"></div>
@@ -73,23 +76,23 @@
 			
 			<!-- Modal Structure -->
             <div id="modal1" class="modal modal-fixed-footer modal-announcement">
-                <form action="addAnnouncement" method="POST">
+                <form id="form-modal1" action="addAnnouncement" method="POST">
                     {{ csrf_field() }}
                     <input type="hidden" name="hiddenSerial" id="hiddenSerial" value="-1">
                     <div class="modal-header">
-                        <h5 class="modal-announcement-title">公告</h5>
+                        <h5 class="modal-announcement-title">公告1</h5>
                     </div>
-                    <div class="modal-content modal-content-customize">
+                    <div class="modal-content modal-content-customize1">
                         <div class="row margin-b0">
                             <div class="input-field col s12">
                                 <i class="material-icons prefix modal-icons">chat_bubble</i>
-                                <input id="title" type="text" name="title" required>
+                                <input id="title" type="text" name="title" data-length="50" required>
                                 <label for="title">標題</label>
                             </div>
                         
                             <div class="input-field col s12">
                                 <i class="material-icons prefix modal-icons">mode_edit</i>
-                                <textarea id="textarea1" class="materialize-textarea margin-b0" type="text" name="content" required></textarea>
+                                <textarea id="textarea1" class="materialize-textarea margin-b0" type="text" name="content" data-length="980" required></textarea>
                                 <label for="textarea1">內容</label>
                             </div>
                         </div>
@@ -124,7 +127,7 @@
 @endsection
 
 @section('script')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
     <script>
         $('.dropdown-edit-button').dropdown({
             inDuration: 300,
@@ -162,6 +165,10 @@
             document.getElementById("deleteLink").href = "deleteAnnouncement/" + serial;
             
             editAnnouncement(serial);
+        }
+        
+        function reset() {
+            $('#form-modal1').trigger("reset");
         }
     </script>
 @endsection
