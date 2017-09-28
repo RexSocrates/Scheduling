@@ -645,6 +645,27 @@ class Schedule implements ShouldQueue
                         }
                     }
                 }
+            }else if($on_class_list[$i]->location == 'D' and $on_class_list[$i]->dayOrNight == 'd') {
+                // 淡水白班
+                
+                // 內外科需求為2人:2人，x為內科需求，y為外科需求，X為預班醫師的內科人數，Y為預班醫師的外科人數
+                $x = 2;
+                $y = 2;
+                $X = 0;
+                $Y = 0;
+                
+                // 計算預班的醫師有幾個內科幾個外科,用List去接醫生的專職科別後再去計算
+                $doctor_ex_list = [];
+                $med_list = [];
+                $sur_list = [];
+                $all_list = [];
+                
+                for($j = 0; $j < count($doctor_list); $j++) {
+                    for($k = 0; $k < count($on_class_list[$i]->doctorsID); $k++) {
+                        // 761 行
+                    }
+                }
+                
             }
         }
     }
