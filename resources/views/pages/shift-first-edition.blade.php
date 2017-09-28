@@ -700,7 +700,9 @@
                      //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
                      refresh();
                 }
-
+                else if(array[0]['date2'] == array[0]['date1']  ){
+                     updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                }
                 else if(array[0]['count1']!=0){
                     alert(array[0]['doc1']+"醫生"+array[0]['date1']+"已有班");
                     //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date1']+"已有班" });
@@ -905,10 +907,6 @@
 
                 console.log("rrf"+scheduleID_1);
                 console.log("rrf"+scheduleID_2);
-
-
-
-                
 
                 var weekday1 = array[0]['weekday1'];
                 var weekday2 = array[0]['weekday2'];
