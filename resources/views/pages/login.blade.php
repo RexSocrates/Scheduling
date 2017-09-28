@@ -34,7 +34,9 @@
                     <div class="card-action">
                         <center>
                             <p class="card-title margin-b0" style="font-weight: 400">馬偕醫院急診室排班系統</p>
-<!--                            <img src="../img/logo.jpg" style="width: 320px;height: 90px;">-->
+<!--                            <img src="../img/logo2.png" style="width: 284px;height: 235px;margin-top: 20px;">-->
+<!--                            <img src="../img/logo2.png" style="width: 710px;height: 589px;">-->
+<!--                            <img src="../img/logo3.png" style="width: 806px;height: 668px;">-->
                         </center>
                     </div>
 
