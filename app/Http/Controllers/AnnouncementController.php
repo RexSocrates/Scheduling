@@ -22,6 +22,7 @@ class AnnouncementController extends Controller
         $reservationData = new ReservationData();
 
         $currentMonth = date('Y-m');
+
         $startDate = $reservationData->getDate($currentMonth)->startDate;
         $endDate = $reservationData->getDate($currentMonth)->endDate;
         
