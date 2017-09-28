@@ -878,8 +878,8 @@
                 var weekday1 = array[0]['weekday1'];
                 var weekday2 = array[0]['weekday2'];
 
-                console.log("abc"+array[0]['doc1Location']);
-                console.log("abc"+array[0]['doc2Location']);
+                console.log("abc"+array[0]['doc1']);
+                console.log("abc"+array[0]['doc2']);
 
                 if(array[0]['doc1Location']>=2){
                     alert(array[0]['doc1']+"醫生本週已有2班非值登院區班");
@@ -1207,7 +1207,7 @@
                     refresh();
                 }
 
-                else if(array[0]['date'] == array[0]['dateInSchedule'] && array[0]['scheduleID']!=0 ){
+                if(array[0]['date'] == array[0]['dateInSchedule'] && array[0]['scheduleID']!=0 ){
                     checkDocStatus(id,array[0]['scheduleID']);
                 }
                 
@@ -1305,7 +1305,7 @@
             }, function(id){
                 console.log(id);
                 dhtmlx.message({ type:"error", text:"修改成功" });
-                //refresh();
+                refresh();
                 console.log("1111");
             });
         }

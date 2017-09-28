@@ -184,13 +184,14 @@ class ScheduleController extends Controller
     //調整班表->新增班 驗證醫生id與off班
     public function confirmscheduleStatus(Request $request){
         $data = $request->all();
-        $id = $data['id'];
+        $id = $data['id']; //doctor id
         $date = $data['date'];
         $categoryID = $data['classification'];
 
         $schedule = new Schedule();
         $user = new User();
         $reservation = new Reservation();
+        $scheduleCategory = new ScheduleCategory();
         //$count = $schedule->checkDocStatus($id,$date);
 
         $countNight=0;
@@ -198,13 +199,11 @@ class ScheduleController extends Controller
             $countNight=1;
         }
 
-         $location=0;
-            if($schedule->getAnotherLocationShifts($id,$date)>= 2){
-                $location=1;
+         // $location=0;
+         //    if($user->getDoctorInfoByID($id)->location != $scheduleCategory->getSchCategoryInfo($categoryID))
+                if($schedule->getAnotherLocationShifts($id,$date)>= 2){
+                    $location=1;
             }
-            
-        
-
 
         $infoArr=[];
         $info=[
@@ -248,10 +247,12 @@ class ScheduleController extends Controller
         }
 
         $location=0;
-        if($schedule->getScheduleDataByID($scheduleID)->location != $scheduleCategory->getSchCategoryInfo($categoryID)){
-            if($schedule->getAnotherLocationShifts($doctorID,$dateStr)>= 2){
-                $location=1;
+         if($user->getDoctorInfoByID($doctorID)->location != $scheduleCategory->getSchCategoryInfo($categoryID)){
+            if($schedule->getScheduleDataByID($scheduleID)->location != $scheduleCategory->getSchCategoryInfo($categoryID)){
+                if($schedule->getAnotherLocationShifts($doctorID,$dateStr)>= 2){
+                    $location=1;
             }
+        }
             
         }
         if($schedule->countScheduleDataByDateAndSessionID($dateStr,$categoryID)!=0){

@@ -537,7 +537,7 @@ class Schedule extends Model
         
         // 取得非職登院區
         $anotherLocation = '';
-        if($doctorLocation == '台北') {
+        if($doctorLocation == 'Taipei') {
             $anotherLocation = 'Tamsui';
         }else {
             $anotherLocation = 'Taipei';
