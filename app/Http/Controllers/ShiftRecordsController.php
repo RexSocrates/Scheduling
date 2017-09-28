@@ -339,6 +339,16 @@ class ShiftRecordsController extends Controller
         $doc1PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID1,$date1);
         $doc2PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID2,$date2);
 
+        //判斷在非値登院區班數
+        $doc1Location =0;
+        $doc2Location =0;
+        
+        if($schedule->getScheduleDataByID($scheduleID1)->location !=  $schedule->getScheduleDataByID($scheduleID2)->location){
+            $doc1Location = $schedule->getAnotherLocationShifts($doctorID1,$date1);
+            $doc2Location = $schedule->getAnotherLocationShifts($doctorID2,$date2);
+        }
+        
+
         $doc1Night=0;
 
         if($doc1PreNight != 0 and ($categoryID1==3 or $categoryID1==4 or $categoryID1==5 or $categoryID1==6 or $categoryID1==7 or $categoryID1==8 or $categoryID1==9 or $categoryID1==10 or $categoryID1==11 or $categoryID1==12)){
@@ -367,7 +377,9 @@ class ShiftRecordsController extends Controller
             'doc1off' => $doc1off,
             'doc2off' => $doc2off,
             'doc1Night' => $doc1Night,
-            'doc2Night' => $doc2Night
+            'doc2Night' => $doc2Night,
+            'doc1Location'=>$doc1Location,
+            'doc2Location'=>$doc2Location
         ];
 
         

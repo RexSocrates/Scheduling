@@ -236,6 +236,7 @@ class ScheduleController extends Controller
             $countNight=1;
         }
 
+        
         if($schedule->countScheduleDataByDateAndSessionID($dateStr,$categoryID)!=0){
             $scheduleSerial=$schedule->getScheduleDataByDateAndSessionID($dateStr,$categoryID)->scheduleID;
         }

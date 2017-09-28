@@ -691,6 +691,18 @@
                     console.log("doc2"+array[0]['count2']);
                 }
 
+                 else if(array[0]['doc1Location']>=2){
+                    alert(array[0]['doc1']+"醫生本週已有2班非值登院區班");
+                    //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生本週已有2班非值登院區班" });
+                    refresh();
+                }
+
+                else if(array[0]['doc2Location']>=2){
+                    alert(array[0]['doc2']+"醫生本週已有2班非值登院區班");
+                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                     refresh();
+                }
+
                 else if (array[0]['doc1off']!=0 || array[0]['doc1Night']!=0 ){
                     if(array[0]['doc1off']!=0 && array[0]['doc1Night']!=0 ){
                         var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n且"+array[0]['date1']+"前一晚有夜班\n確定要換班嗎");
@@ -873,6 +885,19 @@
                     dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生"+array[0]['date2']+"已有班" });
                     console.log("doc2"+array[0]['count2']);
                 }
+
+                else if(array[0]['doc1Location']>=2){
+                    alert(array[0]['doc1']+"醫生本週已有2班非值登院區班");
+                    //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生本週已有2班非值登院區班" });
+                    refresh();
+                }
+
+                else if(array[0]['doc2Location']>=2){
+                    alert(array[0]['doc2']+"醫生本週已有2班非值登院區班");
+                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                     refresh();
+                }
+
                 else if (array[0]['doc1off']!=0 || array[0]['doc1Night']!=0 ){
                     if(array[0]['doc1off']!=0 && array[0]['doc1Night']!=0 ){
                         var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n且"+array[0]['date1']+"前一晚已有夜班\n確定要換班嗎");
@@ -968,6 +993,7 @@
                 else{
                 save_form();
                 }
+
            
            });
         }
@@ -1016,7 +1042,7 @@
 
                 else if(array[0]['countOff']!=0 || array[0]['countNight']!=0 ){
                     if(array[0]['countOff']!=0 && array[0]['countNight']!=0 ){
-                        var r = confirm( array[0]['doc']+ " 在 " + array[0]['date']+"已有off班?\n且"+array[0]['date']+"前一晚已有夜班\n確定要換班嗎");
+                        var r = confirm( array[0]['doc']+ " 在 " + array[0]['date']+"已有off班?\n且"+array[0]['date']+"前一晚已有夜班\n確定要增班嗎");
                             if (r == true) {
                                 saveSchedule(id,date,classification);
                             } 
@@ -1037,7 +1063,7 @@
                             }
                     }
                     else if(array[0]['countNight']!=0){
-                        var r = confirm( array[0]['doc']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n確定要換班嗎");
+                        var r = confirm( array[0]['doc']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n確定要增班嗎");
                             if (r == true) {
                                 saveSchedule(id,date,classification);
                             } 
@@ -1183,7 +1209,7 @@
                 else if (array[0]['countOff']!=0 || array[0]['countNight']!=0){
 
                     if(array[0]['countOff']!=0 && array[0]['countNight']!=0){
-                        var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"已有off班?\n且"+ array[0]['date']+"前一晚已有夜班\n確定要換班嗎");
+                        var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"已有off班?\n且"+ array[0]['date']+"前一晚已有夜班\n確定要增班嗎");
 
                             if (r == true) {
                                 updateSchedule(scheduleID,date,classification);
@@ -1207,7 +1233,7 @@
                     }
 
                     else if(array[0]['countNight']!=0){
-                        var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有o夜班?\n確定要換班嗎");
+                        var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n確定要增班嗎");
 
                             if (r == true) {
                                 updateSchedule(scheduleID,date,classification);

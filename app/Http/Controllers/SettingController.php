@@ -13,12 +13,25 @@ class SettingController extends Controller
     public function getSettingPage(){
 
 
-        $month=date("Y-m");
+        $month=date("Y-m",strtotime("+1 month"));
         $reservationData = new ReservationData();
-        $strDate = $reservationData->getDate($month)->startDate;
-        $endDate = $reservationData->getDate($month)->endDate;
-        $status = $reservationData->getDate($month)->status;
-        $m = (int)date('m', strtotime($month));
+
+        $count = $reservationData->countMonth($month);
+
+        if($count==0){
+            $strDate=1;
+            $endDate=10;
+            $status=0;
+
+        }
+        else{
+            $strDate = $reservationData->getDate($month)->startDate;
+            $endDate = $reservationData->getDate($month)->endDate;
+            $status = $reservationData->getDate($month)->status;
+        }
+
+
+        $m = (int)date('m', strtotime("+1 month"));
 
         return view('pages.setting', array('month'=> $m,'strDate'=>$strDate,'endDate'=>$endDate,'status'=>$status ));
 
@@ -44,7 +57,7 @@ class SettingController extends Controller
 
         $endDate = (int)$data['endDate'];
         $startDate = (int)$data['startDate'];
-        $yearMonth = date('Y-m');
+        $yearMonth = date('Y-m',strtotime("+1 month"));
     
         if($startDate<10){
             $strDate='0'.$startDate;
