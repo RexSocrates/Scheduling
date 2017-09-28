@@ -207,9 +207,11 @@ class ScheduleController extends Controller
             }
 
         $major=0;
-        if($user->getDoctorInfoByID($id)->major != $scheduleCategory->getSchCategoryMajor($categoryID)){
+        if($user->getDoctorInfoByID($id)->major != "All"){
+            if($user->getDoctorInfoByID($id)->major != $scheduleCategory->getSchCategoryMajor($categoryID)){
                 $major=1;
             }
+        }  
 
         $infoArr=[];
         $info=[
