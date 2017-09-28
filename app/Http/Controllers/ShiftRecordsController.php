@@ -309,6 +309,7 @@ class ShiftRecordsController extends Controller
         $schedule = new Schedule();
         $user =new User();
         $reservation = new Reservation();
+        $scheduleCategory = new ScheduleCategory();
 
 
         //判斷醫生1班
@@ -343,7 +344,7 @@ class ShiftRecordsController extends Controller
         $doc1Location =0;
         $doc2Location =0;
         
-        if($schedule->getScheduleDataByID($scheduleID1)->location !=  $schedule->getScheduleDataByID($scheduleID2)->location){
+        if($schedule->getScheduleDataByID($scheduleID1)->location != $schedule->getScheduleDataByID($scheduleID2)->location){
             if($schedule->getScheduleDataByID($scheduleID2)->location != $user->getDoctorInfoByID($doctorID1)->location){
                 $doc1Location = $schedule->getAnotherLocationShifts($doctorID1,$date1);
             }
@@ -354,6 +355,20 @@ class ShiftRecordsController extends Controller
         
         }
         
+        //判斷醫生科別
+        $doc1Major=0;
+        $doc2Major=0;
+        if($user->getDoctorInfoByID($doctorID1)->major != "All"){
+            if($scheduleCategory->getSchCategoryMajor($categoryID1) != $scheduleCategory->getSchCategoryMajor($categoryID2)){
+                if($user->getDoctorInfoByID($doctorID1)->major != $scheduleCategory->getSchCategoryMajor($categoryID1)){
+                    $doc1Major=1;
+                }
+                if($user->getDoctorInfoByID($doctorID2)->major != $scheduleCategory->getSchCategoryMajor($categoryID2)){
+                    $doc2Major=2;
+                }
+
+            }
+        }
 
         $doc1Night=0;
 
@@ -385,7 +400,9 @@ class ShiftRecordsController extends Controller
             'doc1Night' => $doc1Night,
             'doc2Night' => $doc2Night,
             'doc1Location'=>$doc1Location,
-            'doc2Location'=>$doc2Location
+            'doc2Location'=>$doc2Location,
+            'doc1Major'=>$doc1Major,
+            'doc2Major'=>$doc2Major,
         ];
 
         

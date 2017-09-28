@@ -545,6 +545,7 @@ class Schedule extends Model
         
         // 取得在這一週目前在非職登院區的上班數
         $count = DB::table('Schedule')
+            ->whereNotNull('doctorID')
             ->where('doctorID', $doctorID)
             ->where('location', $anotherLocation)
             ->whereBetween('date', [$modayDate, $sundayDate])

@@ -422,8 +422,31 @@
 
                 var weekday1 = array[0]['weekday1'];
                 var weekday2 = array[0]['weekday2'];
-               
-                if(array[0]['date2'] == array[0]['date1']  ){
+                
+                if(array[0]['doc1Location']>=2){
+                    //alert(array[0]['doc1']+"醫生本週已有2班非值登院區班");
+                    dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生本週已有2班非值登院區班" });
+                    
+                }
+
+                else if(array[0]['doc2Location']>=2){
+                    //alert(array[0]['doc2']+"醫生本週已有2班非值登院區班");
+                     dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                     
+                }
+
+                else if(array[0]['doc1Major'] != 0){
+                    //alert(array[0]['doc1']+"醫生非該科醫生");
+                     dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生非該科醫生" });
+                     
+                }
+
+                else if(array[0]['doc2Major'] != 0){
+                    alert(array[0]['doc2']+"醫生非該科醫生");
+                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                     refresh();
+                }
+                else if(array[0]['date2'] == array[0]['date1']  ){
                      save_form();
                 }
 
@@ -438,17 +461,7 @@
                     console.log("doc2"+array[0]['date2']);
                 }
 
-                else if(array[0]['doc1Location']>=2){
-                    alert(array[0]['doc1']+"醫生本週已有2班非值登院區班");
-                    //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生本週已有2班非值登院區班" });
-                    refresh();
-                }
-
-                else if(array[0]['doc2Location']>=2){
-                    alert(array[0]['doc2']+"醫生本週已有2班非值登院區班");
-                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
-                     refresh();
-                }
+                
 
                 else if (array[0]['doc1off']!=0 || array[0]['doc1Night']!=0 ){
                     if(array[0]['doc1off']!=0 && array[0]['doc1Night']!=0 ){

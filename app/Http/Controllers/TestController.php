@@ -949,30 +949,17 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
-         $schedule = new Schedule();
-         $user = new User();
-         $scheduleCategory = new ScheduleCategory();
+         //判斷醫生科別
+       $location=0;
+       $user = new User();
+        $schedule = new Schedule();
+        $scheduleCategory = new ScheduleCategory();
+        $major=0;
+            if($user->getDoctorInfoByID(5)->major != $scheduleCategory->getSchCategoryMajor(7)){
+                $major=1;
+            }
+            echo $major;
 
-        //$location=0;
-         //if(strcmp($user->getDoctorInfoByID(5)->location,$scheduleCategory->getSchCategoryInfo(11))){
-            // if($schedule->getScheduleDataByID(111)->location != $scheduleCategory->getSchCategoryInfo(11)){
-            //     if($schedule->getAnotherLocationShifts(4,"2017-10-02")>= 2){
-                $doc =$user->getDoctorInfoByID(5)->location;
-                $id = $scheduleCategory->getSchCategoryInfo(11);
-                    $location=1;
-            //}
-        //}
-           
-
-       // }
-
-        // echo $user->getDoctorInfoByID(5)->location;
-        // echo $scheduleCategory->getSchCategoryInfo(11);
-        // echo $schedule->getAnotherLocationShifts(4,"2017-10-02");
-        // echo $doc;
-        // echo $id;
-        // echo $location;
-        echo strcmp($user->getDoctorInfoByID(5)->location,$scheduleCategory->getSchCategoryInfo(12));
     }
     
     // 取得特定醫師在那一週的非職登院區上班班數

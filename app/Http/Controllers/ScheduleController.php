@@ -199,10 +199,16 @@ class ScheduleController extends Controller
             $countNight=1;
         }
 
-         // $location=0;
-         //    if($user->getDoctorInfoByID($id)->location != $scheduleCategory->getSchCategoryInfo($categoryID))
+         $location=0;
+            if($user->getDoctorInfoByID($id)->location != $scheduleCategory->getSchCategoryInfo($categoryID)){
                 if($schedule->getAnotherLocationShifts($id,$date)>= 2){
                     $location=1;
+                }
+            }
+
+        $major=0;
+        if($user->getDoctorInfoByID($id)->major != $scheduleCategory->getSchCategoryMajor($categoryID)){
+                $major=1;
             }
 
         $infoArr=[];
@@ -212,7 +218,8 @@ class ScheduleController extends Controller
             "countShedule"=>$schedule->checkDocStatus($id,$date),
             "countOff"=>$reservation->getResrvationByDateandDoctorID($id,$date),
             "countNight"=>$countNight,
-            "location" => $location
+            "location" => $location,
+            "major"=>$major
         ];
         array_push($infoArr,$info);
         
@@ -253,8 +260,16 @@ class ScheduleController extends Controller
                     $location=1;
             }
         }
-            
+    }
+
+        $major=0;
+        if($user->getDoctorInfoByID($doctorID)->major != "All"){
+            if($user->getDoctorInfoByID($doctorID)->major != $scheduleCategory->getSchCategoryMajor($categoryID)){
+                $major=1;
+            }
         }
+            
+        
         if($schedule->countScheduleDataByDateAndSessionID($dateStr,$categoryID)!=0){
             $scheduleSerial=$schedule->getScheduleDataByDateAndSessionID($dateStr,$categoryID)->scheduleID;
         }
@@ -276,7 +291,8 @@ class ScheduleController extends Controller
             'scheduleID'=>$scheduleSerial,
             "countOff"=>$countOff,
             "countNight"=>$countNight,
-            'location'=>$location
+            'location'=>$location,
+            "major"=> $major
         ];
 
         array_push($dataArr,$info);
