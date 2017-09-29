@@ -128,67 +128,67 @@
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
     <script src="../js/dropload.min.js"></script>
     <script>
-        $(function(){
-            
-            $('.card-content').dropload({
-                scrollArea : window,
-                loadDownFn : function(me){
-                    
-                    // 拼接HTML
-                    var result = '';
-                    $.ajax({
-                        type: 'GET',
-                        url: 'js/more.json',
-                        dataType: 'json',
-                        success: function(data){
-    //                        alert(data);
-    //                        console.log(data.lists[3]);
-                            console.log(data.lists[3].link);
-                            console.log(data.lists[3].title);
-                            console.log(data.lists[3].date);
-                            
-                            var arrLen = data.lists.length;
-                            if(arrLen > 0){
-                                for(var i=0; i<3; i++){
-//                                for(var i=0; i<arrLen; i++){
-                                    result +='<div class="row">'
-                                                +'<div class="col s2">'
-                                                    +'<img src="../img/user.png" class="boss-img">'
-                                                +'</div>'
-                                                +'<div class="col s10">'
-                                                    +'<span class="card-title">'+data.lists[i].link
-                                                        +'<a class="dropdown-edit-button right" href="" data-activates="dropdown-announcement"><i class="material-icons" onclick="passAnnouncementSerial(AjaxTEST)">more_vert</i></a>'
-                                                    +'</span>'
-                                                    +'<p class="announcement-ellipsis">'+data.lists[i].title+'</p>'
-                                                    +'<a href="#modal-more" onclick="getAnnouncement(AjaxTEST)">more</a>'
-                                                +'</div>'
-                                            +'</div>'
-                                            +'<div class="divider margin-b20"></div>';
-                                }
-                            // if no data
-                            }else{
-                                // 锁定
-                                me.lock();
-                                // 无数据
-                                me.noData();
-                            }
-                            
-                            setTimeout(function(){
-                                // 插入数据到页面，放到最后面
-                                $('.announcement').append(result);
-                                // 每次数据插入，必须重置
-                                me.resetload();
-                            },1000);
-                        },
-                        error: function(xhr, type){
-                            alert('Ajax error!');
-                            // 即使加载出错，也得重置
-                            me.resetload();
-                        }
-                    });
-                }
-            });
-        });
+//        $(function(){
+//            
+//            $('.card-content').dropload({
+//                scrollArea : window,
+//                loadDownFn : function(me){
+//                    
+//                    // 拼接HTML
+//                    var result = '';
+//                    $.ajax({
+//                        type: 'GET',
+//                        url: 'js/more.json',
+//                        dataType: 'json',
+//                        success: function(data){
+//    //                        alert(data);
+//    //                        console.log(data.lists[3]);
+//                            console.log(data.lists[3].link);
+//                            console.log(data.lists[3].title);
+//                            console.log(data.lists[3].date);
+//                            
+//                            var arrLen = data.lists.length;
+//                            if(arrLen > 0){
+//                                for(var i=0; i<3; i++){
+////                                for(var i=0; i<arrLen; i++){
+//                                    result +='<div class="row">'
+//                                                +'<div class="col s2">'
+//                                                    +'<img src="../img/user.png" class="boss-img">'
+//                                                +'</div>'
+//                                                +'<div class="col s10">'
+//                                                    +'<span class="card-title">'+data.lists[i].link
+//                                                        +'<a class="dropdown-edit-button right" href="" data-activates="dropdown-announcement"><i class="material-icons" onclick="passAnnouncementSerial(AjaxTEST)">more_vert</i></a>'
+//                                                    +'</span>'
+//                                                    +'<p class="announcement-ellipsis">'+data.lists[i].title+'</p>'
+//                                                    +'<a href="#modal-more" onclick="getAnnouncement(AjaxTEST)">more</a>'
+//                                                +'</div>'
+//                                            +'</div>'
+//                                            +'<div class="divider margin-b20"></div>';
+//                                }
+//                            // if no data
+//                            }else{
+//                                // 锁定
+//                                me.lock();
+//                                // 无数据
+//                                me.noData();
+//                            }
+//                            
+//                            setTimeout(function(){
+//                                // 插入数据到页面，放到最后面
+//                                $('.announcement').append(result);
+//                                // 每次数据插入，必须重置
+//                                me.resetload();
+//                            },1000);
+//                        },
+//                        error: function(xhr, type){
+//                            alert('Ajax error!');
+//                            // 即使加载出错，也得重置
+//                            me.resetload();
+//                        }
+//                    });
+//                }
+//            });
+//        });
         
         $('.dropdown-edit-button').dropdown({
             inDuration: 300,
