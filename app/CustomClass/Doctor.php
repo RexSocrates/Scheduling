@@ -5,7 +5,7 @@ class Doctor {
     
     public $doctorID = 0; // 醫師ID
     public $major = ''; // 專職科別
-    public $totalShifts = 0; // 總班數
+    public $totalShifts = 0; // 臨床總班數
     public $dayShifts = 0; // 白天班數
     public $nightShifts = 0; // 夜晚班數
     public $weekendShifts = 0; // 假日班數
