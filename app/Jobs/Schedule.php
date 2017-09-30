@@ -159,7 +159,16 @@ class Schedule implements ShouldQueue
                 // 計算表格中的假日班數
                 for($j = 0; $j < count($schedule); $j++) {
                     if($schedule[$j]->holiday == 1 and $schedule[$j]->doctor_id) {
-                        $class_holiday_amount = $class_holiday_amount + 1; // 2507
+                        $class_holiday_amount = $class_holiday_amount + 1; 
+                    }
+                }
+                
+                while($run_run_again == true or $switch_switch == 1) {
+                    $switch_switch = $switch_switch + 1;
+                    $run_run_again = false;
+                    
+                    for($j = 0; $j < count($holiday_order_list); $j++) {
+                        holiday_rotary_method_doctor($schedule, $schedule[$holiday_order_list[$j]], $doctor_list);
                     }
                 }
             }
@@ -1056,6 +1065,44 @@ class Schedule implements ShouldQueue
                 array_push($holiday_order_list, $i);
             }
         }
+    }
+    
+    // 輪盤法填假日班表
+    public function holiday_rotary_method_doctor($schedule, $class_table, $doctor_list) {
+        // 選醫生時存放他們暫時fit
+        
+        $fit_list = [];
+        $check = 0;
+        $check2 = 0;
+        $count = 0;
+        
+        while($check == 0) {
+            if($class_table->doctor_id == '') {
+                break;
+            }
+            
+            if($class_table->doctor_id == '' and $count < 300) {
+                // 班表屬性為以下
+                if($class_table->section == 'sur' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    // 依此班表屬性去算醫師的適性值，存入fit_list中
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    // 檢查此醫師是否有違反規定
+                    // 1397 rotary_method
+                }
+            }
+        }
+    }
+    
+    // 輪盤法選醫師填入班表
+    public function rotary_method($fit_list) {
+        // 1751
     }
     
     //  ==================  準備資料用  =========================
