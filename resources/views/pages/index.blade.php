@@ -61,6 +61,24 @@
       		  	  	</div>
       		  	</div>
       		  	<div class="col s12 m4">
+      		  	  	<div class="card center">
+              			<img src="../img/galaxy.svg" class="solar-system">
+              			<h4 class="blue-grey-text text-darken-3">初版班表已公佈</h4>
+      		  	  	  	<div class="card-action center">
+      		  	  	  	  	<a href="first-edition" class="margin-r0">前往初版班表 - 個人</a>
+      		  	  	  	</div>
+      		  	  	</div>
+      		  	</div>
+      		  	<div class="col s12 m4">
+      		  	  	<div class="card center">
+              			<img src="../img/sunset.svg" class="solar-system">
+              			<h4 class="blue-grey-text text-darken-3">正式班表已公佈</h4>
+      		  	  	  	<div class="card-action center">
+      		  	  	  	  	<a href="schedule" class="margin-r0">前往正式班表 - 個人</a>
+      		  	  	  	</div>
+      		  	  	</div>
+      		  	</div>
+      		  	<div class="col s12 m4">
       		  	  	<div class="card center padding-t5">
                         <h1 class="teal-text text-lighten-2">{{ $currentOfficialLeaveHours }}</h1>
       		  	  		<p class="blue-grey-text text-darken-3" style="font-weight: 500;">剩餘公假時數</p>
@@ -128,8 +146,8 @@
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
     <script src="../js/dropload.min.js"></script>
     <script>
+//        
 //        $(function(){
-//            
 //            $('.card-content').dropload({
 //                scrollArea : window,
 //                loadDownFn : function(me){
