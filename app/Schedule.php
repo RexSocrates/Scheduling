@@ -16,11 +16,9 @@ class Schedule extends Model
 
     //取得所有初版班表資訊
     public function getFirstSchedule() {
-        $currentMonth = date('Y-m');
         
         $schedule = DB::table('Schedule')
             ->whereNotNull('doctorID')
-            ->where('date', 'like', date('Y-m', strtotime($currentMonth.' +1 month')).'%')
             ->get();
         
         return $schedule;
@@ -66,6 +64,16 @@ class Schedule extends Model
             ->first();
         
         return $schedule;
+    }
+
+    //計算月份班數
+    public function getScheduleDataByDate($date) {
+        $count = DB::table('Schedule')
+            ->whereNotNull('doctorID')
+            ->where('date', 'like', $date.'%')
+            ->count();
+        
+        return $count;
     }
 
      //查看目前登入的醫生班表資訊
@@ -479,6 +487,32 @@ class Schedule extends Model
 
         return $count;
     }
+
+
+    //確認醫生前一天班是否為夜班
+     public function getNightScheduleByDoctorIDandDate($doctorID,$date){
+        $predate= date("Y-m-d",strtotime($date."-1 day"));
+
+         $preNightcount = DB::table('Schedule')
+                ->where('doctorID',$doctorID)
+                ->where('date', $predate)
+                ->whereIn('schCategorySerial',[13,14,15,16,17,18,19,20,21])
+                ->count();
+
+       //  $count=0;
+        
+       //  if($preNightcount!=0){
+       //       $count = DB::table('Schedule')
+       //          ->where('doctorID',$doctorID)
+       //          ->where('date', $date)
+       //          ->whereIn('schCategorySerial',[3,4,5,6,7,8,9,10,11,12])
+       //          ->count();
+
+       // }
+        return $preNightcount;
+
+    }
+
     
     // 檢查一位醫生在當週非職登院區的班數
     public function getAnotherLocationShifts($doctorID, $date) {
@@ -503,7 +537,7 @@ class Schedule extends Model
         
         // 取得非職登院區
         $anotherLocation = '';
-        if($doctorLocation == '台北') {
+        if($doctorLocation == 'Taipei') {
             $anotherLocation = 'Tamsui';
         }else {
             $anotherLocation = 'Taipei';
@@ -511,6 +545,7 @@ class Schedule extends Model
         
         // 取得在這一週目前在非職登院區的上班數
         $count = DB::table('Schedule')
+            ->whereNotNull('doctorID')
             ->where('doctorID', $doctorID)
             ->where('location', $anotherLocation)
             ->whereBetween('date', [$modayDate, $sundayDate])
@@ -519,4 +554,5 @@ class Schedule extends Model
         return $count;
     }
     
+
 }

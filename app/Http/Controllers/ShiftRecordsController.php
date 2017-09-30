@@ -11,6 +11,7 @@ use App\Schedule;
 use App\User;
 use App\ScheduleCategory;
 use App\Remark;
+use App\Reservation;
 
 // import jobs
 use App\Jobs\SendAgreeShiftExchangeMail;
@@ -236,8 +237,8 @@ class ShiftRecordsController extends Controller
     public function firstEditionShiftAddShifts(Request $request){
         $data = $request->all();
 
-        $scheduleID1 = (int)$data['scheduleID_1'];
-        $scheduleID2 = (int)$data['scheduleID_2'];
+        $scheduleID1 = (int)$data['scheduleID_1']; //提出
+        $scheduleID2 = (int)$data['scheduleID_2']; // 要換
 
         $schedule = new Schedule();
 
@@ -260,14 +261,14 @@ class ShiftRecordsController extends Controller
 
         $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
 
-        $receiver = $schedule_2_Info->doctorID; 
-        $applier = $schedule_1_Info->doctorID;
-        $applier_ScheduleID = $schedule_1_Info->scheduleID;
-        $receiver_ScheduleID = $schedule_2_Info->scheduleID;
+        // $receiver = $schedule_2_Info->doctorID; 
+        // $applier = $schedule_1_Info->doctorID;
+        // $applier_ScheduleID = $schedule_1_Info->scheduleID;
+        // $receiver_ScheduleID = $schedule_2_Info->scheduleID;
 
-        // $job = new SendApplyShiftExchangeMail($receiver,$applier,$applier_ScheduleID,$receiver_ScheduleID);
+        $job = new SendApplyShiftExchangeMail($newChangeSerial);
 
-        // dispatch($job);
+        dispatch($job);
 
 
     }
@@ -307,16 +308,20 @@ class ShiftRecordsController extends Controller
 
         $schedule = new Schedule();
         $user =new User();
+        $reservation = new Reservation();
+        $scheduleCategory = new ScheduleCategory();
 
 
         //判斷醫生1班
         $doctorID1 = $schedule->getScheduleDataByID($scheduleID1)->doctorID;//2
         $date1 = $schedule->getScheduleDataByID($scheduleID2)->date;
+        $categoryID1 =$schedule->getScheduleDataByID($scheduleID2)->schCategorySerial;
         $weekday1 = (int)date('N', strtotime($date1));
 
         //判斷醫生2班
         $doctorID2 = $schedule->getScheduleDataByID($scheduleID2)->doctorID;
         $date2 = $schedule->getScheduleDataByID($scheduleID1)->date;
+        $categoryID2 =$schedule->getScheduleDataByID($scheduleID1)->schCategorySerial;
         $weekday2 = (int)date('N', strtotime($date2));
 
         //確認當天一位醫生是否有上班 醫生id
@@ -326,6 +331,56 @@ class ShiftRecordsController extends Controller
         //確認醫生假日班數
         $doc1weekend = $schedule->checkDocScheduleInWeekend($doctorID1);
         $doc2weekend = $schedule->checkDocScheduleInWeekend($doctorID2);
+
+        //確認醫生是否有off班
+        $doc1off = $reservation->getResrvationByDateandDoctorID($doctorID1,$date1);
+        $doc2off = $reservation->getResrvationByDateandDoctorID($doctorID2,$date2);
+
+        //確認醫生前一天是否為夜班
+        $doc1PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID1,$date1);
+        $doc2PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID2,$date2);
+
+        //判斷在非値登院區班數
+        $doc1Location =0;
+        $doc2Location =0;
+        
+        if($schedule->getScheduleDataByID($scheduleID1)->location != $schedule->getScheduleDataByID($scheduleID2)->location){
+            if($schedule->getScheduleDataByID($scheduleID2)->location != $user->getDoctorInfoByID($doctorID1)->location){
+                $doc1Location = $schedule->getAnotherLocationShifts($doctorID1,$date1);
+            }
+
+            if($schedule->getScheduleDataByID($scheduleID1)->location != $user->getDoctorInfoByID($doctorID2)->location){
+                $doc2Location = $schedule->getAnotherLocationShifts($doctorID2,$date2);
+            }
+        
+        }
+        
+        //判斷醫生科別
+        $doc1Major=0;
+        $doc2Major=0;
+        if($user->getDoctorInfoByID($doctorID1)->major != "All"){
+            if($scheduleCategory->getSchCategoryMajor($categoryID1) != $scheduleCategory->getSchCategoryMajor($categoryID2)){
+                if($user->getDoctorInfoByID($doctorID1)->major != $scheduleCategory->getSchCategoryMajor($categoryID1)){
+                    $doc1Major=1;
+                }
+                if($user->getDoctorInfoByID($doctorID2)->major != $scheduleCategory->getSchCategoryMajor($categoryID2)){
+                    $doc2Major=2;
+                }
+
+            }
+        }
+
+        $doc1Night=0;
+
+        if($doc1PreNight != 0 and ($categoryID1==3 or $categoryID1==4 or $categoryID1==5 or $categoryID1==6 or $categoryID1==7 or $categoryID1==8 or $categoryID1==9 or $categoryID1==10 or $categoryID1==11 or $categoryID1==12)){
+            $doc1Night=1;
+        }
+
+        $doc2Night=0;
+
+        if($doc2PreNight != 0 and ($categoryID2==3 or $categoryID2==4 or $categoryID2==5 or $categoryID2==6 or $categoryID2==7 or $categoryID2==8 or $categoryID2==9 or $categoryID2==10 or $categoryID2==11 or $categoryID2==12)){
+            $doc2Night=1;
+        }
 
         $countDic=[
             "scheduleID_1"=>$scheduleID1,
@@ -339,7 +394,15 @@ class ShiftRecordsController extends Controller
             'weekday1'=>$weekday1,
             'weekday2'=>$weekday2,
             'doc1weekend'=> $doc1weekend,
-            'doc2weekend' => $doc2weekend
+            'doc2weekend' => $doc2weekend,
+            'doc1off' => $doc1off,
+            'doc2off' => $doc2off,
+            'doc1Night' => $doc1Night,
+            'doc2Night' => $doc2Night,
+            'doc1Location'=>$doc1Location,
+            'doc2Location'=>$doc2Location,
+            'doc1Major'=>$doc1Major,
+            'doc2Major'=>$doc2Major,
         ];
 
         

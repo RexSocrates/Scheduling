@@ -12,6 +12,7 @@ use App\Schedule;
 use App\ReservationData;
 use App\MustOnDutyShiftPerMonth;
 use App\Announcement;
+use App\Reservation;
 
 use App\Jobs\SendDeleteShiftMail;
 use App\Jobs\SendNewShiftAssignmentMail;
@@ -180,27 +181,63 @@ class ScheduleController extends Controller
         }
         return view('pages.schedule', array('schedule' => $scheduleData));
     }
-    //調整班表->新增班 驗證醫生id
+    //調整班表->新增班 驗證醫生id與off班
     public function confirmscheduleStatus(Request $request){
         $data = $request->all();
-        
-        $id = $data['id'];
+        $id = $data['id']; //doctor id
         $date = $data['date'];
         $categoryID = $data['classification'];
+
         $schedule = new Schedule();
-        $count = $schedule->checkDocStatus($id,$date);
+        $user = new User();
+        $reservation = new Reservation();
+        $scheduleCategory = new ScheduleCategory();
+        //$count = $schedule->checkDocStatus($id,$date);
+
+        $countNight=0;
+        if($schedule->getNightScheduleByDoctorIDandDate($id,$date) != 0 and ($categoryID==3 or $categoryID==4 or $categoryID==5 or $categoryID==6 or $categoryID==7 or $categoryID==8 or $categoryID==9 or $categoryID==10 or $categoryID==11 or $categoryID==12)){
+            $countNight=1;
+        }
+
+         $location=0;
+            if($user->getDoctorInfoByID($id)->location != $scheduleCategory->getSchCategoryInfo($categoryID)){
+                if($schedule->getAnotherLocationShifts($id,$date)>= 2){
+                    $location=1;
+                }
+            }
+
+        $major=0;
+        if($user->getDoctorInfoByID($id)->major != "All"){
+            if($user->getDoctorInfoByID($id)->major != $scheduleCategory->getSchCategoryMajor($categoryID)){
+                $major=1;
+            }
+        }  
+
+        $infoArr=[];
+        $info=[
+            "doc"=>$user->getDoctorInfoByID($id)->name,
+            "date"=>$data['date'],
+            "countShedule"=>$schedule->checkDocStatus($id,$date),
+            "countOff"=>$reservation->getResrvationByDateandDoctorID($id,$date),
+            "countNight"=>$countNight,
+            "location" => $location,
+            "major"=>$major
+        ];
+        array_push($infoArr,$info);
         
-        return $count;
+        return $infoArr;
     }
     //調整班表->更新班 驗證 班id
     public function confirmscheduleStatusBySerial(Request $request){
         $data = $request->all();
         $schedule = new Schedule();
         $user = new User();
-        
+        $reservation = new Reservation();
+        $scheduleCategory = new ScheduleCategory();
+
         $scheduleID = $data['scheduleID'];
         $date = $data['date']; //移動到哪一天
-        $session= $data['classification'];
+        $categoryID= $data['classification'];
 
         $dateStr = $this->processDateStr($date);
         $doctorID = $schedule->getScheduleDataByID($scheduleID)->doctorID;
@@ -210,14 +247,37 @@ class ScheduleController extends Controller
         $count = $schedule->checkDocStatus($doctorID,$dateStr);
         $weekDay = (int)date('N', strtotime($dateStr));  //移動的
         $weekDayInSchedule = (int)date('N', strtotime($dateInSchedule));
+        $countOff = $reservation->getResrvationByDateandDoctorID($doctorID,$dateStr);
 
-        if($schedule->countScheduleDataByDateAndSessionID($dateStr,$session)!=0){
-            $scheduleSerial=$schedule->getScheduleDataByDateAndSessionID($dateStr,$session)->scheduleID;
+
+        $countNight=0;
+        if($schedule->getNightScheduleByDoctorIDandDate($doctorID,$dateStr) != 0 and ($categoryID==3 or $categoryID==4 or $categoryID==5 or $categoryID==6 or $categoryID==7 or $categoryID==8 or $categoryID==9 or $categoryID==10 or $categoryID==11 or $categoryID==12)){
+            $countNight=1;
+        }
+
+        $location=0;
+         if($user->getDoctorInfoByID($doctorID)->location != $scheduleCategory->getSchCategoryInfo($categoryID)){
+            if($schedule->getScheduleDataByID($scheduleID)->location != $scheduleCategory->getSchCategoryInfo($categoryID)){
+                if($schedule->getAnotherLocationShifts($doctorID,$dateStr)>= 2){
+                    $location=1;
+            }
+        }
+    }
+
+        $major=0;
+        if($user->getDoctorInfoByID($doctorID)->major != "All"){
+            if($user->getDoctorInfoByID($doctorID)->major != $scheduleCategory->getSchCategoryMajor($categoryID)){
+                $major=1;
+            }
+        }
+            
+        
+        if($schedule->countScheduleDataByDateAndSessionID($dateStr,$categoryID)!=0){
+            $scheduleSerial=$schedule->getScheduleDataByDateAndSessionID($dateStr,$categoryID)->scheduleID;
         }
         else{
             $scheduleSerial=0;
         }
-
         
 
         $dataArr = [];
@@ -230,7 +290,11 @@ class ScheduleController extends Controller
             "date"=>$dateStr,
             'weekDayInSchedule' => $weekDayInSchedule,
             'dateInSchedule' =>$dateInSchedule,
-            'scheduleID'=>$scheduleSerial
+            'scheduleID'=>$scheduleSerial,
+            "countOff"=>$countOff,
+            "countNight"=>$countNight,
+            'location'=>$location,
+            "major"=> $major
         ];
 
         array_push($dataArr,$info);
@@ -325,9 +389,9 @@ class ScheduleController extends Controller
         $shiftRecords->deleteShiftRecord($data['scheduleID']);
         $doctorID = $schedule->getScheduleDataByID($data['scheduleID'])->doctorID;
 
-        $job = new SendDeleteShiftMail($data['scheduleID'],$doctorID);
+        // $job = new SendDeleteShiftMail($data['scheduleID'],$doctorID);
 
-        dispatch($job);
+        // dispatch($job);
 
             
     }
@@ -475,12 +539,12 @@ class ScheduleController extends Controller
             if($user->getDoctorInfoByID($name->doctorID)->location == "台北"){
                 if($totalShift/ 2== 0){
                     $taipei = (int)$totalShift/2;
-                    $mustOnDutyArr['taipei']= ceil($taipei)+1;
+                    $mustOnDutyArr['taipei']= ceil($taipei);
                     $mustOnDutyArr['tamsui']=$totalShift-$mustOnDutyArr['taipei'];
                 }
                 else{
                 $taipei = (int)$totalShift/2;
-                $mustOnDutyArr['taipei']= ceil($taipei)+1;
+                $mustOnDutyArr['taipei']= ceil($taipei);
                 $tamsui=$totalShift-$mustOnDutyArr['taipei'];
                 $mustOnDutyArr['tamsui']=(int)$tamsui;
                 }
@@ -551,33 +615,41 @@ class ScheduleController extends Controller
     }
 
     $onDuty=[];
-    foreach($doctorName as $name){
 
-        $onDutyArr=[
-            'doctorName'=> $name->name,
-            'totalShift'=>$schedule->totalShiftFirstEdition($name->doctorID),
-            'taipei'=>$schedule->totalTaipeiShiftFirstEdition($name->doctorID),
-            'tamsui'=>$schedule->totalTamsuiShiftFirstEdition($name->doctorID),
-            'day'=> $schedule->totalDayShiftFirstEdition($name->doctorID),
-            'night'=>$schedule->totalNightShiftFirstEdition($name->doctorID),
-            'medical'=>$schedule->totalMedicalShiftFirstEdition($name->doctorID),
-            'surgical'=>$schedule->totalSurgicalShiftFirstEdition($name->doctorID),
-            'weekendShifts'=>$schedule->checkDocScheduleInWeekend($name->doctorID),
-            'mustTotalShift'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTotalShifts,
-            'mustTaipei'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTaipeiShifts,
-            'mustTamsui'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTamsuiShifts,
-            'mustDay'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyDayShifts,
-            'mustNight'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyNightShifts,
-            'mustMedical'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyMedicalShifts,
-            'mustSurgical'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutySurgicalShifts
+    if($schedule->getScheduleDataByDate($date) !=0){
 
-        ];
+        foreach($doctorName as $name){
+
+            $onDutyArr=[
+                'doctorName'=> $name->name,
+                'totalShift'=>$schedule->totalShiftFirstEdition($name->doctorID),
+                'taipei'=>$schedule->totalTaipeiShiftFirstEdition($name->doctorID),
+                'tamsui'=>$schedule->totalTamsuiShiftFirstEdition($name->doctorID),
+                'day'=> $schedule->totalDayShiftFirstEdition($name->doctorID),
+                'night'=>$schedule->totalNightShiftFirstEdition($name->doctorID),
+                'medical'=>$schedule->totalMedicalShiftFirstEdition($name->doctorID),
+                'surgical'=>$schedule->totalSurgicalShiftFirstEdition($name->doctorID),
+                'weekendShifts'=>$schedule->checkDocScheduleInWeekend($name->doctorID),
+                'mustTotalShift'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTotalShifts,
+                'mustTaipei'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTaipeiShifts,
+                'mustTamsui'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTamsuiShifts,
+                'mustDay'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyDayShifts,
+                'mustNight'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyNightShifts,
+                'mustMedical'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutyMedicalShifts,
+                'mustSurgical'=>$user->getDoctorInfoByID($name->doctorID)->mustOnDutySurgicalShifts
+
+            ];
          array_push($onDuty,$onDutyArr);
+        }
+    }
+    else{
+
     }
         return view ('pages.first-edition-situation',array('mustOnDuty'=>$mustOnDuty,'onDuty'=>$onDuty));
+    }
 
 
-}
+
     // 從scheduler 傳回資料後將日期的字串分解
     private function processDateStr($dateStr) {
         $dateArr = explode(' ', $dateStr);

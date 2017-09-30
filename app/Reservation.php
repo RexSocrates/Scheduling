@@ -291,4 +291,25 @@ class Reservation extends Model
         
         return true;
     }
+
+    public function getResrvationByDateandDoctorID($doctorID,$date){
+        $resSerial = DB::table('Reservation')
+            ->where('date', $date)
+            ->where('isOn',0)
+            ->get();
+
+        $count=0;
+
+        foreach ($resSerial as $res) {
+            $count =  DB::table('DoctorAndReservation')
+            ->where('doctorID',$doctorID)
+            ->where('resSerial',$res->resSerial)
+            ->count();
+        }
+
+        return $count;
+
+    }
+    
+   
 }

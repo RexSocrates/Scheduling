@@ -949,12 +949,16 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
-            
+         //判斷醫生科別
+       $location=0;
+       $user = new User();
         $schedule = new Schedule();
-        $reservationData = new ReservationData();
-
-        $schedule->confirmNextMonthSchedule();
-        $reservationData->setScheduleAnnounceStatus();
+        $scheduleCategory = new ScheduleCategory();
+        $major=0;
+            if($user->getDoctorInfoByID(5)->major != $scheduleCategory->getSchCategoryMajor(7)){
+                $major=1;
+            }
+            echo $major;
 
     }
     

@@ -22,14 +22,23 @@ class AnnouncementController extends Controller
         $reservationData = new ReservationData();
 
         $currentMonth = date('Y-m');
-        $startDate = $reservationData->getDate($currentMonth)->startDate;
-        $endDate = $reservationData->getDate($currentMonth)->endDate;
+
+        $count=$reservationData->countMonth($currentMonth);
+
+        if($count==0){
+            $startDate="尚未開放";
+            $endDate="尚未開放";
+        }
+        else{
+            $startDate = $currentMonth.'-'.$reservationData->getDate($currentMonth)->startDate;
+            $endDate = $currentMonth.'-'.$reservationData->getDate($currentMonth)->endDate;
+        }
         
         return view('pages.index', [
             'announcements' => $announcements,
             'currentOfficialLeaveHours' => $leavehours,
-            'startDate' => $currentMonth.'-'.$startDate,
-            'endDate' => $currentMonth.'-'.$endDate,
+            'startDate' => $startDate,
+            'endDate' => $endDate
         ]);
     }
     

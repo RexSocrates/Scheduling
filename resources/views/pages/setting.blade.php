@@ -28,8 +28,13 @@
                                 <div id="slider"></div>
                             </div>
                             <div class="card-action">
+                                @if($status !=1 )
+                                <button type="submit" class="modal-action waves-effect waves-light btn btn-save" 
+                                disabled>Save</button>
+                                @else
                                 <button type="submit" class="modal-action waves-effect waves-light btn btn-save" 
                                 onclick="setDate()">Save</button>
+                                @endif
                             </div>
                             {{ csrf_field() }}
                         <!-- </form> -->

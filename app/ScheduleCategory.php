@@ -40,6 +40,29 @@ class ScheduleCategory extends Model
 		}   
         return $location;
     }
+
+    // 回傳該 schedule category的科別
+    public function getSchCategoryMajor($categorySerial) {
+       $major=null;
+        if($categorySerial == 3 || $categorySerial == 4 ||
+            $categorySerial == 5|| $categorySerial == 6 ||
+            $categorySerial == 9|| $categorySerial == 10 || 
+            $categorySerial == 13|| $categorySerial == 14 || 
+            $categorySerial == 15|| $categorySerial == 16 || 
+            $categorySerial == 19|| $categorySerial == 20  )
+        {
+
+            $major="Medical";
+        } 
+        if($categorySerial == 7 || $categorySerial == 8 ||
+            $categorySerial == 11 || $categorySerial == 12 ||
+            $categorySerial == 17|| $categorySerial == 18 ||
+            $categorySerial == 21)
+        {
+            $major="Surgical";
+        }   
+        return $major;
+    }
     
     // 回傳班的名稱
     public function getSchCateName($serial) {
