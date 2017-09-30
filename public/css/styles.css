@@ -742,6 +742,12 @@ tbody td:last-child, thead th:last-child {
     border-right: none;
 }
 
+.ellipsis {
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+}
+
 .announcement-ellipsis {
     overflow: hidden;
     display: -webkit-box;
@@ -751,8 +757,12 @@ tbody td:last-child, thead th:last-child {
 /*    display: inline;*/
 }
 
+#announcementContent {
+    white-space: pre-line;
+}
+
 .inline {
-/*    display: inline !important;*/
+    display: inline !important;
 }
 
 #slider {

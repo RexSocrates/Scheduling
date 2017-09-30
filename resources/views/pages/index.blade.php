@@ -30,10 +30,11 @@
                                         <img src="../img/user.png" class="boss-img">
                                     </div>
                                     <div class="col s10">
-                                        <span class="card-title">{{ $announcement->title }}
-                                        @if(Auth::user()->identity == 'Admin')
-                                        <a class="dropdown-edit-button right" href="" data-activates='dropdown-announcement'><i class="material-icons" onclick="passAnnouncementSerial({{ $announcement->announcementSerial }})">more_vert</i></a>
-                                        @endif
+                                        <span class="card-title">
+                                            @if(Auth::user()->identity == 'Admin')
+                                            <a class="dropdown-edit-button right" href="" data-activates='dropdown-announcement'><i class="material-icons" onclick="passAnnouncementSerial({{ $announcement->announcementSerial }})">more_vert</i></a>
+                                            @endif
+                                            <p class="ellipsis">{{ $announcement->title }}</p>
                                         </span>
                                         <p class="announcement-ellipsis">{{ $announcement->content }}</p>
                                         <a href="#modal-more" onclick="getAnnouncement({{ $announcement->announcementSerial }})">more</a>
@@ -105,7 +106,6 @@
                                 <input id="title" type="text" name="title" data-length="50" required>
                                 <label for="title">標題</label>
                             </div>
-                        
                             <div class="input-field col s12">
                                 <i class="material-icons prefix modal-icons">mode_edit</i>
                                 <textarea id="textarea1" class="materialize-textarea margin-b0" type="text" name="content" data-length="980" required></textarea>
@@ -124,17 +124,18 @@
                 <div class="modal-header">
                     <h5 class="modal-announcement-title">公告</h5>
                 </div>
-                
                 <div class="modal-content modal-content-customize1">
                     <div class="row margin-b0">
     				    <div class="col s12">
                             <h5 class="card-title" id="announcementTitle"></h5>
-    				    	<p id="announcementContent"></p>
+                            <p class="inline">蔡維德</p>
+                            <p class="inline margin-l10 grey-text">2017-09-10</p>
+    				    	<pre id="announcementContent"></pre>
     				    </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="" class="modal-action modal-close waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">Close</a>
+                    <button class="modal-action modal-close waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-cancel">Close</button>
                 </div>
             </div>
 
@@ -146,7 +147,7 @@
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
     <script src="../js/dropload.min.js"></script>
     <script>
-//        
+        
 //        $(function(){
 //            $('.card-content').dropload({
 //                scrollArea : window,
@@ -174,8 +175,9 @@
 //                                                    +'<img src="../img/user.png" class="boss-img">'
 //                                                +'</div>'
 //                                                +'<div class="col s10">'
-//                                                    +'<span class="card-title">'+data.lists[i].link
+//                                                    +'<span class="card-title">'
 //                                                        +'<a class="dropdown-edit-button right" href="" data-activates="dropdown-announcement"><i class="material-icons" onclick="passAnnouncementSerial(AjaxTEST)">more_vert</i></a>'
+//                                                        +'<p class="ellipsis">'+data.lists[i].link+'</p>'
 //                                                    +'</span>'
 //                                                    +'<p class="announcement-ellipsis">'+data.lists[i].title+'</p>'
 //                                                    +'<a href="#modal-more" onclick="getAnnouncement(AjaxTEST)">more</a>'
