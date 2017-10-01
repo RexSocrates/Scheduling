@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\ReservationData;
 use\App\User;
 use\App\Announcement;
+use App\MustOnDutyShiftPerMonth;
+use App\ScheduleRecord;
 
 class SettingController extends Controller
 {
@@ -30,8 +32,8 @@ class SettingController extends Controller
                 $status = $reservationData->getDate($nextMonth)->status;
                     if($today<($nextMonth.'-'.$endDate)){
                         $firstSchedule=1;
-            }
                     }
+            }
     }
         
         else if($reservationData->getStatus($month)->status !=1){
@@ -123,6 +125,7 @@ class SettingController extends Controller
         $reservationData = new ReservationData();
         $user = new User();
         $announcement = new Announcement();
+        
 
         $reservationData->setFirstScheduleAnnounceStatus();
 
@@ -134,6 +137,7 @@ class SettingController extends Controller
 
         $announcement->addAnnouncement($data);
 
+        
 
         return redirect('setting');
     }

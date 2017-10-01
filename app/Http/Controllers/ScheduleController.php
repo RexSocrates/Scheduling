@@ -13,6 +13,7 @@ use App\ReservationData;
 use App\MustOnDutyShiftPerMonth;
 use App\Announcement;
 use App\Reservation;
+use App\ScheduleRecord;
 
 use App\Jobs\SendDeleteShiftMail;
 use App\Jobs\SendNewShiftAssignmentMail;
@@ -458,6 +459,8 @@ class ScheduleController extends Controller
         $reservationData = new ReservationData();
         $user = new User();
         $announcement = new Announcement();
+        $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
+        $scheduleRecord = new ScheduleRecord();
 
         $schedule->confirmNextMonthSchedule();
         $reservationData->setScheduleAnnounceStatus();
@@ -467,6 +470,34 @@ class ScheduleController extends Controller
             'content'=>"已公布正式班表",
             'doctorID'=> $user->getCurrentUserID()
         ];
+
+        $doctorName = $user->getAtWorkDoctors();
+
+        foreach($doctorName as $name){
+
+            $date= date('Y-m');
+           
+            $mustOnDutyShiftArr=[
+            'doctorID'=>$name->doctorID,
+            'leaveMonth'=>$date
+            ];
+
+            $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
+
+            if($count!=0){
+                $mustOnDutyTotalShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift; //應上
+                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
+                $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
+                $scheduleRecord->addScheduleRecord($name->doctorID,$shifHours);
+            }
+            else{
+                $mustOnDutyTotalShift=$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTotalShifts;
+                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
+                $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
+                $scheduleRecord->addScheduleRecord($name->doctorID,$shifHours);
+             }
+
+    }
 
         $announcement->addAnnouncement($data);
 
@@ -526,6 +557,7 @@ class ScheduleController extends Controller
         ];
 
         $date= date('Y-m',strtotime("+1 month"));
+
         $mustOnDutyShiftArr=[
             'doctorID'=>$name->doctorID,
             'leaveMonth'=>$date
@@ -553,7 +585,7 @@ class ScheduleController extends Controller
          if($user->getDoctorInfoByID($name->doctorID)->level == "A1" || $user->getDoctorInfoByID($name->doctorID)->level == "A5"){
             if($totalShift /2 == 0){
                 $mustOnDutyArr['day'] = $totalShift/2;
-                $mustOnDutyArr['night']  = $totalShift- $totalShift/2;
+                $mustOnDutyArr['night']  = $totalShift-$totalShift/2;
             }
             else{
                 $mustOnDutyArr['day'] = floor($totalShift/2);
@@ -648,7 +680,35 @@ class ScheduleController extends Controller
         return view ('pages.first-edition-situation',array('mustOnDuty'=>$mustOnDuty,'onDuty'=>$onDuty));
     }
 
+    //查詢 單一醫生總積欠班數 
+    public function shifHoursByDoctorID(){
+        $scheduleRecord = new ScheduleRecord();
+        $user = new User();
+        $shiftHours =$scheduleRecord->getScheduleBydoctorID($user->getCurrentUserID());
+        $total =0;
+        foreach ($shiftHours as $shiftHour) {
+            $total += $shiftHour->shiftHours;
+        }
+        return $total;
+    }
 
+    //查詢 所有醫生總積欠班數
+    public function shifHours(){
+
+        $scheduleRecord = new ScheduleRecord();     
+        $user = new User();
+        $doctors = $user->getAtWorkDoctors();
+        foreach ($doctors as $doctor) {
+            $shiftHours =$scheduleRecord->getScheduleBydoctorID($doctor->doctorID);
+            $total =0;
+            foreach ($shiftHours as $shiftHour) {
+            $total += $shiftHour->shiftHours;
+            
+            }
+             array_push($totalShift,$total);
+        }
+
+    }
 
     // 從scheduler 傳回資料後將日期的字串分解
     private function processDateStr($dateStr) {

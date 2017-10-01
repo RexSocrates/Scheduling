@@ -16,6 +16,8 @@ use App\ShiftRecords;
 use App\OfficialLeave;
 use App\ScheduleCategory;
 use App\ReservationData;
+use App\MustOnDutyShiftPerMonth;
+use App\ScheduleRecord;
 
 use App\Jobs\SendDeleteShiftMail;
 use App\Jobs\SendApplyShiftExchangeMail;
@@ -949,21 +951,30 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
-      
-
-      $month=date("Y-m",strtotime("+1 month"));
-      $reservationData = new ReservationData();
-$today = date("Y-m-d");//現在時間
-       $m = (int)date('m',strtotime("+1 month"));
+     
+        $scheduleRecord = new ScheduleRecord();
+        //$shiftHours =$scheduleRecord->getScheduleBydoctorID(3);
+       
+        $user = new User();
+        $doctors = $user->getAtWorkDoctors();
+        $totalShift=[];
+        foreach ($doctors as $doctor) {
+            $shiftHours =$scheduleRecord->getScheduleBydoctorID($doctor->doctorID);
+            $total =0;
+            foreach ($shiftHours as $shiftHour) {
+            $total += $shiftHour->shiftHours;
+            //echo $doctor->doctorID."<br>";
             
-            $endDate = $reservationData->getDate($month)->endDate;
-            
-            $firstSchedule = 0;
-            if($today<($m.'-'.$endDate)){
-                $firstSchedule=1;
             }
+             array_push($totalShift,$total);
+        }
+        for($i = 0 ; $i<count($totalShift);$i++){
+                echo $totalShift[$i];
+        }
 
-            echo $firstSchedule;
+        
+        
+    
         //$reservationData->addDate($month,1,10);
             // $user= new User();
             // $schedule = new Schedule();
