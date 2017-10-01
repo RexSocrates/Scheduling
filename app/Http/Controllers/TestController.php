@@ -949,18 +949,48 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
-         //判斷醫生科別
-       $location=0;
-       $user = new User();
-        $schedule = new Schedule();
-        $scheduleCategory = new ScheduleCategory();
-        $major=0;
-            if($user->getDoctorInfoByID(5)->major != $scheduleCategory->getSchCategoryMajor(7)){
-                $major=1;
-            }
-            echo $major;
+      
 
-    }
+      $month=date("Y-m",strtotime("+1 month"));
+      $reservationData = new ReservationData();
+$today = date("Y-m-d");//現在時間
+       $m = (int)date('m',strtotime("+1 month"));
+            
+            $endDate = $reservationData->getDate($month)->endDate;
+            
+            $firstSchedule = 0;
+            if($today<($m.'-'.$endDate)){
+                $firstSchedule=1;
+            }
+
+            echo $firstSchedule;
+        //$reservationData->addDate($month,1,10);
+            // $user= new User();
+            // $schedule = new Schedule();
+            // $major='Surgical';
+            // $doctors = $user->getDoctorByMajor($major);
+            // $scheduleData = $schedule->getDoctorScheduleDataByDate('2017-10-02');
+            
+            //     // $id = $doctor->doctorID;
+            //     // $idArr = [$id];
+            // // }
+            //    foreach($scheduleData as $info){
+            //     foreach ($doctors as $doctor) {
+            //          if($doctor->doctorID != $info->doctorID){
+            //             echo $doctor->doctorID.'<br>';
+            //          }
+            //          else{ 
+                        
+            //         }
+                    
+            //     }
+               
+            // }
+        }
+            // if($idArr != $scArr){
+            //     echo $idArr[0];
+            // }
+    
     
     // 取得特定醫師在那一週的非職登院區上班班數
     public function getAnotherLocationShifts() {

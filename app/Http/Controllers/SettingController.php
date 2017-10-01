@@ -13,34 +13,45 @@ class SettingController extends Controller
     public function getSettingPage(){
 
         $month = date("Y-m");
-        //$month=date("Y-m",strtotime("+1 month"));
+        $nextMonth=date("Y-m",strtotime("+1 month"));
         $reservationData = new ReservationData();
 
-        $count = $reservationData->countMonth($month);
+        $count = $reservationData->countMonth($nextMonth);
+        $firstSchedule = 0;
 
+        $today = date("Y-m-d");//現在時間
         $m = (int)date('m');
 
-        if($count==0){
-            $strDate=1;
-            $endDate=10;
-            $status=1;
-
-        }
-
+        if($count == 1){
+            if($reservationData->getStatus($nextMonth)->status ==1){
+                $m = (int)date('m',strtotime("+1 month"));
+                $strDate = $reservationData->getDate($nextMonth)->startDate;
+                $endDate = $reservationData->getDate($nextMonth)->endDate;
+                $status = $reservationData->getDate($nextMonth)->status;
+                    if($today<($nextMonth.'-'.$endDate)){
+                        $firstSchedule=1;
+            }
+                    }
+    }
+        
         else if($reservationData->getStatus($month)->status !=1){
             $m = (int)date('m',strtotime("+1 month"));
             $strDate=1;
             $endDate=10;
             $status=$reservationData->getStatus($month)->status;
+            $firstSchedule=1;
         }
 
         else{
             $strDate = $reservationData->getDate($month)->startDate;
             $endDate = $reservationData->getDate($month)->endDate;
             $status = $reservationData->getDate($month)->status;
+            if($today<($month.'-'.$endDate)){
+                $firstSchedule=1;
+            }
         }
 
-        return view('pages.setting', array('month'=> $m,'strDate'=>$strDate,'endDate'=>$endDate,'status'=>$status));
+        return view('pages.setting', array('month'=> $m,'strDate'=>$strDate,'endDate'=>$endDate,'status'=>$status,'firstSchedule'=>$firstSchedule));
 
     }
 
@@ -86,7 +97,7 @@ class SettingController extends Controller
         
         $count = $reservationData->countMonth($yearMonth);
 
-        if($count==1){
+        // if($count==1){
             $status = $reservationData->getStatus($yearMonth)->status;
                 if($status !=0 && $status !=1 ){
                     $yearMonth = date('Y-m',strtotime("+1 month"));
@@ -94,11 +105,11 @@ class SettingController extends Controller
         	$reservationData->updateDate($yearMonth,$strDate,$enDate);
             
 
-        }
-        else{
-        	$reservationData->addDate($yearMonth,$strDate,$enDate);
+        //}
+        // else{
+        // 	$reservationData->addDate($yearMonth,$strDate,$enDate);
 
-        }
+        // }
 
         //echo $month;
         // echo $yearMonth.'-'.$startDate;
@@ -130,12 +141,17 @@ class SettingController extends Controller
     public function toReservation(){
         $user = new User();
         $announcement = new Announcement();
+        $reservationData = new ReservationData();
 
         $data=[
             'title'=>"預班已開放",
             'content'=>"開放預班",
             'doctorID'=> $user->getCurrentUserID()
         ];
+
+        $month=date("Y-m",strtotime("+1 month"));
+
+        $reservationData->addDate($month,1,10);
 
         $announcement->addAnnouncement($data);
 
