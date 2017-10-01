@@ -60,11 +60,12 @@
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12 margin-b20">
-                                            <select name="doctor" id="doctor" required>
+                                            <select name="doctor" class="browser-default" id="doctor" required>
                                                 <option value="" selected disabled>選擇醫生</option>
-                                                @foreach($doctorName as $name)
+                                                <option value="" selected ></option>
+                                                <!-- @foreach($doctorName as $name)
                                                 <option value="{{$name->doctorID}}">{{$name->name}}</option>
-                                                @endforeach
+                                                @endforeach -->
                                             </select>
                                             <label>醫生</label>
                                         </div>
@@ -515,6 +516,7 @@
                             
                                 changeDoctor_1(event.hidden);
                                 showScheduleInfo(event.start_date,event.section_id);
+                                //showDoctorInfo(event.section_id);
 
                                 console.log("123"+event.text);
 
@@ -1072,6 +1074,7 @@
 
         }
 
+        
 
         function save_form_alert_addSchedule(){
             var id = document.getElementById('doctor').value;
@@ -1371,14 +1374,37 @@
             });
         }
 
-        function showScheduleInfo(date,section_id,id) {
-             document.getElementById("shiftDate").value=date;
-             document.getElementById("shiftSessionID").value=section_id;
-             document.getElementById("scheduleID_1").value=id;
 
-             console.log("scheduleID_1");
+        function showScheduleInfo(date,section_id,id){
+            $.get("showDoctorInfo",{
+               categorySerial: section_id
+            
+            }, function(array){
+                document.getElementById("shiftDate").value=date;
+                document.getElementById("shiftSessionID").value=section_id;
+                document.getElementById("scheduleID_1").value=id;
+                var info = "";
+                console.log("length"+array.length);
+                for(i=0 ; i<array.length ; i++){
+                    info += "<option value="+array[i]['doctorID']+">"+array[i]['doctorName']+(array[i]['totalShift'])+"</option>";
+                    console.log('1'+array[i]['doctorID']);
+                }
+                document.getElementById("doctor").innerHTML  = info;
 
+            console.log("11123rrr");
+
+        });
+
+             
         }
+        // function showScheduleInfo(date,section_id,id) {
+        //      document.getElementById("shiftDate").value=date;
+        //      document.getElementById("shiftSessionID").value=section_id;
+        //      document.getElementById("scheduleID_1").value=id;
+
+        //      console.log("scheduleID_1");
+
+        // }
 
         function close_form() {               
             scheduler.endLightbox(false, html("my_form"));             
@@ -1441,5 +1467,10 @@
         });
 
         }
+
+        
+
+
+        
     </script>
 @endsection

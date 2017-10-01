@@ -860,7 +860,7 @@ class ShiftRecordsController extends Controller
 
         $scheduleData = $schedule->getFirstSchedule();
 
-        $doctor = $user->getAtWorkDoctors();
+        $doctors = $user->getAtWorkDoctors();
         //$doctorSchedule = $schedule->getScheduleByDoctorID($doctor->doctorID); //之後用ajax傳入id
 
         foreach ($scheduleData as $data) {
@@ -868,12 +868,14 @@ class ShiftRecordsController extends Controller
             $data->doctorID = $doctorName->name;
         }
 
+
+
         $dateArr = explode('-', $date);
         
 
         return view('pages.shift-first-edition',array(
             'schedule' => $scheduleData,
-            'doctorName' => $doctor,
+            'doctorName' => $doctors,
         ));
 
     }

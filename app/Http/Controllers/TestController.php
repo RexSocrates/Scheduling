@@ -952,24 +952,74 @@ class TestController extends Controller
 
    public function announceSchedule(){
      
-        $scheduleRecord = new ScheduleRecord();
-        //$shiftHours =$scheduleRecord->getScheduleBydoctorID(3);
-       
-        $user = new User();
+       $user = new User();
+        $scheduleCategory = new ScheduleCategory();
+        $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
+        $schedule = new Schedule();
+
+        //$data = $request->all();
+        $categorySerial = $scheduleCategory->getSchCategoryMajor(4);
+
         $doctors = $user->getAtWorkDoctors();
-        $totalShift=[];
+
+        $date= date('Y-m',strtotime("+1 month"));
+   
+        $shiftArr=[];
         foreach ($doctors as $doctor) {
-            $shiftHours =$scheduleRecord->getScheduleBydoctorID($doctor->doctorID);
-            $total =0;
-            foreach ($shiftHours as $shiftHour) {
-            $total += $shiftHour->shiftHours;
-            //echo $doctor->doctorID."<br>";
+
+            $mustOnDutyShiftArr=[
+            'doctorID'=>$doctor->doctorID,
+            'leaveMonth'=>$date
+            ];
+
+            $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
+            $mustOnDutyMedicalShifts=0;
+            $mustOnDutySurgicalShifts=0;
+            $shift=0;
+            $totalShift=0;
             
+
+            $shiftDic=[
+                'totalShift'=>"",
+                'doctorID'=>$doctor->doctorID,
+                'doctorName' => $doctor->name
+            ];
+
+            if($count!=0){
+                $mustOnDutyMedicalShifts=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift*11/15;
+                $mustOnDutySurgicalShifts=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift-$medical;
+              
+                if($categorySerial == "Medical"){
+                    $shift=$schedule->totalMedicalShiftFirstEdition($doctor->doctorID);
+                    $shiftDic['totalShift']=$mustOnDutyMedicalShifts-$shift;
+                }
+                else if($categorySerial == "Surgical")
+                    $shift=$schedule->totalSurgicalShiftFirstEdition($doctor->doctorID);
+                    $shiftDic['totalShift']=$mustOnDutySurgicalShifts-$shift;
+                }
+            else{
+                $mustOnDutyMedicalShifts=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts;
+                $$mustOnDutySurgicalShifts=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutySurgicalShifts;
+
+                if($categorySerial == "Medical"){
+                    $shift=$schedule->totalMedicalShiftFirstEdition($doctor->doctorID);
+                    $$shiftDic['totalShift']=$mustOnDutyMedicalShifts-$shift;
+                }
+                else if($categorySerial == "Surgical")
+                    $shift=$schedule->totalMedicalShiftFirstEdition($doctor->doctorID);
+                    $shiftDic['totalShift']=$mustOnDutySurgicalShifts-$shift;
+                }
+             
+                array_push($shiftArr,$shiftDic);
             }
-             array_push($totalShift,$total);
-        }
-        for($i = 0 ; $i<count($totalShift);$i++){
-                echo $totalShift[$i];
+
+
+            for($i = 0 ; $i<count($shiftArr);$i++){
+                echo $shiftArr[$i]['doctorName'];
+            }
+           
+
+           
         }
 
         
@@ -997,7 +1047,7 @@ class TestController extends Controller
             //     }
                
             // }
-        }
+
             // if($idArr != $scArr){
             //     echo $idArr[0];
             // }

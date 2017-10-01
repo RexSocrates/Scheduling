@@ -337,6 +337,71 @@ class ScheduleController extends Controller
 
         
     }
+
+    //列出醫生剩餘班數
+    public function showDoctorInfo(Request $request){
+        $user = new User();
+        $scheduleCategory = new ScheduleCategory();
+        $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
+        $schedule = new Schedule();
+
+        $data = $request->all();
+        $categorySerial = $scheduleCategory->getSchCategoryMajor($data['categorySerial']);
+
+        $doctors = $user->getAtWorkDoctors();
+
+        $date= date('Y-m',strtotime("+1 month"));
+        $shiftArr=[];
+        
+        foreach ($doctors as $doctor) {
+
+            $mustOnDutyMedicalShifts=0;
+            $mustOnDutySurgicalShifts=0;
+
+            $mustOnDutyShiftArr=[
+            'doctorID'=>$doctor->doctorID,
+            'leaveMonth'=>$date
+            ];
+
+            $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
+            
+            
+            $shiftDic=[
+                'totalShift'=>"",
+                'doctorID'=>$doctor->doctorID,
+                'doctorName' => $doctor->name
+            ];
+
+            if($count!=0){
+              
+                if($categorySerial == "Medical"){
+                    
+                    $shiftDic['totalShift']=($mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift*11/15)-($schedule->totalMedicalShiftFirstEdition($doctor->doctorID));
+                }
+                else if($categorySerial == "Surgical")
+                    $medical =$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift*11/15;
+                    $shiftDic['totalShift']=($mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift-$medical)-$schedule->totalSurgicalShiftFirstEdition($doctor->doctorID);
+                }
+
+            else{
+               
+                if($categorySerial == "Medical"){
+                    
+                    $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts-$schedule->totalMedicalShiftFirstEdition($doctor->doctorID);
+                }
+                else if($categorySerial == "Surgical")
+                    $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutySurgicalShifts-$schedule->totalMedicalShiftFirstEdition($doctor->doctorID);
+            }
+            
+                array_push($shiftArr,$shiftDic);
+               
+
+            }
+             return $shiftArr;
+           
+           //array_push($surgicallArr,$totalSurgical);
+        }
+    
     
     // 刪除預班
     public function deleteReservation(Request $request){
