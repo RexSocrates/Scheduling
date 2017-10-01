@@ -210,11 +210,18 @@ class ShiftRecordsController extends Controller
     //醫生拒絕換班
     public function rejectShift($id){
         $shiftRecords = new ShiftRecords();
+        $schedule = new Schedule();
 
         $shiftCheck = $shiftRecords->doc2Confirm($id,2);
 
         $applier = $shiftRecords->schID_1_doctor;
         $receiver = $shiftRecords->schID_2_doctor;
+
+        $scheduleID_1=$shiftRecords->getShiftRecordByChangeSerial($id)->scheduleID_1;
+        $scheduleID_2=$shiftRecords->getShiftRecordByChangeSerial($id)->scheduleID_2;
+
+        $schedule->checkScheduleStatus($scheduleID_1,0);
+        $schedule->checkScheduleStatus($scheduleID_2,0);
 
         $job = new SendDenyShiftExchangeMail($applier,$receiver);
 
@@ -261,6 +268,8 @@ class ShiftRecordsController extends Controller
 
         $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
 
+        $schedule->checkScheduleStatus($scheduleID1,1);
+        $schedule->checkScheduleStatus($scheduleID2,1);
         // $receiver = $schedule_2_Info->doctorID; 
         // $applier = $schedule_1_Info->doctorID;
         // $applier_ScheduleID = $schedule_1_Info->scheduleID;
@@ -798,6 +807,7 @@ class ShiftRecordsController extends Controller
         $serial = $data['id'];
 
         $shiftRecordObj = new ShiftRecords();
+        $schedule = new Schedule();
         $shiftRecordObj->adminConfirm($serial,1);
 
         // $shiftRecordData = $shiftRecordObj->getShiftRecordByChangeSerial($serial);
@@ -808,6 +818,11 @@ class ShiftRecordsController extends Controller
         // $receiver_ScheduleID = $shiftRecordData->scheduleID_2;
 
         // $job = new SendShiftExchangingInformMail($applier,$receiver,$applier_ScheduleID,$receiver_ScheduleID);
+        $scheduleID_1=$shiftRecordObj->getShiftRecordByChangeSerial($serial)->scheduleID_1;
+        $scheduleID_2=$shiftRecordObj->getShiftRecordByChangeSerial($serial)->scheduleID_2;
+
+        $schedule->checkScheduleStatus($scheduleID_1,0);
+        $schedule->checkScheduleStatus($scheduleID_2,0);
 
         $job = new SendShiftExchangingInformMail($serial);
 
@@ -820,8 +835,16 @@ class ShiftRecordsController extends Controller
     // 排班人員拒絕換班
     public function adminDisagreeShiftRecord($serial){
         $shiftRecordObj = new ShiftRecords();
+        $schedule = new Schedule();
 
         $shiftRecordObj->adminConfirm($serial,2);
+
+
+        $scheduleID_1=$shiftRecordObj->getShiftRecordByChangeSerial($serial)->scheduleID_1;
+        $scheduleID_2=$shiftRecordObj->getShiftRecordByChangeSerial($serial)->scheduleID_2;
+
+        $schedule->checkScheduleStatus($scheduleID_1,0);
+        $schedule->checkScheduleStatus($scheduleID_2,0);
 
         $job = new SendDenyConfirmedShiftExchangeMail($serial);
 

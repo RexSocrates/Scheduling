@@ -217,6 +217,17 @@ class Schedule extends Model
         
         return $affectedRows;
     }
+
+    //更新醫生班表是否有被換班狀態
+    public function checkScheduleStatus($scheduleID,$status){
+        $affectedRows = DB::table('Schedule')
+            ->where('scheduleID', $scheduleID)
+            ->update([
+                'status' => $status
+
+            ]);
+        
+    }
     
     // 確認當月班表
     public function confirmSchedule() {

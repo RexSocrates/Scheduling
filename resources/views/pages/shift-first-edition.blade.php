@@ -14,7 +14,19 @@
             opacity: 0;
             filter: alpha(opacity = 0);
         }
+
+       .dhx_cal_event.event_1 div, .dhx_cal_event_line.event_1{
+            background-color: #FC5BD5 !important;
+            border-color: #839595 !important;
+        }
+        .dhx_cal_event_clear.event_1{
+            color:#B82594 !important;
+        }
+
     </style>
+
+
+
 @endsection
 
 @section('navbar')
@@ -179,6 +191,9 @@
                             scheduler.config.container_autoresize = true;
                             scheduler.config.collision_limit = 2; 
                             scheduler.config.drag_resize= false;
+                            scheduler.locale.labels.section_subject = "Subject";
+                            scheduler.config.multi_day = true;
+
 
                             scheduler.form_blocks["hidden"] = {
                                 render:function(sns) {
@@ -506,6 +521,19 @@
                                 return true;
                             });
                            
+                            scheduler.templates.event_class=function(start, end, event){
+                                var css = "";
+
+                                if(event.subject) // if event has subject property then special class should be assigned
+                                 css += "event_"+event.subject;
+
+                                if(event.id == scheduler.getState().select_id){
+                                    css += " selected";
+                                }
+                                return css; // default return       
+                         };
+
+
                            
 
                             //進入畫面後顯示的東西
@@ -513,7 +541,7 @@
 
                             scheduler.parse([
                                 @foreach($schedule as $data)
-                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}" },
+                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}", subject:"{{ $data->status }}" },
                                
                                 @endforeach
                             ],"json");
