@@ -38,7 +38,7 @@ class Schedule implements ShouldQueue
     public $month = 0; // 月份
     public $days = 0; // 一個月天數
     public $first_day_of_month = 0; // 第一天為星期幾
-    public $schedule = []; // 放整個物件班表的List
+    public $schedule = []; // 放整個物件班表的List  使用 ClassTable
     public $x = 0; // 迴圈起始值
     public $generation = 0; // 想要跑的代數
     public $doctor_list = []; // 放所有醫生的list
@@ -125,7 +125,100 @@ class Schedule implements ShouldQueue
                 
                 // 建立預ON班表
                 creat_on_class_list();
-                pre_on_class();
+                pre_on_class(); // 2483
+                
+                // 建立填班表順序
+                input_order_list($schedule);
+                
+                // 建立假日班填班順序
+                input_holiday_order_list($schedule); // 2488
+                
+                // 先將預班完的班表和醫生列表複製起來
+                // 取代 deep copy
+                $copy_pre_schedule = [];
+                foreach($schedule as $sch) {
+                    array_push($copy_pre_schedule, $sch);
+                }
+                
+                $copy_pre_doctor_list = [];
+                foreach($doctor_list as $doctor) {
+                    array_push($copy_pre_doctor_list, $doctor);
+                }
+                
+                // 先將假日班填完
+                $switch_switch = 1;
+                $run_run_again = false;
+                $doctor_holiday_amount = 0;
+                $class_holiday_amount = 0;
+                
+                // 計算所有醫生的假日班數
+                for($j = 0; $j < count($doctor_list); $j++) {
+                    $doctor_holiday_amount = $doctor_holiday_amount + $doctor_list[$j]->weekendShifts;
+                }
+                
+                // 計算表格中的假日班數
+                for($j = 0; $j < count($schedule); $j++) {
+                    if($schedule[$j]->holiday == 1 and $schedule[$j]->doctor_id) {
+                        $class_holiday_amount = $class_holiday_amount + 1; 
+                    }
+                }
+                
+                while($run_run_again == true or $switch_switch == 1) {
+                    $switch_switch = $switch_switch + 1;
+                    $run_run_again = false;
+                    
+                    for($j = 0; $j < count($holiday_order_list); $j++) {
+                        holiday_rotary_method_doctor($schedule, $schedule[$holiday_order_list[$j]], $doctor_list);
+                    }
+                    
+                    if($doctor_holiday_amount < $class_holiday_amount) {
+                        $after_hc = 0;
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            $after_hc = $after_hc + $doctor_list[$i]->weekendShifts;
+                            if($after_hc != 0) {
+                                $run_run_again = true;
+                                
+                                // 取代 python deep copy
+                                $schedule = [];
+                                foreach($copy_pre_schedule as $sch) {
+                                    array_push($schedule, $sch);
+                                }
+                                
+                                // 取代 python deep copy
+                                $doctor_list = [];
+                                foreach($copy_pre_doctor_list as $doctor) {
+                                    array_push($doctor_list, $doctor);
+                                }
+                                
+                                break;
+                            }
+                        }
+                    }else if($doctor_holiday_amount >= $class_holiday_amount) {
+                        for($k = 0; $k < count($holiday_order_list); $k++) {
+                            if($schedule[$holiday_order_list[$k]]->doctor_id == '') {
+                                $run_run_again = true;
+                                
+                                // 取代 python deep copy
+                                $schedule = [];
+                                foreach($copy_pre_schedule as $sch) {
+                                    array_push($schedule, $sch);
+                                }
+                                
+                                // 取代 python deep copy
+                                $doctor_list = [];
+                                foreach($copy_pre_doctor_list as $doctor) {
+                                    array_push($doctor_list, $doctor);
+                                }
+                                
+                                break;
+                            }
+                        }
+                    }
+                }
+                
+                // 完成班表(分兩次:第一次較嚴謹、第二次有違反些軟限制)
+                finish_schedule(schedule,order_list,doctor_list); // 2537
+                
             }
         }
     }
@@ -373,12 +466,560 @@ class Schedule implements ShouldQueue
                             }
                         }
                     }
+                }else if($X <= $Y) {
+                    array_merge($med_list, $all_list);
                     
+                    while(count($med_list) < $x) {
+                        $a = '';
+                        array_push($med_list, $a);
+                    }
+                    
+                    // 塞入內科醫師
+                    shuffle($med_list);
+                    for($j = 0; $j < $x; $j++) {
+                        // 抓出該醫生在doctor_list中的index和class_table在schedule中的index
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當med_list中抓到的不是空白醫生
+                        if($med_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($med_list[$j] == $doctor_list[$l]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = ($on_class_list[$i]->day - 1) * 19 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index], $doctor_list($doctor_index));
+                        }
+                    }
+                    
+                    // 如果能上綜合的醫生沒有被選入內科，則要讓他繼續有機會選上外科
+                    if(count($med_list) > $x) {
+                        for($j = $x; $j < count($med_list); $j++) {
+                            for($k = 0; $k < count($all_list); $k++) {
+                                if($med_list[$j] == $all_list[$k]) {
+                                    array_merge($sur_list, $all_list[$k]);
+                                }
+                            }
+                        }
+                    }
+                    
+                    // 放入外科醫生
+                    while(count($sur_list) < $y) {
+                        $a = '';
+                        array_push($sur_list, $a);
+                    }
+                    
+                    shuffle($sur_list);
+                    
+                    for($j = 0; $j < $y; $j++) {
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當sur_list中抓到的不是空白醫生
+                        if($sur_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $ < count($doctor_list); $k++) {
+                                if($sur_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = ($on_class_list[$i]->day - 1) * 19 + 4 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index], $doctor_list($doctor_index));
+                        }
+                    }
+                }
+                // 當醫生有預班沒被排到，則doctor中的pre_c屬性+1
+            }else if($on_class_list[$i]->location == 'T' and $on_class_list[$i]->dayOrNight) {
+                // 台北夜班
+                
+                // 內外科需求為4人:2人，x為內科需求，y為外科需求，X為預班醫師的內科人數，Y為預班醫師的外科人數
+                $x = 4;
+                $y = 2;
+                $X = 0;
+                $Y = 0;
+                
+                // 計算預班的醫師有幾個內科幾個外科,用List去接醫生的專職科別後再去計算
+                $doctor_ex_list = [];
+                $med_list = [];
+                $sur_list = [];
+                $all_list = [];
+                
+                for($j = 0; $j < count($doctor_list); $j++) {
+                    for($k = 0; $k < count($on_class_list[$i]->doctorsID); $k++) {
+                        if($doctor_list[$j]->doctorID == $on_class_list[$j]->doctorsID[$k]) {
+                            array_push($doctor_ex_list, $doctor_list[$j]->major);
+                            
+                            // 將不同專職的的醫師id複製到各別的list中
+                            if($doctor_list[$j]->major == 'med') {
+                                array_push($med_list, $doctor_list[$j]->doctorID);
+                            }else if($doctor_list[$j]->major == 'sur') {
+                                array_push($sur_list, $doctor_list[$j]->doctorID);
+                            }else if($doctor_list[$j]->major == 'all') {
+                                array_push($all_list, $doctor_list[$j]->doctorID);
+                            }
+                            break;
+                        }
+                    }
+                }
+                
+                for($j = 0; $j < count($doctor_ex_list); $j++) {
+                    if($doctor_ex_list[$j] == 'all') {
+                        $X = $X + 1;
+                        $Y = $Y + 1;
+                    }else if($doctor_ex_list[$j] == 'med') {
+                        $X = $X + 1;
+                    }else if($doctor_ex_list[$j] == 'sur') {
+                        $Y = $Y + 1;
+                    }
+                }
+                
+                if($X > $Y) {
+                    array_merge($sur_list, $all_list);
+                    
+                    while(count($sur_list) < $y) {
+                        $a = '';
+                        array_push($sur_list, $a);
+                    }
+                    
+                    // 放入外科醫生
+                    shuffle($sur_list);
+                    
+                    for($j = 0; $j < $y; $j++) {
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當sur_list中抓到的不是空白醫生
+                        if($sur_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($sur_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = (($on_class_list[$i]->day - 1) * 19) + 14 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index],$doctor_list[$doctor_index]);
+                        }
+                    }
+                    
+                    // 如果能上綜合的醫生沒有被選入外科，則要讓他繼續有機會選上外科
+                    if(count($sur_list) > $y) {
+                        for($j = $y; $j < count($sur_list); $j++) {
+                            for($k = 0; $k < count($all_list); $k++) {
+                                if($sur_list[$j] == $all_list[$k]) {
+                                    array_merge($med_list, $all_list);
+                                }
+                            }
+                        }
+                    }
+                    
+                    // 如果med_list長度少於x，則補上空的物件
+                    while(count($med_list) < $x) {
+                        $a = '';
+                        array_push($med_list, $a);
+                    }
+                    
+                    // 塞入內科醫師
+                    for($j = 0; $j < $x; $j++) {
+                        // 抓出該醫生在doctor_list中的index和class_table在schedule中的index
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當med_list中抓到的不是空白醫生
+                        if($med_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($med_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = (($on_class_list[i]->day -1) * 19) + 10 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index],$doctor_list[$doctor_index]);
+                        }
+                    }
+                    
+                    //  如果能上綜合的醫生沒有被選入內科，則要讓他繼續有機會選上外科
+                    if(count($med_list) > $x) {
+                        for($j = $x; $j < count($med_list); $j++) {
+                            for($k = 0; $k < count($all_list); $k++) {
+                                if($med_list[$j] == $all_list[$k]) {
+                                    array_merge($sur_list, $all_list[$k]);
+                                }
+                            }
+                        }
+                    }
+                }else if($X <= $Y) {
+                    array_merge($med_list, $all_list);
+                    
+                    while(count($med_list) < $x) {
+                        $a = '';
+                        array_push($med_list, $a);
+                    }
+                    
+                    // 塞入內科醫師
+                    shuffle($med_list);
+                    
+                    for($j = 0; $j < $x; $j++) {
+                        // 抓出該醫生在doctor_list中的index和class_table在schedule中的index
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當med_list中抓到的不是空白醫生
+                        if($med_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($med_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = (($on_class_list[$i]->day -1) * 19) + 10 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index], $doctor_list[$doctor_index]);
+                        }
+                    }
+                    
+                    // 如果能上綜合的醫生沒有被選入內科，則要讓他繼續有機會選上外科
+                    if(count($med_list) > $x) {
+                        for($j = $x; $j < count($med_list); $j++) {
+                            for($k = 0; $k < count($all_list); $k++) {
+                                if($med_list[$j] == $all_list[$k]) {
+                                    array_merge($sur_list, $all_list[$k]);
+                                }
+                            }
+                        }
+                    }
+                    
+                    // 放入外科醫生
+                    while(count($sur_list) < $y) {
+                        $a = '';
+                        array_push($sur_list, $a);
+                    }
+                    
+                    shuffle($sur_list);
+                    
+                    for($j = 0; $j < $y; $j++) {
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當sur_list中抓到的不是空白醫生
+                        if($sur_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($sur_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = (($on_class_list[$i]->day -1) * 19) + 14 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index], $doctor_list[$doctor_index]);
+                        }
+                    }
+                }
+            }else if($on_class_list[$i]->location == 'D' and $on_class_list[$i]->dayOrNight == 'd') {
+                // 淡水白班
+                
+                // 內外科需求為2人:2人，x為內科需求，y為外科需求，X為預班醫師的內科人數，Y為預班醫師的外科人數
+                $x = 2;
+                $y = 2;
+                $X = 0;
+                $Y = 0;
+                
+                // 計算預班的醫師有幾個內科幾個外科,用List去接醫生的專職科別後再去計算
+                $doctor_ex_list = [];
+                $med_list = [];
+                $sur_list = [];
+                $all_list = [];
+                
+                for($j = 0; $j < count($doctor_list); $j++) {
+                    for($k = 0; $k < count($on_class_list[$i]->doctorsID); $k++) {
+                        if($doctor_list[$j]->doctorID == $on_class_list[$i]->doctorsID[k]) {
+                            array_push($doctor_ex_list, $doctor_list[$j]->major);
+                            
+                            // 將不同專職的的醫師id複製到各別的list中
+                            if($doctor_list[$j]->major == 'med') {
+                                array_push($med_list, $doctor_list[$j]->doctorID);
+                            }else if($doctor_list[$j]->major == 'sur') {
+                                array_push($sur_list, $doctor_list[$j]->doctorID);
+                            }else if($doctor_list[$j]->major == 'all') {
+                                array_push($all_list, $doctor_list[$j]->doctorID);
+                            }
+                            break;
+                        }
+                    }
+                }
+                
+                for($j = 0; $j < count($doctor_ex_list); $j++) {
+                    if($doctor_ex_list[$j] == 'all') {
+                        $X = $X + 1;
+                        $Y + $Y + 1;
+                    }else if($doctor_ex_list[$j] == 'med') {
+                        $X = $X + 1;
+                    }else if($doctor_ex_list[$j] == 'sur') {
+                        $Y + $Y + 1;
+                    }
+                }
+                
+                if($X > $Y) {
+                    array_merge($sur_list, $all_list);
+                    
+                    while(count($sur_list) < $y) {
+                        $a = '';
+                        array_push($sur_list, $a);
+                    }
+                    
+                    // 放入外科醫生
+                    shuffle($sur_list);
+                    
+                    for($j = 0; $j < $y; $j++) {
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當sur_list中抓到的不是空白醫生
+                        if($sur_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($sur_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = (($on_class_list[$i]->day -1) * 19) + 8 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index], $doctor_list[$doctor_index]);
+                        }
+                    }
+                }
+            }else {
+                // 淡水夜班
+                
+                // 內外科需求為2人:1人，x為內科需求，y為外科需求，X為預班醫師的內科人數，Y為預班醫師的外科人數
+                $x = 2;
+                $y = 1;
+                $X = 0;
+                $Y = 0;
+                
+                // 計算預班的醫師有幾個內科幾個外科,用List去接醫生的專職科別後再去計算
+                $doctor_ex_list = [];
+                $med_list = [];
+                $sur_list = [];
+                $all_list = [];
+                
+                for($j = 0; $j < count($doctor_list); $j++) {
+                    for($k = 0; $k < count($on_class_list[$i]->doctorsID); $k++) {
+                        if($doctor_list[$j]->doctorID == $on_class_list[$i]->doctorsID[$k]) {
+                            array_push($doctor_ex_list, $doctor_list[$j]->major);
+                            
+                            // 將不同專職的的醫師id複製到各別的list中
+                            if($doctor_list[$j]->major == 'med') {
+                                array_push($med_list, $doctor_list[$j]->doctorID);
+                            }else if($doctor_list[$j]->major == 'sur') {
+                                array_push($sur_list, $doctor_list[$j]->doctorID);
+                            }else if($doctor_list[$j]->major == 'all') {
+                                array_push($all_list, $doctor_list[$j]->doctorID);
+                            }
+                            break;
+                        }
+                    }
+                }
+                
+                for($j = 0; $j < count($doctor_ex_list); $j++) {
+                    if($doctor_ex_list[$j] == 'all') {
+                        $X = $X + 1;
+                        $Y = $Y + 1;
+                    }else if($doctor_ex_list[$j] == 'all') {
+                        $X = $X + 1;
+                    }else if($doctor_ex_list[$j] == 'all') {
+                        $Y = $Y + 1;
+                    }
+                }
+                
+                if($X > $Y) {
+                    array_merge($sur_list, $all_list);
+                    
+                    while(count($sur_list) < $y) {
+                        $a = '';
+                        array_push($sur_list, $a);
+                    }
+                    
+                    // 放入外科醫生
+                    shuffle($sur_list);
+                    
+                    for($j = 0; $j < $y; $j++) {
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當sur_list中抓到的不是空白醫生
+                        if($sur_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($sur_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = (($on_class_list[$i]->day -1) * 19) + 18 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index], $doctor_list[$doctor_index]);
+                        }
+                    }
+                    
+                    // 如果能上綜合的醫生沒有被選入外科，則要讓他繼續有機會選上外科
+                    if(count($sur_list) > $y) {
+                        for($j = $y; $j , count($sur_list); $j++) {
+                            for($k = 0; $k < count($all_list); $k++) {
+                                if($sur_list[$j] == $all_list[$k]) {
+                                    array_merge($med_list, $all_list[$k]);
+                                }
+                            }
+                        }
+                    }
+                    
+                    // 如果med_list長度少於x，則補上空的物件
+                    while(count($med_list) < $x) {
+                        $a = '';
+                        array_push($med_list, $a);
+                    }
+                    
+                    // 塞入內科醫師
+                    for($j = 0; $j < $x; $j++) {
+                        // 抓出該醫生在doctor_list中的index和class_table在schedule中的index
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當med_list中抓到的不是空白醫生
+                        if($med_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($med_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = (($on_class_list[$i]->day -1) * 19) + 16 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index], $doctor_list[$doctor_index]);
+                        }
+                    }
+                    
+                    // 如果能上綜合的醫生沒有被選入內科，則要讓他繼續有機會選上外科
+                    if(count($med_list) > $x) {
+                        for($j = $x; $j < count($med_list); $j++) {
+                            for($k = 0; $k < count($all_list); $k++) {
+                                if($med_list[$j] == $all_list[$k]) {
+                                    array_merge($sur_list, $all_list[$k]); // 992
+                                }
+                            }
+                        }
+                    }
+                }else if($X <= $Y) {
+                    array_merge($med_list, $all_list);
+                    
+                    while(count($med_list) < $x) {
+                        $a = '';
+                        array_push($med_list, $a);
+                    }
+                    
+                    // 塞入內科醫師
+                    shuffle($med_list);
+                    
+                    for($j = 0; $j < $x; $j++) {
+                        // 抓出該醫生在doctor_list中的index和class_table在schedule中的index
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當med_list中抓到的不是空白醫生
+                        if($med_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($med_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = (($on_class_list[$i]->day -1) * 19) + 16 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index], $doctor_list[$doctor_index]);
+                            
+                            
+                        }
+                    }
+                    
+                    // 如果能上綜合的醫生沒有被選入內科，則要讓他繼續有機會選上外科
+                    if(count($med_list) > $x) {
+                        for($j = $x; $j < count($med_list); $j++) {
+                            for($k = 0; $k < count($all_list); $k++) {
+                                if($med_list[$j] == $all_list[$k]) {
+                                    array_merge($sur_list, $all_list[$k]);
+                                }
+                            }
+                        }
+                    }
+                    
+                    // 放入外科醫生
+                    while(count($sur_list) < $y) {
+                        $a = '';
+                        array_push($sur_list, $a);
+                    }
+                    
+                    shuffle($sur_list);
+                    
+                    for($j = 0; $j < $y; $j++) {
+                        $class_table_index = 0;
+                        $doctor_index = 0;
+                        
+                        // 當sur_list中抓到的不是空白醫生
+                        if($sur_list[$j] != '') {
+                            // 找出doctor_index
+                            for($k = 0; $k < count($doctor_list); $k++) {
+                                if($sur_list[$j] == $doctor_list[$k]->doctorID) {
+                                    $doctor_index = $k;
+                                }
+                            }
+                            
+                            // 找出class_table_index
+                            $class_table_index = (($on_class_list[$i]->day -1) * 19) + 18 + $j;
+                            
+                            // 放入醫生
+                            pre_put_doc_in($schedule[$class_table_index], $doctor_list[$doctor_index]);
+                        }
+                    }
                 }
             }
         }
     }
     
+    // 當醫生預班成功將醫師放入班表
     public function pre_put_doc_in($class_table, $doctor) {
         // 在該班表格中放入該醫師
         $class_table->doctor_id = $doctor->doctorID;
@@ -418,6 +1059,1015 @@ class Schedule implements ShouldQueue
                 $doctor->tamsuiShiftsLimit = $doctor->tamsuiShiftsLimit - 1;
             }
         }
+    }
+    
+    // 建立排班順序的index
+    public function input_order_list($schedule) {
+        // 淡水夜班先排
+        for($i = 0; $i < count($schedule); $i++) {
+            if($schedule[$i]->hospital_area == 'D' and $schedule[$i]->class_sort == 'n') {
+                array_push($order_list, $i);
+            }
+        }
+        
+        // 再排台北夜班
+        for($i = 0; $i < count($schedule); $i++) {
+            if($schedule[$i]->hospital_area == 'T' and $schedule[$i]->class_sort == 'n') {
+                array_push($order_list, $i);
+            }
+        }
+        
+        // 再排淡水假日班
+        for($i = 0; $i < count($schedule); $i++) {
+            if($schedule[$i]->holiday == 1 and $schedule[$i]->hospital_area == 'D' and $schedule[$i]->class_sort == 'd') {
+                array_push($order_list, $i);
+            }
+        }
+        
+        // 再排台北假日班
+        for($i = 0; $i < count($schedule); $i++) {
+            if($schedule[$i]->holiday == 1 and $schedule[$i]->hospital_area == 'T' and $schedule[$i]->class_sort == 'd') {
+                array_push($order_list, $i);
+            }
+        }
+        
+        // 再排淡水白班
+        for($i = 0; $i < count($schedule); $i++) {
+            if($schedule[$i]->holiday == 0 and $schedule[$i]->hospital_area == 'D' and $schedule[$i]->class_sort == 'd') {
+                array_push($order_list, $i);
+            }
+        }
+        
+        // 再排台北白班
+        for($i = 0; $i < count($schedule); $i++) {
+            if($schedule[$i]->holiday == 0 and $schedule[$i]->hospital_area == 'T' and $schedule[$i]->class_sort == 'd') {
+                array_push($order_list, $i);
+            }
+        }
+    }
+    
+    // 建立假日班的排班順序
+    public function input_holiday_order_list($schedule) {
+        for($i = 0; $i < count($schedule); $i++) {
+            if($schedule[$i]->holiday == 1) {
+                array_push($holiday_order_list, $i);
+            }
+        }
+    }
+    
+    // 輪盤法填假日班表
+    public function holiday_rotary_method_doctor($schedule, $class_table, $doctor_list) {
+        // 選醫生時存放他們暫時fit
+        
+        $fit_list = [];
+        $check = 0;
+        $check2 = 0;
+        $count = 0;
+        
+        while($check == 0) {
+            if($class_table->doctor_id == '') {
+                break;
+            }
+            
+            if($class_table->doctor_id == '' and $count < 300) {
+                // 班表屬性為以下
+                if($class_table->section == 'sur' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    // 依此班表屬性去算醫師的適性值，存入fit_list中
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    // 檢查此醫師是否有違反規定
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule, $class_table, $doctor_list[$doc_index]) == true) {
+                        // 若都無違反則將醫師填入
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->section == 'sur' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    // 依此班表屬性去算醫師的適性值，存入fit_list中
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    // 檢查此醫師是否有違反規定
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule, $class_table, $doctor_list[$doc_index]) == true) {
+                        // 若都無違反則將醫師填入
+                        put_doc_in($class_table, $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->section == 'sur' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    // 依此班表屬性去算醫師的適性值，存入fit_list中
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->$surgicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    // 檢查此醫師是否有違反規定
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // 若都無違反則將醫師填入
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->section == 'sur' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    // 依此班表屬性去算醫師的適性值，存入fit_list中
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    // 檢查此醫師是否有違反規定
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->section == 'med' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    // 依此班表屬性去算醫師的適性值，存入fit_list中
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    // 檢查此醫師是否有違反規定
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // 若都無違反則將醫師填入
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->section == 'med' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    // 依此班表屬性去算醫師的適性值，存入fit_list中
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    // 檢查此醫師是否有違反規定
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // 若都無違反則將醫師填入
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->section == 'med' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    // 依此班表屬性去算醫師的適性值，存入fit_list中
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    // 檢查此醫師是否有違反規定
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // 若都無違反則將醫師填入
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }
+            }else {
+                break;
+            }
+        }
+    }
+    
+    // 輪盤法選醫師填入班表
+    public function rotary_method($fit_list) {
+        $rand_num = rand(1, array_sum($fit_list));
+        $sum1 = 0;
+        
+        for($i = 0; $i < count($fit_list); $i++) {
+            $sum1 = $sum1 + $fit_list[$i];
+            if($sum1 >= $rand_num) {
+                return $i;
+            }
+        }
+    }
+    
+    // 檢查硬限制H3、H4、H5
+    public function check_doc($class_table, $doctor) {
+        // boolean值 true為可填入班表，false則不可填入
+        $result = true;
+        
+        // 當班表的科別與醫生的專職科別不合，則該醫師不能填入
+        if($doctor->major != 'all' and $class_table->section != $doctror->major) {
+            $result = false;
+        }
+        
+        // 檢查醫生是否還有白班或夜班可上
+        if($result == true and ($class_table->class_sort == 'n' and $doctor->dayShifts == 0)) {
+            $result = false;
+        }else if($result == true and ($class_table->class_sort == 'n' and $doctor->nightShifts == 0)) {
+            $result = false;
+        }
+        
+        // 檢查醫生是否還有內科斑或外科班可上
+        if($result == true and ($class_table->section == 'med' and $doctor->medicalShifts == 0)) {
+            $result = false;
+        }else if($result == true and ($class_table->section == 'sur' and $doctor->surgicalShifts == 0)) {
+            $result = false
+        }
+        
+        // 如果當天預OFF班則不填入
+        if($result == true) {
+            for($i = 0; $i < count($class_table->offc); $i++) {
+                if($doctor->doctorID == $class_table->offc[$i]) {
+                    $result = false;
+                    break;
+                }
+            }
+        }
+        
+        // 檢查醫師總班數是否小於0
+        if($result == true and $doctor->totalShifts <= 0) {
+            $result = false;
+        }
+        
+        // 檢查是否為假日班，是的話檢查醫生是否還有假日班可上
+        if($result == true and $class_table->holiday == 1) {
+            if($doctor->weekendShifts == 0) {
+                $result == false;
+            }
+        }
+        
+        // 當班表院區與醫師職登院區不同時，需先檢查醫師是否還有非職登院區的班可上，再檢查同一周是否有支援超過兩班
+        if($result == true and $class_table->hospital_area != $doctor->location) {
+            if($class_table->hospital_area == 'T' and $doctor->taipeiShiftsLimit == 0) {
+                $result = false;
+            }else if($class_table->hospital_area == 'D' and $doctor->taipeiShiftsLimit == 0) {
+                $result = false;
+            }
+            
+            if($result == true and $doctor->otherLocationShifts[$class_table->week_num - 1] == 2) {
+                $result = false;
+            }
+        }
+        
+        // 如果醫生在當天預OFF班就不填入
+        for($i = 0; $i < count($class_table->offc); $i++) {
+            if($result = true and $doctor->doctorID == $class_table->offc[$i]) {
+                $result = false;
+            }
+        }
+        
+        return $result;
+    }
+    
+    // 檢查同時間是否有相同醫生、檢查上一班、下一班是否有相同醫生(H1、H2)
+    public function check_doc_class($schedule, $class_table, $doctor) {
+        $result = true;
+        
+        if($class_table->class_id == 1) {
+            for($i = 0; $i < 19; $i++) {
+                if($schedule[$i]->doctor_id == $doctor->doctorID) {
+                    $result = false;
+                }
+            }
+        }else if($class_table->class_id == $schedule[count($schedule) - 1]->class_id) {
+            for($i = (intval($schedule[count(schedule) - 1]->class_id / 2) - 1) * 19; $i < 19 * intval(($schedule[count($schedule) - 1]->class_id) / 2); $i++) {
+                if($schedule[$i]->doctor_id == $doctor->doctorID) {
+                    $result = false;
+                }
+            }
+        }else if($class_table->class_id % 2 == 1 and $class_table->class_id != 1) {
+            for($i = intval($class_table.class_id / 2) * 19 - 9; $i < (intval($class_table.class_id / 2) + 1) * 19; $i++) {
+                if($schedule[$i]->doctor_id == $doctor->doctorID) {
+                    $result = false;
+                }
+            }
+        }else if($class_table->class_id % 2 == 0 and $class_table->class_id != $schedule[count($schedule) - 1]->class_id) {
+            for($i = (intval($class_table.class_id / 2) - 1) * 19; $i < (intval($class_table.class_id / 2) * 19) + 11; $i++) {
+                if($schedule[$i]->doctor_id == $doctor->doctorID) {
+                    $result = false;
+                }
+            }
+        }
+        
+        return $result;
+    }
+    
+    // 當醫生成功填入班表時所作的處理
+    public function put_doc_in($class_table , $doctor) {
+        // 在該班表格中放入該醫師
+        $class_table->doctor_id = $doctor-doctorID;
+        
+        $class_table_property_list = [];
+        array_push(class_table_property_list, $class_table->section);
+        array_push(class_table_property_list, $class_table->class_sort);
+        array_push(class_table_property_list, $class_table->hospital_area);
+        
+        // 醫生假日班數-1
+        $doctor->weekendShifts -= $class_table->holiday;
+        // 醫師總班數-1
+        $doctor->totalShifts = $doctor->totalShifts - 1;
+        
+        // 當醫師不是在職登院區上班時，將該週在非職登院區上班數+1
+        if($class_table->hospital_area != $doctor->location) {
+            $doctor->otherLocationShifts[$class_table->week_num - 1] += 1;
+        }
+        
+        // 根據表格屬性，將醫生其值扣除
+        for($i = 0; $i < count($class_table_property_list); $i++) {
+            if($class_table_property_list[$i] == 'med') {
+                $doctor->medicalShifts = $doctor->medicalShifts - 1;
+            }else if($class_table_property_list[$i] == 'sur') {
+                $doctor->surgicalShifts = $doctor->surgicalShifts - 1;
+            }else if($class_table_property_list[$i] == 'd') {
+                $doctor->dayShifts = $doctor->dayShifts - 1;
+            }else if($class_table_property_list[$i] == 'n') {
+                $doctor->nightShifts = $doctor->nightShifts - 1;
+            }else if($class_table_property_list[$i] == 'T') {
+                $doctor->taipeiShiftsLimit = $doctor->taipeiShiftsLimit - 1;
+            }else if($class_table_property_list[$i] == 'D') {
+                $doctor->tamsuiShiftsLimit = $doctor->tamsuiShiftsLimit - 1;
+            }
+        }
+    }
+    
+    // 完成這張表
+    public function finish_schedule($schedule, $order_list, $doctor_list) {
+        for($i = 0; $i < count($schedule); $i++) {
+            rotary_method_doctor($schedule, $schedule[$order_list[$i]], $doctor_list);
+        }
+        
+        for($i = 0; $i < count($schedule); $i++) {
+            re_rotary_method_doctor($schedule, $schedule[$order_list[$i]], $doctor_list);
+        }
+    }
+    
+    // 輪盤法選醫師填入班表
+    public function rotary_method_doctor($schedule, $class_table, $doctor_list) {
+        // 選醫生時存放他們暫時fit
+        $fit_list = [];
+        $check = 0;
+        $check2 = 0;
+        $count = 0;
+        
+        while($check == 0) {
+            if($class_table->doctor_id != '') {
+                break;
+            }
+            if($class_table->doctor_id == '' and $count < 300) {
+                // 班表屬性為以下
+                if($class_table->holiday == 1 and $class_table->section == 'sur' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    // 依此班表屬性去算醫師的適性值，存入fit_list中
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->surgicalShifts + $doctor_list[i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    // 檢查此醫師是否有違反規定
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // 若都無違反則將醫師填入
+                        // print('01');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 1 and $class_table->section == 'med' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->medicalShifts + $doctor_list[i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('02');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 1 and $class_table->section == 'sur' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->surgicalShifts + $doctor_list[i]->nightShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('03');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 1 and $class_table->section == 'sur' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->surgicalShifts + $doctor_list[i]->dayShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                        // print('04');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 1 and $class_table->section == 'med' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->medicalShifts + $doctor_list[i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                        // print('05');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 1 and $class_table->section == 'med' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->medicalShifts + $doctor_list[i]->dayShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                        // print('06');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 1 and $class_table->section == 'sur' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->surgicalShifts + $doctor_list[i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                        // print('07');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 1 and $class_table->section == 'med' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->medicalShifts + $doctor_list[i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                        // print('08');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 0 and $class_table->section == 'med' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                        // print('09');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 0 and $class_table->section == 'sur' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[i]->nightShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                        // print('10');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 0 and $class_table->section == 'sur' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[i]->dayShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                        // print('11');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 0 and $class_table->section == 'med' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[i]->nightShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                        // print('12');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 0 and $class_table->section == 'med' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[i]->dayShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                        // print('13');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 0 and $class_table->section == 'sur' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                        // print('14');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 0 and $class_table->section == 'med' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                        // print('15');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else {
+                    $count = $count + 1;
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                        // print('16');
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }
+            }else {
+                break;
+            }
+        }
+    }
+    
+    // 輪盤法選醫師填入班表
+    public function re_rotary_method_doctor($schedule, $class_table, $doctor_list) {
+        // 選醫生時存放他們暫時fit
+        $fit_list = [];
+        $check = 0;
+        $check2 = 0;
+        $count = 0;
+        
+        while($check == 0) {
+            if($class_table->doctor_id != '') {
+                break;
+            }
+            
+            if($class_table->doctor_id == '' and $count < 300) {
+                // 班表屬性為以下
+                if($class_table->holiday == 1 and $class_table->section == 'sur' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    // 依此班表屬性去算醫師的適性值，存入fit_list中
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    // 檢查此醫師是否有違反規定
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // 若都無違反則將醫師填入
+                        // print('01');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 1 and $class_table->section == 'med' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->medicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('02');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 1 and $class_table->section == 'sur' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('03');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 1 and $class_table->section == 'sur' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('04');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 1 and $class_table->section == 'med' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->medicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('05');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 1 and $class_table->section == 'med' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->medicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('06');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 1 and $class_table->section == 'sur' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('07');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 1 and $class_table->section == 'med' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->weekendShifts + $doctor_list[$i]->medicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('08');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 0 and $class_table->section == 'med' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('09');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 0 and $class_table->section == 'sur' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('10');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 0 and $class_table->section == 'sur' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('11');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 0 and $class_table->section == 'med' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'T') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('12');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 0 and $class_table->section == 'med' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('13');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 0 and $class_table->section == 'sur' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('14');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->holiday == 0 and $class_table->section == 'med' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'D') {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('15');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else {
+                    $count = $count + 1;
+                    
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    $doc_index = rotary_method($fit_list);
+                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // print('16');
+                        
+                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }
+            }
+        }
+    }
+    
+    // 填第二次時要檢查的限制
+    public function re_check_doc($class_table, $doctor) {
+        // boolean值 true為可填入班表，false則不可填入
+        $result = true;
+        
+        // 檢查醫師總班數是否小於0
+        if($result == true and $doctor->totalShifts <= 0) {
+            $result = false;
+        }
+        
+        // 當班表和醫師專職科別不同，就不能填
+        if($doctor->major != 'all' and $class_table->section != $doctor->major) {
+            $result = false;
+        }
+        
+        // 當班表院區與醫師職登院區不同時，需先檢查醫師是否還有非職登院區的班可上，再檢查同一周是否有支援超過兩班
+        if($result == true and $class_table->hospital_area != doctor.location) {
+            if($class_table->hospital_area =='T' and $doctor->taipeiShiftsLimit == 0) {
+                $result = false;
+            }else if($class_table->hospital_area =='D' and $doctor->tamsuiShiftsLimit == 0) {
+                $result = false;
+            }
+            
+            if($result == true and $doctor->otherLocationShifts[$class_table->week_num - 1] == 2) {
+                $result = false;
+            }
+        }
+        
+        return $result;
     }
     
     //  ==================  準備資料用  =========================

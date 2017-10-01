@@ -1,10 +1,7 @@
 @extends("layouts.app2")
 
 @section('head')
-<!--
     <link rel="stylesheet" href="../css/dropload.css">
-    <script src="../js/dropload.min.js"></script>
--->
 @endsection
 
 @section('navbar')
@@ -26,29 +23,31 @@
       		  	  		<div class="divider"></div>
       		  	  	  	
       		  	  	  	<div class="card-content">
-                            @foreach($announcements as $announcement)
-                            <div class="row">
-                                <div class="col s2">
-                                    <img src="../img/user.png" class="boss-img">
+                            <div class="announcement">
+                                @foreach($announcements as $announcement)
+                                <div class="row">
+                                    <div class="col s2">
+                                        <img src="../img/user.png" class="boss-img">
+                                    </div>
+                                    <div class="col s10">
+                                        <span class="card-title">
+                                            @if(Auth::user()->identity == 'Admin')
+                                            <a class="dropdown-edit-button right" href="" data-activates='dropdown-announcement'><i class="material-icons" onclick="passAnnouncementSerial({{ $announcement->announcementSerial }})">more_vert</i></a>
+                                            @endif
+                                            <p class="ellipsis">{{ $announcement->title }}</p>
+                                        </span>
+                                        <p class="announcement-ellipsis">{{ $announcement->content }}</p>
+                                        <a href="#modal-more" onclick="getAnnouncement({{ $announcement->announcementSerial }})">more</a>
+                                    </div>
                                 </div>
-                                <div class="col s10">
-                                    <span class="card-title">{{ $announcement->title }}
-                                    @if(Auth::user()->identity == 'Admin')
-                                    <a class="dropdown-edit-button right" href="" data-activates='dropdown-announcement'><i class="material-icons" onclick="passAnnouncementSerial({{ $announcement->announcementSerial }})">more_vert</i></a>
-                                    @endif
-                                    </span>
-                                    <p class="announcement-ellipsis">{{ $announcement->content }}</p>
-                                    <a href="#modal-more" onclick="getAnnouncement({{ $announcement->announcementSerial }})">more</a>
-                                </div>
-    				        </div>
-    				        <div class="divider margin-b20"></div>
-                            @endforeach
-                            <ul id='dropdown-announcement' class='dropdown-content'>
-                                <li><a href="#modal1">編輯</a></li>
-                                <li><a href="deleteAnnouncement" id="deleteLink">刪除</a></li>
-                            </ul>
+                                <div class="divider margin-b20"></div>
+                                @endforeach
+                                <ul id='dropdown-announcement' class='dropdown-content'>
+                                    <li><a href="#modal1">編輯</a></li>
+                                    <li><a href="deleteAnnouncement" id="deleteLink">刪除</a></li>
+                                </ul>
+                            </div>
       		  	  	  	</div>
-      		  	  	  	
       		  	  	</div>
       		  	</div>
 				
@@ -59,6 +58,24 @@
       		  	  		<p class="blue-grey-text text-darken-3" style="font-weight: 500;">{{ $startDate }} ~ {{ $endDate }}</p>
       		  	  	  	<div class="card-action center">
       		  	  	  	  	<a href="reservation" class="margin-r0">前往預班表</a>
+      		  	  	  	</div>
+      		  	  	</div>
+      		  	</div>
+      		  	<div class="col s12 m4">
+      		  	  	<div class="card center">
+              			<img src="../img/galaxy.svg" class="solar-system">
+              			<h4 class="blue-grey-text text-darken-3">初版班表已公佈</h4>
+      		  	  	  	<div class="card-action center">
+      		  	  	  	  	<a href="first-edition" class="margin-r0">前往初版班表 - 個人</a>
+      		  	  	  	</div>
+      		  	  	</div>
+      		  	</div>
+      		  	<div class="col s12 m4">
+      		  	  	<div class="card center">
+              			<img src="../img/sunset.svg" class="solar-system">
+              			<h4 class="blue-grey-text text-darken-3">正式班表已公佈</h4>
+      		  	  	  	<div class="card-action center">
+      		  	  	  	  	<a href="schedule" class="margin-r0">前往正式班表 - 個人</a>
       		  	  	  	</div>
       		  	  	</div>
       		  	</div>
@@ -80,7 +97,7 @@
                     {{ csrf_field() }}
                     <input type="hidden" name="hiddenSerial" id="hiddenSerial" value="-1">
                     <div class="modal-header">
-                        <h5 class="modal-announcement-title">公告1</h5>
+                        <h5 class="modal-announcement-title">公告</h5>
                     </div>
                     <div class="modal-content modal-content-customize1">
                         <div class="row margin-b0">
@@ -89,11 +106,10 @@
                                 <input id="title" type="text" name="title" data-length="50" required>
                                 <label for="title">標題</label>
                             </div>
-                        
                             <div class="input-field col s12">
                                 <i class="material-icons prefix modal-icons">mode_edit</i>
                                 <textarea id="textarea1" class="materialize-textarea margin-b0" type="text" name="content" data-length="980" required></textarea>
-                                <label for="textarea1">內容</label>
+                                <label class="active" for="textarea1">內容</label>
                             </div>
                         </div>
                     </div>
@@ -108,17 +124,18 @@
                 <div class="modal-header">
                     <h5 class="modal-announcement-title">公告</h5>
                 </div>
-                
                 <div class="modal-content modal-content-customize1">
                     <div class="row margin-b0">
     				    <div class="col s12">
                             <h5 class="card-title" id="announcementTitle"></h5>
-    				    	<p id="announcementContent"></p>
+                            <p class="inline">蔡維德</p>
+                            <p class="inline margin-l10 grey-text">2017-09-10</p>
+    				    	<pre id="announcementContent"></pre>
     				    </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="" class="modal-action modal-close waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save">Close</a>
+                    <button class="modal-action modal-close waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-cancel">Close</button>
                 </div>
             </div>
 
@@ -128,7 +145,71 @@
 
 @section('script')
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+    <script src="../js/dropload.min.js"></script>
     <script>
+        
+//        $(function(){
+//            $('.card-content').dropload({
+//                scrollArea : window,
+//                loadDownFn : function(me){
+//                    
+//                    // 拼接HTML
+//                    var result = '';
+//                    $.ajax({
+//                        type: 'GET',
+//                        url: 'js/more.json',
+//                        dataType: 'json',
+//                        success: function(data){
+//    //                        alert(data);
+//    //                        console.log(data.lists[3]);
+//                            console.log(data.lists[3].link);
+//                            console.log(data.lists[3].title);
+//                            console.log(data.lists[3].date);
+//                            
+//                            var arrLen = data.lists.length;
+//                            if(arrLen > 0){
+//                                for(var i=0; i<3; i++){
+////                                for(var i=0; i<arrLen; i++){
+//                                    result +='<div class="row">'
+//                                                +'<div class="col s2">'
+//                                                    +'<img src="../img/user.png" class="boss-img">'
+//                                                +'</div>'
+//                                                +'<div class="col s10">'
+//                                                    +'<span class="card-title">'
+//                                                        +'<a class="dropdown-edit-button right" href="" data-activates="dropdown-announcement"><i class="material-icons" onclick="passAnnouncementSerial(AjaxTEST)">more_vert</i></a>'
+//                                                        +'<p class="ellipsis">'+data.lists[i].link+'</p>'
+//                                                    +'</span>'
+//                                                    +'<p class="announcement-ellipsis">'+data.lists[i].title+'</p>'
+//                                                    +'<a href="#modal-more" onclick="getAnnouncement(AjaxTEST)">more</a>'
+//                                                +'</div>'
+//                                            +'</div>'
+//                                            +'<div class="divider margin-b20"></div>';
+//                                }
+//                            // if no data
+//                            }else{
+//                                // 锁定
+//                                me.lock();
+//                                // 无数据
+//                                me.noData();
+//                            }
+//                            
+//                            setTimeout(function(){
+//                                // 插入数据到页面，放到最后面
+//                                $('.announcement').append(result);
+//                                // 每次数据插入，必须重置
+//                                me.resetload();
+//                            },1000);
+//                        },
+//                        error: function(xhr, type){
+//                            alert('Ajax error!');
+//                            // 即使加载出错，也得重置
+//                            me.resetload();
+//                        }
+//                    });
+//                }
+//            });
+//        });
+        
         $('.dropdown-edit-button').dropdown({
             inDuration: 300,
             outDuration: 225,
@@ -156,8 +237,10 @@
                 document.getElementById("hiddenSerial").value = array[0];
                 document.getElementById("title").value = array[1];
                 document.getElementById("textarea1").value = array[2];
+                $('textarea').trigger('autoresize');
                 Materialize.updateTextFields();
             });
+            
         }
         
         function passAnnouncementSerial(serial) {
@@ -169,6 +252,7 @@
         
         function reset() {
             $('#form-modal1').trigger("reset");
+            $('textarea').trigger('autoresize');
         }
     </script>
 @endsection
