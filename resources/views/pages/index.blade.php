@@ -51,6 +51,7 @@
       		  	  	</div>
       		  	</div>
 				
+        @if( $status ==1)
 				<div class="col s12 m4">
       		  	  	<div class="card center">
               			<img src="../img/solar-system.png" class="solar-system">
@@ -61,6 +62,7 @@
       		  	  	  	</div>
       		  	  	</div>
       		  	</div>
+       @elseif( $status ==2)
       		  	<div class="col s12 m4">
       		  	  	<div class="card center">
               			<img src="../img/galaxy.svg" class="solar-system">
@@ -70,6 +72,7 @@
       		  	  	  	</div>
       		  	  	</div>
       		  	</div>
+         @else
       		  	<div class="col s12 m4">
       		  	  	<div class="card center">
               			<img src="../img/sunset.svg" class="solar-system">
@@ -79,6 +82,7 @@
       		  	  	  	</div>
       		  	  	</div>
       		  	</div>
+          @endif
       		  	<div class="col s12 m4">
       		  	  	<div class="card center padding-t5">
                         <h1 class="teal-text text-lighten-2">{{ $currentOfficialLeaveHours }}</h1>
@@ -88,6 +92,7 @@
       		  	  	  	</div>
       		  	  	</div>
       		  	</div>
+         
       		</div>
 			
 			

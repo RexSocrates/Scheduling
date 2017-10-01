@@ -28,17 +28,20 @@ class AnnouncementController extends Controller
         if($count==0){
             $startDate="尚未開放";
             $endDate="尚未開放";
+
         }
         else{
             $startDate = $currentMonth.'-'.$reservationData->getDate($currentMonth)->startDate;
             $endDate = $currentMonth.'-'.$reservationData->getDate($currentMonth)->endDate;
+            $status = $reservationData->getDate($currentMonth)->status;
         }
         
         return view('pages.index', [
             'announcements' => $announcements,
             'currentOfficialLeaveHours' => $leavehours,
             'startDate' => $startDate,
-            'endDate' => $endDate
+            'endDate' => $endDate,
+            'status'=>$status
         ]);
     }
     
