@@ -78,6 +78,8 @@ class SettingController extends Controller
         $startDate = (int)$data['startDate'];
 
         $reservationData = new ReservationData();
+        $announcement = new Announcement();
+        $user = new User();
 
         $yearMonth = date('Y-m');
 
@@ -106,7 +108,13 @@ class SettingController extends Controller
                 }
         	$reservationData->updateDate($yearMonth,$strDate,$enDate);
             
+        $data=[
+            'title'=>"預班開放時間修改",
+            'content'=>"時間預班".$yearMonth."-".$strDate."~".$yearMonth."-".$enDate,
+            'doctorID'=> $user->getCurrentUserID()
+        ];
 
+        $announcement->addAnnouncement($data);
         //}
         // else{
         // 	$reservationData->addDate($yearMonth,$strDate,$enDate);
@@ -147,17 +155,21 @@ class SettingController extends Controller
         $announcement = new Announcement();
         $reservationData = new ReservationData();
 
+        $month=date("Y-m",strtotime("+1 month"));
+
         $data=[
-            'title'=>"預班已開放",
-            'content'=>"開放預班",
+            'title'=>"預班開放時間",
+            'content'=>"時間預班".$month."-01"."~".$month."-10",
             'doctorID'=> $user->getCurrentUserID()
         ];
 
-        $month=date("Y-m",strtotime("+1 month"));
+       
 
         $reservationData->addDate($month,01,10);
 
         $announcement->addAnnouncement($data);
+
+         return redirect('setting');
 
     }
 }
