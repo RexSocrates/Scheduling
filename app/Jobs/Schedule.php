@@ -53,8 +53,8 @@ class Schedule implements ShouldQueue
     public $count = 0; // 計找了幾次醫生次用
     public $copy_parent_list = []; // 用來放複製的母代
     public $off_class_list = []; // 用來存預OFF班的List
-    public $on_class_list = []; // 用來存預ON班的List
-    public $run_again = False; // 用來判斷表格是否有空格
+    public $on_class_list = []; // 用來存預ON班的List  onRes
+    public $run_again = false; // 用來判斷表格是否有空格
     public $switch = 1; // 讓while一定要跑一次(取代do-while)的方法
     public $cross_over_rate = 0.8; // 交配率
     public $mutation_rate = 0.06; // 突變率
@@ -219,7 +219,51 @@ class Schedule implements ShouldQueue
                 // 完成班表(分兩次:第一次較嚴謹、第二次有違反些軟限制)
                 finish_schedule(schedule,order_list,doctor_list); // 2537
                 
+                
+                for($i = 0; $i < count($schedule); $i++) {
+                    if($schedule[$i]->doctor_id == '') {
+                        $run_again = true;
+                    }
+                }
+                
+                $switch = $switch + 1;
+                
+                // 產出來的表放入all_parent_list中
+                if($run_again == false) {
+                    array_push($all_parent_list, $schedule);
+                    break;
+                }
+                
             }
+        }
+        
+        for($i = 1; $i < ($generation + 1); $i++) {
+            echo '====================================<br>';
+            echo 'The '.$i.' generation ';
+            
+            // 計算all_parent_list的fitness，使用前必須先重製醫師屬性表
+            $all_parent_fitness_list = [];
+            for($j = 0; $j < count($all_parent_list); $j++) {
+                creat_doctor();
+                
+                // 先計算doctor的pre_c
+                count_pre_c($all_parent_list[$j], $doctor_list);
+                array_push($all_parent_fitness_list, count_fit($all_parent_list[$j], $doctor_list)); //python 2568
+            }
+            
+            echo "all parent fitness : ";
+            echo print_r($all_parent_fitness_list);
+            
+            // 計算平均值並存入each_generation_fit_avg中
+            array_push($each_generation_fit_avg, round(array_sum($all_parent_fitness_list) / count($all_parent_fitness_list), 1));
+            
+            // 交配運算子
+            $all_child_list = [];
+            for($j = 0; $j < intval($cross_over_amount / 2); $j++) {
+                // python 2578
+                cross_over($all_parent_list);
+            }
+            
         }
     }
     
@@ -2068,6 +2112,233 @@ class Schedule implements ShouldQueue
         }
         
         return $result;
+    }
+    
+    // 計算預ON醫生是否有上到班
+    public function count_pre_c($schedule, $doctor_list) {
+        $same = false;
+        
+        // 有預ON班，卻沒排到的醫生，該醫生pre_c加1
+        for($i = 0; $i < count($on_class_list); $i++) {
+            // 台北白斑時
+            if($on_class_list[$i]->location == 'T' and $on_class_list[$i]->dayOrNight = 'd') {
+                // 找schedule的index
+                $loop_first_index = ($on_class_list[$i]->day - 1) * 19;
+                $loop_last_index  = ($on_class_list[$i]->day - 1) * 19 + 6;
+                
+                // 拿對應schedule上的醫生去和預ON班的醫生去比較，如果預ON班沒上到則pre_c +1(php : lostShfits)
+                for($j = 0; $j < count($on_class_list[$i]->doctorsID); $j++) {
+                    // 開關，如果沒有想同，該醫生pre_c+1
+                    $same = false;
+                    for($k = $loop_first_index; $k < $loop_last_index; $k++) {
+                        if($schedule[$k]->doctor_id == $on_class_list[$i]->doctorsID[$j]) {
+                            $same = true;
+                            break;
+                        }
+                    }
+                    
+                    if($same == false) {
+                        for($l = 0; $l < count($doctor_list); $l++) {
+                            if($on_class_list[$i]->doctorsID[$j] == $doctor_list[$l].doctorID) {
+                                $doctor_list[$l]->lostShfits = $doctor_list[$l]->lostShfits + 1;
+                            }
+                        }
+                    }
+                }
+            }else if($on_class_list[$i]->location == 'T' and $on_class_list[$i]->dayOrNight = 'n') {
+                // 台北夜班
+                $loop_first_index = ($on_class_list[$i]->day - 1) * 19 + 10;
+                $loop_last_index  = ($on_class_list[$i]->day - 1) * 19 + 16;
+                
+                // 拿對應schedule上的醫生去和預ON班的醫生去比較，如果預ON班沒上到則pre_c +1(php : lostShfits)
+                for($j = 0; $j < count($on_class_list[$i]->doctorsID); $j++) {
+                    // 開關，如果沒有想同，該醫生pre_c+1
+                    $same = false;
+                    for($k = $loop_first_index; $k < $loop_last_index; $k++) {
+                        if($schedule[$k]->doctor_id == $on_class_list[$i]->doctorsID[$j]) {
+                            $same = true;
+                            break;
+                        }
+                    }
+                    
+                    if($same == false) {
+                        for($l = 0; $l < count($doctor_list); $l++) {
+                            if($on_class_list[$i]->doctorsID[$j] == $doctor_list[$l].doctorID) {
+                                $doctor_list[$l]->lostShfits = $doctor_list[$l]->lostShfits + 1;
+                            }
+                        }
+                    }
+                }
+            }else if($on_class_list[$i]->location == 'D' and $on_class_list[$i]->dayOrNight = 'd') {
+                // 淡水白班
+                $loop_first_index = ($on_class_list[$i]->day - 1) * 19 + 6;
+                $loop_last_index  = ($on_class_list[$i]->day - 1) * 19 + 10;
+                
+                // 拿對應schedule上的醫生去和預ON班的醫生去比較，如果預ON班沒上到則pre_c +1
+                for($j = 0; $j < count($on_class_list[$i]->doctorsID); $j++) {
+                    // 開關，如果沒有想同，該醫生pre_c+1
+                    $same = false;
+                    for($k = $loop_first_index; $k < $loop_last_index; $k++) {
+                        if($schedule[$k]->doctor_id == $on_class_list[$i]->doctorsID[$j]) {
+                            $same = true;
+                            break;
+                        }
+                    }
+                    
+                    if($same == false) {
+                        for($l = 0; $l < count($doctor_list); $l++) {
+                            if($on_class_list[$i]->doctorsID[$j] == $doctor_list[$l].doctorID) {
+                                $doctor_list[$l]->lostShfits = $doctor_list[$l]->lostShfits + 1;
+                            }
+                        }
+                    }
+                }
+            }else {
+                // 淡水夜班
+                $loop_first_index = ($on_class_list[$i]->day - 1) * 19 + 16;
+                $loop_last_index  = ($on_class_list[$i]->day - 1) * 19 + 19;
+                
+                // 拿對應schedule上的醫生去和預ON班的醫生去比較，如果預ON班沒上到則pre_c +1
+                for($j = 0; $j < count($on_class_list[$i]->doctorsID); $j++) {
+                    // 開關，如果沒有想同，該醫生pre_c+1
+                    $same = false;
+                    for($k = $loop_first_index; $k < $loop_last_index; $k++) {
+                        if($schedule[$k]->doctor_id == $on_class_list[$i]->doctorsID[$j]) {
+                            $same = true;
+                            break;
+                        }
+                    }
+                    
+                    if($same == false) {
+                        for($l = 0; $l < count($doctor_list); $l++) {
+                            if($on_class_list[$i]->doctorsID[$j] == $doctor_list[$l].doctorID) {
+                                $doctor_list[$l]->lostShfits = $doctor_list[$l]->lostShfits + 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    public function count_fit($schedule, $doctor_list) {
+        // 根據一張完整的排班表，去計算醫生剩下的屬性值
+        for($i = 0; $i < count($schedule); $i++) {
+            fin_count_doctor_attribute($schedule, $schedule[$i], $doctor_list); // python 2402
+        }
+        
+        // 計算fitness值
+        $fitness = 0;
+        // 1.先把每位pallc未上的班先加上去
+        for($i = 0; $i < count($doctor_list); $i++) {
+            $fitness = $fitness + $doctor_list[$i]->totalShifts;
+        }
+        
+        // 2.醫師有預班卻沒排上的加上去(醫師物件中有"pre_c"就是拿來記錄醫師預班卻沒上的次數)
+        for($i = 0; $i < count($doctor_list); $i++) {
+            $fitness = $fitness + $doctor_list[$i]->lostShfits;
+        }
+        
+        // 3.醫師預當天OFF班，卻排到去上班
+        for($i = 0; $i < count($schedule); $i++) {
+            for($j = 0; $j < count($schedule[$i]->offc); $j++) {
+                if($schedule[$i]->doctor_id == $$schedule[$i]->offc[$j]) {
+                    $fitness = $fitness + 1;
+                    break;
+                }
+            }
+        }
+        
+        // 4.若還有剩餘的白夜班也加上去
+        for($i = 0; $i < count($doctor_list); $i++) {
+            $fitness = $fitness + abs($doctor_list[$i]->dayShifts) + abs($doctor_list[$i]->nightShifts);
+        }
+        
+        // 5.若還有剩餘的內外班也加上去
+        for($i = 0; $i < count($doctor_list); $i++) {
+            $fitness = $fitness + abs($doctor_list[$i]->medicalShifts) + abs($doctor_list[$i]->surgicalShifts);
+        }
+        
+        return $fitness;
+    }
+    
+    // 進來的表一定要是填完的表
+    public function fin_count_doctor_attribute($schedule, $class_table, $doctor_list) {
+        // 先抓出醫生index
+        $doctor_index = 0;
+        if($class_table->doctor_id != '') {
+            for($i = 0; $i < count($doctor_list); $i++) {
+                if($class_table->doctor_id == $doctor_list[$i]->doctorID) {
+                    $doctor_index = $i;
+                }
+            }
+            
+            $class_table_property_list = [];
+            array_push($class_table_property_list, $class_table->section);
+            array_push($class_table_property_list, $class_table->class_sort);
+            array_push($class_table_property_list, $class_table->hospital_area);
+            
+            // 當天為假日班時，醫生假日班數-1
+            $doctor_list[$doctor_index]->weekendShifts -= $class_table->holiday;
+            
+            // 醫生總班數-1
+            $doctor_list[$doctor_index]->totalShifts = $doctor_list[$doctor_index]->totalShifts - 1;
+            
+            // 根據表格屬性，將醫生其值扣除
+            for($i = 0; $i < count($class_table_property_list); $i++) {
+                if($class_table_property_list[$i] == 'med') {
+                    $doctor_list[$doctor_index]->medicalShifts = $doctor_list[$doctor_index]->medicalShifts - 1;
+                }else if($class_table_property_list[$i] == 'sur') {
+                    $doctor_list[$doctor_index]->surgicalShifts = $doctor_list[$doctor_index]->surgicalShifts - 1;
+                }else if($class_table_property_list[$i] == 'd') {
+                    $doctor_list[$doctor_index]->dayShifts = $doctor_list[$doctor_index]->dayShifts - 1;
+                }else if($class_table_property_list[$i] == 'n') {
+                    $doctor_list[$doctor_index]->nightShifts = $doctor_list[$doctor_index]->nightShifts - 1;
+                }else if($class_table_property_list[$i] == 'T') {
+                    $doctor_list[$doctor_index]->taipeiShiftsLimit = $doctor_list[$doctor_index]->taipeiShiftsLimit - 1;
+                }else if($class_table_property_list[$i] == 'D') {
+                    $doctor_list[$doctor_index]->tamsuiShiftsLimit = $doctor_list[$doctor_index]->tamsuiShiftsLimit - 1;
+                }
+            }
+            
+            // 當在非職登院區上班時，再當週非職登院區班數+1
+            if($class_table->hospital_area != $doctor_list[$doctor_index]->location) {
+                $doctor_list[$doctor_index]->otherLocationShifts[$class_table->week_num - 1] += 1;
+            }
+            
+        }
+    }
+    
+    // 交配運算子
+    public function cross_over($all_parent_list) {
+        // from php 264
+        
+        $crossover_sort = rand(0, 2);
+        
+        // 單日雙點交配
+        if($crossover_sort == 0) {
+            // 隨機選兩張表
+            $random_parent_index1 = 0;
+            $random_parent_index2 = 0;
+            $random_day = 0;
+            
+            // 兩張表不能是同一張且假日要跟假日換，平日要跟平日換
+            while($random_parent_index1 == $random_parent_index2) {
+                $random_parent_index1 = rand(0, count(all_parent_list) - 1);
+                $random_parent_index2 = rand(0, count(all_parent_list) - 1);
+                $random_day = rand(0, intval($days) - 1);
+            }
+            
+            $copy_parent_list = [];
+            foreach($all_parent_list as $parent) {
+                array_push($copy_parent_list, $parent);
+            }
+            
+            for($i = $random_day * 19; $i < $random_day * 19 + 19; $i++) {
+                // 找到預班的或是假日班則不換則不換
+                // python 2076
+            }
+        }
     }
     
     //  ==================  準備資料用  =========================
