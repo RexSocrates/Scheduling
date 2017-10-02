@@ -196,7 +196,7 @@
                                       }
                                       else {
                                         // 剩餘可預約班數為0，無法預班
-                                        alert("可預約班數不足，無法預班");
+                                        alert("預約班數不足，無法預班，可預約班數剩餘"+document.getElementById('hiddenCountOn').value);
                                         //dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
                                     }
                                   }else {
@@ -206,7 +206,7 @@
                                       }
                                       else {
                                         // 剩餘可預約班數為0，無法預班
-                                        alert("可預約班數不足，無法預班");
+                                        alert("可off班數不足，無法預班，可off班剩餘"+document.getElementById('hiddenCountOff').value);
                                         //dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
                                     }
                                   }
@@ -259,7 +259,7 @@
                                         updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
                                     }else {
                                         // 剩餘可預約班數為0，無法預班;
-                                        alert("可預約班數不足，無法預班");
+                                        alert("預約班數不足，無法預班，可預約班數剩餘"+document.getElementById('hiddenCountOn').value);
                                         //dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
                                     }
                                 }else {
@@ -268,7 +268,7 @@
                                         updateReservation(event.hidden, event.priority, event.start_date, event.end_date);
                                     }else {
                                         // 剩餘可預約班數為0，無法預班
-                                        alert("可預約班數不足，無法預班");
+                                       alert("可off班數不足，無法預班，可off班剩餘"+document.getElementById('hiddenCountOff').value);
                                         //dhtmlx.message({ type:"error", text:"可預約班數不足，無法預班"});
                                     }
                                 }
