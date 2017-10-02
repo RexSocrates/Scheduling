@@ -155,7 +155,7 @@ class SettingController extends Controller
 
         $month=date("Y-m",strtotime("+1 month"));
 
-        $reservationData->addDate($month,1,10);
+        $reservationData->addDate($month,01,10);
 
         $announcement->addAnnouncement($data);
 

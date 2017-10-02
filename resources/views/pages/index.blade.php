@@ -130,7 +130,7 @@
                     <h5 class="modal-announcement-title">公告</h5>
                 </div>
                 <div class="modal-content modal-content-customize1">
-                    <div class="row margin-b0">
+                    <div class="row margin-b0">  
     				    <div class="col s12">
                             <h5 class="card-title" id="announcementTitle"></h5>
                             <p class="inline">蔡維德</p>
