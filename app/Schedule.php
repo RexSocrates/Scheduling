@@ -575,7 +575,19 @@ class Schedule extends Model
         return $count;
     }
 
-  
+  public function getDoctorDate(){
+    $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+    $count = DB::table('Schedule')
+            ->whereNotNull('doctorID')
+            ->where('doctorID', 3)
+            ->whereNotIn('doctorID', [2])
+            ->where('date', 'like', $nextMonth.'%')
+            ->get();
+
+           return $count;
+        
+  }
 
 
 }

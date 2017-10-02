@@ -18,11 +18,11 @@ class ScheduleRecord extends Model
 
     }
 
-    public function getScheduleBydoctorID($doctorID){
+    public function getScheduleTotoalBydoctorID($doctorID){
 
     	 $data = DB::table('ScheduleRecord')
     	 	->where('doctorID',$doctorID)
-    	 	->get();
+    	 	->sum('shiftHours');
 		
 		return $data;
     }

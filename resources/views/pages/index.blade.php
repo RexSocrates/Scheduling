@@ -133,8 +133,8 @@
                     <div class="row margin-b0">  
     				    <div class="col s12">
                             <h5 class="card-title" id="announcementTitle"></h5>
-                            <p class="inline">蔡維德</p>
-                            <p class="inline margin-l10 grey-text">2017-09-10</p>
+                            <p class="inline" id="name"></p>
+                            <p class="inline margin-l10 grey-text" id="date"></p>
     				    	<pre id="announcementContent"></pre>
     				    </div>
                     </div>
@@ -232,6 +232,9 @@
             }, function(array) {
                 document.getElementById("announcementTitle").innerHTML = array[1];
                 document.getElementById("announcementContent").innerHTML = array[2];
+                document.getElementById("name").innerHTML = array[3];
+                document.getElementById("date").innerHTML = array[4];
+                console.log(array[3]);
             });
         }
         
@@ -244,6 +247,7 @@
                 document.getElementById("textarea1").value = array[2];
                 $('textarea').trigger('autoresize');
                 Materialize.updateTextFields();
+
             });
             
         }

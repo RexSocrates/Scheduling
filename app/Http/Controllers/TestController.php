@@ -952,78 +952,18 @@ class TestController extends Controller
 
    public function announceSchedule(){
      
-       $user = new User();
-        $scheduleCategory = new ScheduleCategory();
-        $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
-        $schedule = new Schedule();
-
-        //$data = $request->all();
-        $categorySerial = $scheduleCategory->getSchCategoryMajor(4);
-
+      
+         $scheduleRecord = new ScheduleRecord();     
+        $user = new User();
         $doctors = $user->getAtWorkDoctors();
-
-        $date= date('Y-m',strtotime("+1 month"));
-   
-        $shiftArr=[];
         foreach ($doctors as $doctor) {
-
-            $mustOnDutyShiftArr=[
-            'doctorID'=>$doctor->doctorID,
-            'leaveMonth'=>$date
-            ];
-
-            $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
-            $mustOnDutyMedicalShifts=0;
-            $mustOnDutySurgicalShifts=0;
-            $shift=0;
-            $totalShift=0;
-            
-
-            $shiftDic=[
-                'totalShift'=>"",
-                'doctorID'=>$doctor->doctorID,
-                'doctorName' => $doctor->name
-            ];
-
-            if($count!=0){
-                $mustOnDutyMedicalShifts=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift*11/15;
-                $mustOnDutySurgicalShifts=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift-$medical;
-              
-                if($categorySerial == "Medical"){
-                    $shift=$schedule->totalMedicalShiftFirstEdition($doctor->doctorID);
-                    $shiftDic['totalShift']=$mustOnDutyMedicalShifts-$shift;
-                }
-                else if($categorySerial == "Surgical")
-                    $shift=$schedule->totalSurgicalShiftFirstEdition($doctor->doctorID);
-                    $shiftDic['totalShift']=$mustOnDutySurgicalShifts-$shift;
-                }
-            else{
-                $mustOnDutyMedicalShifts=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts;
-                $$mustOnDutySurgicalShifts=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutySurgicalShifts;
-
-                if($categorySerial == "Medical"){
-                    $shift=$schedule->totalMedicalShiftFirstEdition($doctor->doctorID);
-                    $$shiftDic['totalShift']=$mustOnDutyMedicalShifts-$shift;
-                }
-                else if($categorySerial == "Surgical")
-                    $shift=$schedule->totalMedicalShiftFirstEdition($doctor->doctorID);
-                    $shiftDic['totalShift']=$mustOnDutySurgicalShifts-$shift;
-                }
-             
-                array_push($shiftArr,$shiftDic);
-            }
-
-
-            for($i = 0 ; $i<count($shiftArr);$i++){
-                echo $shiftArr[$i]['doctorName'];
-            }
-           
-
-           
+            $shiftHours =$scheduleRecord->getScheduleTotoalBydoctorID($doctor->doctorID);
+                echo $shiftHours.'</br>';
+            // array_push($totalShift,$shiftHours);
         }
 
         
-        
+    }
     
         //$reservationData->addDate($month,1,10);
             // $user= new User();

@@ -373,30 +373,38 @@ class ScheduleController extends Controller
             ];
 
             if($count!=0){
-              
-                if($categorySerial == "Medical"){
+                $shiftDic['totalShift'] = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift;
+
+            //   if($user->getDoctorInfoByID($doctor->doctorID)->level == "All"){
+            //     $mustOnDutyShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift;
+            //     $medical=ceil($mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift*11/15);
+                
+            //     if($categorySerial == "Medical"){
+            //         $shiftDic['totalShift']=$medical-($schedule->totalMedicalShiftFirstEdition($doctor->doctorID));
+            //     }
+            //     else if($categorySerial == "Surgical"){
+            //         $surgical =$mustOnDutyShift-$medical;
                     
-                    $shiftDic['totalShift']=($mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift*11/15)-($schedule->totalMedicalShiftFirstEdition($doctor->doctorID));
-                }
-                else if($categorySerial == "Surgical")
-                    $medical =$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift*11/15;
-                    $shiftDic['totalShift']=($mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift-$medical)-$schedule->totalSurgicalShiftFirstEdition($doctor->doctorID);
-                }
+            //         $shiftDic['totalShift']=$surgical-$schedule->totalSurgicalShiftFirstEdition($doctor->doctorID);
+            //     }
+            //     }
+
+             }
 
             else{
+                $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts;
                
-                if($categorySerial == "Medical"){
+            //     if($categorySerial == "Medical"){
                     
-                    $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts-$schedule->totalMedicalShiftFirstEdition($doctor->doctorID);
-                }
-                else if($categorySerial == "Surgical")
-                    $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutySurgicalShifts-$schedule->totalMedicalShiftFirstEdition($doctor->doctorID);
-            }
-            
-                array_push($shiftArr,$shiftDic);
-               
+            //         $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts-$schedule->totalMedicalShiftFirstEdition($doctor->doctorID);
+            //     }
+            //     else if($categorySerial == "Surgical")
+            //         $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutySurgicalShifts-$schedule->totalMedicalShiftFirstEdition($doctor->doctorID);
+            // }    
 
             }
+             array_push($shiftArr,$shiftDic);
+        }
              return $shiftArr;
            
            //array_push($surgicallArr,$totalSurgical);
@@ -633,17 +641,17 @@ class ScheduleController extends Controller
         if($count!=0){
             $totalShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift;
             $mustOnDutyArr['totalShift']=$totalShift;
-            if($user->getDoctorInfoByID($name->doctorID)->location == "台北"){
+            if($user->getDoctorInfoByID($name->doctorID)->location == "Taipei"){
                 if($totalShift/ 2== 0){
                     $taipei = (int)$totalShift/2;
                     $mustOnDutyArr['taipei']= ceil($taipei);
                     $mustOnDutyArr['tamsui']=$totalShift-$mustOnDutyArr['taipei'];
                 }
                 else{
-                $taipei = (int)$totalShift/2;
-                $mustOnDutyArr['taipei']= ceil($taipei);
-                $tamsui=$totalShift-$mustOnDutyArr['taipei'];
-                $mustOnDutyArr['tamsui']=(int)$tamsui;
+                    $taipei = (int)$totalShift/2;
+                    $mustOnDutyArr['taipei']= ceil($taipei);
+                    $tamsui=$totalShift-$mustOnDutyArr['taipei'];
+                    $mustOnDutyArr['tamsui']=(int)$tamsui;
                 }
          }
 
@@ -690,11 +698,20 @@ class ScheduleController extends Controller
 
          }
 
-
+        if($user->getDoctorInfoByID($name->doctorID)->major == "All"){
             $medical=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift*11/15;
             $mustOnDutyArr['medical']=ceil($medical);
             $surgical=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift-$medical;
             $mustOnDutyArr['surgical']=(int)$surgical;
+        }
+            else if($user->getDoctorInfoByID($name->doctorID)->major == "Medical"){
+            $mustOnDutyArr['medical']=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift;
+            $mustOnDutyArr['surgical']=0;
+        }
+            else if ($user->getDoctorInfoByID($name->doctorID)->major == "Surgical") {
+            $mustOnDutyArr['medical']=0;
+            $mustOnDutyArr['surgical']=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift;;
+        }
            
         }
 
@@ -749,12 +766,9 @@ class ScheduleController extends Controller
     public function shifHoursByDoctorID(){
         $scheduleRecord = new ScheduleRecord();
         $user = new User();
-        $shiftHours =$scheduleRecord->getScheduleBydoctorID($user->getCurrentUserID());
-        $total =0;
-        foreach ($shiftHours as $shiftHour) {
-            $total += $shiftHour->shiftHours;
-        }
-        return $total;
+        $shiftHours =$scheduleRecord->getScheduleTotoalBydoctorID($user->getCurrentUserID());
+        
+        return $shiftHours;
     }
 
     //查詢 所有醫生總積欠班數
@@ -763,14 +777,11 @@ class ScheduleController extends Controller
         $scheduleRecord = new ScheduleRecord();     
         $user = new User();
         $doctors = $user->getAtWorkDoctors();
+        $totalShift=[];
         foreach ($doctors as $doctor) {
-            $shiftHours =$scheduleRecord->getScheduleBydoctorID($doctor->doctorID);
-            $total =0;
-            foreach ($shiftHours as $shiftHour) {
-            $total += $shiftHour->shiftHours;
+            $shiftHours =$scheduleRecord->getScheduleTotoalBydoctorID($doctor->doctorID);
             
-            }
-             array_push($totalShift,$total);
+             array_push($totalShift,$shiftHours);
         }
 
     }

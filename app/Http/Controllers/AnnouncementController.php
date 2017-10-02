@@ -93,8 +93,10 @@ class AnnouncementController extends Controller
         $data = $request->all();
         
         $announcementObj = new Announcement();
+        $userObj = new User();
         $announcement = $announcementObj->getAnnouncement($data['serial']);
+        $announcementName = $userObj->getDoctorInfoByID($announcement->doctorID)->name;
         
-        return [$announcement->announcementSerial, $announcement->title, $announcement->content];
+        return [$announcement->announcementSerial, $announcement->title, $announcement->content, $announcementName, $announcement->date ];
     }
 }
