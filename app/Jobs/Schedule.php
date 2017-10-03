@@ -264,6 +264,13 @@ class Schedule implements ShouldQueue
                 cross_over($all_parent_list);
             }
             
+            // 突變運算子
+            $mutation_list = [];
+            for($j = 0; $j < $mutation_amount; $j++) {
+                // python 2583
+                mutation($all_parent_list, $doctor_list);
+            }
+            
         }
     }
     
@@ -2311,8 +2318,6 @@ class Schedule implements ShouldQueue
     
     // 交配運算子
     public function cross_over($all_parent_list) {
-        // from php 264
-        
         $crossover_sort = rand(0, 2);
         
         // 單日雙點交配
@@ -2334,11 +2339,180 @@ class Schedule implements ShouldQueue
                 array_push($copy_parent_list, $parent);
             }
             
+            // =================================下面這一段問題很多=================================
             for($i = $random_day * 19; $i < $random_day * 19 + 19; $i++) {
-                // 找到預班的或是假日班則不換則不換
-                // python 2076
+                // 找到預班的或是假日班則不換則不換 python 2076
+                if($copy_parent_list[$random_parent_index1][$i]->reservation == false and $copy_parent_list[$random_parent_index2][$i]->reservation == false and $copy_parent_list[$random_parent_index1][$i]->holiday == 0 and 
+                   $copy_parent_list[$random_parent_index2][$i]->holiday == 0) {
+                    // 取代deep copy
+                    $c = [];
+                    foreach($copy_parent_list[$random_parent_index1][$i] as $parent) {
+                        array_push($c, $parent);
+                    }
+                    
+                    // 取代deep copy
+                    $copy_parent_list[$random_parent_index1][$i] = [];
+                    foreach($copy_parent_list[$random_parent_index2][$i] as $item) {
+                        array_push($copy_parent_list[$random_parent_index1][$i], $item);
+                    }
+                    
+                    // 取代deep copy
+                    $copy_parent_list[$random_parent_index2][$i] = [];
+                    foreach($c as $item) {
+                        array_push($copy_parent_list[$random_parent_index2][$i], $item);
+                    }
+                }
             }
+            
+            // 把交配完的子代放入all_child_list
+            // 取代deep copy
+            $items = [];
+            foreach($copy_parent_list[$random_parent_index1] as $item) {
+                array_push($items, $item);
+            }
+            array_push($all_child_list, $items);
+            
+            // 取代deep copy
+            $items = [];
+            foreach($copy_parent_list[$random_parent_index2] as $item) {
+                array_push($items, $item);
+            }
+            array_push($all_child_list, $items);
+            
+        }else if($crossover_sort == 1) {
+            // 多日雙點
+            
+            // 隨機選擇兩張表
+            $random_parent_index1 = 0;
+            $random_parent_index2 = 0;
+            
+            // 隨機選擇要交配的RANGE範圍
+            $random_day1 = 0;
+            $random_day2 = 0;
+            $a = 0;
+            
+            while($random_parent_index1 == $random_parent_index2 or $random_day1 == $random_day2) {
+                $random_parent_index1 = rand(0, count($all_parent_list) - 1);
+                $random_parent_index2 = rand(0, count($all_parent_list) - 1);
+                $random_day1 = rand(0, intval($days) - 1);
+                $random_day2 = rand(0, intval($days) - 1);
+                
+                // 當random_day1比random_day2大時，互相交換
+                if($random_day1 > $random_day2) {
+                    $a = $random_day1;
+                    $random_day1 = $random_day2;
+                    $random_day2 = $a;
+                }
+            }
+            
+            // 取代deep copy
+            foreach($all_parent_list as $parent) {
+                array_push($copy_parent_list, $parent);
+            }
+            
+            for($i = $random_day1 * 19; $i < $random_day2 * 19 + 19; $i++) {
+                if($copy_parent_list[$random_parent_index1][$i]->reservation == false and $copy_parent_list[$random_parent_index2][$i]->reservation == false and $copy_parent_list[$random_parent_index1][$i]->holiday == 0 and 
+                   $copy_parent_list[$random_parent_index2][$i]->holiday == 0) {
+                    $c = [];
+                    foreach($copy_parent_list[$random_parent_index1][$i] as $parent) {
+                        array_push($c, $parent);
+                    }
+                    
+                    // 取代deep copy
+                    $copy_parent_list[$random_parent_index1][$i] = [];
+                    foreach($copy_parent_list[$random_parent_index2][$i] as $item) {
+                        array_push($copy_parent_list[$random_parent_index1][$i], $item);
+                    }
+                    
+                    // 取代deep copy
+                    $copy_parent_list[$random_parent_index2][$i] = [];
+                    foreach($c as $item) {
+                        array_push($copy_parent_list[$random_parent_index2][$i], $item);
+                    }
+                }
+            }
+            
+            // 把交配完的子代放入all_child_list
+            // 取代deep copy
+            $items = [];
+            foreach($copy_parent_list[$random_parent_index1] as $item) {
+                array_push($items, $item);
+            }
+            array_push($all_child_list, $items);
+            
+            $items = [];
+            foreach($copy_parent_list[$random_parent_index2] as $item) {
+                array_push($items, $item);
+            }
+            array_push($all_child_list, $items);
+            
+        }else {
+            // 建立mask，裡面是0和1，0不交換，1則交換
+            $mask = [];
+            for($i = 0; $i < intval($days); $i++) {
+                $random_num = rand(0, 1);
+                array_push($mask, $random_num);
+            }
+            
+            $random_parent_index1 = 0;
+            $random_parent_index2 = 0;
+            
+            // 兩張表不能是同一張且假日要跟假日換，平日要跟平日換
+            while($random_parent_index1 == $random_parent_index2) {
+                $random_parent_index1 = rand(0, count($all_parent_list) - 1);
+                $random_parent_index2 = rand(0, count($all_parent_list) - 1);
+            }
+            
+            // 取代deep copy
+            $copy_parent_list = [];
+            foreach($all_parent_list as $parent) {
+                array_push($copy_parent_list, $parent);
+            }
+            
+            for($i = 0; $i < count($mask); $i++) {
+                for($j = $i * 19; $j < $i * 19 + 19; $j++) {
+                    if($copy_parent_list[$random_parent_index1][$j]->reservation == false and $copy_parent_list[$random_parent_index2][$j]->reservation == false and $mask[$i] == 1 and $copy_parent_list[$random_parent_index1][$j]->holiday == 0 and $copy_parent_list[$random_parent_index2][$j]->holiday == 0) {
+                        // 取代deep copy
+                        $c = [];
+                        foreach($copy_parent_list[$random_parent_index1][$j] as $item) {
+                            array_push($c, $item);
+                        }
+                        
+                        // 取代deep copy
+                        $copy_parent_list[$random_parent_index1][$j] = [];
+                        foreach($copy_parent_list[$random_parent_index2][$j] as $item) {
+                            array_push($copy_parent_list[$random_parent_index1][$j], $item);
+                        }
+                        
+                        // 取代deep copy
+                        $copy_parent_list[$random_parent_index2][$j] = [];
+                        foreach($c as $item) {
+                            array_push($copy_parent_list[$random_parent_index2][$j], $item);
+                        }
+                    }
+                }
+            }
+            
+            // 把交配完的子代放入all_child_list
+            // 取代deep copy
+            $items = [];
+            foreach($copy_parent_list[$random_parent_index1] as $item) {
+                array_push($items, $item);
+            }
+            array_push($all_child_list, $items);
+            
+            // 取代deep copy
+            $items = [];
+            foreach($copy_parent_list[$random_parent_index2] as $item) {
+                array_push($items, $item);
+            }
+            array_push($all_child_list, $items);
         }
+    }
+    
+    // 突變運算子
+    public function mutation($all_parent_list, $doctor_list) {
+        // from php 271
     }
     
     //  ==================  準備資料用  =========================
