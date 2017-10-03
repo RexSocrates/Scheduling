@@ -2512,7 +2512,42 @@ class Schedule implements ShouldQueue
     
     // 突變運算子
     public function mutation($all_parent_list, $doctor_list) {
-        // from php 271
+        $mutation_list = [];
+        // 看有沒有抓到不是預班的醫生，如果抓到預班的醫生要重抓
+        $rerun = 1;
+        $parent_list_index = 0;
+        $random_class_table_index = 0;
+        
+        while($rerun == 1) {
+            // 從all_parent_list中，挑選出一個要突變的子代
+            $parent_list_index = rand(0, count($all_parent_list) - 1);
+            
+            // 存放random出來要突變哪一格的值
+            $random_class_table_index = rand(0, intval(days) * 19 - 1);
+            
+            // 檢查該格是否為預班、或者是否為假日班，如果不是將該格醫師取出
+            if($all_parent_list[$parent_list_index][$random_class_table_index]->reservation != true and $all_parent_list[$parent_list_index][$random_class_table_index]->holiday != 1) {
+                // 將要突變的子代複製一個到mutation_list中
+                $items = [];
+                foreach($all_parent_list[$parent_list_index] as $item) {
+                    array_push($items, $item);
+                }
+                array_push($mutation_list, $items);
+                
+                // 把該醫生取出
+                $mutation_list_index = count($mutation_list) - 1;
+                $mutation_list[$mutation_list_index][$random_class_table_index]->doctor_id = '';
+                // 放入一個隨機取出的醫生
+                $random_doctor_index = 0;
+                $random_doctor_index = rand(0, count($doctor_list) - 1);
+                
+                $mutation_list[$mutation_list_index][$random_class_table_index]->doctor_id = $doctor_list[$random_doctor_index]->doctorID;
+                
+                $rerun += 1;
+            }else {
+                $rerun = 1;
+            }
+        }
     }
     
     //  ==================  準備資料用  =========================
