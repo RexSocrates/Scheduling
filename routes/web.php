@@ -211,6 +211,9 @@ Route::get('confirmsaveSchedule','ScheduleController@confirmscheduleStatus');
 //調整班表->新增班
 Route::get('saveSchedule','ScheduleController@addSchedule');
 
+//列出醫生剩餘班數
+Route::get('showDoctorInfo','ScheduleController@showDoctorInfo');
+
 
 Route::get('updateScheduleID','ScheduleController@getDoctorInfoByScheduleID');
 

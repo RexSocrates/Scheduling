@@ -13,6 +13,7 @@ use App\ReservationData;
 use App\MustOnDutyShiftPerMonth;
 use App\Announcement;
 use App\Reservation;
+use App\ScheduleRecord;
 
 use App\Jobs\SendDeleteShiftMail;
 use App\Jobs\SendNewShiftAssignmentMail;
@@ -336,6 +337,79 @@ class ScheduleController extends Controller
 
         
     }
+
+    //列出醫生剩餘班數
+    public function showDoctorInfo(Request $request){
+        $user = new User();
+        $scheduleCategory = new ScheduleCategory();
+        $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
+        $schedule = new Schedule();
+
+        $data = $request->all();
+        $categorySerial = $scheduleCategory->getSchCategoryMajor($data['categorySerial']);
+
+        $doctors = $user->getAtWorkDoctors();
+
+        $date= date('Y-m',strtotime("+1 month"));
+        $shiftArr=[];
+        
+        foreach ($doctors as $doctor) {
+
+            $mustOnDutyMedicalShifts=0;
+            $mustOnDutySurgicalShifts=0;
+
+            $mustOnDutyShiftArr=[
+            'doctorID'=>$doctor->doctorID,
+            'leaveMonth'=>$date
+            ];
+
+            $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
+            
+            
+            $shiftDic=[
+                'totalShift'=>"",
+                'doctorID'=>$doctor->doctorID,
+                'doctorName' => $doctor->name
+            ];
+
+            if($count!=0){
+                $shiftDic['totalShift'] = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift;
+
+            //   if($user->getDoctorInfoByID($doctor->doctorID)->level == "All"){
+            //     $mustOnDutyShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift;
+            //     $medical=ceil($mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift*11/15);
+                
+            //     if($categorySerial == "Medical"){
+            //         $shiftDic['totalShift']=$medical-($schedule->totalMedicalShiftFirstEdition($doctor->doctorID));
+            //     }
+            //     else if($categorySerial == "Surgical"){
+            //         $surgical =$mustOnDutyShift-$medical;
+                    
+            //         $shiftDic['totalShift']=$surgical-$schedule->totalSurgicalShiftFirstEdition($doctor->doctorID);
+            //     }
+            //     }
+
+             }
+
+            else{
+                $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts;
+               
+            //     if($categorySerial == "Medical"){
+                    
+            //         $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts-$schedule->totalMedicalShiftFirstEdition($doctor->doctorID);
+            //     }
+            //     else if($categorySerial == "Surgical")
+            //         $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutySurgicalShifts-$schedule->totalMedicalShiftFirstEdition($doctor->doctorID);
+            // }    
+
+            }
+             array_push($shiftArr,$shiftDic);
+        }
+             return $shiftArr;
+           
+           //array_push($surgicallArr,$totalSurgical);
+        }
+    
     
     // 刪除預班
     public function deleteReservation(Request $request){
@@ -458,6 +532,8 @@ class ScheduleController extends Controller
         $reservationData = new ReservationData();
         $user = new User();
         $announcement = new Announcement();
+        $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
+        $scheduleRecord = new ScheduleRecord();
 
         $schedule->confirmNextMonthSchedule();
         $reservationData->setScheduleAnnounceStatus();
@@ -467,6 +543,34 @@ class ScheduleController extends Controller
             'content'=>"已公布正式班表",
             'doctorID'=> $user->getCurrentUserID()
         ];
+
+        $doctorName = $user->getAtWorkDoctors();
+
+        foreach($doctorName as $name){
+
+            $date= date('Y-m');
+           
+            $mustOnDutyShiftArr=[
+            'doctorID'=>$name->doctorID,
+            'leaveMonth'=>$date
+            ];
+
+            $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
+
+            if($count!=0){
+                $mustOnDutyTotalShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift; //應上
+                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
+                $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
+                $scheduleRecord->addScheduleRecord($name->doctorID,$shifHours);
+            }
+            else{
+                $mustOnDutyTotalShift=$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTotalShifts;
+                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
+                $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
+                $scheduleRecord->addScheduleRecord($name->doctorID,$shifHours);
+             }
+
+    }
 
         $announcement->addAnnouncement($data);
 
@@ -526,6 +630,7 @@ class ScheduleController extends Controller
         ];
 
         $date= date('Y-m',strtotime("+1 month"));
+
         $mustOnDutyShiftArr=[
             'doctorID'=>$name->doctorID,
             'leaveMonth'=>$date
@@ -536,24 +641,24 @@ class ScheduleController extends Controller
         if($count!=0){
             $totalShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift;
             $mustOnDutyArr['totalShift']=$totalShift;
-            if($user->getDoctorInfoByID($name->doctorID)->location == "台北"){
+            if($user->getDoctorInfoByID($name->doctorID)->location == "Taipei"){
                 if($totalShift/ 2== 0){
                     $taipei = (int)$totalShift/2;
                     $mustOnDutyArr['taipei']= ceil($taipei);
                     $mustOnDutyArr['tamsui']=$totalShift-$mustOnDutyArr['taipei'];
                 }
                 else{
-                $taipei = (int)$totalShift/2;
-                $mustOnDutyArr['taipei']= ceil($taipei);
-                $tamsui=$totalShift-$mustOnDutyArr['taipei'];
-                $mustOnDutyArr['tamsui']=(int)$tamsui;
+                    $taipei = (int)$totalShift/2;
+                    $mustOnDutyArr['taipei']= ceil($taipei);
+                    $tamsui=$totalShift-$mustOnDutyArr['taipei'];
+                    $mustOnDutyArr['tamsui']=(int)$tamsui;
                 }
          }
 
          if($user->getDoctorInfoByID($name->doctorID)->level == "A1" || $user->getDoctorInfoByID($name->doctorID)->level == "A5"){
             if($totalShift /2 == 0){
                 $mustOnDutyArr['day'] = $totalShift/2;
-                $mustOnDutyArr['night']  = $totalShift- $totalShift/2;
+                $mustOnDutyArr['night']  = $totalShift-$totalShift/2;
             }
             else{
                 $mustOnDutyArr['day'] = floor($totalShift/2);
@@ -593,11 +698,20 @@ class ScheduleController extends Controller
 
          }
 
-
+        if($user->getDoctorInfoByID($name->doctorID)->major == "All"){
             $medical=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift*11/15;
             $mustOnDutyArr['medical']=ceil($medical);
             $surgical=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift-$medical;
             $mustOnDutyArr['surgical']=(int)$surgical;
+        }
+            else if($user->getDoctorInfoByID($name->doctorID)->major == "Medical"){
+            $mustOnDutyArr['medical']=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift;
+            $mustOnDutyArr['surgical']=0;
+        }
+            else if ($user->getDoctorInfoByID($name->doctorID)->major == "Surgical") {
+            $mustOnDutyArr['medical']=0;
+            $mustOnDutyArr['surgical']=$mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift;;
+        }
            
         }
 
@@ -648,7 +762,29 @@ class ScheduleController extends Controller
         return view ('pages.first-edition-situation',array('mustOnDuty'=>$mustOnDuty,'onDuty'=>$onDuty));
     }
 
+    //查詢 單一醫生總積欠班數 
+    public function shifHoursByDoctorID(){
+        $scheduleRecord = new ScheduleRecord();
+        $user = new User();
+        $shiftHours =$scheduleRecord->getScheduleTotoalBydoctorID($user->getCurrentUserID());
+        
+        return $shiftHours;
+    }
 
+    //查詢 所有醫生總積欠班數
+    public function shifHours(){
+
+        $scheduleRecord = new ScheduleRecord();     
+        $user = new User();
+        $doctors = $user->getAtWorkDoctors();
+        $totalShift=[];
+        foreach ($doctors as $doctor) {
+            $shiftHours =$scheduleRecord->getScheduleTotoalBydoctorID($doctor->doctorID);
+            
+             array_push($totalShift,$shiftHours);
+        }
+
+    }
 
     // 從scheduler 傳回資料後將日期的字串分解
     private function processDateStr($dateStr) {

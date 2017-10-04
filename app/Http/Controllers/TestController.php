@@ -16,6 +16,8 @@ use App\ShiftRecords;
 use App\OfficialLeave;
 use App\ScheduleCategory;
 use App\ReservationData;
+use App\MustOnDutyShiftPerMonth;
+use App\ScheduleRecord;
 
 use App\Jobs\SendDeleteShiftMail;
 use App\Jobs\SendApplyShiftExchangeMail;
@@ -949,18 +951,47 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
-         //判斷醫生科別
-       $location=0;
-       $user = new User();
-        $schedule = new Schedule();
-        $scheduleCategory = new ScheduleCategory();
-        $major=0;
-            if($user->getDoctorInfoByID(5)->major != $scheduleCategory->getSchCategoryMajor(7)){
-                $major=1;
-            }
-            echo $major;
+     
+      
+         $scheduleRecord = new ScheduleRecord();     
+        $user = new User();
+        $doctors = $user->getAtWorkDoctors();
+        foreach ($doctors as $doctor) {
+            $shiftHours =$scheduleRecord->getScheduleTotoalBydoctorID($doctor->doctorID);
+                echo $shiftHours.'</br>';
+            // array_push($totalShift,$shiftHours);
+        }
 
+        
     }
+    
+        //$reservationData->addDate($month,1,10);
+            // $user= new User();
+            // $schedule = new Schedule();
+            // $major='Surgical';
+            // $doctors = $user->getDoctorByMajor($major);
+            // $scheduleData = $schedule->getDoctorScheduleDataByDate('2017-10-02');
+            
+            //     // $id = $doctor->doctorID;
+            //     // $idArr = [$id];
+            // // }
+            //    foreach($scheduleData as $info){
+            //     foreach ($doctors as $doctor) {
+            //          if($doctor->doctorID != $info->doctorID){
+            //             echo $doctor->doctorID.'<br>';
+            //          }
+            //          else{ 
+                        
+            //         }
+                    
+            //     }
+               
+            // }
+
+            // if($idArr != $scArr){
+            //     echo $idArr[0];
+            // }
+    
     
     // 取得特定醫師在那一週的非職登院區上班班數
     public function getAnotherLocationShifts() {

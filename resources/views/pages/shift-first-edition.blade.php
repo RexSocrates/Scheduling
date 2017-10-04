@@ -14,7 +14,19 @@
             opacity: 0;
             filter: alpha(opacity = 0);
         }
+
+       .dhx_cal_event.event_1 div, .dhx_cal_event_line.event_1{
+            background-color: #FC5BD5 !important;
+            border-color: #839595 !important;
+        }
+        .dhx_cal_event_clear.event_1{
+            color:#B82594 !important;
+        }
+
     </style>
+
+
+
 @endsection
 
 @section('navbar')
@@ -48,11 +60,12 @@
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s12 margin-b20">
-                                            <select name="doctor" id="doctor" required>
+                                            <select name="doctor" class="browser-default" id="doctor" required>
                                                 <option value="" selected disabled>選擇醫生</option>
-                                                @foreach($doctorName as $name)
+                                                <option value="" selected ></option>
+                                                <!-- @foreach($doctorName as $name)
                                                 <option value="{{$name->doctorID}}">{{$name->name}}</option>
-                                                @endforeach
+                                                @endforeach -->
                                             </select>
                                             <label>醫生</label>
                                         </div>
@@ -179,6 +192,9 @@
                             scheduler.config.container_autoresize = true;
                             scheduler.config.collision_limit = 2; 
                             scheduler.config.drag_resize= false;
+                            scheduler.locale.labels.section_subject = "Subject";
+                            scheduler.config.multi_day = true;
+
 
                             scheduler.form_blocks["hidden"] = {
                                 render:function(sns) {
@@ -500,12 +516,26 @@
                             
                                 changeDoctor_1(event.hidden);
                                 showScheduleInfo(event.start_date,event.section_id);
+                                //showDoctorInfo(event.section_id);
 
                                 console.log("123"+event.text);
 
                                 return true;
                             });
                            
+                            scheduler.templates.event_class=function(start, end, event){
+                                var css = "";
+
+                                if(event.subject) // if event has subject property then special class should be assigned
+                                 css += "event_"+event.subject;
+
+                                if(event.id == scheduler.getState().select_id){
+                                    css += " selected";
+                                }
+                                return css; // default return       
+                         };
+
+
                            
 
                             //進入畫面後顯示的東西
@@ -513,7 +543,7 @@
 
                             scheduler.parse([
                                 @foreach($schedule as $data)
-                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}" },
+                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}", subject:"{{ $data->status }}" },
                                
                                 @endforeach
                             ],"json");
@@ -1044,6 +1074,7 @@
 
         }
 
+        
 
         function save_form_alert_addSchedule(){
             var id = document.getElementById('doctor').value;
@@ -1343,14 +1374,37 @@
             });
         }
 
-        function showScheduleInfo(date,section_id,id) {
-             document.getElementById("shiftDate").value=date;
-             document.getElementById("shiftSessionID").value=section_id;
-             document.getElementById("scheduleID_1").value=id;
 
-             console.log("scheduleID_1");
+        function showScheduleInfo(date,section_id,id){
+            $.get("showDoctorInfo",{
+               categorySerial: section_id
+            
+            }, function(array){
+                document.getElementById("shiftDate").value=date;
+                document.getElementById("shiftSessionID").value=section_id;
+                document.getElementById("scheduleID_1").value=id;
+                var info = "";
+                console.log("length"+array.length);
+                for(i=0 ; i<array.length ; i++){
+                    info += "<option value="+array[i]['doctorID']+">"+array[i]['doctorName']+(array[i]['totalShift'])+"</option>";
+                    console.log('1'+array[i]['doctorID']);
+                }
+                document.getElementById("doctor").innerHTML  = info;
 
+            console.log("11123rrr");
+
+        });
+
+             
         }
+        // function showScheduleInfo(date,section_id,id) {
+        //      document.getElementById("shiftDate").value=date;
+        //      document.getElementById("shiftSessionID").value=section_id;
+        //      document.getElementById("scheduleID_1").value=id;
+
+        //      console.log("scheduleID_1");
+
+        // }
 
         function close_form() {               
             scheduler.endLightbox(false, html("my_form"));             
@@ -1413,5 +1467,10 @@
         });
 
         }
+
+        
+
+
+        
     </script>
 @endsection

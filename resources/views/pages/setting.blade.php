@@ -51,11 +51,17 @@
                             <h5 class="margin-t0">預班進行中</h5>
                             <p>系統將會關閉X小時</p>
                             <p>除排班人員外，所有醫生將不能進入系統</p>
+                            
+                            @if($firstSchedule == 1)
+                            <button type="button" class="btn btn-secondary margin-t10" disabled>產生初版班表</button>
+                            @else
                             <button type="button" class="btn btn-secondary margin-t10" onclick="announceFirstSchedule()">產生初版班表</button>
+                           
+                            @endif
                         </div>
                     </div>
                 </div>
-                @elseif(  $status ==2 )
+                @elseif( $status ==2 )
                 <div class="col s5">                 
                     <div class="card">
                         <div class="card-action">

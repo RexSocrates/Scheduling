@@ -76,6 +76,16 @@ class Schedule extends Model
         return $count;
     }
 
+    //取得醫生班表藉由日期
+    public function getDoctorScheduleDataByDate($date) {
+        $schedule = DB::table('Schedule')
+            ->whereNotNull('doctorID')
+            ->where('date', 'like', $date.'%')
+            ->get();
+        
+        return $schedule;
+    }
+
      //查看目前登入的醫生班表資訊
     public function getScheduleByCurrentDoctorID()
     {
@@ -206,6 +216,17 @@ class Schedule extends Model
             ]);
         
         return $affectedRows;
+    }
+
+    //更新醫生班表是否有被換班狀態
+    public function checkScheduleStatus($scheduleID,$status){
+        $affectedRows = DB::table('Schedule')
+            ->where('scheduleID', $scheduleID)
+            ->update([
+                'status' => $status
+
+            ]);
+        
     }
     
     // 確認當月班表
@@ -553,6 +574,20 @@ class Schedule extends Model
         
         return $count;
     }
-    
+
+  public function getDoctorDate(){
+    $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+    $count = DB::table('Schedule')
+            ->whereNotNull('doctorID')
+            ->where('doctorID', 3)
+            ->whereNotIn('doctorID', [2])
+            ->where('date', 'like', $nextMonth.'%')
+            ->get();
+
+           return $count;
+        
+  }
+
 
 }

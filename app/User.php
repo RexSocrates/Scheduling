@@ -140,6 +140,16 @@ class User extends Authenticatable
         
         return $rows;
     }
+
+    //查詢醫生藉由科別
+    public function getDoctorByMajor($major){
+        $doctors = DB::table('Doctor')
+                ->whereNotIn('Major',[$major])
+                ->get();
+
+                return $doctors;
+
+    }
     
     // 醫生離職
     public function resign($id) {
