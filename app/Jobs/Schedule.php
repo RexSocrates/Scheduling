@@ -267,11 +267,248 @@ class Schedule implements ShouldQueue
             // 突變運算子
             $mutation_list = [];
             for($j = 0; $j < $mutation_amount; $j++) {
-                // python 2583
                 mutation($all_parent_list, $doctor_list);
             }
             
+            // 修正交配後的班表
+            for($j = 0; $j < count($all_child_list); $j++) {
+                creat_doctor();
+                $mutation_list[$j] = revise($mutation_list[$j], $doctor_list); // python 2593
+            }
+            
+            // 計算all_child_list的fitness，使用前必須先重製醫師屬性表
+            $all_child_fitness_list = [];
+            for($j = 0; $j < count($all_child_list); $j++) {
+                creat_doctor();
+                
+                // 先計算doctor的pre_c
+                count_pre_c($all_child_list[$j], $doctor_list);
+                
+                // 取代deep copy 對integer用deep copy到底有什麼用啦！！
+                array_push($all_child_fitness_list, count_fit($all_child_list[$j], $doctor_list));
+            }
+            
+            echo "all child fitness : ";
+            echo print_r($all_child_fitness_list);
+            
+            // 計算mutation_list的fitness，使用前必須先重製醫師屬性表
+            $mutation_fitness_list = [];
+            for($j = 0; $j < count($mutation_list); $j++) {
+                creat_doctor();
+                
+                // 先計算doctor的pre_c
+                count_pre_c($mutation_list[$j], $doctor_list);
+                
+                // 取代deep copy 對integer用deep copy到底有什麼用啦！！
+                array_push($mutation_fitness_list, count_fit($mutation_list[$j], $doctor_list));
+            }
+            
+            echo 'mutation fitness : ';
+            echo print_r($mutation_fitness_list);
+            
+            // 將all_parent_fitness_list、all_child_fitness_list、mutation_fitness_list合併到all_fitness_list
+            $all_fitness_list = [];
+            array_merge($all_fitness_list, $all_parent_fitness_list);
+            array_merge($all_fitness_list, $all_child_fitness_list);
+            array_merge($all_fitness_list, $mutation_fitness_list);
+            
+            // 將all_fitness_list中的fitness由小到大排序
+            // 取代quicksort
+            sort($all_fitness_list); // python 2622
+            echo 'all fitness and sort : ';
+            echo print_r($all_fitness_list);
+            
+            // 將最好的染色體fitness值先取出來
+            // 取代deep copy，什麼東西都用deep copy 就好了啊，對一個本來就是call by value的東西用deep copy到底有個屁用啦!!
+            $the_best_chromosome_fitness = $all_fitness_list[0];
+            
+            
+            // 將排序過的all_fitness_list中，第chromosome_amount個fitness記錄下來
+            $best_fitness_index = 0;
+            $best_fitness_index = intval($elite_rate * $chromosome_amount);
+            $best_fitness_index = $all_fitness_list[$best_fitness_index - 1];
+            echo '第10個的fit:';
+            echo $best_fitness_index;
+            
+            // 從all_parent_fitness_list、all_child_fitness_list、mutation_fitness_list中找出菁英並放入best_chromosome_list中
+            $best_chromosome_list = [];
+            
+            // 從all_parent_list中挑選fitness比best_fitness_index小的菁英
+            $a = [];
+            for($j = 0; $j < count($all_parent_fitness_list); $j++) {
+                if($all_parent_fitness_list[$j] <= $best_fitness_index) {
+                    // 取代deep copy
+                    array_push($best_chromosome_list, $all_parent_list[$j]);
+                }else {
+                    // 取代deep copy
+                    array_push($a, $all_parent_list[$j]);
+                }
+            }
+            
+            // 取代deep copy
+            $all_parent_list = [];
+            for($a as $item) {
+                array_push($all_parent_list, $item);
+            }
+            
+            // 從all_child_list中挑選fitness比best_fitness_index小的菁英
+            $a = [];
+            for($j = 0; $j , count($all_child_fitness_list); $j++) {
+                if($all_child_fitness_list[$j] <= $best_fitness_index) {
+                    // 取代deep copy
+                    array_push($best_chromosome_list, $all_child_list[$j]);
+                }else {
+                    // 取代deep copy
+                    array_push($a, $all_child_list[$j]);
+                }
+            }
+            
+            // 取代deep copy
+            $all_child_list = [];
+            foreach($a as $item) {
+                array_push($all_child_list, $item);
+            }
+            
+            // 從mutation_list中挑選fitness比best_fitness_index小的菁英 python 2657
+            $a = [];
+            for($j = 0; $j < count($mutation_fitness_list); $j++) {
+                if($mutation_fitness_list[$j] <= $best_fitness_index) {
+                    // 取代deep copy
+                    array_push($best_chromosome_list, $mutation_list[$j]);
+                }else {
+                    // 取代deep copy
+                    array_push($a, $mutation_list[$j]);
+                }
+            }
+            
+            // 取代deep copy
+            $mutation_list = [];
+            foreach($a as $item) {
+                array_push($mutation_list, $item);
+            }
+            
+            // 計算best_chromosome_list中的fitness
+            $best_chromosome_fitness_list = [];
+            for($j = 0; $j < count($best_chromosome_list); $j++) {
+                creat_doctor();
+                // 先計算doctor的pre_c
+                count_pre_c($best_chromosome_list[$j], $doctor_list);
+                
+                // 取代deep copy，這邊還是對integer 用deep copy
+                array_push($best_chromosome_fitness_list, count_fit($best_chromosome_list[$j], $doctor_list));
+            }
+            
+            echo '選完前50%的fitness:';
+            echo print_r($best_chromosome_fitness_list);
+            
+            // 將最好的chromosome複製給the_best_chromosome
+            $the_best_chromosome = [];
+            for($j = 0; $j < count($best_chromosome_fitness_list); $j++) {
+                if($best_chromosome_fitness_list[$j] == $the_best_chromosome_fitness) {
+                    // 取代deep copy
+                    array_push($the_best_chromosome, $best_chromosome_list[$j]);
+                    
+                    // 取代deep copy
+                    array_push($each_best_generation_chromosomem, $best_chromosome_list[$j]);
+                    break;
+                }
+            }
+            
+            // 當best_chromosome_list數量超過chromosome_amount必須扣除
+            for($k = 0; $k < count($best_chromosome_list) - intval($chromosome_amount * $elite_rate); $k++) {
+                for($j = 0; $j < count($best_chromosome_fitness_list); $j++) {
+                    if($best_chromosome_fitness_list[$j] == $best_fitness_index) {
+                        // del 使用 unset() 取代
+                        unset($best_chromosome_fitness_list[$j]);
+                        unset($best_chromosome_list[$j]);
+                        break;
+                    }
+                }
+            }
+            
+            // 把剩下的chromosome放入last_chromosome_list中
+            $last_chromosome_list = [];
+            for($j = 0; $j < count($all_parent_list); $j++) {
+                // 取代deep copy
+                array_push(last_chromosome_list, $all_parent_list[$j]); // python 2695
+            }
+            
+            for($j = 0; $j < count($all_child_list); $j++) {
+                // 取代deep copy
+                array_push($last_chromosome_list, $all_child_list[$j]);
+            }
+            
+            for($j = 0; $j < count($mutation_list); $j++) {
+                // 取代deep copy
+                array_push($last_chromosome_list, $mutation_list[$j]);
+            }
+            
+            // 從剩下的chromosome_list中隨機挑出需要的個數
+            $index = [];
+            
+            // index 要用的list
+            $list = [];
+            for($listIndex = 0; $listIndex < count($last_chromosome_list); $listIndex++) {
+                array_push($list, $listIndex);
+            }
+            // list 可能會有問題
+            $index = array_rand($list, $chromosome_amount - count($best_chromosome_list));
+            // 為什麼這邊不直接用index的長度??
+            for($j = 0; $j < $chromosome_amount - count($best_chromosome_list); $j++) {
+                // 取代deep copy
+                array_push($best_chromosome_list, $last_chromosome_list[$index[$j]]);
+            }
+            
+            // 計算best_chromosome_list中的fitness
+            $best_chromosome_fitness_list = [];
+            for($j = 0; $j < count($best_chromosome_list); $j++) {
+                creat_doctor();
+                // 先計算doctor的pre_c
+                count_pre_c($best_chromosome_list[$j], $doctor_list);
+                // 取代deep copy
+                array_push($best_chromosome_fitness_list, count_fit($best_chromosome_list[$j], $doctor_list));
+            }
+            
+            echo 'all best chromosome fitness : ';
+            echo print_r($best_chromosome_fitness_list);
+            
+            
+            // 取代deep copy
+            $all_parent_list = [];
+            foreach($best_chromosome_list as $chromosome) {
+                array_push($all_parent_list, $chromosome);
+            }
+            
+            echo 'The best schedule:';
+            print_schedule($the_best_chromosome[0]); // python 2724
+            creat_doctor();
+            
+            // 先計算doctor的pre_c
+            count_pre_c($the_best_chromosome[0], $doctor_list);
+            $the_best_chromosome = count_fit($the_best_chromosome[0], $doctor_list);
+            echo 'The best schedule fitness:';
+            echo print_r($the_best_chromosome);
+            echo '====================================';
         }
+        
+        // 印出每一代平均
+//        echo 'average:';
+//        echo print_r($each_generation_fit_avg);
+        
+        // 印出第一代最好的班表
+        echo 'the first generation schedule================================';
+        print_schedule($each_best_generation_chromosome[0]);
+        echo 'the first generation schedule================================';
+        
+        // 印出每一代最好的fitness
+        echo 'each_best_generation_chromosome: ';
+        for($x = 0; $x < count($each_best_generation_chromosome); $x++) {
+            creat_doctor();
+            // 先計算doctor的pre_c
+            count_pre_c($each_best_generation_chromosome[$x], $doctor_list);
+            array_push($each_best_generation_fit, count_fit($each_best_generation_chromosome[$x], $doctor_list));
+        }
+        echo print_r($each_best_generation_fit);
     }
     
     // ==================  排班用  ==================
@@ -2547,6 +2784,187 @@ class Schedule implements ShouldQueue
             }else {
                 $rerun = 1;
             }
+        }
+    }
+    
+    // 修正班表
+    public function revise($schedule, $doctor_list) {
+        $order_list = [];
+        
+        // 確認該格醫生不是預班醫生,且不是假日班
+        for($i = 0; $i < count($schedule); $i++) {
+            if($schedule[$i]->reservation == false and $schedule[$i]->holiday == 0) {
+                // 先找出該格對應的doctor_list中的doctor物件index
+                $doc_index = 0;
+                for($j = 0; $j , count($doctor_list); $j++) {
+                    if($schedule[$i]->doctor_id == $doctor_list[$j]->doctorID) {
+                        $doc_index = $j;
+                    }
+                }
+                
+                // 若該班表之該表格中的醫師違反H1、H2或H7時，就把該醫師取出，並取出醫師對應的屬性
+                if(check_doc_class($schedule , $schedule[$i] , $doctor_list[$doc_index]) == false or check_H7($schedule[i] , $doctor_list[$doc_index]) == false) {
+                    $schedule[$i]->doctor_id = '';
+                }
+            }
+        }
+        
+        // 重新計算醫師屬性的值
+        for($i = 0; $i < count($schedule); $i++) {
+            calcu_doc_attribute($schedule[$i], $doctor_list);
+        }
+        
+        // 取代deep copy
+        $copy_doctor_list = [];
+        foreach($doctor_list as $doctor) {
+            array_push($copy_doctor_list, $doctor);
+        }
+        
+        // 先把不合理的醫生拿出的表另存起來
+        // 取代deep copy
+        $copy_schedule = [];
+        foreach($schedule as $sch) {
+            array_push($copy_schedule, $sch);
+        }
+        
+        // 將剩下空格繼續填滿,如果沒填滿必須重填，填到滿為止
+        $rerun_rerun = false;
+        $switch_switch = 1;
+        
+        while($rerun_rerun == true or $switch_switch == 1) {
+            $rerun_rerun = false;
+            finish_schedule($schedule, $order_list, $doctor_list);
+            
+            for($k = 0; $k , count($schedule); $k++) {
+                if($schedule[$k]->doctor_id == '') {
+                    $rerun_rerun = true;
+                    
+                    // 取代deep copy
+                    $schedule = [];
+                    foreach($copy_schedule as $sch) {
+                        array_push($schedule, $sch);
+                    }
+                    
+                    // 取代deep copy
+                    $doctor_list = [];
+                    foreach($copy_doctor_list as $doc) {
+                        array_push($doctor_list, $doc);
+                    }
+                    
+                    break;
+                }
+            }
+            
+            $switch_switch = $switch_switch + 1;
+        }
+        
+        return $schedule;
+    }
+    
+    public function check_H7($class_table , $doctor) {
+        // boolean值 true為可填入班表，false則不可填入
+        $result = true;
+        
+        // 當班表的科別與醫生的專職科別不合，則該醫師不能填入
+        if($doctor->major != 'all' and $class_table->section != doctor->major) {
+            $result = false;
+        }
+        
+        return $result;
+    }
+    
+    // 逐一扣除在表格中醫師的屬性，再扣除前要先檢查:
+    // 1.該醫師目前為止是否已經上超過4天假日班，若超過則取出該醫師
+    // 2.該醫師目前為止是否已經上超過他自己非職登院區的班數，若超過則取出該醫師
+    // 3.該醫師目前為止白夜班是否已經超過他的白夜班班數，若超過則取出該醫師
+    // 4.該醫師當週已超過支援上限兩班，也取出該醫師
+    public function calcu_doc_attribute($class_table , $doctor_list) {
+        $result = true;
+        
+        // 先抓出醫生index
+        $doctor_index = 0;
+        if($class_table->doctor_id != '') {
+            for($i = 0; $i < count($doctor_list); $i++) {
+                if($class_table->doctor_id == $doctor_list[$i]->doctorID) {
+                    $doctor_index = $i;
+                    break;
+                }
+            }
+            
+            // 1
+            if($class_table->holiday == 1) {
+                if($doctor_list[$doctor_index]->weekendShifts == 0) {
+                    $result = false;
+                }
+            }
+            
+            // 2
+            if($doctor_list[$doctor_index]->location == 'T' and $class_table->hospital_area == 'D' and $doctor_list[$doctor_index]->tamsuiShiftsLimit == 0) {
+                $result = false;
+            }else if($doctor_list[$doctor_index]->location == 'D' and $class_table->hospital_area == 'T' and $doctor_list[$doctor_index]->taipeiShiftsLimit == 0) {
+                $result = false;
+            }
+            
+            // 3
+            if($class_table->class_sort == 'd' and $doctor_list[$doctor_index]->dayShifts == 0) {
+                $result = false;
+            }else if($class_table->class_sort == 'n' and $doctor_list[$doctor_index]->nightShifts == 0) {
+                $result = false;
+            }
+            
+            // 4
+            if($doctor_list[$doctor_index]->location == 'T' and $class_table->hospital_area == 'D' and $doctor_list[$doctor_index]->tamsuiShiftsLimit > 0 and $doctor_list[$doctor_index]->otherLocationShifts[$class_table->week_num - 1] == 2) {
+                $result = false;
+            }else if($doctor_list[$doctor_index]->location == 'D' and $class_table->hospital_area == 'T' and $doctor_list[$doctor_index]->taipeiShiftsLimit > 0 and $doctor_list[$doctor_index]->otherLocationShifts[$class_table->week_num - 1] == 2) {
+                $result = false;
+            }
+            
+            if($result == true and $class_table->doctor_id != '') {
+                $class_table_property_list = [];
+                array_push($class_table_property_list, $class_table->section);
+                array_push($class_table_property_list, $class_table->class_sort);
+                array_push($class_table_property_list, $class_table->hospital_area);
+                
+                // 當天為假日班時，醫生假日班數-1
+                $doctor_list[$doctor_index]->weekendShifts = $doctor_list[$doctor_index]->weekendShifts - $class_table->holiday;
+                
+                // 醫生總班數-1
+                $doctor_list[$doctor_index]->totalShifts = $doctor_list[$doctor_index]->totalShifts - 1;
+                
+                // 根據表格屬性，將醫生其值扣除
+                for($i = 0; $i < count($class_table_property_list); $i++) {
+                    if($class_table_property_list[$i] == 'med') {
+                        $doctor_list[$doctor_index]->medicalShifts -= 1;
+                    }else if($class_table_property_list[$i] == 'sur') {
+                        $doctor_list[$doctor_index]->surgicalShifts -= 1;
+                    }else if($class_table_property_list[$i] == 'd') {
+                        $doctor_list[$doctor_index]->dayShifts -= 1;
+                    }else if($class_table_property_list[$i] == 'n') {
+                        $doctor_list[$doctor_index]->nightShifts -= 1;
+                    }else if($class_table_property_list[$i] == 'T') {
+                        $doctor_list[$doctor_index]->taipeiShiftsLimit -= 1;
+                    }else if($class_table_property_list[$i] == 'D') {
+                        $doctor_list[$doctor_index]->tamsuiShiftsLimit -= 1;
+                    }
+                }
+                
+                // 當在非職登院區上班時，再當週非職登院區班數+1
+                if($class_table->hospital_area != $doctor_list[$doctor_index]->location) {
+                    $doctor_list[$doctor_index]->otherLocationShifts[$class_table->week_num - 1] += 1;
+                }
+            }else {
+                $class_table->doctor_id = '';
+            }
+        }
+    }
+    
+    public function print_schedule($schedule) {
+        echo 'print_schedule=================================';
+        for($i = 0; $i < 19; $i++) {
+            for($j = 0; $j < intval($days); $j++) {
+                echo $schedule[$i + $j * 19]->doctor_id.' ';
+            }
+            echo '<br.';
         }
     }
     
