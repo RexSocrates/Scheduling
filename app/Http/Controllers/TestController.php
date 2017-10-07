@@ -952,46 +952,64 @@ class TestController extends Controller
 
    public function announceSchedule(){
      
+       $user = new User();
+        $scheduleCategory = new ScheduleCategory();
+        $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
+        $schedule = new Schedule();
+
+        //$data = $request->all();
+
+        $str = "2017-10-02";
+        $major = "Medical";
+        //$categorySerial="Medical";
+        
+        //$date1 = "2017-10-02";
       
-         $scheduleRecord = new ScheduleRecord();     
-        $user = new User();
-        $doctors = $user->getAtWorkDoctors();
+        $doctors = $schedule->getDoctorNotInDate("2017-10-02",$major);
+
+        $date= date('Y-m',strtotime("+1 month"));
+        $shiftArr=[];
+        
         foreach ($doctors as $doctor) {
-            $shiftHours =$scheduleRecord->getScheduleTotoalBydoctorID($doctor->doctorID);
-                echo $shiftHours.'</br>';
-            // array_push($totalShift,$shiftHours);
-        }
+
+            $mustOnDutyMedicalShifts=0;
+            $mustOnDutySurgicalShifts=0;
+
+            $mustOnDutyShiftArr=[
+            'doctorID'=>$doctor->doctorID,
+            'leaveMonth'=>$date
+            ];
+
+            $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
+            
+            $shiftDic=[
+                'totalShift'=>"",
+                'doctorID'=>$doctor->doctorID,
+                'doctorName' =>$doctor->name,
+                
+            ];
+
+           
+            if($count!=0){
+                $shiftDic['totalShift'] = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift-$schedule->totalShiftFirstEdition($doctor->doctorID);
 
         
-    }
-    
-        //$reservationData->addDate($month,1,10);
-            // $user= new User();
-            // $schedule = new Schedule();
-            // $major='Surgical';
-            // $doctors = $user->getDoctorByMajor($major);
-            // $scheduleData = $schedule->getDoctorScheduleDataByDate('2017-10-02');
-            
-            //     // $id = $doctor->doctorID;
-            //     // $idArr = [$id];
-            // // }
-            //    foreach($scheduleData as $info){
-            //     foreach ($doctors as $doctor) {
-            //          if($doctor->doctorID != $info->doctorID){
-            //             echo $doctor->doctorID.'<br>';
-            //          }
-            //          else{ 
-                        
-            //         }
-                    
-            //     }
-               
-            // }
+             }
 
-            // if($idArr != $scArr){
-            //     echo $idArr[0];
-            // }
-    
+            else{
+                 $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts-$schedule->totalShiftFirstEdition($doctor->doctorID);
+               
+           
+         }    
+         echo $doctor->name;
+            
+            array_push($shiftArr,$shiftDic);
+        }
+        
+           
+           
+         }
+         
     
     // 取得特定醫師在那一週的非職登院區上班班數
     public function getAnotherLocationShifts() {

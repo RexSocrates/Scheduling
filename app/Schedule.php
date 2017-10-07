@@ -533,7 +533,21 @@ class Schedule extends Model
         return $preNightcount;
 
     }
+    public function getDoctorNotInDate($date, $major){
+       $query = DB::table("Schedule")
+                ->select('doctorID')
+                ->where('date', 'like',$date)
+                ->whereNotNull('doctorID');
+                    
+       $info = DB::table("Doctor")
+                ->where('major',$major)
+                ->orwhere('major',"All")
+                ->whereNotIn('doctorID',($query))
+                ->get();
 
+
+        return $info;
+    }
     
     // 檢查一位醫生在當週非職登院區的班數
     public function getAnotherLocationShifts($doctorID, $date) {

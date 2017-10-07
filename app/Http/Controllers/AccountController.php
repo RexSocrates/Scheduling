@@ -144,7 +144,7 @@ class AccountController extends Controller
         // ]);
     }
     
-    // 調整班表->初版班表 彈出式視窗取得醫生2的上班資訊
+    //調整班表->初版班表 彈出式視窗取得醫生2的上班資訊
     public function getDoctorFirstScheduleInfoByID(Request $request){
         $data = $request->all();
 
@@ -166,6 +166,7 @@ class AccountController extends Controller
 
         return $array;
     }
+     
     // 調整班表->正式班表 彈出式視窗取得醫生2的上班資訊
     public function getDoctorSheduleInfoByID(Request $request){
         $data = $request->all();

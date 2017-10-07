@@ -396,4 +396,6 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 Route::get("info",'TestController@announceSchedule');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 
+Route::get('changeDate2','AccountController@getDoctorFirstScheduleInfoByID');
+
 Route::get('getShiftRecordByMonth', 'TestController@getShiftRecordByMonth');

@@ -346,9 +346,14 @@ class ScheduleController extends Controller
         $schedule = new Schedule();
 
         $data = $request->all();
-        $categorySerial = $scheduleCategory->getSchCategoryMajor($data['categorySerial']);
 
-        $doctors = $user->getAtWorkDoctors();
+        $str = $this->processDateStr($data['date']);
+        $major = $scheduleCategory->getSchCategoryMajor($data['categorySerial']);
+        //$categorySerial="Medical";
+        
+        //$date1 = "2017-10-02";
+      
+        $doctors = $schedule->getDoctorNotInDate($str,$major);
 
         $date= date('Y-m',strtotime("+1 month"));
         $shiftArr=[];
@@ -365,15 +370,16 @@ class ScheduleController extends Controller
 
             $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
             
-            
             $shiftDic=[
                 'totalShift'=>"",
                 'doctorID'=>$doctor->doctorID,
-                'doctorName' => $doctor->name
+                'doctorName' =>$doctor->name,
+                
             ];
 
+           
             if($count!=0){
-                $shiftDic['totalShift'] = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift;
+                $shiftDic['totalShift'] = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift-$schedule->totalShiftFirstEdition($doctor->doctorID);
 
             //   if($user->getDoctorInfoByID($doctor->doctorID)->level == "All"){
             //     $mustOnDutyShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift;
@@ -388,11 +394,11 @@ class ScheduleController extends Controller
             //         $shiftDic['totalShift']=$surgical-$schedule->totalSurgicalShiftFirstEdition($doctor->doctorID);
             //     }
             //     }
-
+             
              }
 
             else{
-                $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts;
+                 $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts-$schedule->totalShiftFirstEdition($doctor->doctorID);
                
             //     if($categorySerial == "Medical"){
                     
@@ -400,11 +406,12 @@ class ScheduleController extends Controller
             //     }
             //     else if($categorySerial == "Surgical")
             //         $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutySurgicalShifts-$schedule->totalMedicalShiftFirstEdition($doctor->doctorID);
-            // }    
+         }    
 
-            }
-             array_push($shiftArr,$shiftDic);
+            
+            array_push($shiftArr,$shiftDic);
         }
+        
              return $shiftArr;
            
            //array_push($surgicallArr,$totalSurgical);
@@ -576,7 +583,7 @@ class ScheduleController extends Controller
 
 
     }
-
+    //換班 彈出式視窗取得醫生1的上班資訊 
     public function getDoctorInfoByScheduleID(Request $request){
       $data = $request->all();
       $schedule = new Schedule();

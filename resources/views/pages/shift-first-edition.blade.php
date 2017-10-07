@@ -90,7 +90,7 @@
                                         <img src="../img/exchange.svg" style="height: 220px;width: 220px;">
                                     </div>
                                      <div class="col s6">
-                                        <label>醫生:</label>
+                                        <label>醫生:</label>   <!-- 要求換班 -->
                                         <select name= 'schID_1_doctor' class="browser-default" id="schID_1_doctor" onchange="changeDoctor_1()" required>
                                             <option  disabled selected>請選擇醫生</option>
                                                 <option disabled value=""></option>
@@ -99,7 +99,8 @@
                                                 @endforeach
                                         </select>
                                     </div>
-                                    <div class="col s6">
+
+                                   <!--  <div class="col s6">
                                         <label>醫生:</label>
                                         <select name= 'schID_2_doctor' class="browser-default" id="schID_2_doctor" onchange="changeDoctor()" required>
                                             <option value="" disabled selected>請選擇醫生</option> 
@@ -107,10 +108,18 @@
                                             <option value="{{$name->doctorID}}">{{$name->name}}</option>
                                             @endforeach
                                         </select>
+                                    </div> -->
+
+                                      <div class="col s6">  <!--換班日期  資料庫拉資料--> 
+                                        <label>日期:</label>
+                                        <select  name='scheduleID_2' class="browser-default" id="date2" required>
+                                            <option value="" disabled selected>請選擇日期</option>
+                                            <option value=""></option>
+                                        </select>
                                     </div>
 
                                     <div class="col s6">
-                                        <label>日期:</label>
+                                        <label>日期:</label><!-- 要求換班日期 -->
                                         <select name="scheduleID_1" class="browser-default" id="date1" required>
                                             <option value="" disabled selected>請選擇日期</option>
                                             <option value=""></option>
@@ -118,11 +127,21 @@
                                         </select>
                                     </div>
 
-                                    <div class="col s6">
+                                   <!--  <div class="col s6">  換班日期  資料庫拉資料 
                                         <label>日期:</label>
                                         <select  name='scheduleID_2' class="browser-default" id="date2" required>
                                             <option value="" disabled selected>請選擇日期</option>
                                             <option value=""></option>
+                                        </select>
+                                    </div> -->
+
+                                     <div class="col s6">
+                                        <label>醫生:</label> <!-- 換班醫生 -->
+                                        <select name= 'schID_2_doctor' class="browser-default" id="schID_2_doctor" onchange="changeDoctor()" required>
+                                            <option value="" disabled selected>請選擇醫生</option> 
+                                            @foreach($doctorName as $name)
+                                            <option value="{{$name->doctorID}}">{{$name->name}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -515,7 +534,7 @@
                                 var event = scheduler.getEvent(id);
                             
                                 changeDoctor_1(event.hidden);
-                                showScheduleInfo(event.start_date,event.section_id);
+                                //showSchedule(event.start_date,event.section_id);
                                 //showDoctorInfo(event.section_id);
 
                                 console.log("123"+event.text);
@@ -653,7 +672,7 @@
             $('select').material_select();
         });
     
-    function changeDoctor_1(id){
+    function changeDoctor_1(id){ //醫生1
             $.get('changeDoctor1',{
                 id : id
             }, function(array){
@@ -662,7 +681,7 @@
             });
         }
 
-        function changeDoctor() {
+        function changeDoctor() { //醫生2
             $.get('changeDoctor', {
                 id : document.getElementById('schID_2_doctor').value
             }, function(array) {
@@ -672,9 +691,25 @@
             });
         }
 
-        function changeDate1(array) {
-                document.getElementById("date1").innerHTML= "<option value="+array[0]+">"+array[2]+"</option>"     
+        function changeDate1(array) { //要求換班日期
+                document.getElementById("date1").innerHTML= "<option value="+array[0]+">"+array[2]+"</option>" 
+
+                changeDate2(array[2]);
         }
+
+        // function changeDate2(date){
+        //     $.get('changeDate2' ,{
+        //         date:date
+        //     },function(array){
+        //         var date = "";
+        //         for(i=0 ; i<array.length ; i++){
+        //             date += "<option>"+array[i][2]+"</option>";
+        //             console.log('1'+array[i][2]);
+        //         }
+        //         document.getElementById("date2").innerHTML  = date;
+        //     });
+
+        // }
 
         function changeDate2(array) {
                 var date = "";
@@ -1153,7 +1188,7 @@
                    
                     saveSchedule(id,date,classification);
                 }
-                console.log(array[0]['countOff']);
+                console.log(array[0]['location']);
                 
             });
         }
@@ -1331,11 +1366,6 @@
 
                 }
 
-                
-
-                
-                
-
                 // else if(array[0]['docWeekend']<=4 && (weekday != 6 && weekday != 7) && (weekDayInSchedule==6 || weekDayInSchedule==7)){
                 //     var check= confirm(array[0]['docName']+"醫生假日班不得少於4\n確定要換班嗎?");
                 //     if(check==true){
@@ -1376,33 +1406,33 @@
 
 
         function showScheduleInfo(date,section_id,id){
-            $.get("showDoctorInfo",{
-               categorySerial: section_id
-            
-            }, function(array){
                 document.getElementById("shiftDate").value=date;
                 document.getElementById("shiftSessionID").value=section_id;
                 document.getElementById("scheduleID_1").value=id;
+            $.get("showDoctorInfo",{
+                categorySerial: section_id,
+                date : document.getElementById("shiftDate").value
+            }, function(array){
+                
                 var info = "";
                 console.log("length"+array.length);
                 for(i=0 ; i<array.length ; i++){
                     info += "<option value="+array[i]['doctorID']+">"+array[i]['doctorName']+(array[i]['totalShift'])+"</option>";
                     console.log('1'+array[i]['doctorID']);
+                    console.log("section_id"+array[i]['doctorName']);
                 }
                 document.getElementById("doctor").innerHTML  = info;
 
-            console.log("11123rrr");
-
         });
 
-             
+             //console.log("date"+document.getElementById("shiftDate").value);
         }
         // function showScheduleInfo(date,section_id,id) {
         //      document.getElementById("shiftDate").value=date;
         //      document.getElementById("shiftSessionID").value=section_id;
         //      document.getElementById("scheduleID_1").value=id;
 
-        //      console.log("scheduleID_1");
+        //      console.log("scheduleID_111");
 
         // }
 
