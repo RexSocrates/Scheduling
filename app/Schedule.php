@@ -563,8 +563,8 @@ class Schedule extends Model
                 ->whereNotNull('doctorID');
                     
        $info = DB::table("Doctor")
-                ->where('major',$major)
-                ->orwhere('major',"All")
+                ->whereIn('major',[$major,"All"])
+                // ->orwhere('major',"All")
                 ->whereNotIn('doctorID',($query))
                 ->get();
 
