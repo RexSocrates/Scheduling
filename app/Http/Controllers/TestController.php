@@ -952,59 +952,80 @@ class TestController extends Controller
 
    public function announceSchedule(){
      
-       $user = new User();
-        $scheduleCategory = new ScheduleCategory();
-        $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
+       // $user = new User();
+       //  $scheduleCategory = new ScheduleCategory();
+       //  $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
+       //  $schedule = new Schedule();
+
+        
+        //$year = "Wed Nov 01 2017 00:00:00 GMT+0800 (CST)";
+       //  $date =  "2017-10-02";
+       //  $id = 3;
+
+        
+        // $dateArr = $this->processDateStr($year);
+
+        // $nextMonth=date("Y-m",strtotime($dateArr));
+
         $schedule = new Schedule();
 
-        //$data = $request->all();
+        $user = new User();
 
-        $str = "2017-10-02";
-        $major = "Medical";
-        //$categorySerial="Medical";
-        
-        //$date1 = "2017-10-02";
+       // $date = $this->processDateStr();
+
+        $count = $schedule->getScheduleDataByDateAndSessionIDWhenDoctorIDisNull("2017-11-03",4);
+        echo $count->scheduleID;
+//         if($count!=0){
+//             $schedule->addScheduleInNull($count->scheduleID,$schInfo);
+//         }
+// //        return $array;
+
       
-        $doctors = $schedule->getDoctorNotInDate("2017-10-02",$major);
-
-        $date= date('Y-m',strtotime("+1 month"));
-        $shiftArr=[];
         
-        foreach ($doctors as $doctor) {
+        // $data=$schedule->getDateNotInDate($id,$date,$year);
 
-            $mustOnDutyMedicalShifts=0;
-            $mustOnDutySurgicalShifts=0;
+        // echo $data;
+        // foreach ($data as $d) {
 
-            $mustOnDutyShiftArr=[
-            'doctorID'=>$doctor->doctorID,
-            'leaveMonth'=>$date
-            ];
+        //     echo $d->date;
+        //     # code...
+        // }
+        
+        // foreach ($doctors as $doctor) {
 
-            $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
+        //     $mustOnDutyMedicalShifts=0;
+        //     $mustOnDutySurgicalShifts=0;
+
+        //     $mustOnDutyShiftArr=[
+        //     'doctorID'=>$doctor->doctorID,
+        //     'leaveMonth'=>$date
+        //     ];
+
+        //     $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
             
-            $shiftDic=[
-                'totalShift'=>"",
-                'doctorID'=>$doctor->doctorID,
-                'doctorName' =>$doctor->name,
+        //     $shiftDic=[
+        //         'totalShift'=>"",
+        //         'doctorID'=>$doctor->doctorID,
+        //         'doctorName' =>$doctor->name,
                 
-            ];
+        //     ];
 
            
-            if($count!=0){
-                $shiftDic['totalShift'] = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift-$schedule->totalShiftFirstEdition($doctor->doctorID);
+        //     if($count!=0){
+        //         $shiftDic['totalShift'] = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift-$schedule->totalShiftFirstEdition($doctor->doctorID);
 
         
-             }
+        //      }
 
-            else{
-                 $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts-$schedule->totalShiftFirstEdition($doctor->doctorID);
+        //     else{
+        //          $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts-$schedule->totalShiftFirstEdition($doctor->doctorID);
                
            
-         }    
-         echo $doctor->name;
+        //  }    
+        //  echo $doctor->name;
             
-            array_push($shiftArr,$shiftDic);
-        }
+        //     array_push($shiftArr,$shiftDic);
+        // }
         
            
            

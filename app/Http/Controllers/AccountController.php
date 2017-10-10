@@ -144,29 +144,7 @@ class AccountController extends Controller
         // ]);
     }
     
-    //調整班表->初版班表 彈出式視窗取得醫生2的上班資訊
-    public function getDoctorFirstScheduleInfoByID(Request $request){
-        $data = $request->all();
-
-        $schedule = new Schedule();
-
-        $user = new User();
-        
-        $doctor = $schedule->getNextMonthShiftsByID($data['id']);
-
-        $array = array();
-
-        foreach ($doctor as $data) {
-            $id = $data->scheduleID;
-            $date = $data->date;
-            $name = $user->getDoctorInfoByID($data->doctorID)->name;
-            
-            array_push($array, array($id,$name,$date));
-        }
-
-        return $array;
-    }
-     
+   
     // 調整班表->正式班表 彈出式視窗取得醫生2的上班資訊
     public function getDoctorSheduleInfoByID(Request $request){
         $data = $request->all();

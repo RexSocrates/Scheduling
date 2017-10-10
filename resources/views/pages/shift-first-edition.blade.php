@@ -112,7 +112,7 @@
 
                                       <div class="col s6">  <!--換班日期  資料庫拉資料--> 
                                         <label>日期:</label>
-                                        <select  name='scheduleID_2' class="browser-default" id="date2" required>
+                                        <select  name='scheduleID_2' class="browser-default" id="date2" onchange="changeDoctor()" required>
                                             <option value="" disabled selected>請選擇日期</option>
                                             <option value=""></option>
                                         </select>
@@ -137,11 +137,12 @@
 
                                      <div class="col s6">
                                         <label>醫生:</label> <!-- 換班醫生 -->
-                                        <select name= 'schID_2_doctor' class="browser-default" id="schID_2_doctor" onchange="changeDoctor()" required>
+                                        <select name= 'schID_2_doctor' class="browser-default" id="schID_2_doctor"  required>
                                             <option value="" disabled selected>請選擇醫生</option> 
-                                            @foreach($doctorName as $name)
-                                            <option value="{{$name->doctorID}}">{{$name->name}}</option>
-                                            @endforeach
+                                             <option value=""></option>
+                                            <!-- @foreach($doctorName as $name) -->
+                                            <!-- <option value="{{$name->doctorID}}">{{$name->name}}</option> -->
+                                            <!-- @endforeach -->
                                         </select>
                                     </div>
                                 </div>
@@ -676,49 +677,55 @@
             $.get('changeDoctor1',{
                 id : id
             }, function(array){
-                document.getElementById("schID_1_doctor").innerHTML= "<option value="+array[3]+">"+array[1]+"</option>";
+                document.getElementById("schID_1_doctor").innerHTML= "<option value="+array[3]+">"+array[1]+"-"+array[4]+"</option>";
                 changeDate1(array);
             });
         }
 
         function changeDoctor() { //醫生2
             $.get('changeDoctor', {
-                id : document.getElementById('schID_2_doctor').value
+                scheduleID_1 :document.getElementById("date1").value,
+                scheduleID_2 :document.getElementById("date2").value
+
             }, function(array) {
-                // var selectBox = document.getElementById('doctorName');
-                // var userInput = selectBox.options[selectBox.selectedIndex].value;
-                changeDate2(array);
+                var doctor = "";
+                for(i=0 ; i<array.length ; i++){
+                    doctor += "<option value="+array[i][0]+">"+array[i][1]+"-"+array[i][2]+"-"+array[i][3]+"</option>";
+                    console.log('1'+array[i][1]);
+                    console.log(array[i][0]);
+                }
+                document.getElementById("schID_2_doctor").innerHTML  = doctor;
+
             });
+
+            console.log("date"+document.getElementById("date1").value);
         }
 
         function changeDate1(array) { //要求換班日期
                 document.getElementById("date1").innerHTML= "<option value="+array[0]+">"+array[2]+"</option>" 
 
-                changeDate2(array[2]);
+                changeDate2(array[2],array[3]);
         }
 
-        // function changeDate2(date){
-        //     $.get('changeDate2' ,{
-        //         date:date
-        //     },function(array){
-        //         var date = "";
-        //         for(i=0 ; i<array.length ; i++){
-        //             date += "<option>"+array[i][2]+"</option>";
-        //             console.log('1'+array[i][2]);
-        //         }
-        //         document.getElementById("date2").innerHTML  = date;
-        //     });
-
-        // }
-
-        function changeDate2(array) {
+        function changeDate2(date,doctorID){
+            $.get('changeDate2' ,{
+                date:date,
+                doctorID : doctorID
+            },function(array){
                 var date = "";
                 for(i=0 ; i<array.length ; i++){
                     date += "<option value="+array[i][0]+">"+array[i][2]+"</option>";
-                    console.log('1'+array[i][0]);
+                    console.log('1'+array[2]);
                 }
                 document.getElementById("date2").innerHTML  = date;
+                changeDoctor();
+            });
+
+        
+            
         }
+
+       
 
         function alert1() {
                 alert("不可選擇相同醫生相同時段");
@@ -754,17 +761,17 @@
                      refresh();
                 }
 
-                else if(array[0]['doc1Major'] != 0){
-                    alert(array[0]['doc1']+"醫生非該科醫生");
-                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
-                     refresh();
-                }
+                // else if(array[0]['doc1Major'] != 0){
+                //     alert(array[0]['doc1']+"醫生非該科醫生");
+                //      //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                //      refresh();
+                // }
 
-                else if(array[0]['doc2Major'] != 0){
-                    alert(array[0]['doc2']+"醫生非該科醫生");
-                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
-                     refresh();
-                }
+                // else if(array[0]['doc2Major'] != 0){
+                //     alert(array[0]['doc2']+"醫生非該科醫生");
+                //      //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                //      refresh();
+                // }
                 else if(array[0]['date2'] == array[0]['date1']  ){
                      updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
                 }
@@ -940,6 +947,10 @@
                     dhtmlx.message({ type:"error", text:"請選擇醫生" });
             }
 
+            else if(doctorID_2 == ""){
+                    dhtmlx.message({ type:"error", text:"請選擇醫生" });
+            }
+
             else if(doctorID_1 == doctorID_2){
                     dhtmlx.message({ type:"error", text:"請選擇不同醫生" });
             }
@@ -957,12 +968,12 @@
 
             $.get('checkDocStatus',{
             scheduleID_1 : document.getElementById('date1').value,
-            scheduleID_2 : document.getElementById('date2').value,
+            scheduleID_2 : document.getElementById('schID_2_doctor').value,
 
             }, function(array){
 
                 var  scheduleID_1 = document.getElementById('date1').value;
-                var  scheduleID_2 = document.getElementById('date2').value;
+                var  scheduleID_2 = document.getElementById('schID_2_doctor').value;
 
                 console.log("abc"+array[0]['doc1']+array[0]['doc1Major']);
                 console.log("abc"+array[0]['doc2']+array[0]['doc2Major']);
@@ -981,26 +992,26 @@
                 if(array[0]['doc1Location']>=2){
                     alert(array[0]['doc1']+"醫生本週已有2班非值登院區班");
                     //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生本週已有2班非值登院區班" });
-                    refresh();
+                   
                 }
 
                 else if(array[0]['doc2Location']>=2){
                     alert(array[0]['doc2']+"醫生本週已有2班非值登院區班");
                      //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
-                     refresh();
+                    
                 }
 
-                else if(array[0]['doc1Major'] != 0){
-                    alert(array[0]['doc1']+"醫生非該科醫生");
-                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
-                     refresh();
-                }
+                // else if(array[0]['doc1Major'] != 0){
+                //     alert(array[0]['doc1']+"醫生非該科醫生");
+                //      //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                     
+                // }
 
-                else if(array[0]['doc2Major'] != 0){
-                    alert(array[0]['doc2']+"醫生非該科醫生");
-                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
-                     refresh();
-                }
+                // else if(array[0]['doc2Major'] != 0){
+                //     alert(array[0]['doc2']+"醫生非該科醫生");
+                //      //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                     
+                // }
 
                 else if(array[0]['date2'] == array[0]['date1']  ){
                      updateShift(scheduleID_1,scheduleID_2);

@@ -314,6 +314,7 @@ class ScheduleController extends Controller
         
         
         $scheduleCategory = new ScheduleCategory();
+        $schedule = new Schedule();
         
         $categoryInfo = $scheduleCategory->getSchCategoryInfo($categoryID);
         $schInfo = [
@@ -325,16 +326,27 @@ class ScheduleController extends Controller
               'confirmed'=>0
             ];
         $weekDay = (int)date('N', strtotime($startDate));
+
         if($weekDay == 6 || $weekDay == 7){
           $schInfo['isWeekday'] = false;
         }
-        $schedule = new Schedule();
-        $scheduleID=$schedule->addSchedule($schInfo);
 
-        $job = new SendNewShiftAssignmentMail($doctorID,$scheduleID);
+        $count = $schedule->getScheduleDataByDateAndSessionIDWhenDoctorIDisNull($startDate,$categoryID);
+
+        if($count->doctorID==""){
+            $schedule->addScheduleInNull($count->scheduleID,$schInfo);
+            $scheduleID=$count->scheduleID;
+        }
+        else{
+            $scheduleID=$schedule->addSchedule($schInfo);
+
+           
+        }
+        
+
+         $job = new SendNewShiftAssignmentMail($doctorID,$scheduleID);
 
         dispatch($job);
-
         
     }
 
@@ -507,6 +519,7 @@ class ScheduleController extends Controller
         $sessionID = $data['newSessionID'];
         $newDate = $data['newDate'];
 
+        $count=$schedule->countScheduleDataByDateAndSessionID($newDate,$sessionID);
 
         $doctorID = $schedule->getScheduleDataByID($id)->doctorID;        
         $date = $this->processDateStr($newDate);
@@ -524,8 +537,9 @@ class ScheduleController extends Controller
         if($weekDay == 6 || $weekDay == 7){
           $schInfo['isWeekday'] = false;
         }
-
+       
         $newScheduleID=$schedule->updateScheduleByID($id,$schInfo);
+        
 
         $job = new SendShiftExchangeMail($doctorID,$id,$newScheduleID);
         dispatch($job);
@@ -588,16 +602,87 @@ class ScheduleController extends Controller
       $data = $request->all();
       $schedule = new Schedule();
       $user = new User();
+      $scheduleCategory = new ScheduleCategory();
       $doctor = $schedule->getScheduleDataByID($data['id']);
      
       $doctorID =$doctor->doctorID;
       $id = $doctor->scheduleID;
       $name = $user->getDoctorInfoByID($doctor->doctorID)->name;
       $date = $doctor->date;
-      $array = array($id,$name,$date,$doctorID);
+      $category = $scheduleCategory->findScheduleName($doctor->schCategorySerial)->schCategoryName;
+      $array = array($id,$name,$date,$doctorID,$category);
       return $array;
       
     }
+
+     //調整班表->初版班表 彈出式視窗取得醫生2的上班資訊
+    public function getDoctorFirstScheduleInfoByID(Request $request){
+        $data = $request->all();
+
+        $schedule = new Schedule();
+
+        $user = new User();
+
+       // $date = $this->processDateStr();
+
+        $yearMonth=date("Y-m",strtotime($data['date']));
+        
+        $doctor = $schedule->getDateNotInDate($data['doctorID'],$data['date'],$yearMonth);
+
+        $array = array();
+
+        foreach ($doctor as $data) {
+            $id = $data->scheduleID;
+            $date = $data->date;
+
+            if($data->doctorID==""){
+                $name = " ";
+            }
+            else{
+            $name = $user->getDoctorInfoByID($data->doctorID)->name;
+            }
+           
+            
+            array_push($array, array($id,$name,$date));
+        }
+
+        return $array;
+    }
+
+      //調整班表->初版班表 彈出式視窗取得醫生2的上班資訊
+    public function getDoctorNameFirstScheduleInfoByID(Request $request){
+        $data = $request->all();
+
+        $schedule = new Schedule();
+
+        $scheduleCategory = new ScheduleCategory();
+       
+        $user = new User();
+
+        $date1 = $schedule->getScheduleDataByID($data['scheduleID_1'])->date;
+        $date2 = $schedule->getScheduleDataByID($data['scheduleID_2'])->date;
+
+        $schCategorySerial=$schedule->getScheduleDataByID($data['scheduleID_1'])->schCategorySerial;
+
+        $major = $scheduleCategory->getSchCategoryMajor($schCategorySerial);
+        
+        $scheduleRecord = $schedule->getDoctorInDate($date1,$date2,$major);
+
+        $array = array();
+
+        
+        foreach ($scheduleRecord as $schedule) {
+            $scheduleID = $schedule->scheduleID;
+            $name = $user->getDoctorInfoByID($schedule->doctorID)->name;
+            $category = $scheduleCategory->findScheduleName($schedule->schCategorySerial)->schCategoryName;
+            $date = $schedule->date;
+            
+            array_push($array, array($scheduleID,$name,$category,$date));
+        }
+
+        return $array;
+    }
+     
     public function getDoctorInfoByScheduleIDWhenExchange(Request $request){
       $data = $request->all();
       $schedule = new Schedule();
