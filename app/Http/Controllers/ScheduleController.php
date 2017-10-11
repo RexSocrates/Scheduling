@@ -519,7 +519,7 @@ class ScheduleController extends Controller
         $sessionID = $data['newSessionID'];
         $newDate = $data['newDate'];
 
-        $count=$schedule->countScheduleDataByDateAndSessionID($newDate,$sessionID);
+        $sch=$schedule->getScheduleDataByDateAndSessionID($newDate,$sessionID);
 
         $doctorID = $schedule->getScheduleDataByID($id)->doctorID;        
         $date = $this->processDateStr($newDate);
@@ -529,6 +529,7 @@ class ScheduleController extends Controller
               'isWeekday' => true,
               'location' => $location,
               'date' => $date,
+              'doctorID'=>$doctorID,
               'confirmed'=>1
             ];
 
@@ -537,8 +538,21 @@ class ScheduleController extends Controller
         if($weekDay == 6 || $weekDay == 7){
           $schInfo['isWeekday'] = false;
         }
+
+        
+        if($sch!=""){
+            $schedule->addScheduleInNull($sch->scheduleID,$schInfo);
+            $schedule->updateScheduleToNullByID($schInfo->scheduleID);
+            $newScheduleID=$count->scheduleID;
+        }
+        else{
+            $newScheduleID=$schedule->addSchedule($schInfo);
+            $schedule->updateScheduleToNullByID($id);
+           
+        }
+        
        
-        $newScheduleID=$schedule->updateScheduleByID($id,$schInfo);
+        //$newScheduleID=$schedule->updateScheduleByID($id,$schInfo);
         
 
         $job = new SendShiftExchangeMail($doctorID,$id,$newScheduleID);

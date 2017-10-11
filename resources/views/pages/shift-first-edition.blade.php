@@ -462,7 +462,7 @@
                                 
                                 var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
                                 console.log("ev "+ev.text)
-                                var evs = scheduler.getEvent(evs[0].id);
+                                var evs = scheuler.getEvent(evs[0].id);
                                 var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
 
 

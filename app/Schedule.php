@@ -172,6 +172,9 @@ class Schedule extends Model
         return $newScheduleID;
     }
     
+
+
+    
     // 透過醫生ID 取得下個月醫生上的所有班
     public function getNextMonthShiftsByID($id) {
         $currentMonth = date('Y-m');
@@ -227,6 +230,21 @@ class Schedule extends Model
         
         return $affectedRows;
     }
+
+    // 因醫生般的變動,導致原本上班的地方醫生變為null
+    public function updateScheduleToNullByID($scheduleID) {
+        $reservation = new Reservation();
+        
+        $affectedRows = DB::table('Schedule')
+            ->where('scheduleID', $scheduleID)
+            ->update([
+               'doctorID'=> null
+            ]);
+        
+        return $affectedRows;
+    }
+
+//查詢已存在的班,將原本doctorID null,改為有醫生上班
     public function addScheduleInNull($scheduleID, array $data){
         $reservation = new Reservation();
         

@@ -952,80 +952,44 @@ class TestController extends Controller
 
    public function announceSchedule(){
      
-       // $user = new User();
-       //  $scheduleCategory = new ScheduleCategory();
-       //  $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
-       //  $schedule = new Schedule();
-
-        
-        //$year = "Wed Nov 01 2017 00:00:00 GMT+0800 (CST)";
-       //  $date =  "2017-10-02";
-       //  $id = 3;
-
-        
-        // $dateArr = $this->processDateStr($year);
-
-        // $nextMonth=date("Y-m",strtotime($dateArr));
-
+      $scheduleCategory = new ScheduleCategory();
         $schedule = new Schedule();
+        //$data = $request->all();
+        $id = 149; //schedule ID
+        $sessionID = 4;
+        $newDate = "Thu Nov 02 2017 00:00:00 GMT+0800 (CST)";
 
-        $user = new User();
+        $sch=$schedule->getScheduleDataByDateAndSessionID($newDate,$sessionID);
 
-       // $date = $this->processDateStr();
+        $doctorID = $schedule->getScheduleDataByID($id)->doctorID;        
+        $date = $this->processDateStr($newDate);
+        $location = $scheduleCategory->getSchCategoryInfo($sessionID);
+        $schInfo = [
+              'schCategorySerial'=>$sessionID,
+              'isWeekday' => true,
+              'location' => $location,
+              'date' => $date,
+              'doctorID'=>$doctorID,
+              'confirmed'=>1
+            ];
 
-        $count = $schedule->getScheduleDataByDateAndSessionIDWhenDoctorIDisNull("2017-11-03",4);
-        echo $count->scheduleID;
-//         if($count!=0){
-//             $schedule->addScheduleInNull($count->scheduleID,$schInfo);
-//         }
-// //        return $array;
+        $weekDay = (int)date('N', strtotime($date));
 
-      
+        if($weekDay == 6 || $weekDay == 7){
+          $schInfo['isWeekday'] = false;
+        }
+
         
-        // $data=$schedule->getDateNotInDate($id,$date,$year);
-
-        // echo $data;
-        // foreach ($data as $d) {
-
-        //     echo $d->date;
-        //     # code...
-        // }
-        
-        // foreach ($doctors as $doctor) {
-
-        //     $mustOnDutyMedicalShifts=0;
-        //     $mustOnDutySurgicalShifts=0;
-
-        //     $mustOnDutyShiftArr=[
-        //     'doctorID'=>$doctor->doctorID,
-        //     'leaveMonth'=>$date
-        //     ];
-
-        //     $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
-            
-        //     $shiftDic=[
-        //         'totalShift'=>"",
-        //         'doctorID'=>$doctor->doctorID,
-        //         'doctorName' =>$doctor->name,
-                
-        //     ];
-
+        if($sch!=""){
+            $schedule->addScheduleInNull($sch->scheduleID,$schInfo);
+            $schedule->updateScheduleToNullByID($schInfo->scheduleID);
+            $newScheduleID=$count->scheduleID;
+        }
+        else{
+            $newScheduleID=$schedule->addSchedule($schInfo);
+            $schedule->updateScheduleToNullByID($id);
            
-        //     if($count!=0){
-        //         $shiftDic['totalShift'] = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift-$schedule->totalShiftFirstEdition($doctor->doctorID);
-
-        
-        //      }
-
-        //     else{
-        //          $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts-$schedule->totalShiftFirstEdition($doctor->doctorID);
-               
-           
-        //  }    
-        //  echo $doctor->name;
-            
-        //     array_push($shiftArr,$shiftDic);
-        // }
+        }
         
            
            
