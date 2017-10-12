@@ -646,18 +646,18 @@ class ScheduleController extends Controller
         $array = array();
 
         foreach ($doctor as $data) {
-            $id = $data->scheduleID;
+            //$id = $data->scheduleID;
             $date = $data->date;
 
-            if($data->doctorID==""){
-                $name = " ";
-            }
-            else{
-            $name = $user->getDoctorInfoByID($data->doctorID)->name;
-            }
+            //if($data->doctorID==""){
+                //$name = " ";
+            //}
+            //else{
+            //$name = $user->getDoctorInfoByID($data->doctorID)->name;
+            //}
            
             
-            array_push($array, array($id,$name,$date));
+            array_push($array, array($date));
         }
 
         return $array;
@@ -674,7 +674,8 @@ class ScheduleController extends Controller
         $user = new User();
 
         $date1 = $schedule->getScheduleDataByID($data['scheduleID_1'])->date;
-        $date2 = $schedule->getScheduleDataByID($data['scheduleID_2'])->date;
+        //$date2 = $schedule->getScheduleDataByID($data['scheduleID_2'])->date;
+        $date2= $data['scheduleID_2'];
 
         $schCategorySerial=$schedule->getScheduleDataByID($data['scheduleID_1'])->schCategorySerial;
 

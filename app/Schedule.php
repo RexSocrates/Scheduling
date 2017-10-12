@@ -598,10 +598,11 @@ class Schedule extends Model
                 ->whereNotNull('doctorID');
 
         $info = DB::table("Schedule")
+                //->distinct('date')
                 ->where('date', 'like',$yearMonth.'%')
                 ->whereNotIn('date',($query))
                 ->orderBy('date')
-                ->get();
+                ->distinct()->get(['date']);
 
 
         return $info;          
