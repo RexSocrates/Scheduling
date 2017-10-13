@@ -951,19 +951,18 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
-     
-      $scheduleCategory = new ScheduleCategory();
+$scheduleCategory = new ScheduleCategory();
         $schedule = new Schedule();
         //$data = $request->all();
-        $id = 149; //schedule ID
-        $sessionID = 4;
-        $newDate = "Thu Nov 02 2017 00:00:00 GMT+0800 (CST)";
+        $id = 3072; //schedule ID
+        $sessionID = 5;
+        $date = "2017-11-01";
 
-        $sch=$schedule->getScheduleDataByDateAndSessionID($newDate,$sessionID);
+        $sch=$schedule->getScheduleDataByDateAndSessionIDWhenDoctorIDisNull($date,$sessionID);
 
         $doctorID = $schedule->getScheduleDataByID($id)->doctorID;        
-        $date = $this->processDateStr($newDate);
-        $location = $scheduleCategory->getSchCategoryInfo($sessionID);
+        //$date = $this->processDateStr($newDate);
+       $location = $scheduleCategory->getSchCategoryInfo($sessionID);
         $schInfo = [
               'schCategorySerial'=>$sessionID,
               'isWeekday' => true,
@@ -979,18 +978,30 @@ class TestController extends Controller
           $schInfo['isWeekday'] = false;
         }
 
+        echo $sch->scheduleID;
         
-        if($sch!=""){
+        //if($sch!=0){ //有查到資料
             $schedule->addScheduleInNull($sch->scheduleID,$schInfo);
-            $schedule->updateScheduleToNullByID($schInfo->scheduleID);
-            $newScheduleID=$count->scheduleID;
-        }
-        else{
-            $newScheduleID=$schedule->addSchedule($schInfo);
             $schedule->updateScheduleToNullByID($id);
-           
-        }
+            $newScheduleID=$sch->scheduleID;
+            
+        //}
+
+        // else{
+        //     $newScheduleID=$schedule->addSchedule($schInfo);
+        //     $schedule->updateScheduleToNullByID($id);
+            
+        // }
         
+       
+        //$newScheduleID=$schedule->updateScheduleByID($id,$schInfo);
+        
+
+        // $job = new SendShiftExchangeMail($doctorID,$id,$newScheduleID);
+        // dispatch($job);
+
+
+    // }
            
            
          }

@@ -333,15 +333,15 @@ class ScheduleController extends Controller
 
         $count = $schedule->getScheduleDataByDateAndSessionIDWhenDoctorIDisNull($startDate,$categoryID);
 
-        if($count->doctorID==""){
+        //  if($count!=""){
             $schedule->addScheduleInNull($count->scheduleID,$schInfo);
             $scheduleID=$count->scheduleID;
-        }
-        else{
-            $scheduleID=$schedule->addSchedule($schInfo);
+        // }
+        // else{
+            //$scheduleID=$schedule->addSchedule($schInfo);
 
            
-        }
+        // }
         
 
          $job = new SendNewShiftAssignmentMail($doctorID,$scheduleID);
@@ -518,11 +518,12 @@ class ScheduleController extends Controller
         $id = $data['id']; //schedule ID
         $sessionID = $data['newSessionID'];
         $newDate = $data['newDate'];
+        $date = $this->processDateStr($newDate);
 
-        $sch=$schedule->getScheduleDataByDateAndSessionID($newDate,$sessionID);
+        $sch=$schedule->getScheduleDataByDateAndSessionIDWhenDoctorIDisNull($date,$sessionID);
 
         $doctorID = $schedule->getScheduleDataByID($id)->doctorID;        
-        $date = $this->processDateStr($newDate);
+        
         $location = $scheduleCategory->getSchCategoryInfo($sessionID);
         $schInfo = [
               'schCategorySerial'=>$sessionID,
@@ -538,18 +539,21 @@ class ScheduleController extends Controller
         if($weekDay == 6 || $weekDay == 7){
           $schInfo['isWeekday'] = false;
         }
-
+ 
         
-        if($sch!=""){
+        // if($sch!=""){ //有查到資料
+        //     // $newScheduleID=$schedule->addSchedule($schInfo);
+        //     // $schedule->updateScheduleToNullByID($sch->doctorID);
             $schedule->addScheduleInNull($sch->scheduleID,$schInfo);
-            $schedule->updateScheduleToNullByID($schInfo->scheduleID);
-            $newScheduleID=$count->scheduleID;
-        }
-        else{
-            $newScheduleID=$schedule->addSchedule($schInfo);
             $schedule->updateScheduleToNullByID($id);
-           
-        }
+            $newScheduleID=$sch->scheduleID;
+            
+        //  }
+
+        // else{
+        //     $newScheduleID=$schedule->addSchedule($schInfo);
+        //     $schedule->updateScheduleToNullByID($sch->doctorID);
+        //  }
         
        
         //$newScheduleID=$schedule->updateScheduleByID($id,$schInfo);
@@ -687,8 +691,15 @@ class ScheduleController extends Controller
 
         
         foreach ($scheduleRecord as $schedule) {
+
             $scheduleID = $schedule->scheduleID;
-            $name = $user->getDoctorInfoByID($schedule->doctorID)->name;
+            if($schedule->doctorID == null){
+                $name="";
+            }
+            else{
+                $name = $user->getDoctorInfoByID($schedule->doctorID)->name;
+            }
+
             $category = $scheduleCategory->findScheduleName($schedule->schCategorySerial)->schCategoryName;
             $date = $schedule->date;
             

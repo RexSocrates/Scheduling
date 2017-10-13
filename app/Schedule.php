@@ -231,7 +231,7 @@ class Schedule extends Model
         return $affectedRows;
     }
 
-    // 因醫生般的變動,導致原本上班的地方醫生變為null
+    // 因醫生的變動,導致原本上班的地方醫生變為null
     public function updateScheduleToNullByID($scheduleID) {
         $reservation = new Reservation();
         
@@ -251,7 +251,7 @@ class Schedule extends Model
         $affectedRows = DB::table('Schedule')
             ->where('scheduleID', $scheduleID)
             ->update([
-                'doctorID' => $data['doctorID'],
+                'doctorID' => $data['doctorID']
             ]);
         
         return $affectedRows;
@@ -594,11 +594,11 @@ class Schedule extends Model
     public function getDateNotInDate($doctorID, $date, $yearMonth){
         $query = DB::table("Schedule")
                 ->select('date')
+                ->where('date', 'like',$yearMonth.'%')
                 ->where('doctorID',$doctorID)
                 ->whereNotNull('doctorID');
 
         $info = DB::table("Schedule")
-                //->distinct('date')
                 ->where('date', 'like',$yearMonth.'%')
                 ->whereNotIn('date',($query))
                 ->orderBy('date')
@@ -613,14 +613,15 @@ class Schedule extends Model
         
         $query = DB::table("Doctor")
                 ->select('doctorID')
-                ->whereIn('major',[$major])
-                ->orwhere('major',"All");
+                ->whereIn('major',[$major,"All"]);
     
         $info = DB::table("Schedule")
-                ->whereIn('doctorID',($query))
                 ->where('date', 'like',$date2)
-                // ->whereNotIn('date',["2017-11-01"]) 
+                ->whereIn('doctorID',$query)
+                ->orwhereNull('doctorID')
+                ->where('date', 'like',$date2)
                 
+                // ->whereNotIn('date',["2017-11-01"])
                 ->get();
 
 
