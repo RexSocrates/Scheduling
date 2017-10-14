@@ -240,9 +240,11 @@ class ScheduleController extends Controller
         $date = $data['date']; //移動到哪一天
         $categoryID= $data['classification'];
 
-        $dateStr = $this->processDateStr($date);
+        $dateStr = $this->processDateStr($date); //移動到哪一天
+
         $doctorID = $schedule->getScheduleDataByID($scheduleID)->doctorID;
         $dateInSchedule = $schedule->getScheduleDataByID($scheduleID)->date;
+
         $docName = $user->getDoctorInfoByID($doctorID)->name;
         $docWeekend = $schedule->checkDocScheduleInWeekend($doctorID);
         $count = $schedule->checkDocStatus($doctorID,$dateStr);
@@ -295,7 +297,9 @@ class ScheduleController extends Controller
             "countOff"=>$countOff,
             "countNight"=>$countNight,
             'location'=>$location,
-            "major"=> $major
+            "major"=> $major,
+            "yearMonth" =>date('Y-m',strtotime($dateStr)), //被拉到的
+            "yearMonthInSchedule" =>date('Y-m',strtotime($dateInSchedule)) //被拉到的
         ];
 
         array_push($dataArr,$info);

@@ -1150,7 +1150,7 @@
                 console.log("bb"+document.getElementById('scheduleID_2').value);
         }
 
-         function save_form() {
+        function save_form() {
             $.get('change-shift-first-edition', {
                 scheduleID_1 : document.getElementById('date1').value,
                 scheduleID_2 : document.getElementById('date2').value

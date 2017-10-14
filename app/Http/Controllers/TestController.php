@@ -953,34 +953,9 @@ class TestController extends Controller
    public function announceSchedule(){
  
 
-        $schedule = new Schedule();
-        $user =new User();
-        $reservation = new Reservation();
-        $scheduleCategory = new ScheduleCategory();
-
-
-         //$data = $request->all();
-      $schedule = new Schedule();
-      $user = new User();
-
-      $doctor = $schedule->getScheduleDataByID(3079);
-      $doctor2 = $schedule->getScheduleDataByID(3059);
-      $name = $user->getDoctorInfoByID($doctor->doctorID)->name;
-      $date = $doctor->date;
-
-      $name2 = null;
-      
-      if($doctor2->doctorID != null){
-         $name2 = $user->getDoctorInfoByID($doctor2->doctorID)->name;
-      }
-      else{
-        $name2 = null;
-     }
-
-      $date2 = $doctor2->date;
-      
-      $array = array($name,$date,$name2,$date2);
-      return $array;
+       $date = "2017-11-01";
+       $yearMonth = date('Y-m',strtotime($date));
+       echo $yearMonth;
         // // $user = new User();
 
        

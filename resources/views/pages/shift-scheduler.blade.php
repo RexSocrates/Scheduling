@@ -46,16 +46,17 @@
                                         <img src="../img/exchange.svg" style="height: 220px;width: 220px;">
                                     </div>
                                      <div class="col s6">
-                                        <label>醫生:</label>
+                                        <label>醫生:</label>   <!-- 要求換班 -->
                                         <select name= 'schID_1_doctor' class="browser-default" id="schID_1_doctor" onchange="changeDoctor_1()" required>
                                             <option  disabled selected>請選擇醫生</option>
                                                 <option disabled value=""></option>
                                                 @foreach($doctorName as $name)
-                                                <option value="{{$name->doctorID}}">{{$name->name}}</option>
+                                                <option value="{{$name->doctorID}}">{{$name->name}} </option>
                                                 @endforeach
                                         </select>
                                     </div>
-                                    <div class="col s6">
+
+                                   <!--  <div class="col s6">
                                         <label>醫生:</label>
                                         <select name= 'schID_2_doctor' class="browser-default" id="schID_2_doctor" onchange="changeDoctor()" required>
                                             <option value="" disabled selected>請選擇醫生</option> 
@@ -63,10 +64,18 @@
                                             <option value="{{$name->doctorID}}">{{$name->name}}</option>
                                             @endforeach
                                         </select>
+                                    </div> -->
+
+                                      <div class="col s6">  <!--換班日期  資料庫拉資料--> 
+                                        <label>日期:</label>
+                                        <select  name='scheduleID_2' class="browser-default" id="date2" onchange="changeDoctor()" required>
+                                            <option value="" disabled selected>請選擇日期</option>
+                                            <option value=""></option>
+                                        </select>
                                     </div>
 
                                     <div class="col s6">
-                                        <label>日期:</label>
+                                        <label>日期:</label><!-- 要求換班日期 -->
                                         <select name="scheduleID_1" class="browser-default" id="date1" required>
                                             <option value="" disabled selected>請選擇日期</option>
                                             <option value=""></option>
@@ -74,11 +83,22 @@
                                         </select>
                                     </div>
 
-                                    <div class="col s6">
+                                   <!--  <div class="col s6">  換班日期  資料庫拉資料 
                                         <label>日期:</label>
                                         <select  name='scheduleID_2' class="browser-default" id="date2" required>
                                             <option value="" disabled selected>請選擇日期</option>
                                             <option value=""></option>
+                                        </select>
+                                    </div> -->
+
+                                     <div class="col s6">
+                                        <label>醫生:</label> <!-- 換班醫生 -->
+                                        <select name= 'schID_2_doctor' class="browser-default" id="schID_2_doctor"  required>
+                                            <option value="" disabled selected>請選擇醫生</option> 
+                                             <option value=""></option>
+                                            <!-- @foreach($doctorName as $name) -->
+                                            <!-- <option value="{{$name->doctorID}}">{{$name->name}}</option> -->
+                                            <!-- @endforeach -->
                                         </select>
                                     </div>
                                 </div>
@@ -130,7 +150,7 @@
 
                         <script type="text/javascript" charset="utf-8">
                     
-                             scheduler.locale.labels.timeline_tab = "Timeline";
+                            scheduler.locale.labels.timeline_tab = "Timeline";
                             scheduler.locale.labels.section_custom="Section";
                             scheduler.config.details_on_create=true;
                             scheduler.config.details_on_dblclick = true;
@@ -262,9 +282,9 @@
                                 if(ev.text == "New"){
                                     scheduler.startLightbox(id, html("my_form1"));
                                 } 
-                                else if(date>today){
-                                    console.log('nothing');
-                                }
+                                // else if(date>today){
+                                //     console.log('nothing');
+                                // }
                                 else {
                                     scheduler.startLightbox(id, html("my_form"));
                                 }
@@ -346,38 +366,34 @@
                                     break;
                             }
                              //鎖定時間
-                            var startd =new Date(res[3], month-1, 1); 
-                            var endd = new Date(res[3], month, 1); 
+                            var startd =new Date(res[3], month, 1); 
+                            var endd = new Date(res[3], month+1, 1); 
+
                             var block_startd =new Date(res[3], month-1, 1); 
                             var block_endd = new Date(res[3], month, 1); 
+
                             console.log("startd "+startd);
                             console.log("endd "+endd);
-                            scheduler.config.limit_start = new Date(startd);
+
+                            scheduler.config.limit_start = new Date(block_startd);
                             scheduler.config.limit_end = new Date(endd);
+
                             scheduler.attachEvent("onLimitViolation", function  (id, obj){
-                                //dhtmlx.message({ type:"error", text:"此時段無法接受換班" })
+                                dhtmlx.message({ type:"error", text:"此時段無法接受換班" })
                             });
+
                              //限制非當月利用點擊視窗換班
                             scheduler.addMarkedTimespan({  
                                 start_date: '1900-1-1',
-                                end_date:  new Date(res[3], month-1, 1),
+                                end_date:   block_startd,
                                 zones: "fullday", 
                                 css: "block_section", 
                                 type: "dhx_time_block"
                             
-                             });
-                            //scheduler.updateView();
-                            scheduler.attachEvent("onEventCollision", function (ev, evs){
-                                var ev = scheduler.getEvent(ev.id);
-                                var evs = scheduler.getEvent(evs[0].id);
-                                var count = scheduler.getEvents(ev.start_date, ev.end_date).length;
-                                console.log("ev "+ev.start_date)
-                                console.log("evs "+evs.start_date);
-                                console.log("evs "+evs.text);
-                                
-                                //checkDocStatus(ev.hidden,evs.hidden);
-                                return true;
                             });
+
+                            //scheduler.updateView();
+                           
                             
                             
                             // //空白處新增醫生班表
@@ -535,36 +551,62 @@
             $('select').material_select();
         });
     
-    function changeDoctor_1(id){
+         function changeDoctor_1(id){ //醫生1
             $.get('changeDoctor1',{
                 id : id
             }, function(array){
-                document.getElementById("schID_1_doctor").innerHTML= "<option value="+array[0]+">"+array[1]+"</option>";
+                document.getElementById("schID_1_doctor").innerHTML= "<option value="+array[3]+">"+array[1]+"-"+array[4]+"</option>";
                 changeDate1(array);
             });
         }
-        function changeDoctor() {
-            $.get('changeDoctorSchedule', {
-                id : document.getElementById('schID_2_doctor').value
+
+        function changeDoctor() { //醫生2
+            $.get('changeDoctor', {
+                scheduleID_1 :document.getElementById("date1").value,
+                scheduleID_2 :document.getElementById("date2").value
+
             }, function(array) {
-                changeDate2(array);
+                var doctor = "";
+                for(i=0 ; i<array.length ; i++){
+                    doctor += "<option value="+array[i][0]+">"+array[i][1]+"-"+array[i][2]+"</option>";
+                    console.log('1'+array[i][1]);
+                    console.log(array[i][0]);
+                }
+                document.getElementById("schID_2_doctor").innerHTML  = doctor;
+
             });
+
+            console.log("date"+document.getElementById("date1").value);
         }
-        function changeDate1(array) {
-                document.getElementById("date1").innerHTML= "<option value="+array[3]+">"+array[2]+"</option>",
-                document.getElementById("getDate").value=array[2]     
+
+        function changeDate1(array) { //要求換班日期
+                document.getElementById("date1").innerHTML= "<option value="+array[0]+">"+array[2]+"</option>" 
+
+                changeDate2(array[2],array[3]);
         }
-        function changeDate2(array) {
+
+        function changeDate2(date,doctorID){
+            $.get('changeDate2' ,{
+                date:date,
+                doctorID : doctorID
+            },function(array){
                 var date = "";
                 for(i=0 ; i<array.length ; i++){
-                    date += "<option value="+array[i][0]+">"+array[i][2]+"</option>";
-                    console.log('1'+array[i][0]);
+                    date += "<option value="+array[i][0]+">"+array[i][0]+"</option>";
+                    console.log('1'+array[2]);
                 }
                 document.getElementById("date2").innerHTML  = date;
+                changeDoctor();
+            });
+
+        
+            
         }
+
         function alert1() {
                 alert("不可選擇相同醫生相同時段");
         }
+
         function updateShift(scheduleID_1,scheduleID_2){
             $.post('sendShiftUpdate',{
                 scheduleID_1:scheduleID_1,
@@ -576,20 +618,29 @@
             });
             //alert(schedule_1+"和"+schedule_2+"換班成功");
         }
-        
-         function showInfo(scheduleID_1,scheduleID_2) {
+
+        function showInfo(scheduleID_1,scheduleID_2) {
             $.get('showInfo', {
                 id : scheduleID_1,
                 id2 : scheduleID_2
             }, function (array){
-                 dhtmlx.message({ type:"error", text: array[2]+array[1]+"\n和\n"+array[0]+array[3]+"換班成功" })
-                 refresh();
+                // dhtmlx.message({ type:"error", text: array[2]+array[1]+"\n和\n"+array[0]+array[3]+"換班成功" })
+                if(array[0] == ""){
+                    alert(array[2]+array[1]+"的班換至"+array[3]);
+                }
+                else{
+                    alert(array[2]+array[1]+"和"+array[0]+array[3]+"換班成功");
+                }
+                refresh();
             });
         }
+
         function refresh() {
             location.reload();
         }
-    function save(){
+
+        
+        function save(){
             var ID_1 = document.getElementById('date1').value;
             var ID_2 = document.getElementById('date2').value;
 
@@ -608,6 +659,10 @@
                     dhtmlx.message({ type:"error", text:"請選擇醫生" });
             }
 
+            else if(doctorID_2 == ""){
+                    dhtmlx.message({ type:"error", text:"請選擇醫生" });
+            }
+
             else if(doctorID_1 == doctorID_2){
                     dhtmlx.message({ type:"error", text:"請選擇不同醫生" });
             }
@@ -621,59 +676,87 @@
 
         }
 
-        function save_form_alert(){
+        
+       function save_form_alert(){
+
             $.get('checkDocStatus',{
             scheduleID_1 : document.getElementById('date1').value,
-            scheduleID_2 : document.getElementById('date2').value,
+            scheduleID_2 : document.getElementById('schID_2_doctor').value,
 
             }, function(array){
-                var ID_1 = document.getElementById('date1').value;
-                var ID_2 = document.getElementById('date2').value;
+
+                var  scheduleID_1 = document.getElementById('date1').value;
+                var  scheduleID_2 = document.getElementById('schID_2_doctor').value;
 
                 var weekday1 = array[0]['weekday1'];
                 var weekday2 = array[0]['weekday2'];
 
-                if(array[0]['doc1Location']>=2){
+                var date = array[0]['date2'];
+
+
+                if(array[0]['doc2']==null){
+                    updateShift(scheduleID_1,scheduleID_2);
+                }
+
+                else if(array[0]['doc1Location']>=2){
                     alert(array[0]['doc1']+"醫生本週已有2班非值登院區班");
                     //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生本週已有2班非值登院區班" });
-                    refresh();
+                   
                 }
 
                 else if(array[0]['doc2Location']>=2){
                     alert(array[0]['doc2']+"醫生本週已有2班非值登院區班");
                      //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
-                     refresh();
+                    
                 }
 
-                else if(array[0]['doc1Major'] != 0){
-                    alert(array[0]['doc1']+"醫生非該科醫生");
-                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
-                     refresh();
+                else if(array[0]['date2'] == array[0]['date1']  ){
+                    if(array[0]['doc1Night']!=0){
+                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班?\n確定要換班嗎");
+                            if (r == true) {
+                                updateShift(scheduleID_1,scheduleID_2);
+                            } 
+                            else {
+                                alert("已取消");
+                                refresh();
+                            }
+                    }
+                     else if(array[0]['doc2Night']!=0){
+                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"前一晚已有夜班?\n確定要換班嗎");
+                            if (r == true) {
+                                updateShift(scheduleID_1,scheduleID_2);
+                            } 
+                            else {
+                                alert("已取消");
+                                refresh();
+                            }
+                    }
+                    else{
+                     updateShift(scheduleID_1,scheduleID_2);
+                    }
+                    
                 }
 
-                else if(array[0]['doc2Major'] != 0){
-                    alert(array[0]['doc2']+"醫生非該科醫生");
-                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
-                     refresh();
-                }
-                
                 else if(array[0]['count1']!=0){
-                    dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date1']+"已有班" });
+                    alert(array[0]['doc1']+"醫生"+array[0]['date1']+"已有班");
+                    //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date1']+"已有班" });
+                    refresh();
                     console.log("doc1"+array[0]['count1']);
 
                 }
+
                 else if(array[0]['count2']!=0){
-                    dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生"+array[0]['date2']+"已有班" });
+                    alert(array[0]['doc2']+"醫生"+array[0]['date2']+"已有班");
+                    //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生"+array[0]['date2']+"已有班" });
+                    refresh();
                     console.log("doc2"+array[0]['count2']);
                 }
-                else if(array[0]['date2'] == array[0]['date1']  ){
-                     save_form();
-                }
+
                 else if (array[0]['doc1off']!=0 || array[0]['doc1Night']!=0 ){
                     if(array[0]['doc1off']!=0 && array[0]['doc1Night']!=0 ){
-                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n且"+array[0]['date1']+"前一晚已有夜班\n確定要換班嗎");
+                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n且"+array[0]['date1']+"前一晚有夜班\n確定要換班嗎????");
                             if (r == true) {
-                                save_form();
+                                updateShift(scheduleID_1,scheduleID_2);
                             } 
                             else {
                                 alert("已取消");
@@ -681,9 +764,9 @@
                             }
                     }
                     else if(array[0]['doc1off']!=0){
-                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n確定要換班嗎");
+                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n確定要換班嗎???/");
                             if (r == true) {
-                                save_form();
+                                updateShift(scheduleID_1,scheduleID_2);
                             } 
                             else {
                                 alert("已取消");
@@ -693,7 +776,7 @@
                     else if(array[0]['doc1Night']!=0){
                         var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班?\n確定要換班嗎");
                             if (r == true) {
-                                save_form();
+                                updateShift(scheduleID_1,scheduleID_2);
                             } 
                             else {
                                 alert("已取消");
@@ -702,13 +785,11 @@
                     }
                 }
 
-                else if(array[0]['doc2off']!=0 || array[0]['doc2Night']!=0){
-                    console.log("night"+array[0]['doc2Night']);
-                    
+                else if (array[0]['doc2off']!=0 || array[0]['doc2Night']!=0 ){
                     if(array[0]['doc2off']!=0 && array[0]['doc2Night']!=0 ){
-                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"已有off班?\n且"+array[0]['date2']+"前一晚已有夜班\n確定要換班嗎");
+                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"已有off班?\n且"+array[0]['date2']+"前一晚有夜班\n確定要換班嗎?");
                             if (r == true) {
-                                save_form();
+                                updateShift(scheduleID_1,scheduleID_2);
                             } 
                             else {
                                 alert("已取消");
@@ -716,9 +797,9 @@
                             }
                     }
                     else if(array[0]['doc2off']!=0){
-                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"已有off班?\n確定要換班嗎");
+                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"已有off班?\n確定要換班嗎???/");
                             if (r == true) {
-                                save_form();
+                                updateShift(scheduleID_1,scheduleID_2);
                             } 
                             else {
                                 alert("已取消");
@@ -728,7 +809,7 @@
                     else if(array[0]['doc2Night']!=0){
                         var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"前一晚已有夜班?\n確定要換班嗎");
                             if (r == true) {
-                                save_form();
+                                updateShift(scheduleID_1,scheduleID_2);
                             } 
                             else {
                                 alert("已取消");
@@ -737,59 +818,19 @@
                     }
                 }
 
-                //  else if( (array[0]['doc1weekend']<=4) && ( weekday2==6 || weekday2 ==7)  && ( weekday1!=6 && weekday1!=7) ){
-
-                //     var check = confirm(array[0]['doc1']+"醫生假日班不得少於4\n確定要換班嗎?");
-
-                //     if(check == true){
-                //        save_form();
-                //     }
-                //     else{
-                //         alert("已取消");
-                //     }
-                //     //dhtmlx.message({ type:"error", text:array[0]['docName']+"醫生假日班不得少於4" });
-                // }
-                
-                // else if((array[0]['doc2weekend']<=4) &&  ( weekday1==6 || weekday1 ==7) && ( weekday2!=6 && weekday2!=7) ){
-                //     var check = confirm(array[0]['doc2']+"醫生假日班不得少於4\n確定要換班嗎?");
-
-                //     if(check == true){
-                //        save_form();
-                //     }
-                //     else{
-                //         alert("已取消");
-                //     }
-
-                // }
-                else{
-                save_form();
-                }
-           
-           });
-        }
-        function save_form() {
-            $.get('change-shift-first-edition', {
-                scheduleID_1 : document.getElementById('date1').value,
-                scheduleID_2 : document.getElementById('date2').value
-                
-            }, function (){
-                scheduler.endLightbox(true, html("my_form"));
-                refresh();
-            });
-        }
-        function save_form_alert_addSchedule(){
-            var id = document.getElementById('doctor').value;
-            var date =document.getElementById('date_1').innerText;
-            var classification = document.getElementById('section_id').innerText;
-            if(id == ""){
-                dhtmlx.message({ type:"error", text:"請選擇醫生" });
-            }
-           else{
-            saveSchedule(id,date,classification);
-           }
             
+                else{
+                    updateShift(scheduleID_1,scheduleID_2);
+                }
+                
+               
+             });
+
+                
+                console.log("aa"+document.getElementById('scheduleID_1').value);
+                console.log("bb"+document.getElementById('scheduleID_2').value);
         }
-    
+
     
         function save_form() {
             $.get('change-shift-first-edition', {
@@ -800,7 +841,9 @@
                 scheduler.endLightbox(true, html("my_form"));
                 refresh();
             });
+
         }
+
         function close_form() {               
             scheduler.endLightbox(false, html("my_form"));             
         }
@@ -819,28 +862,42 @@
 
                 var weekday = array[0]['weekDay'];
                 var weekDayInSchedule =array[0]['weekDayInSchedule'];
+                console.log("aaww33"+array[0]['location']);
 
 
-                if(array[0]['date'] == array[0]['dateInSchedule'] && array[0]['scheduleID']!=0 ){
-                    checkDocStatus(id,array[0]['scheduleID']);
+                if(array[0]['yearMonth']!= array[0]['yearMonthInSchedule']){
+                    alert("不同月份不能換班");
+                    refresh();
+
                 }
-                
-                else if(array[0]['count']!=0){
-                    dhtmlx.message({ type:"error", text:array[0]['docName']+"醫生"+array[0]['date']+"已有班" });
+                else if (array[0]['location'] !=0){
+                    alert(array[0]['docName']+"醫生這週已有2班非直登院區班" );
                     refresh();
                 }
 
+                else if (array[0]['major'] !=0){
+                    alert(array[0]['docName']+"醫生非該科醫生" );
+                    refresh();
+                }
+
+                else if(array[0]['date'] == array[0]['dateInSchedule'] && array[0]['scheduleID']!=0 ){
+                    checkDocStatus(id,array[0]['scheduleID']);
+                }
+
+                else if(array[0]['count']!=0){
+                    alert(array[0]['docName']+"醫生"+array[0]['date']+"已有班" );
+                    //dhtmlx.message({ type:"error", text:array[0]['docName']+"醫生"+array[0]['date']+"已有班" });
+                    refresh();
+                }
+
+                
                 else if(array[0]['scheduleID']!=0){
                     document.getElementById("scheduleID_2").value=array[0]['scheduleID'];
                     checkDocStatus(id,array[0]['scheduleID']);
                 }
-                
-                else{
+                 
+                console.log("count"+array[0]['countNight']);
 
-                }
-
-                console.log(id);
-                console.log(array[0]['scheduleID']);
                
             });
 
@@ -857,50 +914,29 @@
                 // var scheduleID_1= document.getElementById('scheduleID_1').value;
                 // var scheduleID_2= document.getElementById('scheduleID_2').value;
 
-               
+                console.log("abc"+array[0]['doc1']+array[0]['doc1Location']);
+                console.log("abc"+array[0]['doc2']+array[0]['doc2Location']);
+
                 var weekday1 = array[0]['weekday1'];
                 var weekday2 = array[0]['weekday2'];
 
                 var date = array[0]['date2'];
 
-                if(array[0]['date2'] == array[0]['date1']  ){
-                     updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
-                }
-
-                else if(array[0]['count1']!=0){
-                    alert(array[0]['doc1']+"醫生"+array[0]['date1']+"已有班");
-                    //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date1']+"已有班" });
-                    refresh();
-                    console.log("doc1"+array[0]['count1']);
-
-                }
-                else if(array[0]['count2']!=0){
-                    alert(array[0]['doc2']+"醫生"+array[0]['date2']+"已有班");
-                    //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生"+array[0]['date2']+"已有班" });
-                    refresh();
-                    console.log("doc2"+array[0]['count2']);
-                }
-                else if(array[0]['doc1Location']>=2){
-                     dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生本週已有2班非值登院區班" });
+                if(array[0]['doc1Location']>=2){
+                    alert(array[0]['doc1']+"醫生本週已有2班非值登院區班");
+                    //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生本週已有2班非值登院區班" });
+                    //refresh();
                 }
 
                 else if(array[0]['doc2Location']>=2){
-                     dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                    alert(array[0]['doc2']+"醫生本週已有2班非值登院區班");
+                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                     //refresh();
                 }
 
-                else if (array[0]['doc1off']!=0 || array[0]['doc1Night']!=0 ){
-                    if(array[0]['doc1off']!=0 && array[0]['doc1Night']!=0 ){
-                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n且"+array[0]['date1']+"前一晚有夜班\n確定要換班嗎");
-                            if (r == true) {
-                                updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
-                    }
-                    else if(array[0]['doc1off']!=0){
-                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n確定要換班嗎");
+                else if(array[0]['date2'] == array[0]['date1']  ){
+                     if(array[0]['doc2Night']!=0){
+                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"前一晚已有夜班?\n確定要換班嗎");
                             if (r == true) {
                                 updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
                             } 
@@ -919,9 +955,28 @@
                                 refresh();
                             }
                     }
+                    else{
+                     updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                    }
                 }
 
-                else if(array[0]['doc2off']!=0 || array[0]['doc2Night']!=0){
+
+                else if(array[0]['count1']!=0){
+                    alert(array[0]['doc1']+"醫生"+array[0]['date1']+"已有班");
+                    //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生"+array[0]['date1']+"已有班" });
+                    refresh();
+                    console.log("doc1"+array[0]['count1']);
+
+                }
+                else if(array[0]['count2']!=0){
+                    alert(array[0]['doc2']+"醫生"+array[0]['date2']+"已有班");
+                    //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生"+array[0]['date2']+"已有班" });
+                    refresh();
+                    console.log("doc2"+array[0]['count2']);
+                }
+
+
+               else if(array[0]['doc2off']!=0 || array[0]['doc2Night']!=0){
                     console.log("night"+array[0]['doc2Night']);
 
                     if(array[0]['doc2off']!=0 && array[0]['doc2Night']!=0 ){
@@ -955,20 +1010,59 @@
                             }
                     }
                 }
+                
+                else if(array[0]['doc1off']!=0 || array[0]['doc1Night']!=0){
+                    console.log("night"+array[0]['doc2Night']);
 
+                    if(array[0]['doc1off']!=0 && array[0]['doc1Night']!=0 ){
+                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n且"+array[0]['date1']+"前一晚已有夜班\n確定要換班嗎");
+                            if (r == true) {
+                                updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                            } 
+                            else {
+                                alert("已取消");
+                                refresh();
+                            }
+                    }
+                    else if(array[0]['doc1off']!=0){
+                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n確定要換班嗎");
+                            if (r == true) {
+                                updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                            } 
+                            else {
+                                alert("已取消");
+                                refresh();
+                            }
+                    }
+                    else if(array[0]['doc1Night']!=0){
+                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班?\n確定要換班嗎");
+                            if (r == true) {
+                                updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                            } 
+                            else {
+                                alert("已取消");
+                                refresh();
+                            }
+                    }
+                }
+
+
+                else if(array[0]['date2'] == array[0]['date1']  ){
+                     updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                }
+                
                 else{
                     updateShift(scheduleID_1,scheduleID_2);
                 }
                 
                
              });
-
                 
                 console.log("aa"+document.getElementById('scheduleID_1').value);
                 console.log("bb"+document.getElementById('scheduleID_2').value);
         }
 
-         function updateShift(scheduleID_1,scheduleID_2){
+        function updateShift(scheduleID_1,scheduleID_2){
             $.post('sendShiftUpdate',{
                 scheduleID_1:scheduleID_1,
                 scheduleID_2:scheduleID_2
@@ -979,15 +1073,59 @@
             });
             //alert(schedule_1+"和"+schedule_2+"換班成功");
         }
-       function showScheduleInfo(date,section_id,id) {
-             document.getElementById("shiftDate").value=date;
-             document.getElementById("shiftSessionID").value=section_id;
-             document.getElementById("scheduleID_1").value=id;
 
-             console.log("scheduleID_1");
-
+       function showInfo(scheduleID_1,scheduleID_2) {
+            $.get('showInfo', {
+                id : scheduleID_1,
+                id2 : scheduleID_2
+            }, function (array){
+                // dhtmlx.message({ type:"error", text: array[2]+array[1]+"\n和\n"+array[0]+array[3]+"換班成功" })
+                if(array[0] == ""){
+                    alert(array[2]+array[1]+"的班換至"+array[3]);
+                }
+                else{
+                    alert(array[2]+array[1]+"和"+array[0]+array[3]+"換班成功");
+                }
+                refresh();
+            });
         }
 
+        function showScheduleInfo(date,section_id,id){
+                document.getElementById("shiftDate").value=date;
+                document.getElementById("shiftSessionID").value=section_id;
+                document.getElementById("scheduleID_1").value=id;
+        //     $.get("showDoctorInfo",{
+        //         categorySerial: section_id,
+        //         date : document.getElementById("shiftDate").value
+        //     }, function(array){
+                
+        //         var info = "";
+        //         console.log("length"+array.length);
+        //         for(i=0 ; i<array.length ; i++){
+        //             info += "<option value="+array[i]['doctorID']+">"+array[i]['doctorName']+(array[i]['totalShift'])+"</option>";
+        //             console.log('1'+array[i]['doctorID']);
+        //             console.log("section_id"+array[i]['doctorName']);
+        //         }
+        //         //document.getElementById("doctor").innerHTML  = info;
+
+        // });
+
+             //console.log("date"+document.getElementById("shiftDate").value);
+        }
+
+        //  function updateSchedule(scheduleID,date,classification){
+        //     $.get('updateSchedule',{
+        //         id: scheduleID,
+        //         newDate: date,
+        //         newSessionID: classification
+                
+        //     }, function(id){
+        //         console.log(id);
+        //         dhtmlx.message({ type:"error", text:"修改成功" });
+        //         refresh();
+        //         console.log("1111");
+        //     });
+        // }
         
     </script>
 @endsection
