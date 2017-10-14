@@ -317,6 +317,7 @@ class ScheduleController extends Controller
         $schedule = new Schedule();
         
         $categoryInfo = $scheduleCategory->getSchCategoryInfo($categoryID);
+
         $schInfo = [
               'doctorID' =>$doctorID,
               'schCategorySerial'=>$categoryID,
@@ -325,6 +326,7 @@ class ScheduleController extends Controller
               'date' => $startDate,
               'confirmed'=>0
             ];
+
         $weekDay = (int)date('N', strtotime($startDate));
 
         if($weekDay == 6 || $weekDay == 7){
@@ -510,6 +512,7 @@ class ScheduleController extends Controller
         ];
         return $info;
     }
+
     //更新班表
     public function updateSchedule(Request $request){
         $scheduleCategory = new ScheduleCategory();
@@ -713,13 +716,27 @@ class ScheduleController extends Controller
       $data = $request->all();
       $schedule = new Schedule();
       $user = new User();
+
       $doctor = $schedule->getScheduleDataByID($data['id']);
       $doctor2 = $schedule->getScheduleDataByID($data['id2']);
-      $name = $user->getDoctorInfoByID($doctor->doctorID)->name;
+
+      $name = null;
+
+        if($doctor->doctorID == null){
+         $name = "";
+      }
+      else{
+        $name = $user->getDoctorInfoByID($doctor->doctorID)->name;
+     }
       $date = $doctor->date;
-      $name2 = $user->getDoctorInfoByID($doctor2->doctorID)->name;
+
+      
+        $name2 = $user->getDoctorInfoByID($doctor2->doctorID)->name;
+    
+
       $date2 = $doctor2->date;
       $array = array($name,$date,$name2,$date2);
+
       return $array;
       
     }

@@ -690,7 +690,7 @@
             }, function(array) {
                 var doctor = "";
                 for(i=0 ; i<array.length ; i++){
-                    doctor += "<option value="+array[i][0]+">"+array[i][1]+"-"+array[i][2]+"-"+array[i][3]+"</option>";
+                    doctor += "<option value="+array[i][0]+">"+array[i][1]+"-"+array[i][2]+"</option>";
                     console.log('1'+array[i][1]);
                     console.log(array[i][0]);
                 }
@@ -936,8 +936,12 @@
                 id2 : scheduleID_2
             }, function (array){
                 // dhtmlx.message({ type:"error", text: array[2]+array[1]+"\n和\n"+array[0]+array[3]+"換班成功" })
-                
-                alert(array[2]+array[1]+"和"+array[0]+array[3]+"換班成功");
+                if(array[0] == ""){
+                    alert(array[2]+array[1]+"的班換至"+array[3]);
+                }
+                else{
+                    alert(array[2]+array[1]+"和"+array[0]+array[3]+"換班成功");
+                }
                 refresh();
             });
         }
@@ -993,21 +997,16 @@
                 var  scheduleID_1 = document.getElementById('date1').value;
                 var  scheduleID_2 = document.getElementById('schID_2_doctor').value;
 
-                console.log("abc"+array[0]['doc1']+array[0]['doc1Major']);
-                console.log("abc"+array[0]['doc2']+array[0]['doc2Major']);
-
-                console.log("frf"+array[0]['doc1']+array[0]['doc1Location']);
-                console.log("frf"+array[0]['doc2']+array[0]['doc2Location']);
-
-                console.log("rrf"+scheduleID_1);
-                console.log("rrf"+scheduleID_2);
-
                 var weekday1 = array[0]['weekday1'];
                 var weekday2 = array[0]['weekday2'];
 
                 var date = array[0]['date2'];
 
-                if(array[0]['doc1Location']>=2){
+                if(array[0]['doc2']==null){
+                    updateShift(scheduleID_1,scheduleID_2);
+                }
+
+                else if(array[0]['doc1Location']>=2){
                     alert(array[0]['doc1']+"醫生本週已有2班非值登院區班");
                     //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生本週已有2班非值登院區班" });
                    

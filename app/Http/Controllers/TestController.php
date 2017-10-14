@@ -951,57 +951,55 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
-$scheduleCategory = new ScheduleCategory();
+ 
+
         $schedule = new Schedule();
-        //$data = $request->all();
-        $id = 3072; //schedule ID
-        $sessionID = 5;
-        $date = "2017-11-01";
+        $user =new User();
+        $reservation = new Reservation();
+        $scheduleCategory = new ScheduleCategory();
 
-        $sch=$schedule->getScheduleDataByDateAndSessionIDWhenDoctorIDisNull($date,$sessionID);
 
-        $doctorID = $schedule->getScheduleDataByID($id)->doctorID;        
-        //$date = $this->processDateStr($newDate);
-       $location = $scheduleCategory->getSchCategoryInfo($sessionID);
-        $schInfo = [
-              'schCategorySerial'=>$sessionID,
-              'isWeekday' => true,
-              'location' => $location,
-              'date' => $date,
-              'doctorID'=>$doctorID,
-              'confirmed'=>1
-            ];
+         //$data = $request->all();
+      $schedule = new Schedule();
+      $user = new User();
 
-        $weekDay = (int)date('N', strtotime($date));
+      $doctor = $schedule->getScheduleDataByID(3079);
+      $doctor2 = $schedule->getScheduleDataByID(3059);
+      $name = $user->getDoctorInfoByID($doctor->doctorID)->name;
+      $date = $doctor->date;
 
-        if($weekDay == 6 || $weekDay == 7){
-          $schInfo['isWeekday'] = false;
-        }
+      $name2 = null;
+      
+      if($doctor2->doctorID != null){
+         $name2 = $user->getDoctorInfoByID($doctor2->doctorID)->name;
+      }
+      else{
+        $name2 = null;
+     }
 
-        echo $sch->scheduleID;
-        
-        //if($sch!=0){ //有查到資料
-            $schedule->addScheduleInNull($sch->scheduleID,$schInfo);
-            $schedule->updateScheduleToNullByID($id);
-            $newScheduleID=$sch->scheduleID;
-            
-        //}
+      $date2 = $doctor2->date;
+      
+      $array = array($name,$date,$name2,$date2);
+      return $array;
+        // // $user = new User();
 
-        // else{
-        //     $newScheduleID=$schedule->addSchedule($schInfo);
-        //     $schedule->updateScheduleToNullByID($id);
-            
-        // }
-        
        
-        //$newScheduleID=$schedule->updateScheduleByID($id,$schInfo);
+
+        // $oldscheduleID1 = $schedule_1_Info->scheduleID;
+        // $newscheduleID1 = $schedule_2_Info->scheduleID;
+        // $oldscheduleID2 = $schedule_2_Info->scheduleID;
+        // $newscheduleID2 = $schedule_1_Info->scheduleID;
+
+        // $job1 = new SendShiftExchangeMail($doctor1,$oldscheduleID1,$newscheduleID1);
+        // $job2 = new SendShiftExchangeMail($doctor2,$oldscheduleID2,$newscheduleID2);
+
+        // dispatch($job1);
+        // dispatch($job2);
+
+
+
+        //$schedule->exchangeSchedule($newChangeSerial);
         
-
-        // $job = new SendShiftExchangeMail($doctorID,$id,$newScheduleID);
-        // dispatch($job);
-
-
-    // }
            
            
          }
