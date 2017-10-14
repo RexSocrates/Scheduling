@@ -59,6 +59,7 @@ class Reservation extends Model
         $reservations = DB::table('Reservation')
             ->where('date', 'like', $nextMonthStr)
             ->whereIn('categorySerial', [3, 4, 5, 6])
+            ->orderBy('date')
             ->get();
         
         return $reservations;
@@ -87,6 +88,7 @@ class Reservation extends Model
         $reservations = DB::table('Reservation')
             ->where('date', 'like', $nextMonthStr)
             ->where('categorySerial', 7)
+            ->orderBy('date')
             ->get();
         
         return $reservations;

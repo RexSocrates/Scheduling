@@ -19,6 +19,10 @@ use App\CustomClass\OffReservation;
 use App\CustomClass\Doctor;
 use App\CustomClass\Month;
 
+// import jobs
+use App\Jobs\Schedule;
+use App\Jobs\Schedule2;
+
 class AlgorithmController extends Controller
 {
     // send a GET request
@@ -35,16 +39,16 @@ class AlgorithmController extends Controller
     public function sendRequest() {
         
         
-        $client = new Client(['base_uri' => 'http://0.0.0.0:8080/']);
-        
-        $response = $client->request('POST', '', [
-            'json' => [
-                'onRes' => json_encode($this->getOnReservation()),
-                'offRes' => json_encode($this->getOffReservation()),
-                'doctors' => json_encode($this->getDoctorsInfo()),
-                'monthInfo' => json_encode($this->getMonthInfo())
-            ]
-        ]);
+//        $client = new Client(['base_uri' => 'http://0.0.0.0:8080/']);
+//        
+//        $response = $client->request('POST', '', [
+//            'json' => [
+//                'onRes' => json_encode($this->getOnReservation()),
+//                'offRes' => json_encode($this->getOffReservation()),
+//                'doctors' => json_encode($this->getDoctorsInfo()),
+//                'monthInfo' => json_encode($this->getMonthInfo())
+//            ]
+//        ]);
         
         // get response body
 //        $body = (string)$response->getBody();
@@ -112,6 +116,40 @@ class AlgorithmController extends Controller
         $monthInfo = $this->getMonthInfo();
 //        $monthInfo->printData();
         echo json_encode($monthInfo);
+    }
+    
+    // 測試 schedule job
+    public function testScheduleJobs() {
+        ini_set('max_execution_time', 0);
+        echo 'Header=========================================================<br>';
+        $job = new Schedule2();
+        
+        dispatch($job);
+        echo 'Footer=========================================================<br>';
+    }
+    
+    public function testSyntax() {
+        $arr = [];
+        
+        for($i = 0; $i < 10; $i++) {
+            array_push($arr, rand(1, 10));
+        }
+        
+        echo 'Arr<br>';
+        echo print_r($arr).'<br>';
+        
+        $arr2 = [];
+        foreach($arr as $item) {
+            array_push($arr2, $item);
+        }
+        
+        for($i = 0; $i < 10; $i++) {
+            array_push($arr2, rand(1, 10));
+        }
+        
+        $arr2[3] = 100;
+        
+        echo print_r($arr2);
     }
     
     // 取得演算法使用的on班資訊

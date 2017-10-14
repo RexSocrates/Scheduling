@@ -28,10 +28,10 @@ class Schedule implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     
     // 排班資料
-    private $onRes;
-    private $offRes;
-    private $doctors;
-    private $monthInfo;
+    public $onRes;
+    public $offRes;
+    public $doctors;
+    public $monthInfo;
     
     // 有預設值
     public $year = 0; // 年份
@@ -93,7 +93,9 @@ class Schedule implements ShouldQueue
         $this->onRes = $this->getOnReservation();
         $this->offRes = $this->getOffReservation();
         $this->doctors = $this->getDoctorsInfo();
-        $this->monthInfo = $this->getWeeksOfMonth();
+        $this->monthInfo = $this->getMonthInfo();
+        
+        echo 'Prepare data<br>';
     }
 
     /**
@@ -107,42 +109,45 @@ class Schedule implements ShouldQueue
         $this->userInput($this->monthInfo);
         
         // 依據需要的chromosome_amount建立表
-        for($i = 0; $i < chromosome_amount; $i++) {
+        echo 'loop start <br>';
+        for($i = 0; $i < $this->chromosome_amount; $i++) {
+            echo 'Chromosome : '.$i.'<br>';
+            
             $switch = 1;
-            while($run_again == true or $switch == 1) {
+            while($this->run_again == true or $switch == 1) {
                 // 是否重跑的開關
-                $run_again = false;
+                $this->run_again = false;
                 
                 // 建立班表
-                build_all_class_table();
+                $this->build_all_class_table();
                 
                 // 建立醫生
-                creat_doctor();
+                $this->creat_doctor();
                 
                 // 建立預off 班表
-                creat_off_class_list();
-                pre_off_class();
+                $this->creat_off_class_list();
+                $this->pre_off_class();
                 
                 // 建立預ON班表
-                creat_on_class_list();
-                pre_on_class(); // 2483
+                $this->creat_on_class_list();
+                $this->pre_on_class(); // 2483
                 
                 // 建立填班表順序
-                input_order_list($schedule);
+                $this->input_order_list($this->schedule);
                 
                 // 建立假日班填班順序
-                input_holiday_order_list($schedule); // 2488
+                $this->input_holiday_order_list($this->schedule); // 2488
                 
                 // 先將預班完的班表和醫生列表複製起來
                 // 取代 deep copy
-                $copy_pre_schedule = [];
-                foreach($schedule as $sch) {
-                    array_push($copy_pre_schedule, $sch);
+                $this->copy_pre_schedule = [];
+                foreach($this->schedule as $sch) {
+                    array_push($this->copy_pre_schedule, $sch);
                 }
                 
-                $copy_pre_doctor_list = [];
-                foreach($doctor_list as $doctor) {
-                    array_push($copy_pre_doctor_list, $doctor);
+                $this->copy_pre_doctor_list = [];
+                foreach($this->doctor_list as $doctor) {
+                    array_push($this->copy_pre_doctor_list, $doctor);
                 }
                 
                 // 先將假日班填完
@@ -152,29 +157,30 @@ class Schedule implements ShouldQueue
                 $class_holiday_amount = 0;
                 
                 // 計算所有醫生的假日班數
-                for($j = 0; $j < count($doctor_list); $j++) {
-                    $doctor_holiday_amount = $doctor_holiday_amount + $doctor_list[$j]->weekendShifts;
+                for($j = 0; $j < count($this->doctor_list); $j++) {
+                    $doctor_holiday_amount = $doctor_holiday_amount + $this->doctor_list[$j]->weekendShifts;
                 }
                 
                 // 計算表格中的假日班數
-                for($j = 0; $j < count($schedule); $j++) {
-                    if($schedule[$j]->holiday == 1 and $schedule[$j]->doctor_id) {
+                for($j = 0; $j < count($this->schedule); $j++) {
+                    if($this->schedule[$j]->holiday == 1 and $this->schedule[$j]->doctor_id) {
                         $class_holiday_amount = $class_holiday_amount + 1; 
                     }
                 }
                 
                 while($run_run_again == true or $switch_switch == 1) {
+//                    echo 'run run again : '.$switch_switch.'<br>';
                     $switch_switch = $switch_switch + 1;
                     $run_run_again = false;
                     
-                    for($j = 0; $j < count($holiday_order_list); $j++) {
-                        holiday_rotary_method_doctor($schedule, $schedule[$holiday_order_list[$j]], $doctor_list);
+                    for($j = 0; $j < count($this->holiday_order_list); $j++) {
+                        $this->holiday_rotary_method_doctor($this->schedule, $this->schedule[$this->holiday_order_list[$j]], $this->doctor_list);
                     }
                     
                     if($doctor_holiday_amount < $class_holiday_amount) {
                         $after_hc = 0;
-                        for($i = 0; $i < count($doctor_list); $i++) {
-                            $after_hc = $after_hc + $doctor_list[$i]->weekendShifts;
+                        for($i = 0; $i < count($this->doctor_list); $i++) {
+                            $after_hc = $after_hc + $this->doctor_list[$i]->weekendShifts;
                             if($after_hc != 0) {
                                 $run_run_again = true;
                                 
@@ -194,92 +200,106 @@ class Schedule implements ShouldQueue
                             }
                         }
                     }else if($doctor_holiday_amount >= $class_holiday_amount) {
-                        for($k = 0; $k < count($holiday_order_list); $k++) {
-                            if($schedule[$holiday_order_list[$k]]->doctor_id == '') {
+                        for($k = 0; $k < count($this->holiday_order_list); $k++) {
+                            if($this->schedule[$this->holiday_order_list[$k]]->doctor_id == '') {
                                 $run_run_again = true;
                                 
                                 // 取代 python deep copy
-                                $schedule = [];
-                                foreach($copy_pre_schedule as $sch) {
-                                    array_push($schedule, $sch);
+                                $this->schedule = [];
+                                foreach($this->copy_pre_schedule as $sch) {
+                                    array_push($this->schedule, $sch);
                                 }
                                 
                                 // 取代 python deep copy
-                                $doctor_list = [];
-                                foreach($copy_pre_doctor_list as $doctor) {
-                                    array_push($doctor_list, $doctor);
+                                $this->doctor_list = [];
+                                foreach($this->copy_pre_doctor_list as $doctor) {
+                                    array_push($this->doctor_list, $doctor);
                                 }
                                 
                                 break;
                             }
                         }
                     }
+                    
+                    // 無窮迴圈很麻煩，方便測試用
+//                    if($switch_switch > 100) {
+//                        break;
+//                    }
                 }
                 
                 // 完成班表(分兩次:第一次較嚴謹、第二次有違反些軟限制)
-                finish_schedule(schedule,order_list,doctor_list); // 2537
+                $this->finish_schedule($this->schedule, $this->order_list, $this->doctor_list); // 2537
                 
                 
-                for($i = 0; $i < count($schedule); $i++) {
-                    if($schedule[$i]->doctor_id == '') {
-                        $run_again = true;
+                for($i = 0; $i < count($this->schedule); $i++) {
+                    if($this->schedule[$i]->doctor_id == '') {
+                        $this->run_again = true;
                     }
                 }
                 
                 $switch = $switch + 1;
                 
                 // 產出來的表放入all_parent_list中
-                if($run_again == false) {
-                    array_push($all_parent_list, $schedule);
+                if($this->run_again == false) {
+//                    echo 'run again is false<br>';
+//                    echo print_r($this->schedule);
+                    // 取代deep copy
+                    $items = [];
+                    foreach($this->schedule as $sch) {
+                        array_push($items, $sch);
+                    }
+                    array_push($this->all_parent_list, $items);
                     break;
                 }
-                
+                echo 'End of while loop <br>';
             }
         }
         
-        for($i = 1; $i < ($generation + 1); $i++) {
+        for($i = 1; $i < ($this->generation + 1); $i++) {
             echo '====================================<br>';
-            echo 'The '.$i.' generation ';
+            echo 'The '.$i.' generation <br>';
             
             // 計算all_parent_list的fitness，使用前必須先重製醫師屬性表
             $all_parent_fitness_list = [];
-            for($j = 0; $j < count($all_parent_list); $j++) {
-                creat_doctor();
+            for($j = 0; $j < count($this->all_parent_list); $j++) {
+                $this->creat_doctor();
                 
                 // 先計算doctor的pre_c
-                count_pre_c($all_parent_list[$j], $doctor_list);
-                array_push($all_parent_fitness_list, count_fit($all_parent_list[$j], $doctor_list)); //python 2568
+                $this->count_pre_c($this->all_parent_list[$j], $this->doctor_list);
+                array_push($this->all_parent_fitness_list, $this->count_fit($this->all_parent_list[$j], $this->doctor_list)); //python 2568
             }
             
             echo "all parent fitness : ";
-            echo print_r($all_parent_fitness_list);
+            echo print_r($this->all_parent_fitness_list).'<br>';
             
             // 計算平均值並存入each_generation_fit_avg中
-            array_push($each_generation_fit_avg, round(array_sum($all_parent_fitness_list) / count($all_parent_fitness_list), 1));
+            array_push($this->each_generation_fit_avg, round(array_sum($this->all_parent_fitness_list) / count($this->all_parent_fitness_list), 1));
             
             // 交配運算子
-            $all_child_list = [];
-            for($j = 0; $j < intval($cross_over_amount / 2); $j++) {
+            $this->all_child_list = [];
+            for($j = 0; $j < intval($this->cross_over_amount / 2); $j++) {
                 // python 2578
-                cross_over($all_parent_list);
+                $this->cross_over($this->all_parent_list);
             }
             
+            echo 'I am here';
+            
             // 突變運算子
-            $mutation_list = [];
+            $this->mutation_list = [];
             for($j = 0; $j < $mutation_amount; $j++) {
                 mutation($all_parent_list, $doctor_list);
             }
             
             // 修正交配後的班表
             for($j = 0; $j < count($all_child_list); $j++) {
-                creat_doctor();
+                $this->creat_doctor();
                 $mutation_list[$j] = revise($mutation_list[$j], $doctor_list); // python 2593
             }
             
             // 計算all_child_list的fitness，使用前必須先重製醫師屬性表
-            $all_child_fitness_list = [];
+            $this->all_child_fitness_list = [];
             for($j = 0; $j < count($all_child_list); $j++) {
-                creat_doctor();
+                $this->creat_doctor();
                 
                 // 先計算doctor的pre_c
                 count_pre_c($all_child_list[$j], $doctor_list);
@@ -292,9 +312,9 @@ class Schedule implements ShouldQueue
             echo print_r($all_child_fitness_list);
             
             // 計算mutation_list的fitness，使用前必須先重製醫師屬性表
-            $mutation_fitness_list = [];
+            $this->mutation_fitness_list = [];
             for($j = 0; $j < count($mutation_list); $j++) {
-                creat_doctor();
+                $this->creat_doctor();
                 
                 // 先計算doctor的pre_c
                 count_pre_c($mutation_list[$j], $doctor_list);
@@ -307,7 +327,7 @@ class Schedule implements ShouldQueue
             echo print_r($mutation_fitness_list);
             
             // 將all_parent_fitness_list、all_child_fitness_list、mutation_fitness_list合併到all_fitness_list
-            $all_fitness_list = [];
+            $this->all_fitness_list = [];
             array_merge($all_fitness_list, $all_parent_fitness_list);
             array_merge($all_fitness_list, $all_child_fitness_list);
             array_merge($all_fitness_list, $mutation_fitness_list);
@@ -347,7 +367,7 @@ class Schedule implements ShouldQueue
             
             // 取代deep copy
             $all_parent_list = [];
-            for($a as $item) {
+            foreach($a as $item) {
                 array_push($all_parent_list, $item);
             }
             
@@ -390,7 +410,7 @@ class Schedule implements ShouldQueue
             // 計算best_chromosome_list中的fitness
             $best_chromosome_fitness_list = [];
             for($j = 0; $j < count($best_chromosome_list); $j++) {
-                creat_doctor();
+                $this->creat_doctor();
                 // 先計算doctor的pre_c
                 count_pre_c($best_chromosome_list[$j], $doctor_list);
                 
@@ -409,7 +429,7 @@ class Schedule implements ShouldQueue
                     array_push($the_best_chromosome, $best_chromosome_list[$j]);
                     
                     // 取代deep copy
-                    array_push($each_best_generation_chromosomem, $best_chromosome_list[$j]);
+                    array_push($each_best_generation_chromosome, $best_chromosome_list[$j]);
                     break;
                 }
             }
@@ -462,7 +482,7 @@ class Schedule implements ShouldQueue
             // 計算best_chromosome_list中的fitness
             $best_chromosome_fitness_list = [];
             for($j = 0; $j < count($best_chromosome_list); $j++) {
-                creat_doctor();
+                $this->creat_doctor();
                 // 先計算doctor的pre_c
                 count_pre_c($best_chromosome_list[$j], $doctor_list);
                 // 取代deep copy
@@ -470,24 +490,28 @@ class Schedule implements ShouldQueue
             }
             
             echo 'all best chromosome fitness : ';
-            echo print_r($best_chromosome_fitness_list);
+            echo print_r($best_chromosome_fitness_list).'<br>';
+            
+//            echo 'chrosome list <br>';
+//            echo print_r($best_chromosome_list);
             
             
             // 取代deep copy
             $all_parent_list = [];
             foreach($best_chromosome_list as $chromosome) {
-                array_push($all_parent_list, $chromosome);
+//                echo 'chromosome : '.$chromosome.'<br>';
+                array_push($this->all_parent_list, $cthis->hromosome);
             }
             
             echo 'The best schedule:';
-            print_schedule($the_best_chromosome[0]); // python 2724
-            creat_doctor();
+            print_schedule($this->the_best_chromosome[0]); // python 2724
+            $this->creat_doctor();
             
             // 先計算doctor的pre_c
-            count_pre_c($the_best_chromosome[0], $doctor_list);
-            $the_best_chromosome = count_fit($the_best_chromosome[0], $doctor_list);
+            count_pre_c($this->the_best_chromosome[0], $this->doctor_list);
+            $this->the_best_chromosome = count_fit($this->the_best_chromosome[0], $this->doctor_list);
             echo 'The best schedule fitness:';
-            echo print_r($the_best_chromosome);
+            echo print_r($this->the_best_chromosome);
             echo '====================================';
         }
         
@@ -496,89 +520,91 @@ class Schedule implements ShouldQueue
 //        echo print_r($each_generation_fit_avg);
         
         // 印出第一代最好的班表
-        echo 'the first generation schedule================================';
-        print_schedule($each_best_generation_chromosome[0]);
-        echo 'the first generation schedule================================';
+        echo 'the first generation schedule================================<br>';
+//        $this->print_schedule($this->each_best_generation_chromosome[0]);
+        echo print_r($this->each_best_generation_chromosome).'<br>';
+        echo 'the first generation schedule================================<br>';
         
         // 印出每一代最好的fitness
         echo 'each_best_generation_chromosome: ';
-        for($x = 0; $x < count($each_best_generation_chromosome); $x++) {
-            creat_doctor();
+        for($x = 0; $x < count($this->each_best_generation_chromosome); $x++) {
+            $this->creat_doctor();
             // 先計算doctor的pre_c
-            count_pre_c($each_best_generation_chromosome[$x], $doctor_list);
-            array_push($each_best_generation_fit, count_fit($each_best_generation_chromosome[$x], $doctor_list));
+            count_pre_c($this->each_best_generation_chromosome[$x], $this->doctor_list);
+            array_push($this->each_best_generation_fit, count_fit($this->each_best_generation_chromosome[$x], $this->doctor_list));
         }
-        echo print_r($each_best_generation_fit);
+        echo print_r($this->each_best_generation_fit).'<br>';
     }
     
     // ==================  排班用  ==================
     
     // 輸入一些參數
     public function userInput($monthInfo) {
+        echo 'user input<br>';
         
         // 設定月份參數
-        $year = $monthInfo->year;
-        $month = $monthInfo->month;
-        $days = $monthInfo->days;
-        $first_day_of_month = $monthInfo->firstDay;
+        $this->year = $monthInfo->year;
+        $this->month = $monthInfo->month;
+        $this->days = $monthInfo->daysOfMonth;
+        $this->first_day_of_month = $monthInfo->firstDay;
         
         // 設定基因演算法參數
-        $chromosome_amount = 50;
-        $generation = 100;
+        $this->chromosome_amount = 10;
+        $this->generation = 1;
         
-        cross_over_amount = intval(intval(chromosome_amount) * cross_over_rate) * 2;
-        mutation_amount = intval(intval(chromosome_amount)*mutation_rate);
+        $this->cross_over_amount = intval(intval($this->chromosome_amount) * $this->cross_over_rate) * 2;
+        $this->mutation_amount = intval(intval($this->chromosome_amount) * $this->mutation_rate);
     }
     
     //  建立班表
     public function build_all_class_table() {
         // 初始化 schedule
-        $schedule = [];
+        $this->schedule = [];
         
         // 計算班表中該天為該月的第幾個星期
         $week_num = 1;
         
         // 建立班表list，填入正確的year 與 month
-        for($x = 0; $x < $days * 19; $x++) {
+        for($x = 0; $x < $this->days * 19; $x++) {
             // 判別為幾號 (date)
             $date = intval($x / 19) + 1;
             
             // 判別為星期幾 (day)
-            $day =  (intval((x % (19*7)) / 19) + intval(first_day_of_month)) % 7;
+            $day =  (intval(($x % (19*7)) / 19) + intval($this->first_day_of_month)) % 7;
             
             // 判別class_id  10 = 白斑種數
             if($x % 19 < 10) {
-                $class_id = intval($x / 19) * 2 - 1 + 2;
+                $this->class_id = intval($x / 19) * 2 - 1 + 2;
             }else {
-                $class_id = intval($x / 19) * 2 + 2;
+                $this->class_id = intval($x / 19) * 2 + 2;
             }
             
             // 判別是否為假日(holiday) 1=假日
             if($day == 6 or $day == 0) {
-                $holiday = 1;
+                $this->holiday = 1;
             }else {
-                $holiday = 0;
+                $this->holiday = 0;
             }
             
             // 判別為何種科別,內科 = medical , 外科 = surgical
-            if((x % 19) == 4 or (x % 19) == 5 or (x % 19) == 8 or (x % 19) == 9 or (x % 19) == 14 or (x % 19) == 15 or (x % 19) == 18) {
-                $section = 'sur';
+            if(($x % 19) == 4 or ($x % 19) == 5 or ($x % 19) == 8 or ($x % 19) == 9 or ($x % 19) == 14 or ($x % 19) == 15 or ($x % 19) == 18) {
+                $this->section = 'sur';
             }else {
-                $section = 'med';
+                $this->section = 'med';
             }
             
             // 判別班別，白班 = day , 晚班 = night
             if($x % 19 < 10) {
-                $class_sort = 'd';
+                $this->class_sort = 'd';
             }else {
-                $class_sort = 'n';
+                $this->class_sort = 'n';
             }
             
             // 判別院區，台北院區 = T , 淡水院區 = D
             if(($x % 19 < 6) or ((9 < $x % 19) and ($x % 19) < 16)) {
-                $hospital_area = 'T';
+                $this->hospital_area = 'T';
             }else {
-                $hospital_area = 'D';
+                $this->hospital_area = 'D';
             }
             
             // 判別該天為該月第幾個星期
@@ -587,15 +613,15 @@ class Schedule implements ShouldQueue
             }
             
             // 是否為預班，預設False
-            $reservation = false;
+            $this->reservation = false;
             
-            array_push($schedule, new ClassTable($year, $month, $date, $day, $class_id, $holiday, $section, $class_sort, $hospital_area, $week_num, $reservation));
+            array_push($this->schedule, new ClassTable($this->year, $this->month, $date, $day, $this->class_id, $this->holiday, $this->section, $this->class_sort, '', $this->hospital_area, [], $week_num, $this->reservation));
         }
     }
     
     // 建立醫生
     public function creat_doctor() {
-        $doctor_list = $this->doctors;
+        $this->doctor_list = $this->doctors;
     }
     
     // 建立預off 班物件
@@ -605,11 +631,11 @@ class Schedule implements ShouldQueue
     
     // 預OFF班(將schedule中的offc屬性加入醫生)
     public function pre_off_class() {
-        for($i = 0; $i < count($off_class_list); $i++) {
-            for($j = 0; $j < count($schedule); $j++) {
-                if($off_class_list[$i]->day == $schedule[$j]->date) {
+        for($i = 0; $i < count($this->off_class_list); $i++) {
+            for($j = 0; $j < count($this->schedule); $j++) {
+                if($this->off_class_list[$i]->day == $this->schedule[$j]->date) {
                     // 如果兩邊的日期影match 則將預off 班的醫生加入
-                    $schedule[$j]->offc = $off_class_list[$i]->doctorsID;
+                    $this->schedule[$j]->offc = $this->off_class_list[$i]->doctorsID;
                 }
             }
         }
@@ -625,9 +651,9 @@ class Schedule implements ShouldQueue
     
     // 將預ON班的醫師排入
     public function pre_on_class() {
-        for($i = 0; $i < count($on_class_list); $i++) {
+        for($i = 0; $i < count($this->on_class_list); $i++) {
             // 台北白班
-            if($on_class_list[$i]->location == 'T' and $on_class_list[$i]->dayOrNight == 'd') {
+            if($this->on_class_list[$i]->location == 'T' and $this->on_class_list[$i]->dayOrNight == 'd') {
                 // 內外科需求為4人:2人，x為內科需求，y為外科需求，X為預班醫師的內科人數，Y為預班醫師的外科人數
                 $x = 4;
                 $y = 2;
@@ -640,19 +666,19 @@ class Schedule implements ShouldQueue
                 $sur_list = [];
                 $all_list = [];
                 
-                for($j = 0; $j < count($doctor_list); $j++) {
-                    for($k = 0; $k < count($on_class_list[i]->doctorsID); $k++) {
+                for($j = 0; $j < count($this->doctor_list); $j++) {
+                    for($k = 0; $k < count($othis->n_class_list[i]->doctorsID); $k++) {
                         // 取出單一預班的單一醫師編號
-                        if($doctor_list[$j]->doctorID == $on_class_list[i]->doctorsID[$k]) {
-                            array_push($doctor_ex_list, $doctor_list[$j]->major);
+                        if($this->doctor_list[$j]->doctorID == $this->on_class_list[i]->doctorsID[$k]) {
+                            array_push($doctor_ex_list, $this->doctor_list[$j]->major);
                             
                             // 將不同專職的的醫師id複製到各別的list中
-                            if($doctor_list[$j]->major == 'med') {
-                                array_push($med_list, $doctor_list[$j]->doctorID);
-                            }else if($doctor_list[$j]->major == 'sur') {
-                                array_push($sur_list, $doctor_list[$j]->doctorID);
-                            }else if($doctor_list[$j]->major == 'all'){
-                                array_push($all_list, $doctor_list[$j]->doctorID);
+                            if($this->doctor_list[$j]->major == 'med') {
+                                array_push($med_list, $this->doctor_list[$j]->doctorID);
+                            }else if($this->doctor_list[$j]->major == 'sur') {
+                                array_push($sur_list, $this->doctor_list[$j]->doctorID);
+                            }else if($this->doctor_list[$j]->major == 'all'){
+                                array_push($all_list, $this->doctor_list[$j]->doctorID);
                             }
                             
                             break;
@@ -812,7 +838,7 @@ class Schedule implements ShouldQueue
                         // 當sur_list中抓到的不是空白醫生
                         if($sur_list[$j] != '') {
                             // 找出doctor_index
-                            for($k = 0; $ < count($doctor_list); $k++) {
+                            for($k = 0; $k < count($doctor_list); $k++) {
                                 if($sur_list[$j] == $doctor_list[$k]->doctorID) {
                                     $doctor_index = $k;
                                 }
@@ -1354,42 +1380,42 @@ class Schedule implements ShouldQueue
         // 淡水夜班先排
         for($i = 0; $i < count($schedule); $i++) {
             if($schedule[$i]->hospital_area == 'D' and $schedule[$i]->class_sort == 'n') {
-                array_push($order_list, $i);
+                array_push($this->order_list, $i);
             }
         }
         
         // 再排台北夜班
         for($i = 0; $i < count($schedule); $i++) {
             if($schedule[$i]->hospital_area == 'T' and $schedule[$i]->class_sort == 'n') {
-                array_push($order_list, $i);
+                array_push($this->order_list, $i);
             }
         }
         
         // 再排淡水假日班
         for($i = 0; $i < count($schedule); $i++) {
             if($schedule[$i]->holiday == 1 and $schedule[$i]->hospital_area == 'D' and $schedule[$i]->class_sort == 'd') {
-                array_push($order_list, $i);
+                array_push($this->order_list, $i);
             }
         }
         
         // 再排台北假日班
         for($i = 0; $i < count($schedule); $i++) {
             if($schedule[$i]->holiday == 1 and $schedule[$i]->hospital_area == 'T' and $schedule[$i]->class_sort == 'd') {
-                array_push($order_list, $i);
+                array_push($this->order_list, $i);
             }
         }
         
         // 再排淡水白班
         for($i = 0; $i < count($schedule); $i++) {
             if($schedule[$i]->holiday == 0 and $schedule[$i]->hospital_area == 'D' and $schedule[$i]->class_sort == 'd') {
-                array_push($order_list, $i);
+                array_push($this->order_list, $i);
             }
         }
         
         // 再排台北白班
         for($i = 0; $i < count($schedule); $i++) {
             if($schedule[$i]->holiday == 0 and $schedule[$i]->hospital_area == 'T' and $schedule[$i]->class_sort == 'd') {
-                array_push($order_list, $i);
+                array_push($this->order_list, $i);
             }
         }
     }
@@ -1398,7 +1424,8 @@ class Schedule implements ShouldQueue
     public function input_holiday_order_list($schedule) {
         for($i = 0; $i < count($schedule); $i++) {
             if($schedule[$i]->holiday == 1) {
-                array_push($holiday_order_list, $i);
+                // 這是假日班
+                array_push($this->holiday_order_list, $i);
             }
         }
     }
@@ -1410,17 +1437,22 @@ class Schedule implements ShouldQueue
         $fit_list = [];
         $check = 0;
         $check2 = 0;
-        $count = 0;
+        $this->count = 0;
+        
+//        echo 'class table<br>';
+//        echo print_r($class_table).'<br>';
         
         while($check == 0) {
-            if($class_table->doctor_id == '') {
+//            echo 'Check : '.$check.'<br>';
+            
+            if($class_table->doctor_id != '') {
                 break;
             }
             
-            if($class_table->doctor_id == '' and $count < 300) {
+            if($class_table->doctor_id == '' and $this->count < 300) {
                 // 班表屬性為以下
                 if($class_table->section == 'sur' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'T') {
-                    $count = $count + 1;
+                    $this->count += 1;
                     
                     // 依此班表屬性去算醫師的適性值，存入fit_list中
                     if($check2 == 0) {
@@ -1430,16 +1462,16 @@ class Schedule implements ShouldQueue
                     }
                     
                     // 檢查此醫師是否有違反規定
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule, $class_table, $doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule, $class_table, $doctor_list[$doc_index]) == true) {
                         // 若都無違反則將醫師填入
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
                     }
                 }else if($class_table->section == 'sur' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'T') {
-                    $count = $count + 1;
+                    $this->count += 1;
                     // 依此班表屬性去算醫師的適性值，存入fit_list中
                     if($check2 == 0) {
                         for($i = 0; $i < count($doctor_list); $i++) {
@@ -1448,35 +1480,35 @@ class Schedule implements ShouldQueue
                     }
                     
                     // 檢查此醫師是否有違反規定
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule, $class_table, $doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule, $class_table, $doctor_list[$doc_index]) == true) {
                         // 若都無違反則將醫師填入
-                        put_doc_in($class_table, $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table, $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
                     }
                 }else if($class_table->section == 'sur' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'D') {
-                    $count = $count + 1;
+                    $this->count += 1;
                     
                     // 依此班表屬性去算醫師的適性值，存入fit_list中
                     if($check2 == 0) {
                         for($i = 0; $i < count($doctor_list); $i++) {
-                            array_push($fit_list, $doctor_list[$i]->$surgicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
                         }
                     }
                     
                     // 檢查此醫師是否有違反規定
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // 若都無違反則將醫師填入
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
                     }
                 }else if($class_table->section == 'sur' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'D') {
-                    $count = $count + 1;
+                    $this->count += 1;
                     
                     // 依此班表屬性去算醫師的適性值，存入fit_list中
                     if($check2 == 0) {
@@ -1486,15 +1518,34 @@ class Schedule implements ShouldQueue
                     }
                     
                     // 檢查此醫師是否有違反規定
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $check = 1;
+                    }else {
+                        $check2 = 1;
+                    }
+                }else if($class_table->section == 'med' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'T') {
+                    $this->count += 1;
+                    
+                    // 依此班表屬性去算醫師的適性值，存入fit_list中
+                    if($check2 == 0) {
+                        for($i = 0; $i < count($doctor_list); $i++) {
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                        }
+                    }
+                    
+                    // 檢查此醫師是否有違反規定
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                        // 若都無違反則將醫師填入
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
                     }
                 }else if($class_table->section == 'med' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'T') {
-                    $count = $count + 1;
+                    $this->count += 1;
                     
                     // 依此班表屬性去算醫師的適性值，存入fit_list中
                     if($check2 == 0) {
@@ -1504,16 +1555,16 @@ class Schedule implements ShouldQueue
                     }
                     
                     // 檢查此醫師是否有違反規定
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // 若都無違反則將醫師填入
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
                     }
                 }else if($class_table->section == 'med' and $class_table->class_sort == 'd' and $class_table->hospital_area == 'D') {
-                    $count = $count + 1;
+                    $this->count += 1;
                     
                     // 依此班表屬性去算醫師的適性值，存入fit_list中
                     if($check2 == 0) {
@@ -1523,16 +1574,16 @@ class Schedule implements ShouldQueue
                     }
                     
                     // 檢查此醫師是否有違反規定
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // 若都無違反則將醫師填入
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
                     }
                 }else if($class_table->section == 'med' and $class_table->class_sort == 'n' and $class_table->hospital_area == 'D') {
-                    $count = $count + 1;
+                    $this->count += 1;
                     
                     // 依此班表屬性去算醫師的適性值，存入fit_list中
                     if($check2 == 0) {
@@ -1542,10 +1593,10 @@ class Schedule implements ShouldQueue
                     }
                     
                     // 檢查此醫師是否有違反規定
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // 若都無違反則將醫師填入
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1575,8 +1626,11 @@ class Schedule implements ShouldQueue
         // boolean值 true為可填入班表，false則不可填入
         $result = true;
         
+//        echo 'week num <br>';
+//        echo print_r($class_table);
+        
         // 當班表的科別與醫生的專職科別不合，則該醫師不能填入
-        if($doctor->major != 'all' and $class_table->section != $doctror->major) {
+        if($doctor->major != 'all' and $class_table->section != $doctor->major) {
             $result = false;
         }
         
@@ -1591,7 +1645,7 @@ class Schedule implements ShouldQueue
         if($result == true and ($class_table->section == 'med' and $doctor->medicalShifts == 0)) {
             $result = false;
         }else if($result == true and ($class_table->section == 'sur' and $doctor->surgicalShifts == 0)) {
-            $result = false
+            $result = false;
         }
         
         // 如果當天預OFF班則不填入
@@ -1650,19 +1704,19 @@ class Schedule implements ShouldQueue
                 }
             }
         }else if($class_table->class_id == $schedule[count($schedule) - 1]->class_id) {
-            for($i = (intval($schedule[count(schedule) - 1]->class_id / 2) - 1) * 19; $i < 19 * intval(($schedule[count($schedule) - 1]->class_id) / 2); $i++) {
+            for($i = (intval($schedule[count($schedule) - 1]->class_id / 2) - 1) * 19; $i < 19 * intval(($schedule[count($schedule) - 1]->class_id) / 2); $i++) {
                 if($schedule[$i]->doctor_id == $doctor->doctorID) {
                     $result = false;
                 }
             }
         }else if($class_table->class_id % 2 == 1 and $class_table->class_id != 1) {
-            for($i = intval($class_table.class_id / 2) * 19 - 9; $i < (intval($class_table.class_id / 2) + 1) * 19; $i++) {
+            for($i = intval($class_table->class_id / 2) * 19 - 9; $i < (intval($class_table->class_id / 2) + 1) * 19; $i++) {
                 if($schedule[$i]->doctor_id == $doctor->doctorID) {
                     $result = false;
                 }
             }
         }else if($class_table->class_id % 2 == 0 and $class_table->class_id != $schedule[count($schedule) - 1]->class_id) {
-            for($i = (intval($class_table.class_id / 2) - 1) * 19; $i < (intval($class_table.class_id / 2) * 19) + 11; $i++) {
+            for($i = (intval($class_table->class_id / 2) - 1) * 19; $i < (intval($class_table->class_id / 2) * 19) + 11; $i++) {
                 if($schedule[$i]->doctor_id == $doctor->doctorID) {
                     $result = false;
                 }
@@ -1675,12 +1729,12 @@ class Schedule implements ShouldQueue
     // 當醫生成功填入班表時所作的處理
     public function put_doc_in($class_table , $doctor) {
         // 在該班表格中放入該醫師
-        $class_table->doctor_id = $doctor-doctorID;
+        $class_table->doctor_id = $doctor->doctorID;
         
         $class_table_property_list = [];
-        array_push(class_table_property_list, $class_table->section);
-        array_push(class_table_property_list, $class_table->class_sort);
-        array_push(class_table_property_list, $class_table->hospital_area);
+        array_push($class_table_property_list, $class_table->section);
+        array_push($class_table_property_list, $class_table->class_sort);
+        array_push($class_table_property_list, $class_table->hospital_area);
         
         // 醫生假日班數-1
         $doctor->weekendShifts -= $class_table->holiday;
@@ -1713,11 +1767,11 @@ class Schedule implements ShouldQueue
     // 完成這張表
     public function finish_schedule($schedule, $order_list, $doctor_list) {
         for($i = 0; $i < count($schedule); $i++) {
-            rotary_method_doctor($schedule, $schedule[$order_list[$i]], $doctor_list);
+            $this->rotary_method_doctor($schedule, $schedule[$order_list[$i]], $doctor_list);
         }
         
         for($i = 0; $i < count($schedule); $i++) {
-            re_rotary_method_doctor($schedule, $schedule[$order_list[$i]], $doctor_list);
+            $this->re_rotary_method_doctor($schedule, $schedule[$order_list[$i]], $doctor_list);
         }
     }
     
@@ -1746,11 +1800,11 @@ class Schedule implements ShouldQueue
                     }
                     
                     // 檢查此醫師是否有違反規定
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // 若都無違反則將醫師填入
                         // print('01');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1764,10 +1818,10 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('02');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1781,10 +1835,10 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('03');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1798,10 +1852,10 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
                         // print('04');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1815,10 +1869,10 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
                         // print('05');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1832,10 +1886,10 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
                         // print('06');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1849,10 +1903,10 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
                         // print('07');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1866,10 +1920,10 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
                         // print('08');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1879,14 +1933,14 @@ class Schedule implements ShouldQueue
                     
                     if($check2 == 0) {
                         for($i = 0; $i < count($doctor_list); $i++) {
-                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
                         // print('09');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1896,14 +1950,14 @@ class Schedule implements ShouldQueue
                     
                     if($check2 == 0) {
                         for($i = 0; $i < count($doctor_list); $i++) {
-                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[i]->nightShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->taipeiShiftsLimit);
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
                         // print('10');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1913,14 +1967,14 @@ class Schedule implements ShouldQueue
                     
                     if($check2 == 0) {
                         for($i = 0; $i < count($doctor_list); $i++) {
-                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[i]->dayShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->tamsuiShiftsLimit);
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
                         // print('11');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1930,14 +1984,14 @@ class Schedule implements ShouldQueue
                     
                     if($check2 == 0) {
                         for($i = 0; $i < count($doctor_list); $i++) {
-                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[i]->nightShifts + $doctor_list[$i]->taipeiShiftsLimit);
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->taipeiShiftsLimit);
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
                         // print('12');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1947,14 +2001,14 @@ class Schedule implements ShouldQueue
                     
                     if($check2 == 0) {
                         for($i = 0; $i < count($doctor_list); $i++) {
-                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[i]->dayShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->tamsuiShiftsLimit);
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
                         // print('13');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1964,14 +2018,14 @@ class Schedule implements ShouldQueue
                     
                     if($check2 == 0) {
                         for($i = 0; $i < count($doctor_list); $i++) {
-                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                            array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
                         // print('14');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1980,15 +2034,19 @@ class Schedule implements ShouldQueue
                     $count = $count + 1;
                     
                     if($check2 == 0) {
+//                        echo 'check 2 is 0<br>';
                         for($i = 0; $i < count($doctor_list); $i++) {
-                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
+                            array_push($fit_list, $doctor_list[$i]->medicalShifts + $doctor_list[$i]->nightShifts + $doctor_list[$i]->tamsuiShiftsLimit);
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+//                    echo '$doc_index : '.$doc_index.'<br>';
+//                    echo 'fit list : <br>';
+//                    echo print_r($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
                         // print('15');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -1996,15 +2054,16 @@ class Schedule implements ShouldQueue
                 }else {
                     $count = $count + 1;
                     if($check2 == 0) {
+                        echo 'else<br>';
                         for($i = 0; $i < count($doctor_list); $i++) {
                             array_push($fit_list, $doctor_list[$i]->surgicalShifts + $doctor_list[$i]->dayShifts + $doctor_list[$i]->taipeiShiftsLimit);
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table , $doctor_list[$doc_index]) == true) {
                         // print('16');
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2042,12 +2101,12 @@ class Schedule implements ShouldQueue
                     }
                     
                     // 檢查此醫師是否有違反規定
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // 若都無違反則將醫師填入
                         // print('01');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2061,11 +2120,11 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('02');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2079,11 +2138,11 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('03');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2097,11 +2156,11 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('04');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2115,11 +2174,11 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('05');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2133,11 +2192,11 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('06');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2151,11 +2210,11 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('07');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2169,11 +2228,11 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('08');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2187,11 +2246,11 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('09');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2205,11 +2264,11 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('10');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2223,11 +2282,11 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('11');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2241,11 +2300,11 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('12');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2259,11 +2318,11 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('13');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2277,11 +2336,11 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('14');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2295,11 +2354,11 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('15');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2313,11 +2372,11 @@ class Schedule implements ShouldQueue
                         }
                     }
                     
-                    $doc_index = rotary_method($fit_list);
-                    if(re_check_doc($class_table, $doctor_list[$doc_index]) == true and check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
+                    $doc_index = $this->rotary_method($fit_list);
+                    if($this->re_check_doc($class_table, $doctor_list[$doc_index]) == true and $this->check_doc_class($schedule ,$class_table ,$doctor_list[$doc_index]) == true) {
                         // print('16');
                         
-                        put_doc_in($class_table , $doctor_list[$doc_index]);
+                        $this->put_doc_in($class_table , $doctor_list[$doc_index]);
                         $check = 1;
                     }else {
                         $check2 = 1;
@@ -2343,7 +2402,7 @@ class Schedule implements ShouldQueue
         }
         
         // 當班表院區與醫師職登院區不同時，需先檢查醫師是否還有非職登院區的班可上，再檢查同一周是否有支援超過兩班
-        if($result == true and $class_table->hospital_area != doctor.location) {
+        if($result == true and $class_table->hospital_area != $doctor->location) {
             if($class_table->hospital_area =='T' and $doctor->taipeiShiftsLimit == 0) {
                 $result = false;
             }else if($class_table->hospital_area =='D' and $doctor->tamsuiShiftsLimit == 0) {
@@ -2363,7 +2422,7 @@ class Schedule implements ShouldQueue
         $same = false;
         
         // 有預ON班，卻沒排到的醫生，該醫生pre_c加1
-        for($i = 0; $i < count($on_class_list); $i++) {
+        for($i = 0; $i < count($this->on_class_list); $i++) {
             // 台北白斑時
             if($on_class_list[$i]->location == 'T' and $on_class_list[$i]->dayOrNight = 'd') {
                 // 找schedule的index
@@ -2468,7 +2527,7 @@ class Schedule implements ShouldQueue
     public function count_fit($schedule, $doctor_list) {
         // 根據一張完整的排班表，去計算醫生剩下的屬性值
         for($i = 0; $i < count($schedule); $i++) {
-            fin_count_doctor_attribute($schedule, $schedule[$i], $doctor_list); // python 2402
+            $this->fin_count_doctor_attribute($schedule, $schedule[$i], $doctor_list); // python 2402
         }
         
         // 計算fitness值
@@ -2555,10 +2614,17 @@ class Schedule implements ShouldQueue
     
     // 交配運算子
     public function cross_over($all_parent_list) {
-        $crossover_sort = rand(0, 2);
+        echo '$all_parent_list<br>';
+        echo 'Length : '.count($all_parent_list).'<br>';
+        echo print_r($all_parent_list).'<br>';
+        
+        $crossover_sort = 0;
+//        $crossover_sort = rand(0, 2);
         
         // 單日雙點交配
         if($crossover_sort == 0) {
+//            echo '單日雙點交配';
+            
             // 隨機選兩張表
             $random_parent_index1 = 0;
             $random_parent_index2 = 0;
@@ -2566,37 +2632,38 @@ class Schedule implements ShouldQueue
             
             // 兩張表不能是同一張且假日要跟假日換，平日要跟平日換
             while($random_parent_index1 == $random_parent_index2) {
-                $random_parent_index1 = rand(0, count(all_parent_list) - 1);
-                $random_parent_index2 = rand(0, count(all_parent_list) - 1);
-                $random_day = rand(0, intval($days) - 1);
+                $random_parent_index1 = rand(0, count($all_parent_list) - 1);
+                $random_parent_index2 = rand(0, count($all_parent_list) - 1);
+                $random_day = rand(0, intval($this->days) - 1);
             }
             
-            $copy_parent_list = [];
+            // 取代 deep copy
+            $this->copy_parent_list = [];
             foreach($all_parent_list as $parent) {
-                array_push($copy_parent_list, $parent);
+                array_push($this->copy_parent_list, $parent);
             }
             
             // =================================下面這一段問題很多=================================
             for($i = $random_day * 19; $i < $random_day * 19 + 19; $i++) {
                 // 找到預班的或是假日班則不換則不換 python 2076
-                if($copy_parent_list[$random_parent_index1][$i]->reservation == false and $copy_parent_list[$random_parent_index2][$i]->reservation == false and $copy_parent_list[$random_parent_index1][$i]->holiday == 0 and 
-                   $copy_parent_list[$random_parent_index2][$i]->holiday == 0) {
+                if($this->copy_parent_list[$random_parent_index1][$i]->reservation == false and $this->copy_parent_list[$random_parent_index2][$i]->reservation == false and $this->copy_parent_list[$random_parent_index1][$i]->holiday == 0 and 
+                   $this->copy_parent_list[$random_parent_index2][$i]->holiday == 0) {
                     // 取代deep copy
                     $c = [];
-                    foreach($copy_parent_list[$random_parent_index1][$i] as $parent) {
+                    foreach($this->copy_parent_list[$random_parent_index1][$i] as $parent) {
                         array_push($c, $parent);
                     }
                     
                     // 取代deep copy
-                    $copy_parent_list[$random_parent_index1][$i] = [];
-                    foreach($copy_parent_list[$random_parent_index2][$i] as $item) {
-                        array_push($copy_parent_list[$random_parent_index1][$i], $item);
+                    $this->copy_parent_list[$random_parent_index1][$i] = [];
+                    foreach($this->copy_parent_list[$random_parent_index2][$i] as $item) {
+                        array_push($this->copy_parent_list[$random_parent_index1][$i], $item);
                     }
                     
                     // 取代deep copy
-                    $copy_parent_list[$random_parent_index2][$i] = [];
+                    $this->copy_parent_list[$random_parent_index2][$i] = [];
                     foreach($c as $item) {
-                        array_push($copy_parent_list[$random_parent_index2][$i], $item);
+                        array_push($this->copy_parent_list[$random_parent_index2][$i], $item);
                     }
                 }
             }
@@ -2604,17 +2671,17 @@ class Schedule implements ShouldQueue
             // 把交配完的子代放入all_child_list
             // 取代deep copy
             $items = [];
-            foreach($copy_parent_list[$random_parent_index1] as $item) {
+            foreach($this->copy_parent_list[$random_parent_index1] as $item) {
                 array_push($items, $item);
             }
-            array_push($all_child_list, $items);
+            array_push($this->all_child_list, $items);
             
             // 取代deep copy
             $items = [];
-            foreach($copy_parent_list[$random_parent_index2] as $item) {
+            foreach($this->copy_parent_list[$random_parent_index2] as $item) {
                 array_push($items, $item);
             }
-            array_push($all_child_list, $items);
+            array_push($this->all_child_list, $items);
             
         }else if($crossover_sort == 1) {
             // 多日雙點
@@ -2631,8 +2698,8 @@ class Schedule implements ShouldQueue
             while($random_parent_index1 == $random_parent_index2 or $random_day1 == $random_day2) {
                 $random_parent_index1 = rand(0, count($all_parent_list) - 1);
                 $random_parent_index2 = rand(0, count($all_parent_list) - 1);
-                $random_day1 = rand(0, intval($days) - 1);
-                $random_day2 = rand(0, intval($days) - 1);
+                $random_day1 = rand(0, intval($this->days) - 1);
+                $random_day2 = rand(0, intval($this->days) - 1);
                 
                 // 當random_day1比random_day2大時，互相交換
                 if($random_day1 > $random_day2) {
@@ -2644,27 +2711,27 @@ class Schedule implements ShouldQueue
             
             // 取代deep copy
             foreach($all_parent_list as $parent) {
-                array_push($copy_parent_list, $parent);
+                array_push($this->copy_parent_list, $parent);
             }
             
             for($i = $random_day1 * 19; $i < $random_day2 * 19 + 19; $i++) {
-                if($copy_parent_list[$random_parent_index1][$i]->reservation == false and $copy_parent_list[$random_parent_index2][$i]->reservation == false and $copy_parent_list[$random_parent_index1][$i]->holiday == 0 and 
-                   $copy_parent_list[$random_parent_index2][$i]->holiday == 0) {
+                if($this->copy_parent_list[$random_parent_index1][$i]->reservation == false and $this->copy_parent_list[$random_parent_index2][$i]->reservation == false and $this->copy_parent_list[$random_parent_index1][$i]->holiday == 0 and 
+                   $this->copy_parent_list[$random_parent_index2][$i]->holiday == 0) {
                     $c = [];
-                    foreach($copy_parent_list[$random_parent_index1][$i] as $parent) {
+                    foreach($this->copy_parent_list[$random_parent_index1][$i] as $parent) {
                         array_push($c, $parent);
                     }
                     
                     // 取代deep copy
-                    $copy_parent_list[$random_parent_index1][$i] = [];
-                    foreach($copy_parent_list[$random_parent_index2][$i] as $item) {
-                        array_push($copy_parent_list[$random_parent_index1][$i], $item);
+                    $this->copy_parent_list[$random_parent_index1][$i] = [];
+                    foreach($this->copy_parent_list[$random_parent_index2][$i] as $item) {
+                        array_push($this->copy_parent_list[$random_parent_index1][$i], $item);
                     }
                     
                     // 取代deep copy
-                    $copy_parent_list[$random_parent_index2][$i] = [];
+                    $this->copy_parent_list[$random_parent_index2][$i] = [];
                     foreach($c as $item) {
-                        array_push($copy_parent_list[$random_parent_index2][$i], $item);
+                        array_push($this->copy_parent_list[$random_parent_index2][$i], $item);
                     }
                 }
             }
@@ -2672,13 +2739,13 @@ class Schedule implements ShouldQueue
             // 把交配完的子代放入all_child_list
             // 取代deep copy
             $items = [];
-            foreach($copy_parent_list[$random_parent_index1] as $item) {
+            foreach($this->copy_parent_list[$random_parent_index1] as $item) {
                 array_push($items, $item);
             }
             array_push($all_child_list, $items);
             
             $items = [];
-            foreach($copy_parent_list[$random_parent_index2] as $item) {
+            foreach($this->copy_parent_list[$random_parent_index2] as $item) {
                 array_push($items, $item);
             }
             array_push($all_child_list, $items);
@@ -2686,7 +2753,7 @@ class Schedule implements ShouldQueue
         }else {
             // 建立mask，裡面是0和1，0不交換，1則交換
             $mask = [];
-            for($i = 0; $i < intval($days); $i++) {
+            for($i = 0; $i < intval($this->days); $i++) {
                 $random_num = rand(0, 1);
                 array_push($mask, $random_num);
             }
@@ -2701,30 +2768,30 @@ class Schedule implements ShouldQueue
             }
             
             // 取代deep copy
-            $copy_parent_list = [];
+            $this->copy_parent_list = [];
             foreach($all_parent_list as $parent) {
-                array_push($copy_parent_list, $parent);
+                array_push($this->copy_parent_list, $parent);
             }
             
             for($i = 0; $i < count($mask); $i++) {
                 for($j = $i * 19; $j < $i * 19 + 19; $j++) {
-                    if($copy_parent_list[$random_parent_index1][$j]->reservation == false and $copy_parent_list[$random_parent_index2][$j]->reservation == false and $mask[$i] == 1 and $copy_parent_list[$random_parent_index1][$j]->holiday == 0 and $copy_parent_list[$random_parent_index2][$j]->holiday == 0) {
+                    if($this->copy_parent_list[$random_parent_index1][$j]->reservation == false and $this->copy_parent_list[$random_parent_index2][$j]->reservation == false and $mask[$i] == 1 and $this->copy_parent_list[$random_parent_index1][$j]->holiday == 0 and $this->copy_parent_list[$random_parent_index2][$j]->holiday == 0) {
                         // 取代deep copy
                         $c = [];
-                        foreach($copy_parent_list[$random_parent_index1][$j] as $item) {
+                        foreach($this->copy_parent_list[$random_parent_index1][$j] as $item) {
                             array_push($c, $item);
                         }
                         
                         // 取代deep copy
-                        $copy_parent_list[$random_parent_index1][$j] = [];
-                        foreach($copy_parent_list[$random_parent_index2][$j] as $item) {
-                            array_push($copy_parent_list[$random_parent_index1][$j], $item);
+                        $this->copy_parent_list[$random_parent_index1][$j] = [];
+                        foreach($this->copy_parent_list[$random_parent_index2][$j] as $item) {
+                            array_push($this->copy_parent_list[$random_parent_index1][$j], $item);
                         }
                         
                         // 取代deep copy
-                        $copy_parent_list[$random_parent_index2][$j] = [];
+                        $this->copy_parent_list[$random_parent_index2][$j] = [];
                         foreach($c as $item) {
-                            array_push($copy_parent_list[$random_parent_index2][$j], $item);
+                            array_push($this->copy_parent_list[$random_parent_index2][$j], $item);
                         }
                     }
                 }
@@ -2733,14 +2800,14 @@ class Schedule implements ShouldQueue
             // 把交配完的子代放入all_child_list
             // 取代deep copy
             $items = [];
-            foreach($copy_parent_list[$random_parent_index1] as $item) {
+            foreach($this->copy_parent_list[$random_parent_index1] as $item) {
                 array_push($items, $item);
             }
             array_push($all_child_list, $items);
             
             // 取代deep copy
             $items = [];
-            foreach($copy_parent_list[$random_parent_index2] as $item) {
+            foreach($this->copy_parent_list[$random_parent_index2] as $item) {
                 array_push($items, $item);
             }
             array_push($all_child_list, $items);
@@ -2866,7 +2933,7 @@ class Schedule implements ShouldQueue
         $result = true;
         
         // 當班表的科別與醫生的專職科別不合，則該醫師不能填入
-        if($doctor->major != 'all' and $class_table->section != doctor->major) {
+        if($doctor->major != 'all' and $class_table->section != $doctor->major) {
             $result = false;
         }
         
@@ -2906,16 +2973,16 @@ class Schedule implements ShouldQueue
             }
             
             // 3
-            if($class_table->class_sort == 'd' and $doctor_list[$doctor_index]->dayShifts == 0) {
+            if($class_table->class_sort == 'd' and $this->doctor_list[$doctor_index]->dayShifts == 0) {
                 $result = false;
-            }else if($class_table->class_sort == 'n' and $doctor_list[$doctor_index]->nightShifts == 0) {
+            }else if($class_table->class_sort == 'n' and $this->doctor_list[$doctor_index]->nightShifts == 0) {
                 $result = false;
             }
             
             // 4
-            if($doctor_list[$doctor_index]->location == 'T' and $class_table->hospital_area == 'D' and $doctor_list[$doctor_index]->tamsuiShiftsLimit > 0 and $doctor_list[$doctor_index]->otherLocationShifts[$class_table->week_num - 1] == 2) {
+            if($this->doctor_list[$doctor_index]->location == 'T' and $class_table->hospital_area == 'D' and $this->doctor_list[$doctor_index]->tamsuiShiftsLimit > 0 and $this->doctor_list[$doctor_index]->otherLocationShifts[$class_table->week_num - 1] == 2) {
                 $result = false;
-            }else if($doctor_list[$doctor_index]->location == 'D' and $class_table->hospital_area == 'T' and $doctor_list[$doctor_index]->taipeiShiftsLimit > 0 and $doctor_list[$doctor_index]->otherLocationShifts[$class_table->week_num - 1] == 2) {
+            }else if($this->doctor_list[$doctor_index]->location == 'D' and $class_table->hospital_area == 'T' and $this->doctor_list[$doctor_index]->taipeiShiftsLimit > 0 and $this->doctor_list[$doctor_index]->otherLocationShifts[$class_table->week_num - 1] == 2) {
                 $result = false;
             }
             
@@ -2926,10 +2993,10 @@ class Schedule implements ShouldQueue
                 array_push($class_table_property_list, $class_table->hospital_area);
                 
                 // 當天為假日班時，醫生假日班數-1
-                $doctor_list[$doctor_index]->weekendShifts = $doctor_list[$doctor_index]->weekendShifts - $class_table->holiday;
+                $this->doctor_list[$doctor_index]->weekendShifts = $this->doctor_list[$doctor_index]->weekendShifts - $class_table->holiday;
                 
                 // 醫生總班數-1
-                $doctor_list[$doctor_index]->totalShifts = $doctor_list[$doctor_index]->totalShifts - 1;
+                $this->doctor_list[$doctor_index]->totalShifts = $this->doctor_list[$doctor_index]->totalShifts - 1;
                 
                 // 根據表格屬性，將醫生其值扣除
                 for($i = 0; $i < count($class_table_property_list); $i++) {
@@ -2950,7 +3017,7 @@ class Schedule implements ShouldQueue
                 
                 // 當在非職登院區上班時，再當週非職登院區班數+1
                 if($class_table->hospital_area != $doctor_list[$doctor_index]->location) {
-                    $doctor_list[$doctor_index]->otherLocationShifts[$class_table->week_num - 1] += 1;
+                    $this->doctor_list[$doctor_index]->otherLocationShifts[$class_table->week_num - 1] += 1;
                 }
             }else {
                 $class_table->doctor_id = '';
@@ -2961,7 +3028,7 @@ class Schedule implements ShouldQueue
     public function print_schedule($schedule) {
         echo 'print_schedule=================================';
         for($i = 0; $i < 19; $i++) {
-            for($j = 0; $j < intval($days); $j++) {
+            for($j = 0; $j < intval($this->days); $j++) {
                 echo $schedule[$i + $j * 19]->doctor_id.' ';
             }
             echo '<br.';

@@ -274,6 +274,10 @@ Route::get('sendGetRequest', 'AlgorithmController@sendGetRequest');
 //演算法輸入格式測試
 Route::get('sendRequest', 'AlgorithmController@sendRequest');
 
+Route::get('testScheduleJobs', 'AlgorithmController@testScheduleJobs');
+
+Route::get('testSyntax', 'AlgorithmController@testSyntax');
+
 //Route::get('test','TestController@shiftFirstEditionAddShifts');
 
 Route::get('getAAAA', 'TestController@getAAAA');
