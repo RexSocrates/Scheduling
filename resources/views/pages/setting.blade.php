@@ -128,15 +128,20 @@
                 location.reload();
             });
         }
-
-
+        
+        var dt = new Date();
+        var year = dt.getFullYear();
+        var month = dt.getMonth() + 1;
+        var curMonthDays = new Date(year,month,0).getDate();
+        
+        //計算每年每月最大的日數是多少
         noUiSlider.create(slider, {
             start: [ start, end ],
             step: 1,
             connect: true,
             range: {
                 'min': 1,
-                'max': 31
+                'max': curMonthDays,
             }
         });
         
