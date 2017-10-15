@@ -154,7 +154,7 @@ class ScheduleController extends Controller
             $singleData = [
                 'date' => $data->date,
                 'endDate' => $data->endDate,
-                'categoryName' => $scheduleCategory->findScheduleName($data->schCategorySerial)
+                'categoryName' => $scheduleCategory->findScheduleName($data->schCategorySerial)->schCategoryName
             ];
             
             array_push($displayData, $singleData);
