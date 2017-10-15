@@ -609,6 +609,30 @@ class Schedule extends Model
 
     }
 
+     public function getDateNotInDateNotNull($doctorID, $major, $yearMonth){
+        $query = DB::table("Schedule")
+                ->select('date')
+                ->where('date', 'like',$yearMonth.'%')
+                ->where('doctorID',$doctorID)
+                ->whereNotNull('doctorID');
+
+        $query2 = DB::table("Doctor")
+                ->select('doctorID')
+                ->whereIn('major',[$major,"All"]);
+
+        $info = DB::table("Schedule")
+                ->whereIn('doctorID',($query2))
+                ->where('date', 'like',$yearMonth.'%')
+                ->whereNotIn('date',($query))
+                ->whereNotNull('doctorID')
+                ->orderBy('date')
+                ->distinct()->get(['date']);
+
+
+        return $info;          
+
+    }
+
     public function getDoctorInDate($date1, $date2, $major){
         $schCategorySerial=[];
         if($major == "Medical"){
@@ -635,6 +659,32 @@ class Schedule extends Model
                 ->where('date', 'like',$date2)
                 
                 // ->whereNotIn('date',["2017-11-01"])
+                ->get();
+
+
+        return $info;          
+
+    }
+
+     public function getDoctorDateNotNull($date1, $date2, $major){
+        $schCategorySerial=[];
+        if($major == "Medical"){
+             $schCategorySerial=[1,2,3,4,5,6,9,10,13,14,15,16,19,20];
+        }
+        else if($major == "Surgical"){
+             $schCategorySerial=[1,2,3,4,7,8,11,12,13,14,17,18,21];
+        }
+        else{
+             $schCategorySerial=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
+        }
+
+        $query = DB::table("Doctor")
+                ->select('doctorID')
+                ->whereIn('major',[$major,"All"]);
+    
+        $info = DB::table("Schedule")
+                ->whereIn('doctorID',$query)
+                ->where('date', 'like',$date2)
                 ->get();
 
 

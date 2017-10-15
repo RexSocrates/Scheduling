@@ -83,7 +83,7 @@ class ScheduleController extends Controller
 
     //  正式班表  查詢醫生
     public function schedulerPersonal(Request $request){
-         $data = $request->all();
+        $data = $request->all();
         $schedule = new Schedule();
         $user = new User();
 
@@ -177,7 +177,7 @@ class ScheduleController extends Controller
         $user = new User();
         $scheduleData = $schedule->getScheduleByDoctorID($user->getCurrentUserID());
         foreach ($scheduleData as $data) {
-            $scheduleName = $scheduleCategory->findScheduleName($data->schCategorySerial);
+            $scheduleName = $scheduleCategory->findScheduleName($data->schCategorySerial)->schCategoryName;
             $data->schCategorySerial =  $scheduleName;
         }
         return view('pages.schedule', array('schedule' => $scheduleData));
@@ -716,6 +716,49 @@ class ScheduleController extends Controller
         return $array;
     }
      
+
+    public function  getDoctorScheduleInfoByID(Request $request){
+        $data = $request->all();
+
+        $schedule = new Schedule();
+
+        $scheduleCategory = new ScheduleCategory();
+       
+        $user = new User();
+
+        $date1 = $schedule->getScheduleDataByID($data['scheduleID_1'])->date;
+        //$date2 = $schedule->getScheduleDataByID($data['scheduleID_2'])->date;
+        $date2= $data['scheduleID_2'];
+
+        $schCategorySerial=$schedule->getScheduleDataByID($data['scheduleID_1'])->schCategorySerial;
+
+        $major = $scheduleCategory->getSchCategoryMajor($schCategorySerial);
+        
+        $scheduleRecord = $schedule->getDoctorDateNotNull($date1,$date2,$major);
+
+        $array = array();
+
+        
+        foreach ($scheduleRecord as $schedule) {
+
+            $scheduleID = $schedule->scheduleID;
+            if($schedule->doctorID == null){
+                $name="";
+            }
+            else{
+                $name = $user->getDoctorInfoByID($schedule->doctorID)->name;
+            }
+
+            $category = $scheduleCategory->findScheduleName($schedule->schCategorySerial)->schCategoryName;
+            $date = $schedule->date;
+            
+            array_push($array, array($scheduleID,$name,$category,$date));
+        }
+
+        return $array;
+
+
+    }
     public function getDoctorInfoByScheduleIDWhenExchange(Request $request){
       $data = $request->all();
       $schedule = new Schedule();

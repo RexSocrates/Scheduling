@@ -620,12 +620,28 @@ class ShiftRecordsController extends Controller
 
         $allRejectShiftData = $shiftRecordObj->getRejectShiftsRecordsInformation(true);  // 列出與自己相關的被拒絕換班資訊
 
+        $currentMonth = date('Y-m-d');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+
         $currentDoctor = $userObj->getCurrentUserInfo();
 
         $currentDoctorSchedule=$sheduleObj->getNextMonthShiftsByID($currentDoctor->doctorID); //查看目前登入的醫生班表資訊
 
-         //選擇換班醫生
-        $doctorName = $userObj->getAtWorkDoctors();
+        $scheduleArr=[];
+        foreach ($currentDoctorSchedule as $schedule) {
+
+                $scheduleID = $schedule->scheduleID;
+                $date = $schedule->date;
+                $sch=$schCateObj->findScheduleName($schedule->schCategorySerial)->schCategoryName;
+                array_push($scheduleArr,array($scheduleID,$date,$sch));
+        }
+
+        $date = $sheduleObj->getDateNotInDateNotNull($currentDoctor->doctorID,$currentDoctor->major,$nextMonth);
+
+        $array = array();
+
+        //  //選擇換班醫生
+        // $doctorName = $userObj->getAtWorkDoctors();
 
         // foreach($confirmedRecords as $record) {
         //     $recordDic = [
@@ -727,8 +743,8 @@ class ShiftRecordsController extends Controller
             'shiftRecords'=>$allShiftData,
             'shiftDataByDoctorID'=>$shiftDataByDoctorID,
             'currentDoctor'=>$currentDoctor,
-            'currentDoctorSchedule'=>$currentDoctorSchedule,
-            'doctorName'=>$doctorName,
+            'currentDoctorSchedule'=>$scheduleArr,
+            'date'=>$date,
             'allRejectShiftData'=>$allRejectShiftData,
             'remarks'=>$displayRemarksArr,
             'monthList' => $monthList,

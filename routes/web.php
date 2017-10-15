@@ -195,6 +195,10 @@ Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts
 
 //Route::post('getSiftInfo',"ShiftRecordsController@shiftFirstEditionShowShifts");
 
+
+//調整班表->初版班表 彈出視窗醫生2資訊
+Route::get('getDoctor','ScheduleController@getDoctorScheduleInfoByID');
+
 //調整班表->初版班表 彈出視窗醫生2資訊
 Route::get('changeDoctor','ScheduleController@getDoctorNameFirstScheduleInfoByID');
 

@@ -952,10 +952,15 @@ class TestController extends Controller
 
    public function announceSchedule(){
  
+            $schObj = new Schedule();
+       $currentMonth = date('Y-m-d');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
 
-       $date = "2017-11-01";
-       $yearMonth = date('Y-m',strtotime($date));
-       echo $yearMonth;
+        $date = $schObj->getDateNotInDate(3,$currentMonth,$nextMonth);
+        foreach ($date as $d) {
+            echo $d->date;
+        }
+       
         // // $user = new User();
 
        
