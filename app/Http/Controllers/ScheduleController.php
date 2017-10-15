@@ -521,7 +521,10 @@ class ScheduleController extends Controller
     public function updateSchedule(Request $request){
         $scheduleCategory = new ScheduleCategory();
         $schedule = new Schedule();
+        $user = new User();
+
         $data = $request->all();
+
         $id = $data['id']; //schedule ID
         $sessionID = $data['newSessionID'];
         $newDate = $data['newDate'];
@@ -529,7 +532,11 @@ class ScheduleController extends Controller
 
         $sch=$schedule->getScheduleDataByDateAndSessionIDWhenDoctorIDisNull($date,$sessionID);
 
-        $doctorID = $schedule->getScheduleDataByID($id)->doctorID;        
+        $doctorID = $schedule->getScheduleDataByID($id)->doctorID;
+        $doctorName = $user->getDoctorInfoByID($doctorID)->name;  
+        $oldDate = $schedule->getScheduleDataByID($id)->date;
+        $oldSession =$scheduleCategory->findScheduleName($schedule->getScheduleDataByID($id)->schCategorySerial)->schCategoryName;
+        $session = $scheduleCategory->findScheduleName($sessionID)->schCategoryName;
         
         $location = $scheduleCategory->getSchCategoryInfo($sessionID);
         $schInfo = [
@@ -546,8 +553,10 @@ class ScheduleController extends Controller
         if($weekDay == 6 || $weekDay == 7){
           $schInfo['isWeekday'] = false;
         }
- 
         
+        
+
+         $array = array($doctorName,$oldDate,$oldSession,$date,$session);
         // if($sch!=""){ //有查到資料
         //     // $newScheduleID=$schedule->addSchedule($schInfo);
         //     // $schedule->updateScheduleToNullByID($sch->doctorID);
@@ -568,6 +577,8 @@ class ScheduleController extends Controller
 
         $job = new SendShiftExchangeMail($doctorID,$id,$newScheduleID);
         dispatch($job);
+
+        return $array;
 
 
     }
@@ -771,14 +782,16 @@ class ScheduleController extends Controller
 
         if($doctor->doctorID == null){
          $name = "";
-      }
-      else{
+        }
+
+        else{
         $name = $user->getDoctorInfoByID($doctor->doctorID)->name;
-     }
+        }
+
       $date = $doctor->date;
 
       
-        $name2 = $user->getDoctorInfoByID($doctor2->doctorID)->name;
+      $name2 = $user->getDoctorInfoByID($doctor2->doctorID)->name;
     
 
       $date2 = $doctor2->date;

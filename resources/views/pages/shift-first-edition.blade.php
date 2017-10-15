@@ -1359,6 +1359,10 @@
                     refresh();
                 }
 
+                else if(id==array[0]['scheduleID']){
+                    console.log("111");
+                }
+
                 else if(array[0]['date'] == array[0]['dateInSchedule'] && array[0]['scheduleID']!=0 ){
                     checkDocStatus(id,array[0]['scheduleID']);
                 }
@@ -1427,7 +1431,7 @@
                     
                     
                 }
-
+                
                 
                 else if(array[0]['scheduleID']!=0){
                     document.getElementById("scheduleID_2").value=array[0]['scheduleID'];
@@ -1454,7 +1458,8 @@
                 }
                 // console.log(id);
                 // console.log(array[0]['scheduleID']);
-                console.log("count"+array[0]['countNight']);
+                console.log("id"+id);
+                console.log("sc2"+array[0]['scheduleID'])
 
                
             });
@@ -1468,9 +1473,8 @@
                 newDate: date,
                 newSessionID: classification
                 
-            }, function(id){
-                console.log(id);
-                dhtmlx.message({ type:"error", text:"修改成功" });
+            }, function(array){
+                alert(array[0]+" "+array[1]+array[2]+"  換到  "+array[3]+array[4]);
                 refresh();
                 console.log("1111");
             });
