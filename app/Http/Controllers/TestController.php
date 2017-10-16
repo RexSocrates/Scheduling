@@ -969,12 +969,11 @@ class TestController extends Controller
 
         $dateArr = [];
         foreach ($date as $d) {
-           array_push($dateArr,$d->date);
-
+        echo $d->date;
 
        }
        
-       echo $dateArr[0];
+       
      
         // // $user = new User();
 

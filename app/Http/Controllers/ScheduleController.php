@@ -792,11 +792,9 @@ class ScheduleController extends Controller
         foreach ($date as $d) {
            array_push($dateArr,$d->date);
 
-
        }
        
         return $dateArr;
-
 
     }
 

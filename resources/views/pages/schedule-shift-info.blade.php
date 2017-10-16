@@ -322,7 +322,7 @@
             }, function(array) {
                  var date = "";
                 for(i=0 ; i<array.length ; i++){
-                    date += "<option value="+array[0]+">"+array[0]+"</option>";
+                    date += "<option value="+array[i]+">"+array[i]+"</option>";
                     console.log(array[0]);
                 }
                 document.getElementById("date2").innerHTML  = date;

@@ -621,9 +621,9 @@ class Schedule extends Model
                 ->whereIn('major',[$major,"All"]);
 
         $info = DB::table("Schedule")
-                ->whereIn('doctorID',($query2))
-                ->where('date', 'like',$yearMonth.'%')
                 ->whereNotIn('date',($query))
+                ->where('date', 'like',$yearMonth.'%')
+               
                 ->whereNotNull('doctorID')
                 ->orderBy('date')
                 ->distinct()->get(['date']);
