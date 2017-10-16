@@ -197,8 +197,15 @@ Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts
 
 //Route::post('getSiftInfo',"ShiftRecordsController@shiftFirstEditionShowShifts");
 
+
 //調整班表->初版班表 彈出視窗醫生2資訊
-Route::get('changeDoctor','AccountController@getDoctorFirstScheduleInfoByID');
+Route::get('getDoctor','ScheduleController@getDoctorScheduleInfoByID');
+
+//調整班表->初版班表 彈出視窗醫生2資訊
+Route::get('changeDoctor','ScheduleController@getDoctorNameFirstScheduleInfoByID');
+
+//調整班表->初版班表 彈出視窗選日期
+Route::get('changeDate2','ScheduleController@getDoctorFirstScheduleInfoByID');
 
 //調整班表->彈出視窗醫生1資訊
 Route::get('changeDoctor1','ScheduleController@getDoctorInfoByScheduleID');
@@ -397,5 +404,7 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 
 Route::get("info",'TestController@announceSchedule');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
+
+
 
 Route::get('getShiftRecordByMonth', 'TestController@getShiftRecordByMonth');

@@ -203,19 +203,19 @@
             </div>
             <div class="modal-content modal-content-customize1">
                 <div class="row margin-b0">
-                     <br><br><input type="month" name="bday" min="2017-09-01" required><br>
+                    <!--  <br><br><input type="month" name="bday" min="2017-09-01" required><br>
                     <label>選擇月份</label>
-<!--
+ -->
                     <div class="input-field col s12 margin-b20">
-                        <input type="month" name="bday" min="2017-09-01" required>
+                        <!-- <input type="month" name="bday" min="2017-09-01" required> -->
                        <select name="leaveMonth" required id='leaveMonth'>
                             <option value="" selected disabled>選擇月份</option>
                             <option value="{{ $currentMonth }}">{{ $currentMonth }}</option>
                             <option value="{{ $nextMonth }}">{{ $nextMonth }}</option>
                         </select>
-                        <label>月份</label>
+                        <!-- <label>月份</label> -->
                     </div>
--->
+
                     <div class="input-field col s12 margin-b20">
                         <select name="hour" required>
                             <option value="" selected disabled required>選擇時數</option>
@@ -230,13 +230,13 @@
                         <label for="textarea1">申請原因</label>
                     </div>
 
-                    <div class="input-field col s12 margin-t0">
+                   <!--  <div class="input-field col s12 margin-t0">
 
                         
-                        <!-- <br><br><input type="month" name="bday" min="2017-09-01" required><br>
-                        <label>選擇月份</label -->
+                        <br><br><input type="month" name="bday" min="2017-09-01" required><br>
+                        <label>選擇月份</label
                     </div>
-
+ -->
                 </div>
             </div>
             <div class="modal-footer">

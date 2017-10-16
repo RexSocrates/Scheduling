@@ -44,7 +44,7 @@ class Schedule extends Model
         return $schedule;
     }
 
-    //透過班ID取得單一班表資訊
+    //計算班ID取得單一班表資訊
     public function countScheduleDataByDateAndSessionID($date,$session) {
         $count = DB::table('Schedule')
             ->whereNotNull('doctorID')
@@ -61,6 +61,16 @@ class Schedule extends Model
             ->whereNotNull('doctorID')
             ->where('schCategorySerial', $session)
             ->where('date', 'like', $date.'%')
+            ->first();
+        
+        return $schedule;
+    }
+
+     //透過班ID取得單一班表資訊 doctor is null
+    public function getScheduleDataByDateAndSessionIDWhenDoctorIDisNull($date,$session) {
+        $schedule = DB::table('Schedule')
+            ->where('schCategorySerial', $session)
+            ->where('date', $date)
             ->first();
         
         return $schedule;
@@ -162,6 +172,9 @@ class Schedule extends Model
         return $newScheduleID;
     }
     
+
+
+    
     // 透過醫生ID 取得下個月醫生上的所有班
     public function getNextMonthShiftsByID($id) {
         $currentMonth = date('Y-m');
@@ -218,6 +231,31 @@ class Schedule extends Model
         return $affectedRows;
     }
 
+    // 因醫生的變動,導致原本上班的地方醫生變為null
+    public function updateScheduleToNullByID($scheduleID) {
+        $reservation = new Reservation();
+        
+        $affectedRows = DB::table('Schedule')
+            ->where('scheduleID', $scheduleID)
+            ->update([
+               'doctorID'=> null
+            ]);
+        
+        return $affectedRows;
+    }
+
+//查詢已存在的班,將原本doctorID null,改為有醫生上班
+    public function addScheduleInNull($scheduleID, array $data){
+        $reservation = new Reservation();
+        
+        $affectedRows = DB::table('Schedule')
+            ->where('scheduleID', $scheduleID)
+            ->update([
+                'doctorID' => $data['doctorID']
+            ]);
+        
+        return $affectedRows;
+    }
     //更新醫生班表是否有被換班狀態
     public function checkScheduleStatus($scheduleID,$status){
         $affectedRows = DB::table('Schedule')
@@ -534,6 +572,126 @@ class Schedule extends Model
 
     }
 
+    //列出在當天非上班醫生
+    public function getDoctorNotInDate($date, $major){
+
+       $query = DB::table("Schedule")
+                ->select('doctorID')
+                ->where('date', 'like',$date)
+                ->whereNotNull('doctorID');
+                    
+       $info = DB::table("Doctor")
+                ->whereIn('major',[$major,"All"])
+                // ->orwhere('major',"All")
+                ->whereNotIn('doctorID',($query))
+                ->get();
+
+
+        return $info;
+    }
+
+     //列出在當天非上班日期
+    public function getDateNotInDate($doctorID, $date, $yearMonth){
+        $query = DB::table("Schedule")
+                ->select('date')
+                ->where('date', 'like',$yearMonth.'%')
+                ->where('doctorID',$doctorID)
+                ->whereNotNull('doctorID');
+
+        $info = DB::table("Schedule")
+                ->where('date', 'like',$yearMonth.'%')
+                ->whereNotIn('date',($query))
+                ->orderBy('date')
+                ->distinct()->get(['date']);
+
+
+        return $info;          
+
+    }
+
+     public function getDateNotInDateNotNull($doctorID, $major, $yearMonth){
+        $query = DB::table("Schedule")
+                ->select('date')
+                ->where('date', 'like',$yearMonth.'%')
+                ->where('doctorID',$doctorID)
+                ->whereNotNull('doctorID');
+
+        $query2 = DB::table("Doctor")
+                ->select('doctorID')
+                ->whereIn('major',[$major,"All"]);
+
+        $info = DB::table("Schedule")
+                ->whereIn('doctorID',($query2))
+                ->where('date', 'like',$yearMonth.'%')
+                ->whereNotIn('date',($query))
+                ->whereNotNull('doctorID')
+                ->orderBy('date')
+                ->distinct()->get(['date']);
+
+
+        return $info;          
+
+    }
+
+    public function getDoctorInDate($date1, $date2, $major){
+        $schCategorySerial=[];
+        if($major == "Medical"){
+             $schCategorySerial=[1,2,3,4,5,6,9,10,13,14,15,16,19,20];
+        }
+        else if($major == "Surgical"){
+             $schCategorySerial=[1,2,3,4,7,8,11,12,13,14,17,18,21];
+        }
+        else{
+             $schCategorySerial=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
+        }
+
+        $query = DB::table("Doctor")
+                ->select('doctorID')
+                ->whereIn('major',[$major,"All"]);
+    
+        $info = DB::table("Schedule")
+                ->where('date', 'like',$date2)
+                ->whereIn('doctorID',$query)
+                
+                ->whereIn("schCategorySerial",$schCategorySerial)
+                ->orwhereNull('doctorID')  
+                ->whereIn("schCategorySerial",$schCategorySerial)
+                ->where('date', 'like',$date2)
+                
+                // ->whereNotIn('date',["2017-11-01"])
+                ->get();
+
+
+        return $info;          
+
+    }
+
+     public function getDoctorDateNotNull($date1, $date2, $major){
+        $schCategorySerial=[];
+        if($major == "Medical"){
+             $schCategorySerial=[1,2,3,4,5,6,9,10,13,14,15,16,19,20];
+        }
+        else if($major == "Surgical"){
+             $schCategorySerial=[1,2,3,4,7,8,11,12,13,14,17,18,21];
+        }
+        else{
+             $schCategorySerial=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
+        }
+
+        $query = DB::table("Doctor")
+                ->select('doctorID')
+                ->whereIn('major',[$major,"All"]);
+    
+        $info = DB::table("Schedule")
+                ->whereIn('doctorID',$query)
+                ->where('date', 'like',$date2)
+                ->get();
+
+
+        return $info;          
+
+    }
+    
     
     // 檢查一位醫生在當週非職登院區的班數
     public function getAnotherLocationShifts($doctorID, $date) {

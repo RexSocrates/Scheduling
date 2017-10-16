@@ -196,8 +196,8 @@ class ShiftRecords extends Model
             $schedule1 = $schedule->getScheduleDataByID($record->scheduleID_1);
             $schedule2 = $schedule->getScheduleDataByID($record->scheduleID_2);
             
-            $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial);
-            $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial);
+            $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial)->schCategoryName;
+            $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial)->schCategoryName;
 
             array_push($dataInschedule, array($doctor1->name, $doctor2->name, $schedule1->date, $schedule2->date, $catName1, $catName2, $record->date, $record->changeSerial));
         }
@@ -230,8 +230,8 @@ class ShiftRecords extends Model
             $schedule1 = $schedule->getScheduleDataByID($record->scheduleID_1);
             $schedule2 = $schedule->getScheduleDataByID($record->scheduleID_2);
             
-            $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial);
-            $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial);
+            $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial)->schCategoryName;
+            $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial)->schCategoryName;
 
             array_push($dataInschedule, array($doctor1->name, $doctor2->name, $schedule1->date, $schedule2->date, $catName1, $catName2, $record->date, $record->changeSerial));
         }
@@ -264,8 +264,8 @@ class ShiftRecords extends Model
             $schedule1 = $schedule->getScheduleDataByID($record->scheduleID_1);
             $schedule2 = $schedule->getScheduleDataByID($record->scheduleID_2);
             
-            $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial);
-            $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial);
+            $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial)->schCategoryName;
+            $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial)->schCategoryName;
 
             $doc2Confirm = $record->doc2Confirm;
 
@@ -302,8 +302,8 @@ class ShiftRecords extends Model
             $schedule1 = $schedule->getScheduleDataByID($record->scheduleID_1);
             $schedule2 = $schedule->getScheduleDataByID($record->scheduleID_2);
             
-            $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial);
-            $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial);
+            $catName1 = $shiftCategory->findScheduleName($schedule1->schCategorySerial)->schCategoryName;
+            $catName2 = $shiftCategory->findScheduleName($schedule2->schCategorySerial)->schCategoryName;
 
             $doc2Confirm = $comfirmStatus->getStatusBySerial($record->doc2Confirm);
             $adminConfirm = $comfirmStatus->getStatusBySerial($record->adminConfirm);
