@@ -239,4 +239,15 @@ class AccountController extends Controller
         $schedule->confirmNextMonthSchedule();
  
     }
+        
+    public function getNewPage() {
+        $user = new User();
+        
+        $data = [
+            'doctors' => $user->getAtWorkDoctors(),
+            'userName' => $user->getCurrentUserInfo()->name
+        ];
+        
+        return view('pages.newPage', $data);
+    }
 }

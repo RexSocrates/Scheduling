@@ -35,8 +35,7 @@
                     </div>
                 </div>
                 
-                <div class="col s8">
-                    <div class="card">
+                
 <!--
                         <div class="card-action">
                             <font class="card-title">使用公假記錄</font>
@@ -66,7 +65,8 @@
                             </div>
                         </div>
 -->
-                        
+                <div class="col s8">
+                    <div class="card">
                         <div class="card-action card1">
                             <div class="title1">
                                 <font class="card-title">公假記錄</font>
@@ -109,6 +109,62 @@
                         </div>
                     </div>	
                 </div>
+                
+                <div class="col s8">
+                    <div class="card">
+                        <div class="card-action card1">
+                            <div class="title1">
+                                <font class="card-title">積欠班狀況</font>
+                            </div>
+                            <div class="title1 margin-l20">
+                                <font class="card-title">總數: 欠3班</font>
+                                <label>每半年結算一次，結算後數目歸零。</label>
+                            </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        <div class="card-content padding-t5">
+                            <table class="centered striped highlight scroll area5">
+                                <thead>
+                                    <tr>
+                                        <th class="td-w-5">日期</th>
+                                        <th class="td-w-5">情況</th>
+                                        <th class="td-w-5">班數</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-10</td>
+                                        <td class="td-padding td-w-5">欠</td>
+                                        <td class="td-padding td-w-5">3</td>   
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-09</td>
+                                        <td class="td-padding td-w-5">積</td>
+                                        <td class="td-padding td-w-5">3</td>   
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-08</td>
+                                        <td class="td-padding td-w-5">欠</td>
+                                        <td class="td-padding td-w-5">3</td>   
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-07</td>
+                                        <td class="td-padding td-w-5">欠</td>
+                                        <td class="td-padding td-w-5">3</td>   
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-06</td>
+                                        <td class="td-padding td-w-5">積</td>
+                                        <td class="td-padding td-w-5">3</td>   
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>	
+                </div>
+                
             </div>
         </div>
     </div>
