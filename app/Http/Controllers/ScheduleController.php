@@ -727,7 +727,7 @@ class ScheduleController extends Controller
         return $array;
     }
      
-
+    //換班資訊 彈出式視窗取得醫生2的上班資訊
     public function  getDoctorScheduleInfoByID(Request $request){
         $data = $request->all();
 
@@ -770,6 +770,36 @@ class ScheduleController extends Controller
 
 
     }
+
+    //換班資訊 彈出式視窗取得醫生2的上班資訊
+    public function  getDoctorScheduleDateByCurrentDoctorID(Request $request){
+
+        $shiftRecordObj = new ShiftRecords();
+        $userObj = new User();
+        $sheduleObj = new Schedule();
+        $schCateObj = new ScheduleCategory();
+        
+        $currentDoctor = $userObj->getCurrentUserInfo();
+
+        $currentDoctorSchedule=$sheduleObj->getNextMonthShiftsByID($currentDoctor->doctorID); //查看目前登入的醫生班表資訊
+
+        $currentMonth = date('Y-m-d');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+
+        $date = $sheduleObj->getDateNotInDateNotNull($currentDoctor->doctorID,$currentDoctor->major,$nextMonth);
+
+        $dateArr = [];
+        foreach ($date as $d) {
+           array_push($dateArr,$d->date);
+
+
+       }
+       
+        return $dateArr;
+
+
+    }
+
     public function getDoctorInfoByScheduleIDWhenExchange(Request $request){
       $data = $request->all();
       $schedule = new Schedule();

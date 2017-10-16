@@ -952,15 +952,30 @@ class TestController extends Controller
 
    public function announceSchedule(){
  
-        $scheduleRecord = new ScheduleRecord();
-        $info= $scheduleRecord->getScheduleRecord();
         
-        foreach ($info as $data) {
-            echo $data->month."<br>";
-            echo $data->doctorID."<br>";
-            echo $data->shiftHours."<br>";
-            # code...
-        }
+        $shiftRecordObj = new ShiftRecords();
+        $userObj = new User();
+        $sheduleObj = new Schedule();
+        $schCateObj = new ScheduleCategory();
+        
+        $currentDoctor = $userObj->getCurrentUserInfo();
+
+        $currentDoctorSchedule=$sheduleObj->getNextMonthShiftsByID($currentDoctor->doctorID); //查看目前登入的醫生班表資訊
+
+        $currentMonth = date('Y-m-d');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+
+        $date = $sheduleObj->getDateNotInDateNotNull($currentDoctor->doctorID,$currentDoctor->major,$nextMonth);
+
+        $dateArr = [];
+        foreach ($date as $d) {
+           array_push($dateArr,$d->date);
+
+
+       }
+       
+       echo $dateArr[0];
+     
         // // $user = new User();
 
        

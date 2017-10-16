@@ -236,7 +236,7 @@
                             
                             <div class="col s6">
                                <label>醫生:</label>
-                                <select name= 'schID_1_doctor' class="browser-default"  id= "schID_1_doctor" required>
+                                <select name= 'schID_1_doctor' class="browser-default"  id= "schID_1_doctor" required >
                                     <option value="{{$currentDoctor->doctorID}}" selected>{{$currentDoctor->name}}</option>
                                 </select>
                             </div>
@@ -248,15 +248,15 @@
                                 
                                 <select  name='scheduleID_2' class="browser-default" id="date2" onchange="changeDoctor()" required>
                                     <option  value="" disabled selected>請選擇日期</option>
-                                     @foreach($date as $d)
-                                    <option value="{{$d->date}}">{{$d->date}}</option>
-                                   @endforeach
+                                     <!-- @foreach($date as $d) -->
+                                    <option value=""></option>
+                                    <!-- @endforeach -->
                                 </select>
                             </div>
 
                             <div class="col s6">
                                 <label>日期:</label>
-                                <select name="scheduleID_1" class="browser-default"  id="date1"  required>
+                                <select name="scheduleID_1" class="browser-default"  id="date1" onchange="changeDoctor_1()" required>
                                     <option value="" disabled selected>請選擇日期</option>
                                     @foreach($currentDoctorSchedule as $data)
                                     <option value='{{ $data[0] }}'>{{ $data[1] }} - {{ $data[2] }}</option>
@@ -298,7 +298,8 @@
     </script>
     
     <script>
-        function changeDoctor() {
+        function changeDoctor(date) {
+
             $.get('getDoctor', {
                 scheduleID_1 :document.getElementById("date1").value,
                 scheduleID_2 :document.getElementById("date2").value
@@ -313,6 +314,23 @@
                 document.getElementById("schID_2_doctor").innerHTML  = doctor;
 
             });
+        }
+
+         function changeDoctor_1() {
+            $.get('getDoctorDate', {
+
+            }, function(array) {
+                 var date = "";
+                for(i=0 ; i<array.length ; i++){
+                    date += "<option value="+array[0]+">"+array[0]+"</option>";
+                    console.log(array[0]);
+                }
+                document.getElementById("date2").innerHTML  = date;
+                changeDoctor(array[0]);
+            });
+
+            
+           
         }
     
         // function changeDate(array) {

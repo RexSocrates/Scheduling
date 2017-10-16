@@ -196,8 +196,12 @@ Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts
 //Route::post('getSiftInfo',"ShiftRecordsController@shiftFirstEditionShowShifts");
 
 
-//調整班表->初版班表 彈出視窗醫生2資訊
+//換班資訊 得到醫生
 Route::get('getDoctor','ScheduleController@getDoctorScheduleInfoByID');
+
+//換班資訊 得到日期
+Route::get('getDoctorDate','ScheduleController@getDoctorScheduleDateByCurrentDoctorID');
+
 
 //調整班表->初版班表 彈出視窗醫生2資訊
 Route::get('changeDoctor','ScheduleController@getDoctorNameFirstScheduleInfoByID');
