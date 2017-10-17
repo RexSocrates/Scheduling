@@ -9,6 +9,7 @@ use App\ShiftCategory;
 use App\Schedule;
 use App\OfficialLeave;
 use App\ConfirmStatus;
+use App\ScheduleRecord;
 
 
 
@@ -41,6 +42,7 @@ class AccountController extends Controller
         $officialLeave = new OfficialLeave();
         $shiftRecords = new ShiftRecords();
         $confirmStatus = new ConfirmStatus();
+        $scheduleRecord = new ScheduleRecord();
 
         $doctorShiftRecords = $shiftRecords->getMoreCheckShiftsRecordsInformation(true); //到shiftrecords modle找資料
 
@@ -65,6 +67,24 @@ class AccountController extends Controller
         $leaveHours=[];
         $hour = $user->getCurrentUserInfo()->currentOfficialLeaveHours;
 
+
+          
+       $doctorScheduleRecords = $scheduleRecord->getScheduleRecordByDoctorID($user->getCurrentUserID());
+
+       $scheduleRecordArr =[];
+
+        foreach ($doctorScheduleRecords as $record) {
+            $recordDic =[
+                'date' => $record->month,
+                'shiftHours' => $record->shiftHours,
+            ];
+
+            array_push($scheduleRecordArr,$recordDic);
+
+        }
+
+        $totalScheduleRecords = $scheduleRecord->getScheduleTotoalBydoctorID($user->getCurrentUserID());
+
         for ($i=12 ; $i<=$hour;) {
             array_push($leaveHours,$i);
             $i=$i+12;
@@ -80,7 +100,9 @@ class AccountController extends Controller
              'doctorOfficialLeave'=>$officialLeaveArr,
              'leaveHours' => $leaveHours,
              'currentMonth'=>$currentMonth,
-             'nextMonth'=>$nextMonth
+             'nextMonth'=>$nextMonth,
+             'doctorScheduleRecords'=>$scheduleRecordArr,
+             'totalScheduleRecords' => $totalScheduleRecords
          ]);
     }
     
