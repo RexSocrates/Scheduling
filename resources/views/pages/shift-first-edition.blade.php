@@ -59,15 +59,16 @@
                                         <div class="col s6"><h5>日期</h5><h5 id ="date_1"></h5></div>
                                     </div>
                                     <div class="row">
-                                        <div class="input-field col s12 margin-b20">
+                                        <div class="col s12 margin-b20">
+                                            <label>醫生</label>
                                             <select name="doctor" class="browser-default" id="doctor" required>
                                                 <option value="" selected disabled>選擇醫生</option>
-                                                <option value="" selected ></option>
+<!--                                                <option value="" selected ></option>-->
                                                 <!-- @foreach($doctorName as $name)
                                                 <option value="{{$name->doctorID}}">{{$name->name}}</option>
                                                 @endforeach -->
                                             </select>
-                                            <label>醫生</label>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -1482,9 +1483,9 @@
 
 
         function showScheduleInfo(date,section_id,id){
-                document.getElementById("shiftDate").value=date;
-                document.getElementById("shiftSessionID").value=section_id;
-                document.getElementById("scheduleID_1").value=id;
+            document.getElementById("shiftDate").value=date;
+            document.getElementById("shiftSessionID").value=section_id;
+            document.getElementById("scheduleID_1").value=id;
             $.get("showDoctorInfo",{
                 categorySerial: section_id,
                 date : document.getElementById("shiftDate").value
@@ -1493,12 +1494,11 @@
                 var info = "";
                 console.log("length"+array.length);
                 for(i=0 ; i<array.length ; i++){
-                    info += "<option value="+array[i]['doctorID']+">"+array[i]['doctorName']+(array[i]['totalShift'])+"</option>";
+                    info += "<option value="+array[i]['doctorID']+">"+array[i]['doctorName']+" - 剩餘天數: "+(array[i]['totalShift'])+"</option>";
                     console.log('1'+array[i]['doctorID']);
                     console.log("section_id"+array[i]['doctorName']);
                 }
-                document.getElementById("doctor").innerHTML  = info;
-
+                document.getElementById("doctor").innerHTML = info;
         });
 
              //console.log("date"+document.getElementById("shiftDate").value);

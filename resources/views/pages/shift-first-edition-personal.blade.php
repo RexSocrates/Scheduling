@@ -528,8 +528,12 @@
     <script>
         $(document).ready(function(){
             $('select').material_select();
+            document.getElementsByClassName("collapsible")[3].getElementsByTagName("li")[0].className += "active";
+            document.getElementsByClassName("collapsible-body")[3].style.display = "block";
+            document.getElementsByClassName("collapsible-body")[3].getElementsByTagName("li")[0].className += "active";
         });
-   function changeDoctor_1(id){
+        
+        function changeDoctor_1(id){
             $.get('changeDoctor1',{
                 id : id
             }, function(array){
