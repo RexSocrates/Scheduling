@@ -407,15 +407,11 @@
                             scheduler.init('scheduler_here',new Date(res[3], month-1),"timeline");
 
                             scheduler.parse([
-
                                 @foreach($scheduleData as $data)
                                  { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}" },
-                               
                                 @endforeach
-                                
                             ],"json");
 
-                            
                         </script>
                     </div>
                 </div>
@@ -429,10 +425,10 @@
     <script>
         $(document).ready(function(){
             $('select').material_select();
+            document.getElementsByClassName("collapsible")[2].getElementsByTagName("li")[0].className += "active";
+            document.getElementsByClassName("collapsible-body")[2].style.display = "block";
+            document.getElementsByClassName("collapsible-body")[2].getElementsByTagName("li")[1].className += "active";
         });
-    
-        
-
         
     </script>
 @endsection

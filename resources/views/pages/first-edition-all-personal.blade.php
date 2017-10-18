@@ -429,10 +429,10 @@
     <script>
         $(document).ready(function(){
             $('select').material_select();
+            document.getElementsByClassName("collapsible")[1].getElementsByTagName("li")[0].className += "active";
+            document.getElementsByClassName("collapsible-body")[1].style.display = "block";
+            document.getElementsByClassName("collapsible-body")[1].getElementsByTagName("li")[1].className += "active";
         });
-    
-        
-
         
     </script>
 @endsection
