@@ -59,7 +59,12 @@
 
                                             </div>
                                             <!-- <input type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right">提交</button> -->
-                                            <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right" value="提交" onclick="alert2()">提交</button>
+                                            @if ( $currentdate <= $endDate )
+                                             <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right" value="提交" onclick="alert2()">提交</button>
+                                            @else
+                                             <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right" value="提交" disabled="">提交</button>
+                                            @endif
+                                           
                                             {{ csrf_field() }}
                                         </form>
                                     </div>
@@ -90,11 +95,20 @@
                         </div>
 
                         <script type="text/javascript" charset="utf-8">
+                            var currDate = Date.parse((new Date()).toDateString());
+
+                            if(Date.parse(currDate)<=Date.parse({{ $endDate }})){
+                                scheduler.config.readonly = false;
+                            }
+
+                            else{
+                                scheduler.config.readonly = true;
+                            }
 
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
                             scheduler.config.api_date="%Y-%m-%d %H:%i";
                             scheduler.config.dblclick_create = false;   //雙擊新增
-                          //scheduler.config.readonly = true;   //唯讀，不能修改東西
+                             //唯讀，不能修改東西
                           //scheduler.config.drag_create = false;   //拖拉新增
                             scheduler.config.details_on_create = false;
                             scheduler.config.details_on_dblclick = true;

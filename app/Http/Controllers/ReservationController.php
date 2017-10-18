@@ -121,7 +121,8 @@ class ReservationController extends Controller
             'doctorNight'=> $doctorNight,
             'onAmount' => $onResAmount,
             'offAmount' => $offResAmount,
-            'remark'=> $doctorRemark
+            'remark'=> $doctorRemark,
+            'currentdate'=>date("Y-m-d")
         ]);
         
     }
