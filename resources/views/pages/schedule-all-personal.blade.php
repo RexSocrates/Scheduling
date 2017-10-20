@@ -38,6 +38,8 @@
                                 <div class="dhx_cal_next_button"></div>
                                 <div class="dhx_cal_today_button"></div>
                                 <div class="dhx_cal_date"></div>
+                                <div class="dhx_cal_tab" name="timeline_tab" style="display: none;"></div>
+                                
                                 <div class="dhx_cal_tab margin-l20 noUnderline">
                                     <form action="schedule-all-personal" method="post">
                                         <font class="dhx-font">醫師:</font>

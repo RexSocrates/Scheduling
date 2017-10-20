@@ -100,14 +100,14 @@
                                         <td class="td-padding td-w-5">{{ $record[0] }}</td> <!--申請人-->
                                         <td class="td-padding td-w-5">{{ $record[6] }}</td>  <!--申請日期-->
                                         @if($record[8] == "已拒絕")
-                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[8] }}<font></td>
+                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[8] }}</font></td>
                                         @else
                                         <td class="td-padding td-w-5">{{ $record[8] }}</td>
                                         @endif
                                         @if($record[9] == "已拒絕")
-                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[9] }}<font></td>
+                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[9] }}</font></td>
                                         @elseif($record[9] == "未確認")
-                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[9] }}<font></td>
+                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[9] }}</font></td>
                                         @else
                                         <td class="td-padding td-w-5">{{ $record[9] }}</td>
                                         @endif

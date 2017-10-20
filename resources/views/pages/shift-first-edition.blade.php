@@ -173,10 +173,12 @@
                                 <div class="dhx_cal_prev_button"></div>
                                 <div class="dhx_cal_next_button"></div>
                                 <div class="dhx_cal_today_button today-btn"></div>
+                                <div class="dhx_cal_tab" name="timeline_tab" style="display: none;"></div>
                                 <div class="dhx_cal_tab situation">
                                     <a class="dhx_cal_tab red-text text-lighten-1" href="first-edition-situation">醫生排班現況</a>
                                 </div>
                                 <div class="dhx_cal_date"></div>
+                                
                                 <div class="dhx_cal_tab margin-l20 noUnderline">
                                     <form action="shift-first-edition-personal" method="post">
                                         <font class="dhx-font">醫師:</font>

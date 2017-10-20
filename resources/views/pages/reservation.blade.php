@@ -81,6 +81,7 @@
                                 <div class="dhx_cal_next_button">&nbsp;</div>
                                 <div class="dhx_cal_today_button"></div>
                                 <div class="dhx_cal_date"></div>
+                                <div class="dhx_cal_tab" name="month_tab" style="display: none;"></div>
         <!-- 
                                 <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
                                 <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
@@ -426,7 +427,6 @@
     </div>
 @endsection
 
-
 @section('script')
     <script>
         // 送出新增預班的request
@@ -438,11 +438,7 @@
             }, function() {
                 dhtmlx.message({ type:"error", text:"預約成功" });
             });
-           
-            
         }
-
-        
 
         // 送出更新預班的request
         function updateReservation(resSerial, categorySerial, startDate, endDate) {

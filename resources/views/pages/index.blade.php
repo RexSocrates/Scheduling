@@ -133,8 +133,8 @@
                     <div class="row margin-b0">  
     				    <div class="col s12">
                             <h5 class="card-title" id="announcementTitle"></h5>
-                            <p class="inline" id="name"></p>
-                            <p class="inline margin-l10 grey-text" id="date"></p>
+                            <p class="inline margin-0" id="name"></p>
+                            <p class="inline margin-0 margin-l10 grey-text" id="date"></p>
     				    	<pre id="announcementContent"></pre>
     				    </div>
                     </div>

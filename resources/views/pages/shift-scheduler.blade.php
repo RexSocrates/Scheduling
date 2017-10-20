@@ -32,9 +32,6 @@
             <div class="row">
                 <div class="col s12 m12">
                     <div class="card border-t">
-                       
-                     
-                        
                         <div id="my_form">
                             <!-- <form action="change-shift-first-edition" method="post" > -->
                             <div class="modal-header">
@@ -127,6 +124,8 @@
                                 <div class="dhx_cal_next_button"></div>
                                 <div class="dhx_cal_today_button"></div>
                                 <div class="dhx_cal_date"></div>
+                                <div class="dhx_cal_tab" name="timeline_tab" style="display: none;"></div>
+                                
                                 <div class="dhx_cal_tab margin-l20 noUnderline">
                                     <form action="shift-scheduler-personal" method="post">
                                         <font class="dhx-font">醫師:</font>

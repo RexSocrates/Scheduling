@@ -117,12 +117,11 @@
                                 <font class="card-title">積欠班狀況</font>
                             </div>
                             <div class="title1 margin-l20">
-                            @if ( $totalScheduleRecords > 0 )
-                                    <font class="card-title">總數: 積 {{ $totalScheduleRecords }}班</font>
-                            @else
-                                    <font class="card-title">總數: 欠 {{ $totalScheduleRecords }}班</font>
-                            @endif
-                                
+                                @if ( $totalScheduleRecords > 0 )
+                                <font class="card-title">總數: 積 {{ $totalScheduleRecords }}班</font>
+                                @else
+                                <font class="card-title">總數: 欠 {{ $totalScheduleRecords }}班</font>
+                                @endif
                                 <label>每半年結算一次，結算後數目歸零。</label>
                             </div>
                         </div>
@@ -143,9 +142,9 @@
                                     <tr>
                                         <td class="td-padding td-w-5">{{ $record['date'] }}</td>
                                         @if ( $record['shiftHours'] >0 )
-                                            <td class="td-padding td-w-5">積</td>
+                                        <td class="td-padding td-w-5">積</td>
                                         @else
-                                            <td class="td-padding td-w-5">欠</td>
+                                        <td class="td-padding td-w-5">欠</td>
                                         @endif
                                         <td class="td-padding td-w-5">{{ $record['shiftHours'] }}</td>   
                                     </tr>
