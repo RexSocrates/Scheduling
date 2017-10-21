@@ -100,14 +100,14 @@
                                         <td class="td-padding td-w-5">{{ $record[0] }}</td> <!--申請人-->
                                         <td class="td-padding td-w-5">{{ $record[6] }}</td>  <!--申請日期-->
                                         @if($record[8] == "已拒絕")
-                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[8] }}<font></td>
+                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[8] }}</font></td>
                                         @else
                                         <td class="td-padding td-w-5">{{ $record[8] }}</td>
                                         @endif
                                         @if($record[9] == "已拒絕")
-                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[9] }}<font></td>
+                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[9] }}</font></td>
                                         @elseif($record[9] == "未確認")
-                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[9] }}<font></td>
+                                        <td class="td-padding td-w-5"><font class="red-text">{{ $record[9] }}</font></td>
                                         @else
                                         <td class="td-padding td-w-5">{{ $record[9] }}</td>
                                         @endif
@@ -236,37 +236,43 @@
                             
                             <div class="col s6">
                                <label>醫生:</label>
-                                <select name= 'schID_1_doctor' class="browser-default"  id= "schID_1_doctor" required>
+                                <select name= 'schID_1_doctor' class="browser-default"  id= "schID_1_doctor" required >
                                     <option value="{{$currentDoctor->doctorID}}" selected>{{$currentDoctor->name}}</option>
+                                </select>
+                            </div>
+
+                             
+
+                            <div class="col s6">
+                                <label>日期:</label>
+                                
+                                <select  name='scheduleID_2' class="browser-default" id="date2" onchange="changeDoctor()" required>
+                                    <option  value="" disabled selected>請選擇日期</option>
+                                     <!-- @foreach($date as $d) -->
+                                    <option value=""></option>
+                                    <!-- @endforeach -->
+                                </select>
+                            </div>
+
+                            <div class="col s6">
+                                <label>日期:</label>
+                                <select name="scheduleID_1" class="browser-default"  id="date1" onchange="changeDoctor_1()" required>
+                                    <option value="" disabled selected>請選擇日期</option>
+                                    @foreach($currentDoctorSchedule as $data)
+                                    <option value='{{ $data[0] }}'>{{ $data[1] }} - {{ $data[2] }}</option>
+                                    @endforeach
                                 </select>
                             </div>
 
                             <div class="col s6">
                                 <label>醫生:</label>
-                                <select name= 'schID_2_doctor' class="browser-default" id="schID_2_doctor" onchange="changeDoctor()" required>
+                                <select name= 'schID_2_doctor' class="browser-default" id="schID_2_doctor" required>
                                     <option value="" disabled selected>請選擇醫生</option> 
-                                    @foreach($doctorName as $name)
-                                    <option value="{{$name->doctorID}}">{{$name->name}}</option>
-                                   @endforeach
+                                   
                                 </select>
                             </div>
-                            <div class="col s6">
-                                <label>日期:</label>
-                                <select name="scheduleID_1" class="browser-default"  id="date1" required>
-                                    <option value="" disabled selected>請選擇日期</option>
-                                    @foreach($currentDoctorSchedule as $data)
-                                    <option value='{{$data->scheduleID}}'>{{$data->date}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col s6">
-                                <label>日期:</label>
-                                
-                                <select  name='scheduleID_2' class="browser-default" id="date2" required>
-                                    <option  value="" disabled selected>請選擇日期</option>
-                                    
-                                </select>
-                            </div>
+                           
+                            
                             
                             
                         </div>
@@ -292,23 +298,50 @@
     </script>
     
     <script>
-        function changeDoctor() {
-            $.get('changeDoctor', {
-                id : document.getElementById('schID_2_doctor').value
+        function changeDoctor(date) {
+
+            $.get('getDoctor', {
+                scheduleID_1 :document.getElementById("date1").value,
+                scheduleID_2 :document.getElementById("date2").value
+
             }, function(array) {
-                changeDate(array);
+                 var doctor = "";
+                for(i=0 ; i<array.length ; i++){
+                    doctor += "<option value="+array[i][0]+">"+array[i][1]+"-"+array[i][2]+"</option>";
+                    console.log('1'+array[i][1]);
+                    console.log(array[i][0]);
+                }
+                document.getElementById("schID_2_doctor").innerHTML  = doctor;
+
             });
         }
-    
-        function changeDate(array) {
-                var date = "";
+
+         function changeDoctor_1() {
+            $.get('getDoctorDate', {
+
+            }, function(array) {
+                 var date = "";
                 for(i=0 ; i<array.length ; i++){
-                    date += "<option value="+array[i][0]+">"+array[i][2]+"</option>";
-                    console.log('aaa'+array[i][0]);
+                    date += "<option value="+array[i]+">"+array[i]+"</option>";
+                    console.log(array[0]);
                 }
                 document.getElementById("date2").innerHTML  = date;
-               
+                changeDoctor(array[0]);
+            });
+
+            
+           
         }
+    
+        // function changeDate(array) {
+        //         var date = "";
+        //         for(i=0 ; i<array.length ; i++){
+        //             date += "<option value="+array[i][0]+">"+array[i][2]+"</option>";
+        //             console.log('aaa'+array[i][0]);
+        //         }
+        //         document.getElementById("date2").innerHTML  = date;
+               
+        // }
 
         function changeShiftMonth() {
              console.log("Month : " + document.getElementById('shiftMonth').value);
@@ -414,11 +447,11 @@
             
             $.get('checkDocStatus',{
             scheduleID_1 : document.getElementById('date1').value,
-            scheduleID_2 : document.getElementById('date2').value,
+            scheduleID_2 : document.getElementById('schID_2_doctor').value,
 
             }, function(array){
                 var ID_1 = document.getElementById('date1').value;
-                var ID_2 = document.getElementById('date2').value;    
+                var ID_2 = document.getElementById('schID_2_doctor').value;    
 
                 var weekday1 = array[0]['weekday1'];
                 var weekday2 = array[0]['weekday2'];
@@ -556,7 +589,7 @@
          function save_form() {
             $.get('addShifts', {
                 scheduleID_1 : document.getElementById('date1').value,
-                scheduleID_2 : document.getElementById('date2').value
+                scheduleID_2 : document.getElementById('schID_2_doctor').value
                 
             }, function (){
                location.reload();

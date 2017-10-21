@@ -66,7 +66,7 @@
       		  	<div class="col s12 m4">
       		  	  	<div class="card center">
               			<img src="../img/galaxy.svg" class="solar-system">
-              			<h4 class="blue-grey-text text-darken-3">初版班表已公佈</h4>
+              			<h4 class="blue-grey-text text-darken-3 margin-t20">初版班表已公佈</h4>
       		  	  	  	<div class="card-action center">
       		  	  	  	  	<a href="first-edition" class="margin-r0">前往初版班表 - 個人</a>
       		  	  	  	</div>
@@ -76,7 +76,7 @@
       		  	<div class="col s12 m4">
       		  	  	<div class="card center">
               			<img src="../img/sunset.svg" class="solar-system">
-              			<h4 class="blue-grey-text text-darken-3">正式班表已公佈</h4>
+              			<h4 class="blue-grey-text text-darken-3 margin-t20">正式班表已公佈</h4>
       		  	  	  	<div class="card-action center">
       		  	  	  	  	<a href="schedule" class="margin-r0">前往正式班表 - 個人</a>
       		  	  	  	</div>
@@ -133,8 +133,8 @@
                     <div class="row margin-b0">  
     				    <div class="col s12">
                             <h5 class="card-title" id="announcementTitle"></h5>
-                            <p class="inline" id="name"></p>
-                            <p class="inline margin-l10 grey-text" id="date"></p>
+                            <p class="inline margin-0" id="name"></p>
+                            <p class="inline margin-0 margin-l10 grey-text" id="date"></p>
     				    	<pre id="announcementContent"></pre>
     				    </div>
                     </div>

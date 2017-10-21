@@ -22,6 +22,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 // 正式路由
 Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
 
+Route::get('newPage', 'AccountController@getNewPage');
+
 // Ajax get request 編輯醫師資料
 Route::get('editDoctorInfo', 'AccountController@editDoctorInfo');
 
@@ -195,8 +197,19 @@ Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts
 
 //Route::post('getSiftInfo',"ShiftRecordsController@shiftFirstEditionShowShifts");
 
+
+//換班資訊 得到醫生
+Route::get('getDoctor','ScheduleController@getDoctorScheduleInfoByID');
+
+//換班資訊 得到日期
+Route::get('getDoctorDate','ScheduleController@getDoctorScheduleDateByCurrentDoctorID');
+
+
 //調整班表->初版班表 彈出視窗醫生2資訊
-Route::get('changeDoctor','AccountController@getDoctorFirstScheduleInfoByID');
+Route::get('changeDoctor','ScheduleController@getDoctorNameFirstScheduleInfoByID');
+
+//調整班表->初版班表 彈出視窗選日期
+Route::get('changeDate2','ScheduleController@getDoctorFirstScheduleInfoByID');
 
 //調整班表->彈出視窗醫生1資訊
 Route::get('changeDoctor1','ScheduleController@getDoctorInfoByScheduleID');
@@ -399,5 +412,7 @@ Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecords
 
 Route::get("info",'TestController@announceSchedule');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
+
+
 
 Route::get('getShiftRecordByMonth', 'TestController@getShiftRecordByMonth');

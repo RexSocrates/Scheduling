@@ -35,8 +35,7 @@
                     </div>
                 </div>
                 
-                <div class="col s8">
-                    <div class="card">
+                
 <!--
                         <div class="card-action">
                             <font class="card-title">使用公假記錄</font>
@@ -66,7 +65,8 @@
                             </div>
                         </div>
 -->
-                        
+                <div class="col s8">
+                    <div class="card">
                         <div class="card-action card1">
                             <div class="title1">
                                 <font class="card-title">公假記錄</font>
@@ -109,6 +109,52 @@
                         </div>
                     </div>	
                 </div>
+                
+                <div class="col s8">
+                    <div class="card">
+                        <div class="card-action card1">
+                            <div class="title1">
+                                <font class="card-title">積欠班狀況</font>
+                            </div>
+                            <div class="title1 margin-l20">
+                                @if ( $totalScheduleRecords > 0 )
+                                <font class="card-title">總數: 積 {{ $totalScheduleRecords }}班</font>
+                                @else
+                                <font class="card-title">總數: 欠 {{ $totalScheduleRecords }}班</font>
+                                @endif
+                                <label>每半年結算一次，結算後數目歸零。</label>
+                            </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        <div class="card-content padding-t5">
+                            <table class="centered striped highlight scroll area5">
+                                <thead>
+                                    <tr>
+                                        <th class="td-w-5">日期</th>
+                                        <th class="td-w-5">情況</th>
+                                        <th class="td-w-5">班數</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach($doctorScheduleRecords as $record)
+                                    <tr>
+                                        <td class="td-padding td-w-5">{{ $record['date'] }}</td>
+                                        @if ( $record['shiftHours'] >0 )
+                                        <td class="td-padding td-w-5">積</td>
+                                        @else
+                                        <td class="td-padding td-w-5">欠</td>
+                                        @endif
+                                        <td class="td-padding td-w-5">{{ $record['shiftHours'] }}</td>   
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>	
+                </div>
+                
             </div>
         </div>
     </div>
@@ -147,19 +193,19 @@
             </div>
             <div class="modal-content modal-content-customize1">
                 <div class="row margin-b0">
-                     <br><br><input type="month" name="bday" min="2017-09-01" required><br>
+                    <!--  <br><br><input type="month" name="bday" min="2017-09-01" required><br>
                     <label>選擇月份</label>
-<!--
+ -->
                     <div class="input-field col s12 margin-b20">
-                        <input type="month" name="bday" min="2017-09-01" required>
+                        <!-- <input type="month" name="bday" min="2017-09-01" required> -->
                        <select name="leaveMonth" required id='leaveMonth'>
                             <option value="" selected disabled>選擇月份</option>
                             <option value="{{ $currentMonth }}">{{ $currentMonth }}</option>
                             <option value="{{ $nextMonth }}">{{ $nextMonth }}</option>
                         </select>
-                        <label>月份</label>
+                        <!-- <label>月份</label> -->
                     </div>
--->
+
                     <div class="input-field col s12 margin-b20">
                         <select name="hour" required>
                             <option value="" selected disabled required>選擇時數</option>
@@ -174,13 +220,13 @@
                         <label for="textarea1">申請原因</label>
                     </div>
 
-                    <div class="input-field col s12 margin-t0">
+                   <!--  <div class="input-field col s12 margin-t0">
 
                         
-                        <!-- <br><br><input type="month" name="bday" min="2017-09-01" required><br>
-                        <label>選擇月份</label -->
+                        <br><br><input type="month" name="bday" min="2017-09-01" required><br>
+                        <label>選擇月份</label
                     </div>
-
+ -->
                 </div>
             </div>
             <div class="modal-footer">

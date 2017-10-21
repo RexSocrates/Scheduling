@@ -14,7 +14,7 @@ class ScheduleCategory extends Model
     public function findScheduleName($serial){
     	$name = DB::table('ScheduleCategory')->where("schCategorySerial",$serial)->first();
 
-    	return $name->schCategoryName;
+    	return $name;
 	}
 
 	// 回傳該 schedule category的地點

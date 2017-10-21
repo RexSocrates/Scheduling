@@ -951,47 +951,33 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
+ 
+        $scheduleRecord = new ScheduleRecord();
+       $scheduleRecord->getScheduleTotoalBydoctorID(5);
      
-      
-         $scheduleRecord = new ScheduleRecord();     
-        $user = new User();
-        $doctors = $user->getAtWorkDoctors();
-        foreach ($doctors as $doctor) {
-            $shiftHours =$scheduleRecord->getScheduleTotoalBydoctorID($doctor->doctorID);
-                echo $shiftHours.'</br>';
-            // array_push($totalShift,$shiftHours);
-        }
+        // // $user = new User();
 
+       
+
+        // $oldscheduleID1 = $schedule_1_Info->scheduleID;
+        // $newscheduleID1 = $schedule_2_Info->scheduleID;
+        // $oldscheduleID2 = $schedule_2_Info->scheduleID;
+        // $newscheduleID2 = $schedule_1_Info->scheduleID;
+
+        // $job1 = new SendShiftExchangeMail($doctor1,$oldscheduleID1,$newscheduleID1);
+        // $job2 = new SendShiftExchangeMail($doctor2,$oldscheduleID2,$newscheduleID2);
+
+        // dispatch($job1);
+        // dispatch($job2);
+
+
+
+        //$schedule->exchangeSchedule($newChangeSerial);
         
-    }
-    
-        //$reservationData->addDate($month,1,10);
-            // $user= new User();
-            // $schedule = new Schedule();
-            // $major='Surgical';
-            // $doctors = $user->getDoctorByMajor($major);
-            // $scheduleData = $schedule->getDoctorScheduleDataByDate('2017-10-02');
-            
-            //     // $id = $doctor->doctorID;
-            //     // $idArr = [$id];
-            // // }
-            //    foreach($scheduleData as $info){
-            //     foreach ($doctors as $doctor) {
-            //          if($doctor->doctorID != $info->doctorID){
-            //             echo $doctor->doctorID.'<br>';
-            //          }
-            //          else{ 
-                        
-            //         }
-                    
-            //     }
-               
-            // }
-
-            // if($idArr != $scArr){
-            //     echo $idArr[0];
-            // }
-    
+           
+           
+         }
+         
     
     // 取得特定醫師在那一週的非職登院區上班班數
     public function getAnotherLocationShifts() {

@@ -38,6 +38,8 @@
                                 <div class="dhx_cal_next_button"></div>
                                 <div class="dhx_cal_today_button"></div>
                                 <div class="dhx_cal_date"></div>
+                                <div class="dhx_cal_tab" name="timeline_tab" style="display: none;"></div>
+                                
                                 <div class="dhx_cal_tab margin-l20 noUnderline">
                                     <form action="">
                                         <font class="dhx-font">醫師:</font>
@@ -429,10 +431,10 @@
     <script>
         $(document).ready(function(){
             $('select').material_select();
+            document.getElementsByClassName("collapsible")[1].getElementsByTagName("li")[0].className += "active";
+            document.getElementsByClassName("collapsible-body")[1].style.display = "block";
+            document.getElementsByClassName("collapsible-body")[1].getElementsByTagName("li")[1].className += "active";
         });
-    
-        
-
         
     </script>
 @endsection

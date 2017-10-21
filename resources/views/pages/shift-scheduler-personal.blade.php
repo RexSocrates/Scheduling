@@ -94,12 +94,14 @@
                                 <div class="dhx_cal_next_button"></div>
                                 <div class="dhx_cal_today_button"></div>
                                 <div class="dhx_cal_date"></div>
+                                <div class="dhx_cal_tab" name="timeline_tab" style="display: none;"></div>
+                                
                                 <div class="dhx_cal_tab margin-l20 noUnderline">
                                     <form action="shift-scheduler-personal" method="post">
                                         <font class="dhx-font">醫師:</font>
                                         <select  name="doctor" class="browser-default select-custom" required>
                                             <option value="" disabled selected required>選擇醫師</option>
-                                            <@foreach($allDoctor as $name)
+                                            @foreach($allDoctor as $name)
                                                 <option value="{{$name->doctorID}}">{{$name->name}} </option>
                                             @endforeach
                                         </select>
@@ -459,6 +461,9 @@
     <script>
         $(document).ready(function(){
             $('select').material_select();
+            document.getElementsByClassName("collapsible")[3].getElementsByTagName("li")[0].className += "active";
+            document.getElementsByClassName("collapsible-body")[3].style.display = "block";
+            document.getElementsByClassName("collapsible-body")[3].getElementsByTagName("li")[1].className += "active";
         });
     
      function changeDoctor_1(id){
