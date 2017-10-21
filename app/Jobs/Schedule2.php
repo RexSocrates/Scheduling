@@ -720,13 +720,508 @@ class Schedule2 implements ShouldQueue
             
             
             // 先找出北夜的預約醫師，台北夜班需求6人，下面這一段需要填滿當日班表 $shiftIndex = 10~15
-//            $taipeiNightShiftDoctorIDs = $this->checkOnScheduleDoctors($day, 'T', 'n');
+            $this->checkOnScheduleDoctors($day, 'T', 'n');
+            $taipeiNightShiftDoctorIDs = $this->onSchDoctorIDs;
             
+            // 計算台北夜班各科人力
+            $resourceDic = $this->countMajorResources($taipeiNightShiftDoctorIDs);
+            $allDocCount = $resourceDic['all'];
+            $medDocCount = $resourceDic['med'];
+            $surDocCount = $resourceDic['sur'];
+            
+            // 北夜急救先讓綜合科醫師先上 $shiftIndex = 10
+            if($allDocCount > 0) {
+                // 北夜急救人力可排
+                foreach($taipeiNightShiftDoctorIDs as $doctorID) {
+                    if($userObj->getDoctorInfoByID($doctorID)->major == 'All') {
+                        $this->schedDoctors[$shiftIndex++] = $doctorID;
+                        
+                        // 綜合科人力減1
+                        $allDocCount -= 1;
+                        // 從陣列中移除醫生ID
+                        array_splice($taipeiNightShiftDoctorIDs, array_search($doctorID, $taipeiNightShiftDoctorIDs), 1);
+                        break;
+                    }
+                }
+            }else {
+                // 沒有綜合科醫師預約此時段，先隨機選取一位醫師上班
+                if(count($taipeiNightShiftDoctorIDs) > 0) {
+                    // 有人預約此時段
+                    $randDoctorIndex = rand(0, count($taipeiNightShiftDoctorIDs) - 1);
+                    $randDoctorID = $taipeiNightShiftDoctorIDs[$randDoctorIndex];
+                    $this->schedDoctors[$shiftIndex++] = $randDoctorID;
+                    
+                    array_splice($taipeiNightShiftDoctorIDs, $randDoctorIndex, 1);
+                    
+                    // 該科人力減1
+                    if($userObj->getDoctorInfoByID($randDoctorID)->major == 'All') {
+                        $allDocCount -= 1;
+                    }else if($userObj->getDoctorInfoByID($randDoctorID)->major == 'Medical') {
+                        $medDocCount -= 1;
+                    }else {
+                        $surDocCount -= 1;
+                    }
+                }else {
+                    // 此時段沒有人預約
+                    
+                    // 先找可以上綜合科的醫生來排急救班
+                    $this->getFreeDoctorIDs($this->getOnDoctors($day), $this->getOffDoctors($day), 'all');
+                    
+                    // 隨機選取一位有空的醫生上班
+                    $randDoctorIDIndex = rand(0, count($this->freeDoctorIDs) - 1);
+                    $randDoctorID = $this->freeDoctorIDs[$randDoctorIDIndex];
+                    
+                    // 將選出的醫師排入當日班表
+                    $this->schedDoctors[$shiftIndex++] = $randDoctorID;
+                    
+                    // 從醫生名單中移除醫師
+                    array_splice($this->freeDoctorIDs, $randDoctorIDIndex, 1);
+                    
+                }
+            }
+            
+            echo '北夜急救排完了11 : '.$shiftIndex.'<br>';
+            
+            // 北夜發燒 + 北夜內科需求人力3 $shiftIndex = 11 ~ 13
+            if($allDocCount + $medDocCount >= 3) {
+                // 北夜內科人力充足
+                
+                // 選告一個陣列紀錄被排入的內科醫師
+                $filledMedDoctorIDs = [];
+                
+                // 內科醫師先排入
+                foreach($taipeiNightShiftDoctorIDs as $doctorID) {
+                    if($userObj->getDoctorInfoByID($doctorID)->major == 'Medical') {
+                        $this->schedDoctors[$shiftIndex++] = $doctorID;
+                        
+                        // 將醫生ID放入暫存陣列
+                        array_push($filledMedDoctorIDs, $doctorID);
+                        
+                        // 內科人力減1
+                        $medDocCount -= 1;
+                        
+                        if($medDocCount <= 0 or $shiftIndex >= 13) {
+                            break;
+                        }
+                    }
+                }
+                
+                // 將排入的內科醫師從人力陣列中移除
+                foreach($filledMedDoctorIDs as $doctorID) {
+                    array_splice($taipeiNightShiftDoctorIDs, array_search($doctorID, $taipeiNightShiftDoctorIDs), 1);
+                }
+                
+                // 若內科的人排完，工作點有空缺，請綜合科醫師去排
+                if($shiftIndex < 13) {
+                    
+                    //  宣告一個陣列存放被排入的綜合科醫生
+                    $filledAllDoctorIDs = [];
+                    
+                    
+                    // 如果將所有內科醫師排入之後工作點有空缺，請綜合科醫師下去排
+                    foreach($taipeiNightShiftDoctorIDs as $doctorID) {
+                        if($userObj->getDoctorInfoByID($doctorID)->major == 'All') {
+                            $this->schedDoctors[$shiftIndex++] = $doctorID;
+                            
+                            // 將醫生ID放入暫存陣列
+                            array_push($filledAllDoctorIDs, $doctorID);
+                            
+                            $allDocCount -= 1;
+                        }
+                        // 如果綜合科人數歸零或是工作點已填滿則離開迴圈
+                        if($allDocCount <= 0 or $shiftIndex >= 13) {
+                            break;
+                        }
+                    }
+                    
+                    // 從人力資源的陣列中移除被排入的綜合科醫生
+                    foreach($filledAllDoctorIDs as $doctorID) {
+                        array_splice($taipeiNightShiftDoctorIDs, array_search($doctorID, $taipeiNightShiftDoctorIDs), 1);
+                    }
+                }
+            }else {
+                // 北夜內科人力短缺
+                
+                // 內科醫師先排
+                if($medDocCount > 0) {
+                    // 宣告一個陣列儲存被排入的醫師ID
+                    $filledMedDoctorIDs = [];
+                    
+                    foreach($taipeiNightShiftDoctorIDs as $doctorID) {
+                        if($userObj->getDoctorInfoByID($doctorID)->major == 'Medical') {
+                            
+                            // 將醫師加入當日班表
+                            $this->schedDoctors[$shiftIndex++] = $doctorID;
+                            
+                            // 內科人力減1
+                            $medDocCount -= 1;
+                            
+                            // 將選上的醫生加入暫存陣列
+                            array_push($filledMedDoctorIDs, $doctorID);
+                        }
+                        
+                        // 如果內科醫生資源數量歸零，或是工作點已經填滿則跳出迴圈
+                        if($medDocCount <= 0 or $shiftIndex >= 13) {
+                            break;
+                        }
+                    }
+                    
+                    // 將已經排入當日班表的醫生移除
+                    foreach($filledMedDoctorIDs as $doctorID) {
+                        array_splice($taipeiNightShiftDoctorIDs, array_search($doctorID, $taipeiNightShiftDoctorIDs), 1);
+                    }
+                }
+                
+                // 如果內科醫師排完後，工作點沒有滿
+                if($shiftIndex < 13) {
+                    // 如果有綜合科醫師預約則排入
+                    if($allDocCount > 0) {
+                        // 存放被排入當日班表的醫生
+                        $filledAllDoctorIDs = [];
+                        
+                        foreach($taipeiNightShiftDoctorIDs as $doctorID) {
+                            if($userObj->getDoctorInfoByID($doctorID)->major == 'All') {
+                                $this->schedDoctors[$shiftIndex++] = $doctorID;
+                                
+                                // 綜合科人力減1
+                                $allDocCount -= 1;
+                                
+                                array_push($filledAllDoctorIDs, $doctorID);
+                            }
+                            
+                            if($allDocCount <= 0 or $shiftIndex >= 13) {
+                                break;
+                            }
+                        }
+                        
+                        // 將被排入的醫生移除
+                        foreach($filledAllDoctorIDs as $doctorID) {
+                            array_splice($taipeiNightShiftDoctorIDs, array_search($doctorID, $taipeiNightShiftDoctorIDs), 1);
+                        }
+                    }
+                    
+                    // 如果綜合科醫師排完後，工作點還是沒有滿，則找有空的醫師上班
+                    if($shiftIndex < 13) {
+                        $this->getFreeDoctorIDs($this->getOnDoctors($day), $this->getOffDoctors($day), 'med');
+                        
+                        // 存放被選上的醫師
+                        $filledDoctorIDIndex = [];
+                        
+                        // 隨機選取醫師上班
+                        while($shiftIndex <= 13) {
+                            $randDoctorIDIndex = rand(0, count($this->freeDoctorIDs) - 1);
+                            
+                            if(array_key_exists($randDoctorIDIndex, $filledDoctorIDIndex) == false) {
+                                // 加入隨機選出來的醫生ID index
+                                array_push($filledDoctorIDIndex, $randDoctorIDIndex);
+                                
+                                // 將隨機選出之醫生排入班表
+                                $this->schedDoctors[$shiftIndex++] = $this->freeDoctorIDs[$randDoctorIDIndex];
+                            }
+                        }
+                        // 將醫生移除選單
+                        foreach($filledDoctorIDIndex as $doctorIDIndex) {
+                            array_splice($this->freeDoctorIDs, $doctorIDIndex, 1);
+                        }
+                    }
+                }
+                
+                
+            }
+            echo '北夜內科排完了14 : '.$shiftIndex.'<br>';
+            
+            // 北夜外科人力需求2 $shiftIndex = 14 ~ 15
+            if($allDocCount + $surDocCount >= 2) {
+                // 北夜外科人力充足
+                if($surDocCount > 0) {
+                    // 宣告一個陣列儲存被排入的醫師
+                    $filledSurDoctorIDs = [];
+                    
+                    foreach($taipeiNightShiftDoctorIDs as $doctorID) {
+                        if($userObj->getDoctorInfoByID($doctorID)->major == 'Surgical') {
+                            $this->schedDoctors[$shiftIndex++] = $doctorID;
+                            
+                            // 外科人力減1
+                            $surDocCount -= 1;
+                            
+                            array_push($filledSurDoctorIDs, $doctorID);
+                        }
+                        
+                        // 如果外科人力歸零，或是工作點已經填滿則跳出迴圈
+                        if($surDocCount <= 0 or $shiftIndex >= 15) {
+                            break;
+                        }
+                    }
+                    
+                    // 移除被填入的外科醫師
+                    foreach($filledSurDoctorIDs as $doctorID) {
+                        array_splice($taipeiNightShiftDoctorIDs, array_search($doctorID, $taipeiNightShiftDoctorIDs), 1);
+                    }
+                }
+                
+                // 如果外科醫師都放進當日班表了，但還有工作點有空缺，排入綜合科醫師
+                
+                // 宣告陣列存放醫生
+                $filledAllDoctorIDs = [];
+                
+                foreach($taipeiNightShiftDoctorIDs as $doctorID) {
+                    if($userObj->getDoctorInfoByID($doctorID)->major == 'Surgical') {
+                        $this->schedDoctors[$shiftIndex++] = $doctorID;
+                        
+                        // 綜合科人力減1
+                        $allDocCount -= 1;
+                        
+                        array_push($filledAllDoctorIDs, $doctorID);
+                    }
+                    
+                    if($allDocCount <= 0 or $shiftIndex >= 15) {
+                        break;
+                    }
+                }
+                
+                // 從資源名單移出醫師
+                foreach($filledAllDoctorIDs as $doctorID) {
+                    array_splice($taipeiNightShiftDoctorIDs, array_search($doctorID, $taipeiNightShiftDoctorIDs), 1);
+                }   
+            }else {
+                // 北夜外科人力短缺
+                
+                if($surDocCount > 0) {
+                    // 宣告一個陣列儲存被排入的醫師
+                    $filledSurDoctorIDs = [];
+                    
+                    foreach($taipeiNightShiftDoctorIDs as $doctorID) {
+                        if($userObj->getDoctorInfoByID($doctorID)->major == 'Surgical') {
+                            $this->schedDoctors[$shiftIndex++] = $doctorID;
+                            
+                            // 外科人力減1
+                            $surDocCount -= 1;
+                            
+                            array_push($filledSurDoctorIDs, $doctorID);
+                        }
+                        
+                        // 如果外科人力歸零，或是工作點已經填滿則跳出迴圈
+                        if($surDocCount <= 0 or $shiftIndex >= 15) {
+                            break;
+                        }
+                    }
+                    
+                    // 移除被填入的外科醫師
+                    foreach($filledSurDoctorIDs as $doctorID) {
+                        array_splice($taipeiNightShiftDoctorIDs, array_search($doctorID, $taipeiNightShiftDoctorIDs), 1);
+                    }
+                }
+                
+                // 如果外科醫師都放進當日班表了，但還有工作點有空缺，排入綜合科醫師
+                if($allDocCount > 0 and $shiftIndex < 15) {
+                    // 宣告陣列存放醫生
+                    $filledAllDoctorIDs = [];
+                    
+                    foreach($taipeiNightShiftDoctorIDs as $doctorID) {
+                        if($userObj->getDoctorInfoByID($doctorID)->major == 'Surgical') {
+                            $this->schedDoctors[$shiftIndex++] = $doctorID;
+                            
+                            // 綜合科人力減1
+                            $allDocCount -= 1;
+                            
+                            array_push($filledAllDoctorIDs, $doctorID);
+                        }
+                        
+                        if($allDocCount <= 0 or $shiftIndex >= 15) {
+                            break;
+                        }
+                    }
+                    
+                    // 從資源名單移出醫師
+                    foreach($filledAllDoctorIDs as $doctorID) {
+                        array_splice($taipeiNightShiftDoctorIDs, array_search($doctorID, $taipeiNightShiftDoctorIDs), 1);
+                    }
+                }
+                
+                // 如果剩餘醫師都已經排進去當日班表，但仍有空缺
+                if($shiftIndex < 15) {
+                    // 先找有空的醫師
+                    $this->getFreeDoctorIDs($this->getOnDoctors($day), $this->getOffDoctors($day), 'sur');
+                    
+                    // 宣告陣列存放被填入的醫生
+                    $filledDoctorIDIndex = [];
+                    
+                    while($shiftIndex <= 15) {
+                        $randDoctorIDIndex = rand(0, count($this->freeDoctorIDs) - 1);
+                        
+                        if(array_key_exists($randDoctorIDIndex, $filledDoctorIDIndex) == false) {
+                            // 將index 加入陣列
+                            array_push($filledDoctorIDIndex, $randDoctorIDIndex);
+                            
+                            $this->schedDoctors[$shiftIndex++] = $this->freeDoctorIDs[$randDoctorIDIndex];
+                        }
+                    }
+                    
+                    // 移除剛才被填入的醫生
+                    foreach($filledDoctorIDIndex as $doctorIDIndex) {
+                        array_splice($this->freeDoctorIDs, $doctorIDIndex, 1);
+                    }
+                }
+            }
+            echo '北夜外科排完了16 : '.$shiftIndex.'<br>';
             
             
             // 先找出淡夜的預約醫師，淡水夜班需求3人，下面這一段需要填滿當日班表 $shiftIndex = 16~18
-//            $damsuiNightShiftDoctorIDs = $this->checkOnScheduleDoctors($day, 'D', 'n');
+            $this->checkOnScheduleDoctors($day, 'D', 'n');
+            $damsuiNightShiftDoctorIDs = $this->onSchDoctorIDs;
             
+            // 計算淡水夜班各科人力
+            $resourceDic = $this->countMajorResources($damsuiNightShiftDoctorIDs);
+            $allDocCount = $resourceDic['all'];
+            $medDocCount = $resourceDic['med'];
+            $surDocCount = $resourceDic['sur'];
+            
+            // 淡水夜班內科人力需求2 $shiftIndex = 16 ~ 17
+            if($allDocCount + $medDocCount >= 2) {
+                // 淡水夜班內科人力充足
+                
+                // 內科醫師先排
+                if($medDocCount > 0) {
+                    // 宣告列儲存被填入的內科醫生
+                    $filledMedDoctorIDs = [];
+                    
+                    foreach($damsuiNightShiftDoctorIDs as $dotorID) {
+                        if($userObj->getDoctorInfoByID($doctorID)->major == 'Medical') {
+                            // 將醫生排入當日班表
+                            $this->schedDoctors[$shiftIndex++] = $dotorID;
+                            
+                            array_push($filledMedDoctorIDs, $doctorID);
+                            
+                            $medDocCount -= 1;
+                        }
+                        
+                        if($medDocCount <= 0 or $shiftIndex >= 17) {
+                            break;
+                        }
+                    }
+                    
+                    // 移除被填入的醫生
+                    foreach($filledMedDoctorIDs as $doctorID) {
+                        array_splice($damsuiNightShiftDoctorIDs, array_search($doctorID, $damsuiNightShiftDoctorIDs), 1);
+                    }
+                }
+                
+                // 工作點沒有滿，請綜合科的醫生加入
+                if($allDocCount > 0) {
+                    // 宣告陣列存放將要被放入的綜合科醫生
+                    $filledAllDoctorIDs = [];
+                    
+                    foreach($damsuiNightShiftDoctorIDs as $doctorID) {
+                        if($userObj->getDoctorInfoByID($doctorID)->major == 'All') {
+                            // 將醫生排入當日班表
+                            $this->schedDoctors[$shiftIndex++] = $doctorID;
+                            
+                            array_push($filledAllDoctorIDs, $doctorID);
+                            $allDocCount -= 1;
+                        }
+                        
+                        if($allDocCount <= 0 or $shiftIndex > 17) {
+                            break;
+                        }
+                    }
+                    
+                    // 移除剛才被放入當日班表的醫生
+                    foreach($filledAllDoctorIDs as $doctorID) {
+                        array_splice($damsuiNightShiftDoctorIDs, array_search($doctorID, $damsuiNightShiftDoctorIDs), 1);
+                    }
+                }
+            }else {
+                // 淡水夜班內科人力不足
+                
+                // 內科醫師先排
+                if($medDocCount > 0) {
+                    // 宣告列儲存被填入的內科醫生
+                    $filledMedDoctorIDs = [];
+                    
+                    foreach($damsuiNightShiftDoctorIDs as $dotorID) {
+                        if($userObj->getDoctorInfoByID($doctorID)->major == 'Medical') {
+                            // 將醫生排入當日班表
+                            $this->schedDoctors[$shiftIndex++] = $dotorID;
+                            
+                            array_push($filledMedDoctorIDs, $doctorID);
+                            
+                            $medDocCount -= 1;
+                        }
+                        
+                        if($medDocCount <= 0 or $shiftIndex >= 17) {
+                            break;
+                        }
+                    }
+                    
+                    // 移除被填入的醫生
+                    foreach($filledMedDoctorIDs as $doctorID) {
+                        array_splice($damsuiNightShiftDoctorIDs, array_search($doctorID, $damsuiNightShiftDoctorIDs), 1);
+                    }
+                }
+                
+                // 工作點沒有滿，請綜合科的醫生加入
+                if($allDocCount > 0) {
+                    // 宣告陣列存放將要被放入的綜合科醫生
+                    $filledAllDoctorIDs = [];
+                    
+                    foreach($damsuiNightShiftDoctorIDs as $doctorID) {
+                        if($userObj->getDoctorInfoByID($doctorID)->major == 'All') {
+                            // 將醫生排入當日班表
+                            $this->schedDoctors[$shiftIndex++] = $doctorID;
+                            
+                            array_push($filledAllDoctorIDs, $doctorID);
+                            $allDocCount -= 1;
+                        }
+                        
+                        if($allDocCount <= 0 or $shiftIndex > 17) {
+                            break;
+                        }
+                    }
+                    
+                    // 移除剛才被放入當日班表的醫生
+                    foreach($filledAllDoctorIDs as $doctorID) {
+                        array_splice($damsuiNightShiftDoctorIDs, array_search($doctorID, $damsuiNightShiftDoctorIDs), 1);
+                    }
+                }
+                
+                // 內科與綜合科醫師填入之後還沒有填滿，請有空的醫生加入
+                if($shiftIndex <= 17) {
+                    $this->getFreeDoctorIDs($this->getOnDoctors($day), $this->getOffDoctors($day), 'med');
+                    
+                    // 宣告陣列儲存隨機選取的醫師
+                    $filledDoctorIDIndex = [];
+                    
+                    while($shiftIndex <= 17) {
+                        $randDoctorIDIndex = rand(0, count($this->freeDoctorIDs) - 1);
+                        
+                        if(array_key_exists($randDoctorIDIndex, $filledDoctorIDIndex) == false) {
+                            array_push($filledDoctorIDIndex, $randDoctorIDIndex);
+                            
+                            $this->schedDoctors[$shiftIndex++] = $this->freeDoctorIDs[$randDoctorIDIndex];
+                        }
+                    }
+                    
+                    // 移除剛才選上的醫師
+                    foreach($filledDoctorIDIndex as $doctorIDIndex) {
+                        array_splice($this->freeDoctorIDs, $doctorIDIndex, 1);
+                    }
+                }
+            }
+            
+            echo '淡夜內科排完了18 : '.$shiftIndex.'<br>';
+            
+            // 淡夜外科人力需求1 $shiftIndex = 18
+            if($allDocCount + $surDocCount) {
+                // 人力充足
+                $this->schedDoctors[$shiftIndex++] = $damsuiNightShiftDoctorIDs[rand(0, count($damsuiNightShiftDoctorIDs) - 1)];
+            }else {
+                // 人力短缺
+                $this->getFreeDoctorIDs($this->getOnDoctors($day), $this->getOffDoctors($day), 'sur');
+                
+                $this->schedDoctors[$shiftIndex++] = $this->freeDoctorIDs[rand(0, count($this->freeDoctorIDs) - 1)];
+            }
+            
+            echo '淡夜外科排完了19 : '.$shiftIndex.'<br>';
             
             
             //  將每日班表加入陣列中
@@ -737,7 +1232,7 @@ class Schedule2 implements ShouldQueue
         
         
     
-//        $this->printSchedule();
+        $this->printSchedule();
     }
     
     //  ==================  排班運算用  =========================
@@ -788,7 +1283,6 @@ class Schedule2 implements ShouldQueue
                 }
             }
         }
-        
     }
     
     // 計算此醫生列表中的各科人力資源數量
