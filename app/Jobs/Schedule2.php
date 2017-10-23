@@ -1235,14 +1235,12 @@ class Schedule2 implements ShouldQueue
             
             
             //  將每日班表加入陣列中
-            array_push($this->schedule, new ClassTable2($day, $this->schedDoctors));
+            array_push($this->schedule, new ClassTable2($day + 1, $this->schedDoctors));
             
         }
         
-        
-        
-    
         $this->printSchedule();
+        $this->storeSchedule();
     }
     
     //  ==================  排班運算用  =========================
@@ -1391,10 +1389,10 @@ class Schedule2 implements ShouldQueue
         
         for($day = 0; $day < count($this->schedule); $day++) {
             // 取得每日班表
-            $singleDaySch = $this->schedule[$day];
+            $classTableObj = $this->schedule[$day];
             
             // 下面的迴圈代表每一天所有的表，應該要有19個
-            for($schCateSerial = 0; $schCateSerial < count($singleDaySch); $schCateSerial++) {
+            for($schCateSerial = 0; $schCateSerial < count($classTableObj->shifts); $schCateSerial++) {
                 // 處理日期字串
                 $dateStr = $dateStr = $this->monthInfo->year.'-';
                 
@@ -1413,8 +1411,8 @@ class Schedule2 implements ShouldQueue
                 $dateStr = $dateStr.($day + 1);
                 
                 $schDic = [
-                    'doctorID' => $singleDaySch[$schCateSerial],
-                    'schCategorySerial' => ($schCateSerial + 1),
+                    'doctorID' => $classTableObj->shifts[$schCateSerial],
+                    'schCategorySerial' => ($schCateSerial + 3),
                     'isWeekday' => array_key_exists($day, $this->weekendDate) == false,
                     'location' => array_key_exists((($schCateSerial + 1)), $this->taipeiSchCateSerial),
                     'date' => $dateStr,
