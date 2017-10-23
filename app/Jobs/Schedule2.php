@@ -13,6 +13,7 @@ use App\User;
 use App\Reservation;
 use App\DoctorAndReservation;
 use App\ShiftCategory;
+use App\Schedule;
 
 // 客製化物件
 use App\CustomClass\OnReservation;
@@ -48,6 +49,13 @@ class Schedule2 implements ShouldQueue
     
     // 特定時間預約on班的醫生
     public $onSchDoctorIDs = [];
+    
+    // 上班地區在台北的 schedule category : 0 ~ 18
+    public $taipeiSchCateSerial = [0, 1, 2, 3, 4, 5, 10, 11, 12, 13, 14, 15];
+    
+    // 存放排班月份的假日日期
+    public $weekendDate = [];
+    
 
     /**
      * Create a new job instance.
@@ -61,6 +69,8 @@ class Schedule2 implements ShouldQueue
         $this->offRes = $this->getOffReservation();
         $this->doctors = $this->getDoctorsInfo();
         $this->monthInfo = $this->getMonthInfo();
+        
+        echo print_r($this->monthInfo).'<br>';
     }
 
     /**
@@ -1338,13 +1348,83 @@ class Schedule2 implements ShouldQueue
     public function printSchedule() {
         echo '<br>月份班表<br>';
         for($day = 0; $day < count($this->schedule); $day++) {
-            echo 'Day : '.$day.'<br>';
+            echo 'Day : '.($day + 1).'<br>';
             echo print_r($this->schedule[$day]->shifts).'<br>';
         }
         
         foreach($this->schedule as $sch) {
             echo 'Day : '.$sch->day.'<br>';
             echo print_r($sch->shifts).'<br>';
+        }
+    }
+    
+    // 計算排班月份的假日日期
+    public function getWeekendDate() {
+        for($day = 1; $day < $this->monthInfo->daysOfMonth; $day++) {
+            $dateStr = $this->monthInfo->year.'-';
+            
+            // 判斷月份
+            if($this->monthInfo->month < 10) {
+                $dateStr = $dateStr.'0'.$this->monthInfo->month;
+            }else {
+                $dateStr = $dateStr.$this->monthInfo->month;
+            }
+            
+            // 判斷日
+            if($day < 10) {
+                $dateStr = $dateStr.'0'.$day;
+            }else {
+                $dateStr = $dateStr.$day;
+            }
+            
+            $weekday = date('N', strtotime($dateStr));
+            
+            if($weekday == 6 or $weekday == 7) {
+                array_push($this->weekendDate, $day);
+            }
+        }
+    }
+    
+    // 將班表寫入資料庫
+    public function storeSchedule() {
+        $schObj = new Schedule();
+        
+        for($day = 0; $day < count($this->schedule); $day++) {
+            // 取得每日班表
+            $singleDaySch = $this->schedule[$day];
+            
+            // 下面的迴圈代表每一天所有的表，應該要有19個
+            for($schCateSerial = 0; $schCateSerial < count($singleDaySch); $schCateSerial++) {
+                // 處理日期字串
+                $dateStr = $dateStr = $this->monthInfo->year.'-';
+                
+                // 判斷月份
+                if($this->monthInfo->month < 10) {
+                    $dateStr = $dateStr.'0';
+                }
+                
+                $dateStr = $dateStr.$this->monthInfo->month.'-';
+                
+                // 判斷日期
+                if(($day + 1) < 10) {
+                    $dateStr = $dateStr.'0';
+                }
+                
+                $dateStr = $dateStr.($day + 1);
+                
+                $schDic = [
+                    'doctorID' => $singleDaySch[$schCateSerial],
+                    'schCategorySerial' => ($schCateSerial + 1),
+                    'isWeekday' => array_key_exists($day, $this->weekendDate) == false,
+                    'location' => array_key_exists((($schCateSerial + 1)), $this->taipeiSchCateSerial),
+                    'date' => $dateStr,
+                    'endDate' => date('Y-m-d', strtotime($dateStr.'+1 day')),
+                    'confirmed' => false,
+                    'status' => 0
+                ];
+                
+                $schObj->setSchedule($schDic);
+            }
         }
     }
     

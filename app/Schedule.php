@@ -733,19 +733,35 @@ class Schedule extends Model
         return $count;
     }
 
-  public function getDoctorDate(){
-    $currentMonth = date('Y-m');
+    public function getDoctorDate(){
+        $currentMonth = date('Y-m');
         $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
-    $count = DB::table('Schedule')
+        $count = DB::table('Schedule')
             ->whereNotNull('doctorID')
             ->where('doctorID', 3)
             ->whereNotIn('doctorID', [2])
             ->where('date', 'like', $nextMonth.'%')
             ->get();
-
-           return $count;
         
-  }
+        return $count;
+        
+    }
+    
+    // 從演算法輸入班表，每一次輸入一天的一個班
+    public function setSchedule(array $data) {
+        $newSerial = DB::table('Schedule')->insertGetId([
+            'doctorID' => $data['doctorID'],
+            'schCategorySerial' => $data['schCategorySerial'],
+            'isWeekday' => $data['isWeekday'],
+            'location' => $data['location'],
+            'date' => $data['date'],
+            'endDate' => $data['endDate'],
+            'confirmed' => false,
+            'status' => 0
+        ]);
+    }
+    
+    
 
 
 }
