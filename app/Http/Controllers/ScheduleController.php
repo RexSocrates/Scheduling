@@ -701,9 +701,10 @@ class ScheduleController extends Controller
 
         $schCategorySerial=$schedule->getScheduleDataByID($data['scheduleID_1'])->schCategorySerial;
 
-        $major = $scheduleCategory->getSchCategoryMajor($schCategorySerial);
+        $major_schedule = $scheduleCategory->getSchCategoryMajor($schCategorySerial);
+        $major_doctor = $user->getDoctorInfoByID($schedule->getScheduleDataByID($data['scheduleID_1'])->doctorID)->major;
         
-        $scheduleRecord = $schedule->getDoctorInDate($date1,$date2,$major);
+        $scheduleRecord = $schedule->getDoctorInDate($date1,$date2,$major_schedule,$major_doctor);
 
         $array = array();
 
@@ -711,6 +712,7 @@ class ScheduleController extends Controller
         foreach ($scheduleRecord as $schedule) {
 
             $scheduleID = $schedule->scheduleID;
+
             if($schedule->doctorID == null){
                 $name="";
             }

@@ -952,8 +952,14 @@ class TestController extends Controller
 
    public function announceSchedule(){
  
-        $scheduleRecord = new ScheduleRecord();
-       $scheduleRecord->getScheduleTotoalBydoctorID(5);
+        $schedule = new Schedule();
+        $scheduleRecord = $schedule->getDoctorInDate("2017-11-04","2017-11-05","All");
+
+        foreach ($scheduleRecord as $record) {
+            echo $record->doctorID;
+        }
+        //echo $scheduleRecordArr;
+        //return $scheduleRecordArr; 
      
         // // $user = new User();
 

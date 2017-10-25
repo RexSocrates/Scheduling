@@ -21,35 +21,40 @@
       		  	  	  	<div class="card-content">
       		  	  	  	    <table id="doctor" class="mdl-data-table striped highlight" cellspacing="0" width="100%">
                                 <thead>
+                                   
                                     <tr>
                                         <th>id</th>
                                         <th>名稱</th>
                                         <th>總數</th>
-                                        <th>12月</th>
-                                        <th>11月</th>
-                                        <th>10月</th>
-                                        <th>9月</th>
-                                        <th>8月</th>
-                                        <th>7月</th>
+                                         @foreach($monthList as $month)
+                                        <th> {{ $month }} 月</th>
+                                         @endforeach
                                         <th>動作</th>
+
                                     </tr>
+                                   
                                 </thead>
                                 <tbody>
-                                    @foreach($doctors as $doctor)
+                                     @foreach($doctorsRecords as $record)
+                                        @foreach($shiftHours as $hour)
                                     <tr>
-                                        <td>{{ $doctor->doctorID }}</td>
-                                        <td>{{ $doctor->name }}</td>
-                                        <td>-2</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>+3</td>
-                                        <td>-2</td>
-                                        <td>-2</td>
+                                        <td>{{ $record[1]['doctorID'] }}</td>
+                                        <td>{{ $record[1]['doctorName'] }}</td>
+                                        
+                                        @if ( $record[1]['totalShiftHours'] >0 )
+                                            <td> {{ $record[1]['totalShiftHours'] }}</td>
+                                        @else
+                                            <td>{{ $record[1]['totalShiftHours'] }}</td>
+                                        @endif
+
+                                        <td>{{ $hour[0] }}</td>
+                                       
+
                                         <td class="doctor-td">
-                                            <a class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" href="#modal1">更多</a>
+                                            <a class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" href="#modal1" onclick="getRecord({{ $record[1]['doctorID'] }})">更多</a>
                                         </td>
                                     </tr>
+                                     @endforeach
                                     @endforeach
                                 </tbody>    
                             </table>
@@ -68,7 +73,7 @@
 
         <div class="modal-content modal-content-customize1 padding-t5">
             <div class="row margin-b0">
-                <h5>醫生名稱：蔡維德</h5>
+                <h5 id=name></h5>
                 <table class="striped">
                     <thead>
                         <tr>
@@ -76,43 +81,12 @@
                             <th>班數情況</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id = "shiftHours">
                         <tr>
-                            <td>2017-10</td>
-                            <td>+4</td>
+                            <td></td>
+                            <td></td>
                         </tr>
-                        <tr>
-                            <td>2017-09</td>
-                            <td>+2</td>
-                        </tr>
-                        <tr>
-                            <td>2017-08</td>
-                            <td>-3</td>
-                        </tr>
-                        <tr>
-                            <td>2017-07</td>
-                            <td>-4</td>
-                        </tr>
-                        <tr>
-                            <td>2017-06</td>
-                            <td>+2</td>
-                        </tr>
-                        <tr>
-                            <td>2017-05</td>
-                            <td>-3</td>
-                        </tr>
-                        <tr>
-                            <td>2017-04</td>
-                            <td>-4</td>
-                        </tr>
-                        <tr>
-                            <td>2017-03</td>
-                            <td>-2</td>
-                        </tr>
-                        <tr>
-                            <td>2017-02</td>
-                            <td>+3</td>
-                        </tr>
+                        
 <!--
                     <thead>
                         <tr>
@@ -195,5 +169,32 @@
             selectMonths: true, // Creates a dropdown to control month
             selectYears: 200 // Creates a dropdown of 15 years to control year
         });
+
+        function getRecord(doctorID) {
+            $.get('getRecord', {
+                doctorID : doctorID
+
+            }, function(array) {
+
+                htmlTableBody = "";
+                 for(i = 0; i < array.length; i++) {
+                     htmlDoc = "<tr>";
+                     htmlDoc += "<td>" + array[i]['date'] + "</td>"; // 日期
+                     htmlDoc += "<td>" + array[i]['shiftHours'] + "</td>"; // 班數
+                     
+                     htmlDoc += "</tr>";
+                     
+                     htmlTableBody += htmlDoc;
+                 }
+                    document.getElementById("name").innerHTML  = "醫生名稱："+array[0]['doctorName'];
+                    document.getElementById("shiftHours").innerHTML = htmlTableBody;
+             });
+
+               
+               
+            
+
+            console.log(doctorID);
+        }
     </script>
 @endsection

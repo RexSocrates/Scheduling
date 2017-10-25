@@ -69,9 +69,21 @@ class ScheduleRecord extends Model
         if($currentMonth >= ($currentYear.'-06')){
             $date = ($currentYear.'-07');
         }
+
+         $data = DB::table('ScheduleRecord')
+            ->whereBetween('month', [$date, $currentMonth])
+            ->where('doctorID',$doctorID)
+            
+            ->get();
+        
+        return $data;
+    }
+
+    //查詢 單一醫生全部積欠班數
+    public function getAllScheduleRecordByDoctorID($doctorID){
+
          $data = DB::table('ScheduleRecord')
             ->where('doctorID',$doctorID)
-            ->whereBetween('month', [$date, $currentMonth])
             ->get();
         
         return $data;
