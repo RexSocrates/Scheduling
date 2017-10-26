@@ -22,7 +22,7 @@
       		  	  	  	    <table id="doctor" class="mdl-data-table striped highlight" cellspacing="0" width="100%">
                                 <thead>
                                    
-                                    <tr>
+                                    <!-- <tr>
                                         <th>id</th>
                                         <th>名稱</th>
                                         <th>總數</th>
@@ -31,10 +31,40 @@
                                          @endforeach
                                         <th>動作</th>
 
+                                    </tr> -->
+                                      <tr>
+                                        <th>id</th>
+                                        <th>名稱</th>
+                                        <th>總數</th>
+                                        <th>12月</th>
+                                        <th>11月</th>
+                                        <th>10月</th>
+                                        <th>9月</th>
+                                        <th>8月</th>
+                                        <th>7月</th>
+                                        <th>動作</th>
                                     </tr>
                                    
                                 </thead>
                                 <tbody>
+                                    @foreach($doctorsRecords as $record)
+                                    <tr>
+                                        <td>{{ $record[1]['doctorID'] }}</td>
+                                        <td>{{ $record[1]['doctorName'] }}</td>
+                                        <td>-2</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>+3</td>
+                                        <td>-2</td>
+                                        <td>-2</td>
+                                        <td class="doctor-td">
+                                            <a class="waves-effect waves-light teal lighten-1 btn doctor-td-btn" href="#modal1" onclick="getRecord({{ $record[1]['doctorID'] }})">更多</a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>    
+                                <!-- <tbody>
                                      @foreach($doctorsRecords as $record)
                                         @foreach($shiftHours as $hour)
                                     <tr>
@@ -56,7 +86,7 @@
                                     </tr>
                                      @endforeach
                                     @endforeach
-                                </tbody>    
+                                </tbody>     -->
                             </table>
       		  	  	  	</div>
       		  	  	</div>

@@ -882,70 +882,70 @@
                     checkDocStatus(id,array[0]['scheduleID']);
                 }
 
-                else if(array[0]['date'] == array[0]['dateInSchedule']){
-                     if(array[0]['countNight'] != 0){
-                        var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n確定要增班嗎");
+                // else if(array[0]['date'] == array[0]['dateInSchedule']){
+                //      if(array[0]['countNight'] != 0){
+                //         var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n確定要增班嗎");
 
-                            if (r == true) {
-                                updateSchedule(scheduleID,date,classification);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
-                    }
-                    else{
-                        updateSchedule(scheduleID,date,classification);
-                    }
+                //             if (r == true) {
+                //                 updateSchedule(scheduleID,date,classification);
+                //             } 
+                //             else {
+                //                 alert("已取消");
+                //                 refresh();
+                //             }
+                //     }
+                //     else{
+                //         updateSchedule(scheduleID,date,classification);
+                //     }
                     
-                }
+                // }
 
-                else if(array[0]['count']!=0){
-                    alert(array[0]['docName']+"醫生"+array[0]['date']+"已有班" );
-                    //dhtmlx.message({ type:"error", text:array[0]['docName']+"醫生"+array[0]['date']+"已有班" });
-                    refresh();
-                }
+                // else if(array[0]['count']!=0){
+                //     alert(array[0]['docName']+"醫生"+array[0]['date']+"已有班" );
+                //     //dhtmlx.message({ type:"error", text:array[0]['docName']+"醫生"+array[0]['date']+"已有班" });
+                //     refresh();
+                // }
 
-                else if (array[0]['countOff']!=0 || array[0]['countNight']!=0){
+                // else if (array[0]['countOff']!=0 || array[0]['countNight']!=0){
 
-                     if(array[0]['countOff']!=0 && array[0]['countNight']!=0){
-                        var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"已有off班?\n且"+ array[0]['date']+"前一晚已有夜班\n確定要增班嗎");
+                //      if(array[0]['countOff']!=0 && array[0]['countNight']!=0){
+                //         var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"已有off班?\n且"+ array[0]['date']+"前一晚已有夜班\n確定要增班嗎");
 
-                            if (r == true) {
-                                updateSchedule(scheduleID,date,classification);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
-                    }
+                //             if (r == true) {
+                //                 updateSchedule(scheduleID,date,classification);
+                //             } 
+                //             else {
+                //                 alert("已取消");
+                //                 refresh();
+                //             }
+                //     }
 
-                    else if(array[0]['countOff']!=0){
-                        var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"已有off班?\n確定要換班嗎");
+                //     else if(array[0]['countOff']!=0){
+                //         var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"已有off班?\n確定要換班嗎");
 
-                            if (r == true) {
-                                updateSchedule(scheduleID,date,classification);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
-                    }
+                //             if (r == true) {
+                //                 updateSchedule(scheduleID,date,classification);
+                //             } 
+                //             else {
+                //                 alert("已取消");
+                //                 refresh();
+                //             }
+                //     }
 
-                    else if(array[0]['countNight'] != 0){
-                        var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n確定要增班嗎");
+                //     else if(array[0]['countNight'] != 0){
+                //         var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n確定要增班嗎");
 
-                            if (r == true) {
-                                updateSchedule(scheduleID,date,classification);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
-                    }
+                //             if (r == true) {
+                //                 updateSchedule(scheduleID,date,classification);
+                //             } 
+                //             else {
+                //                 alert("已取消");
+                //                 refresh();
+                //             }
+                //     }
                     
                     
-                }
+                // }
                 
                 
                 else if(array[0]['scheduleID']!=0){
@@ -968,10 +968,11 @@
                 //      console.log(weekday);
                 // }
                 else {
-                    updateSchedule(scheduleID,date,classification);
+                    refresh();
+                //     //updateSchedule(scheduleID,date,classification);
                     
-                }
-                // console.log(id);
+                 }
+                // // console.log(id);
                 // console.log(array[0]['scheduleID']);
                 console.log("id"+id);
                 console.log("sc2"+array[0]['scheduleID'])
