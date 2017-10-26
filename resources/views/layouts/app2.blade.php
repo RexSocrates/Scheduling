@@ -162,16 +162,49 @@
                 first = !first;
             }
         })();
-        
+             
         function slideToLeft() {
             document.getElementById("slide-out").style.width = "0";
             document.getElementById("header").style.marginLeft = "0";
             document.getElementById("section").style.marginLeft = "0";
+            
+            var classLength = document.getElementsByClassName("dhx_cal_tab").length;
+            
+            if (classLength != 0) {
+                document.getElementsByClassName("dhx_cal_tab")[0].classList.remove("active");
+                var delay = function(s){
+                    return new Promise(function(resolve,reject){
+                        setTimeout(resolve,s); 
+                    });
+                };
+                delay().then(function(){
+                    return delay(500); // 延遲0.5秒
+                }).then(function(){
+                    document.getElementsByClassName("dhx_cal_tab")[0].click();
+                });
+            }
         };
+        
         function slideToRight() {
             document.getElementById("slide-out").style.width = "250px";
             document.getElementById("header").style.marginLeft = "250px";
             document.getElementById("section").style.marginLeft = "250px";
+            
+            var classLength = document.getElementsByClassName("dhx_cal_tab").length;
+            
+            if (classLength != 0) {
+                document.getElementsByClassName("dhx_cal_tab")[0].classList.remove("active");
+                var delay = function(s){
+                    return new Promise(function(resolve,reject){
+                        setTimeout(resolve,s); 
+                    });
+                };
+                delay().then(function(){
+                    return delay(500); // 延遲0.5秒
+                }).then(function(){
+                    document.getElementsByClassName("dhx_cal_tab")[0].click();
+                });
+            }
         };
         
 //        查看side-nav現在是處於哪一頁

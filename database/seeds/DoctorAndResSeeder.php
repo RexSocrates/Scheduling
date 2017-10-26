@@ -14,12 +14,12 @@ class DoctorAndResSeeder extends Seeder
         //
         
         $record = [];
-        for($i = 1; $i <= 50; $i++) {
+        for($i = 1; $i <= 100; $i++) {
             $resSerial = 0;
             $doctorID = 0;
             $haveBeenGenerated = false;
             do {
-                $resSerial = rand(1, 37);
+                $resSerial = rand(64, 154);
                 $doctorID = rand(2, 50);
                 
                 for($j = 0; $j < count($record); $j++) {

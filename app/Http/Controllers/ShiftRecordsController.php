@@ -822,6 +822,15 @@ class ShiftRecordsController extends Controller
            
             $recordDic['applyDate'] = $record->date;
             
+
+
+            
+            $schedule1 = $sheduleObj->getScheduleDataByID($record->scheduleID_1);
+            $schedule2 = $sheduleObj->getScheduleDataByID($record->scheduleID_2);
+            $sch1Name = $schCateObj->findScheduleName($schedule1->schCategorySerial)->schCategoryName;
+            $sch2Name = $schCateObj->findScheduleName($schedule2->schCategorySerial)->schCategoryName;
+            
+
             $recordDic['sch1Date'] = $schedule1->date;
             $recordDic['sch2Date'] = $schedule2->date;
            
