@@ -44,7 +44,8 @@ class ScheduleCategory extends Model
     // 回傳該 schedule category的科別
     public function getSchCategoryMajor($categorySerial) {
        $major=null;
-        if($categorySerial == 3 || $categorySerial == 4 ||
+        if(
+            $categorySerial == 3 || $categorySerial == 4 ||
             $categorySerial == 5|| $categorySerial == 6 ||
             $categorySerial == 9|| $categorySerial == 10 || 
             $categorySerial == 13|| $categorySerial == 14 || 
@@ -54,13 +55,19 @@ class ScheduleCategory extends Model
 
             $major="Medical";
         } 
-        if($categorySerial == 7 || $categorySerial == 8 ||
+
+        if(
+            $categorySerial == 3 || $categorySerial == 4 ||
+            $categorySerial == 7 || $categorySerial == 8 ||
             $categorySerial == 11 || $categorySerial == 12 ||
             $categorySerial == 17|| $categorySerial == 18 ||
             $categorySerial == 21)
         {
             $major="Surgical";
-        }   
+        } 
+
+        //$categorySerial == 1 || $categorySerial == 2){
+           
         return $major;
     }
     

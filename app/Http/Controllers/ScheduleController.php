@@ -208,8 +208,15 @@ class ScheduleController extends Controller
             }
 
         $major=0;
+        $major_doctor = "";
+        if($categoryID==1 || $categoryID==2){
+            $major_doctor=$user->getDoctorInfoByID($id)->major;
+        }
+        else{
+            $major_doctor=$scheduleCategory->getSchCategoryMajor($categoryID);
+        }
         if($user->getDoctorInfoByID($id)->major != "All"){
-            if($user->getDoctorInfoByID($id)->major != $scheduleCategory->getSchCategoryMajor($categoryID)){
+            if($user->getDoctorInfoByID($id)->major != $major_doctor){
                 $major=1;
             }
         }  
@@ -268,8 +275,16 @@ class ScheduleController extends Controller
     }
 
         $major=0;
+        $major_doctor = "";
+        if($categoryID==1 || $categoryID==2 ){
+                $major_doctor=$user->getDoctorInfoByID($doctorID)->major;
+        }
+        else{
+            $major_doctor=$scheduleCategory->getSchCategoryMajor($categoryID);
+        }
         if($user->getDoctorInfoByID($doctorID)->major != "All"){
-            if($user->getDoctorInfoByID($doctorID)->major != $scheduleCategory->getSchCategoryMajor($categoryID)){
+
+            if($user->getDoctorInfoByID($doctorID)->major != $major_doctor){
                 $major=1;
             }
         }
@@ -366,12 +381,18 @@ class ScheduleController extends Controller
         $data = $request->all();
 
         $str = $this->processDateStr($data['date']);
-        $major = $scheduleCategory->getSchCategoryMajor($data['categorySerial']);
-        //$categorySerial="Medical";
-        
-        //$date1 = "2017-10-02";
+
+        $doctors="";
+
+        if($data['categorySerial'] == 1 || $data['categorySerial'] == 2){
+            $doctors =$schedule->getDoctorNotInDateWithoutMajor($str);
+        }
+
+        else{
+            $major = $scheduleCategory->getSchCategoryMajor($data['categorySerial']);
       
-        $doctors = $schedule->getDoctorNotInDate($str,$major);
+            $doctors = $schedule->getDoctorNotInDate($str,$major);
+        }
 
         $date= date('Y-m',strtotime("+1 month"));
         $shiftArr=[];
@@ -701,8 +722,15 @@ class ScheduleController extends Controller
 
         $schCategorySerial=$schedule->getScheduleDataByID($data['scheduleID_1'])->schCategorySerial;
 
-        $major_schedule = $scheduleCategory->getSchCategoryMajor($schCategorySerial);
         $major_doctor = $user->getDoctorInfoByID($schedule->getScheduleDataByID($data['scheduleID_1'])->doctorID)->major;
+
+        if($schCategorySerial == 1 || $schCategorySerial ==2){
+            $major_schedule=$major_doctor;
+        }
+        else{
+            $major_schedule = $scheduleCategory->getSchCategoryMajor($schCategorySerial);
+        }
+        
         
         $scheduleRecord = $schedule->getDoctorInDate($date1,$date2,$major_schedule,$major_doctor);
 

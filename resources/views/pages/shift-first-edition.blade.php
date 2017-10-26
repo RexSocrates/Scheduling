@@ -1487,6 +1487,7 @@
             document.getElementById("shiftDate").value=date;
             document.getElementById("shiftSessionID").value=section_id;
             document.getElementById("scheduleID_1").value=id;
+            
             $.get("showDoctorInfo",{
                 categorySerial: section_id,
                 date : document.getElementById("shiftDate").value
