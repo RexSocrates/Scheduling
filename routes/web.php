@@ -24,6 +24,9 @@ Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
 
 Route::get('newPage', 'AccountController@getNewPage');
 
+//得到單一醫生欠班狀況
+Route::get('getRecord','AccountController@getRecordByDoctor');
+
 // Ajax get request 編輯醫師資料
 Route::get('editDoctorInfo', 'AccountController@editDoctorInfo');
 

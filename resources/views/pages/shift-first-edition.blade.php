@@ -694,9 +694,10 @@
                 var doctor = "";
                 for(i=0 ; i<array.length ; i++){
                     doctor += "<option value="+array[i][0]+">"+array[i][1]+"-"+array[i][2]+"</option>";
-                    console.log('1'+array[i][1]);
+                    console.log('1'+array[0][1]);
                     console.log(array[i][0]);
                 }
+
                 document.getElementById("schID_2_doctor").innerHTML  = doctor;
 
             });
@@ -1488,6 +1489,7 @@
             document.getElementById("shiftDate").value=date;
             document.getElementById("shiftSessionID").value=section_id;
             document.getElementById("scheduleID_1").value=id;
+            
             $.get("showDoctorInfo",{
                 categorySerial: section_id,
                 date : document.getElementById("shiftDate").value

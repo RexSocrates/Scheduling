@@ -806,21 +806,35 @@ class ShiftRecordsController extends Controller
                 'sch2Content' => '',
                 'adminConfirm' => $record->adminConfirm
             ];
+
+            $schedule1 = $sheduleObj->getScheduleDataByID($record->scheduleID_1);
+            $schedule2 = $sheduleObj->getScheduleDataByID($record->scheduleID_2);
+            $sch1Name = $schCateObj->findScheduleName($schedule1->schCategorySerial)->schCategoryName;
+            $sch2Name = $schCateObj->findScheduleName($schedule2->schCategorySerial)->schCategoryName;
             
+
             $recordDic['applier'] = $userObj->getDoctorInfoByID($record->schID_1_doctor)->name;
             $recordDic['receiver'] = $userObj->getDoctorInfoByID($record->schID_2_doctor)->name;
+
+    
+            $recordDic['sch1Content'] = $recordDic['applier'].' '.$sch1Name; 
+            $recordDic['sch2Content'] = $recordDic['receiver'].' '.$sch2Name;
+           
             $recordDic['applyDate'] = $record->date;
             
+
+
             
             $schedule1 = $sheduleObj->getScheduleDataByID($record->scheduleID_1);
             $schedule2 = $sheduleObj->getScheduleDataByID($record->scheduleID_2);
             $sch1Name = $schCateObj->findScheduleName($schedule1->schCategorySerial)->schCategoryName;
             $sch2Name = $schCateObj->findScheduleName($schedule2->schCategorySerial)->schCategoryName;
             
+
             $recordDic['sch1Date'] = $schedule1->date;
             $recordDic['sch2Date'] = $schedule2->date;
-            $recordDic['sch1Content'] = $recordDic['applier'].' '.$sch1Name;
-            $recordDic['sch2Content'] = $recordDic['receiver'].' '.$sch2Name;
+           
+            
             
             array_push($displayArr, $recordDic);
         }
