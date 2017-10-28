@@ -9,6 +9,8 @@ use\App\Announcement;
 use App\MustOnDutyShiftPerMonth;
 use App\ScheduleRecord;
 
+use App\Jobs\Schedule2;
+
 class SettingController extends Controller
 {
 	//傳輸月份
@@ -142,6 +144,10 @@ class SettingController extends Controller
             'content'=>"已公布初版班表",
             'doctorID'=> $user->getCurrentUserID()
         ];
+        
+        $job = new Schedule2();
+        
+        dispatch($job);
 
         $announcement->addAnnouncement($data);
 
