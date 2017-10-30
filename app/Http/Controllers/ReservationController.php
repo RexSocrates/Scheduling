@@ -384,8 +384,8 @@ class ReservationController extends Controller
     
     // 預約人數過多時寄送通知信件
     public function sendRandomNotificationMail($resSerial) {
-        $job = new SendRandomNotificationMail($resSerial);
+        //$job = new SendRandomNotificationMail($resSerial);
         
-        dispatch($job);
+        //dispatch($job);
     }
 }

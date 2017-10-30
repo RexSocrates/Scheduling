@@ -560,7 +560,7 @@
         }
 
         function changeDoctor() { //醫生2
-            $.get('changeDoctor', {
+            $.get('changeDoctor2', {
                 scheduleID_1 :document.getElementById("date1").value,
                 scheduleID_2 :document.getElementById("date2").value
 

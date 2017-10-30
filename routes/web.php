@@ -104,8 +104,6 @@ Route::post('/schedule-all-personal','ScheduleController@schedulerPersonal');
 Route::get('/schedule-all-personal','ScheduleController@schedulerPersonal');
 
 
-
-
 //列出個人班表資訊
 Route::get('/schedule', 'ScheduleController@getScheduleByDoctorID');
 
@@ -202,7 +200,7 @@ Route::post('sendShiftUpdate','ShiftRecordsController@shiftFirstEditionAddShifts
 
 
 //換班資訊 得到醫生
-Route::get('getDoctor','ScheduleController@getDoctorScheduleInfoByID');
+Route::get('getDoctor','ScheduleController@getDoctorNameScheduleInfoByID');
 
 //換班資訊 得到日期
 Route::get('getDoctorDate','ScheduleController@getDoctorScheduleDateByCurrentDoctorID');
@@ -216,6 +214,9 @@ Route::get('changeDate2','ScheduleController@getDoctorFirstScheduleInfoByID');
 
 //調整班表->彈出視窗醫生1資訊
 Route::get('changeDoctor1','ScheduleController@getDoctorInfoByScheduleID');
+
+//調整班表->正式班表 彈出視窗醫生2資訊
+Route::get('changeDoctor2','ScheduleController@getDoctorNameScheduleInfoByID');
 
 
 //拖拉換班顯示資訊

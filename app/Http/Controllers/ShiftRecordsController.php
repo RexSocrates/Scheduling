@@ -201,9 +201,9 @@ class ShiftRecordsController extends Controller
         $applier_ScheduleID = $shiftRecords->scheduleID_1;
         $receiver_ScheduleID = $shiftRecords->scheduleID_2;
 
-        $job = new SendAgreeShiftExchangeMail($applier,$receiver,$applier_ScheduleID,$receiver_ScheduleID);
+        //$job = new SendAgreeShiftExchangeMail($applier,$receiver,$applier_ScheduleID,$receiver_ScheduleID);
 
-        dispatch($job);
+        //dispatch($job);
 
         return redirect ('schedule-shift-info');
     }
@@ -224,9 +224,9 @@ class ShiftRecordsController extends Controller
         $schedule->checkScheduleStatus($scheduleID_1,0);
         $schedule->checkScheduleStatus($scheduleID_2,0);
 
-        $job = new SendDenyShiftExchangeMail($applier,$receiver);
+        //$job = new SendDenyShiftExchangeMail($applier,$receiver);
 
-        dispatch($job);
+        //dispatch($job);
 
         return redirect ('schedule-shift-info');
     }
@@ -276,9 +276,9 @@ class ShiftRecordsController extends Controller
         // $applier_ScheduleID = $schedule_1_Info->scheduleID;
         // $receiver_ScheduleID = $schedule_2_Info->scheduleID;
 
-        $job = new SendApplyShiftExchangeMail($newChangeSerial);
+        //$job = new SendApplyShiftExchangeMail($newChangeSerial);
 
-        dispatch($job);
+        //dispatch($job);
 
 
     }
@@ -481,8 +481,8 @@ class ShiftRecordsController extends Controller
             $schedule->updateScheduleToNullByID($schedule_1_Info->scheduleID);
             $newScheduleID=$schedule_2_Info->scheduleID;
 
-            $job = new SendShiftExchangeMail($schedule_1_Info->doctorID,$schedule_1_Info->scheduleID,$newScheduleID);
-             dispatch($job);
+            //$job = new SendShiftExchangeMail($schedule_1_Info->doctorID,$schedule_1_Info->scheduleID,$newScheduleID);
+             //dispatch($job);
             
         }
 
@@ -518,11 +518,11 @@ class ShiftRecordsController extends Controller
         $oldscheduleID2 = $schedule_2_Info->scheduleID;
         $newscheduleID2 = $schedule_1_Info->scheduleID;
 
-        $job1 = new SendShiftExchangeMail($doctor1,$oldscheduleID1,$newscheduleID1);
-        $job2 = new SendShiftExchangeMail($doctor2,$oldscheduleID2,$newscheduleID2);
+        //$job1 = new SendShiftExchangeMail($doctor1,$oldscheduleID1,$newscheduleID1);
+        //$job2 = new SendShiftExchangeMail($doctor2,$oldscheduleID2,$newscheduleID2);
 
-        dispatch($job1);
-        dispatch($job2);
+        //dispatch($job1);
+        //dispatch($job2);
 
         $schedule->exchangeSchedule($newChangeSerial);
            
@@ -892,9 +892,9 @@ class ShiftRecordsController extends Controller
         $schedule->checkScheduleStatus($scheduleID_1,0);
         $schedule->checkScheduleStatus($scheduleID_2,0);
 
-        $job = new SendShiftExchangingInformMail($serial);
+        //$job = new SendShiftExchangingInformMail($serial);
 
-        dispatch($job);
+        //dispatch($job);
 
         // return redirect('shift-info');
 
@@ -914,9 +914,9 @@ class ShiftRecordsController extends Controller
         $schedule->checkScheduleStatus($scheduleID_1,0);
         $schedule->checkScheduleStatus($scheduleID_2,0);
 
-        $job = new SendDenyConfirmedShiftExchangeMail($serial);
+        //$job = new SendDenyConfirmedShiftExchangeMail($serial);
 
-        dispatch($job);
+        //dispatch($job);
 
         return redirect('shift-info');
 

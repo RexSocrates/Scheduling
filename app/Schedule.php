@@ -650,9 +650,8 @@ class Schedule extends Model
 
     }
 
-    public function getDoctorInDate($date1, $date2,$major_schedule, $major_doctor){
+    public function getDoctorInDate($date1, $date2, $major_schedule, $major_doctor){
         $schCategorySerial=[];
-
        
 
         if($major_doctor == "Medical"){
@@ -665,12 +664,20 @@ class Schedule extends Model
              $schCategorySerial=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
         }
 
-        $query = DB::table("Doctor")
+        if($major_schedule == "All"){
+
+            $info = DB::table("Schedule")
+                ->whereIn("schCategorySerial",$schCategorySerial)
+                ->where('date', 'like',$date2)
+                ->get();
+        }
+        else{
+            $query = DB::table("Doctor")
                 ->select('doctorID')
                 ->whereIn('major',[$major_schedule,"All"]);
                 
                 
-        $info = DB::table("Schedule")
+            $info = DB::table("Schedule")
                 ->where('date', 'like',$date2)
                 ->whereIn('doctorID',$query)
                 ->whereIn("schCategorySerial",$schCategorySerial)
@@ -679,35 +686,52 @@ class Schedule extends Model
                 ->where('date', 'like',$date2)
                 ->get();
 
+        }
+        
 
         return $info;          
 
     }
 
-     public function getDoctorDateNotNull($date1, $date2, $major){
+     public function getDoctorDateNotNull($date1, $date2, $major_schedule, $major_doctor){
         $schCategorySerial=[];
-        if($major == "Medical"){
+       
+
+        if($major_doctor == "Medical"){
              $schCategorySerial=[1,2,3,4,5,6,9,10,13,14,15,16,19,20];
         }
-        else if($major == "Surgical"){
+        else if($major_doctor == "Surgical"){
              $schCategorySerial=[1,2,3,4,7,8,11,12,13,14,17,18,21];
         }
-        else{
+        else if($major_doctor == "All"){
              $schCategorySerial=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
         }
 
-        $query = DB::table("Doctor")
-                ->select('doctorID')
-                ->whereIn('major',[$major,"All"]);
-    
-        $info = DB::table("Schedule")
-                ->whereIn('doctorID',$query)
+
+        if($major_schedule == "All"){
+            $info = DB::table("Schedule")
+                ->whereIn("schCategorySerial",$schCategorySerial)
+                ->whereNotNull('doctorID')
                 ->where('date', 'like',$date2)
                 ->get();
 
+        }
 
-        return $info;          
+        else{
+            $query = DB::table("Doctor")
+                ->select('doctorID')
+                ->whereIn('major',[$major_schedule,"All"]);
+                
+                
+            $info = DB::table("Schedule")
+                ->whereIn('doctorID',$query)
+                ->whereIn("schCategorySerial",$schCategorySerial)
+                ->where('date', 'like',$date2)
+                ->get();
+        }
 
+
+        return $info;   
     }
     
     

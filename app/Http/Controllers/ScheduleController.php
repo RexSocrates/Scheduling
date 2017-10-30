@@ -365,9 +365,9 @@ class ScheduleController extends Controller
         // }
         
 
-         $job = new SendNewShiftAssignmentMail($doctorID,$scheduleID);
+         //$job = new SendNewShiftAssignmentMail($doctorID,$scheduleID);
 
-        dispatch($job);
+        //dispatch($job);
         
     }
 
@@ -596,8 +596,8 @@ class ScheduleController extends Controller
         //$newScheduleID=$schedule->updateScheduleByID($id,$schInfo);
         
 
-        $job = new SendShiftExchangeMail($doctorID,$id,$newScheduleID);
-        dispatch($job);
+        //$job = new SendShiftExchangeMail($doctorID,$id,$newScheduleID);
+        //dispatch($job);
 
         return $array;
 
@@ -706,7 +706,7 @@ class ScheduleController extends Controller
         return $array;
     }
 
-      //調整班表->初版班表 彈出式視窗取得醫生2的上班資訊
+    //調整班表->初版班表 彈出式視窗取得醫生2的上班資訊
     public function getDoctorNameFirstScheduleInfoByID(Request $request){
         $data = $request->all();
 
@@ -756,6 +756,58 @@ class ScheduleController extends Controller
 
         return $array;
     }
+
+
+    //調整班表->正式班表 彈出式視窗取得醫生2的上班資訊
+    public function getDoctorNameScheduleInfoByID(Request $request){
+        $data = $request->all();
+
+        $schedule = new Schedule();
+
+        $scheduleCategory = new ScheduleCategory();
+       
+        $user = new User();
+
+        $date1 = $schedule->getScheduleDataByID($data['scheduleID_1'])->date;
+        //$date2 = $schedule->getScheduleDataByID($data['scheduleID_2'])->date;
+        $date2= $data['scheduleID_2'];
+
+        $schCategorySerial=$schedule->getScheduleDataByID($data['scheduleID_1'])->schCategorySerial;
+        
+        $major_doctor = $user->getDoctorInfoByID($schedule->getScheduleDataByID($data['scheduleID_1'])->doctorID)->major;
+
+        if($schCategorySerial == 1 || $schCategorySerial ==2){
+            $major_schedule=$major_doctor;
+        }
+        else{
+            $major_schedule = $scheduleCategory->getSchCategoryMajor($schCategorySerial);
+        }
+        
+        
+        $scheduleRecord = $schedule->getDoctorDateNotNull($date1,$date2,$major_schedule,$major_doctor);
+
+        $array = array();
+
+        
+        foreach ($scheduleRecord as $schedule) {
+
+            $scheduleID = $schedule->scheduleID;
+
+            if($schedule->doctorID == null){
+                $name="";
+            }
+            else{
+                $name = $user->getDoctorInfoByID($schedule->doctorID)->name;
+            }
+
+            $category = $scheduleCategory->findScheduleName($schedule->schCategorySerial)->schCategoryName;
+            $date = $schedule->date;
+            
+            array_push($array, array($scheduleID,$name,$category,$date));
+        }
+
+        return $array;
+    }
      
     //換班資訊 彈出式視窗取得醫生2的上班資訊
     public function  getDoctorScheduleInfoByID(Request $request){
@@ -773,7 +825,14 @@ class ScheduleController extends Controller
 
         $schCategorySerial=$schedule->getScheduleDataByID($data['scheduleID_1'])->schCategorySerial;
 
-        $major = $scheduleCategory->getSchCategoryMajor($schCategorySerial);
+        $major="";
+
+        if($schCategorySerial == 1 || $schCategorySerial ==2){
+            $major=$user->getDoctorInfoByID($schedule->getScheduleDataByID($data['scheduleID_1'])->doctorID)->major;
+        }
+        else{
+           $major = $scheduleCategory->getSchCategoryMajor($schCategorySerial);
+        }
         
         $scheduleRecord = $schedule->getDoctorDateNotNull($date1,$date2,$major);
 
@@ -815,6 +874,9 @@ class ScheduleController extends Controller
 
         $currentMonth = date('Y-m-d');
         $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+
+
+        
 
         $date = $sheduleObj->getDateNotInDateNotNull($currentDoctor->doctorID,$currentDoctor->major,$nextMonth);
 
