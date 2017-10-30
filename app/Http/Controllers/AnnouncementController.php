@@ -22,6 +22,7 @@ class AnnouncementController extends Controller
         $reservationData = new ReservationData();
 
         $currentMonth = date('Y-m');
+        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
 
         $count=$reservationData->countMonth($currentMonth);
 
@@ -31,9 +32,16 @@ class AnnouncementController extends Controller
 
         }
         else{
-            $startDate = $currentMonth.'-'.$reservationData->getDate($currentMonth)->startDate;
-            $endDate = $currentMonth.'-'.$reservationData->getDate($currentMonth)->endDate;
-            $status = $reservationData->getDate($currentMonth)->status;
+            if($reservationData->countMonth($nextMonth)!=0){
+                $startDate = $nextMonth.'-'.$reservationData->getDate($nextMonth)->startDate;
+                $endDate = $nextMonth.'-'.$reservationData->getDate($nextMonth)->endDate;
+                $status = $reservationData->getDate($nextMonth)->status;
+            }
+            else{
+                $startDate = $currentMonth.'-'.$reservationData->getDate($currentMonth)->startDate;
+                $endDate = $currentMonth.'-'.$reservationData->getDate($currentMonth)->endDate;
+                $status = $reservationData->getDate($currentMonth)->status;
+            }
         }
         
         return view('pages.index', [

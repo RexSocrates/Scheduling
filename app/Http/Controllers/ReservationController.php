@@ -74,8 +74,18 @@ class ReservationController extends Controller
 
         
         $month = date('Y-m');
-        $startDate = $reservationData->getDate($month)->startDate;
-        $endDate = $reservationData->getDate($month)->endDate;
+        $nextMonth=date("Y-m",strtotime($month."+1 month"));
+
+        if($reservationData->countMonth($nextMonth)!=0){
+            $startDate = $nextMonth."-".$reservationData->getDate($nextMonth)->startDate;
+            $endDate = $nextMonth."-".$reservationData->getDate($nextMonth)->endDate;
+        }
+        else{
+            $startDate = $month."-".$reservationData->getDate($month)->startDate;
+            $endDate = $month."-".$reservationData->getDate($month)->endDate;
+        }
+
+        
 
         $reservationData = $reservation->getReservationByID();
         //$reservationData = $reservation->getNextMonthReservationByID();
@@ -112,8 +122,8 @@ class ReservationController extends Controller
 
 
         return view('pages.reservation', [
-            'startDate' => $month.'-'.$startDate,
-            'endDate' =>  $month.'-'.$endDate,
+            'startDate' => $startDate,
+            'endDate' =>  $endDate,
             'reservations' => $data,
             'countDay' => $countDay,
             'countNight' => $countNight,
