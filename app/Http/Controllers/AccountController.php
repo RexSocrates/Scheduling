@@ -240,8 +240,9 @@ class AccountController extends Controller
         $schedule->confirmNextMonthSchedule();
  
     }
-        
-    public function getNewPage() {
+    
+    // 取得積欠班的頁面
+    public function getAccumulatedShifts() {
         $scheduleRecord = new ScheduleRecord();
         $user = new User();
         
@@ -295,7 +296,7 @@ class AccountController extends Controller
         }
         
         
-        return view('pages.newPage', [
+        return view('pages.accumulatedShifts', [
              'doctors'=>$doctors,
              'doctorsRecords'=>$scheduleRecordArr,
              'shiftHours'=>$shiftHours,
