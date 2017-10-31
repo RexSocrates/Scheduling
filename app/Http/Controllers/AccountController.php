@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
+// import models
 use App\User;
 use App\ShiftRecords;
 use App\ShiftCategory;

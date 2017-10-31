@@ -12,6 +12,7 @@ use App\User;
 use App\ScheduleCategory;
 use App\Remark;
 use App\Reservation;
+use App\ScheduleRecord;
 
 // import jobs
 use App\Jobs\SendAgreeShiftExchangeMail;
