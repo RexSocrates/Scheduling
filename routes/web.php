@@ -23,7 +23,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
 
 // 取得積欠班頁面
-Route::get('accumulatedShifts', 'AccountController@getAccumulatedShifts');
+Route::get('accumulatedShifts', 'ShiftRecordsController@getAccumulatedShifts');
 
 //得到單一醫生欠班狀況
 Route::get('getRecord','AccountController@getRecordByDoctor');
