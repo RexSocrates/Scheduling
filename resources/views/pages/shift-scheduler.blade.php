@@ -14,6 +14,15 @@
             opacity: 0;
             filter: alpha(opacity = 0);
         }
+
+        .dhx_cal_event.event_1 div, .dhx_cal_event_line.event_2{
+            background-color: red !important;
+            border-color: red !important;
+        }
+        .dhx_cal_event_clear.event_2{
+            color:#B82594 !important;
+        }
+        
     </style>
 @endsection
 
@@ -441,7 +450,7 @@
                             scheduler.init('scheduler_here',new Date(res[3], month-1),"timeline");
                             scheduler.parse([
                                 @foreach($schedule as $data)
-                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}" },
+                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}", subject:"{{ $data->status }}" },
                                
                                 @endforeach
                             ],"json");

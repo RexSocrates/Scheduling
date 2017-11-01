@@ -482,7 +482,7 @@ class Schedule extends Model
         ->whereNotNull('doctorID')
         ->where('doctorID',$doctorID)
         ->where('date', 'like', $nextMonth.'%')
-        ->whereIn('schCategorySerial', [3,4,5,6,7,8,13, 14, 15, 16,17,18])
+        ->whereIn('schCategorySerial', [1,2,3,4,5,6,7,8,13, 14, 15, 16,17,18])
         ->count();
 
         return $count;
@@ -542,7 +542,6 @@ class Schedule extends Model
         ->whereNotNull('doctorID')
         ->where('doctorID',$doctorID)
         ->where('date', 'like', $nextMonth.'%')
-        ->whereNotIn('schCategorySerial', [1,2])
         ->count();
 
         return $count;
@@ -706,7 +705,7 @@ public function getDoctorInDate($date1, $date2, $major_schedule, $major_doctor){
              $schCategorySerial=[1,2,3,4,5,6,9,10,13,14,15,16,19,20];
         }
         else if($major_doctor == "Surgical"){
-             $schCategorySerial=[1,2,3,4,7,8,11,12,13,14,17,18,21];
+             $schCategorySerial=[1,2,7,8,11,12,17,18,21];
         }
         else if($major_doctor == "All"){
              $schCategorySerial=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
@@ -752,7 +751,7 @@ public function getDoctorInDate($date1, $date2, $major_schedule, $major_doctor){
              $schCategorySerial=[1,2,3,4,5,6,9,10,13,14,15,16,19,20];
         }
         else if($major_doctor == "Surgical"){
-             $schCategorySerial=[1,2,3,4,7,8,11,12,13,14,17,18,21];
+             $schCategorySerial=[1,2,7,8,11,12,17,18,21];
         }
         else if($major_doctor == "All"){
              $schCategorySerial=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];

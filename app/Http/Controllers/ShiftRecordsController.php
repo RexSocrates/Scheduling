@@ -523,7 +523,9 @@ class ShiftRecordsController extends Controller
 
         //dispatch($job1);
         //dispatch($job2);
-
+        // $schedule->checkScheduleStatus($scheduleID1,2); //更改顏色
+        // $schedule->checkScheduleStatus($scheduleID2,2); //更改顏色
+        
         $schedule->exchangeSchedule($newChangeSerial);
            
         }
@@ -889,8 +891,8 @@ class ShiftRecordsController extends Controller
         $scheduleID_1=$shiftRecordObj->getShiftRecordByChangeSerial($serial)->scheduleID_1;
         $scheduleID_2=$shiftRecordObj->getShiftRecordByChangeSerial($serial)->scheduleID_2;
 
-        $schedule->checkScheduleStatus($scheduleID_1,0);
-        $schedule->checkScheduleStatus($scheduleID_2,0);
+        $schedule->checkScheduleStatus($scheduleID_1,2);
+        $schedule->checkScheduleStatus($scheduleID_2,2);
 
         //$job = new SendShiftExchangingInformMail($serial);
 
