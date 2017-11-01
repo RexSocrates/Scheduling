@@ -680,24 +680,17 @@ class ScheduleController extends Controller
 
         $user = new User();
 
-       // $date = $this->processDateStr();
+        //$date = $this->processDateStr();
 
         $yearMonth=date("Y-m",strtotime($data['date']));
         
         $doctor = $schedule->getDateNotInDate($data['doctorID'],$data['date'],$yearMonth);
-
         $array = array();
 
         foreach ($doctor as $data) {
-            //$id = $data->scheduleID;
+            //$doctorID = $data->doctorID;
             $date = $data->date;
-
-            //if($data->doctorID==""){
-                //$name = " ";
-            //}
-            //else{
-            //$name = $user->getDoctorInfoByID($data->doctorID)->name;
-            //}
+            //$id =$data->scheduleID;
            
             
             array_push($array, array($date));
@@ -716,14 +709,11 @@ class ScheduleController extends Controller
        
         $user = new User();
 
-        $date1 = $schedule->getScheduleDataByID($data['scheduleID_1'])->date;
+                $date1 = $schedule->getScheduleDataByID($data['scheduleID_1'])->date;
         //$date2 = $schedule->getScheduleDataByID($data['scheduleID_2'])->date;
         $date2= $data['scheduleID_2'];
-
         $schCategorySerial=$schedule->getScheduleDataByID($data['scheduleID_1'])->schCategorySerial;
-
         $major_doctor = $user->getDoctorInfoByID($schedule->getScheduleDataByID($data['scheduleID_1'])->doctorID)->major;
-
         if($schCategorySerial == 1 || $schCategorySerial ==2){
             $major_schedule=$major_doctor;
         }
@@ -733,7 +723,6 @@ class ScheduleController extends Controller
         
         
         $scheduleRecord = $schedule->getDoctorInDate($date1,$date2,$major_schedule,$major_doctor);
-
         $array = array();
 
         

@@ -25,6 +25,8 @@
 <input type="hidden" id='hiddenCountNight' value={{$countNight}}>
 <input type="hidden" id='hiddenCountOn' value={{$onAmount}}>
 <input type="hidden" id='hiddenCountOff' value={{$offAmount}}>
+<input type="hidden" id="endDate" value="{{ $endDate }}">
+<input type="hidden" id="statrDate" value="{{ $startDate }}">
 
 <input type="hidden" id="originalEventStartDate" value="">
 
@@ -59,7 +61,7 @@
 
                                             </div>
                                             <!-- <input type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right">提交</button> -->
-                                            @if ( $currentdate <= $endDate )
+                                            @if ( $currentdate <= $endDate && $currentdate >= $startDate)
                                              <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right" value="提交" onclick="alert2()">提交</button>
                                             @else
                                              <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right" value="提交" disabled="">提交</button>
@@ -96,14 +98,30 @@
                         </div>
 
                         <script type="text/javascript" charset="utf-8">
-                            var currDate = Date.parse((new Date()).toDateString());
+                            //var currDate = Date.parse((new Date()).toDateString());
+                            var currDate=new Date();
+                            if(currDate.getDate()<10){
+                              var currdateString = currDate.getFullYear()+"-"+(currDate.getMonth()+1)+"-0"+currDate.getDate();
 
-                            if(Date.parse(currDate)<=Date.parse({{ $endDate }})){
+                            }
+                            else{
+                               var currdateString = currDate.getFullYear()+"-"+(currDate.getMonth()+1)+"-"+currDate.getDate();
+                            }
+                           
+                            var statrDate = document.getElementById("statrDate").value;
+                            var endDate = document.getElementById("endDate").value;
+
+                            console.log(currdateString);
+
+                            if(Date.parse(currDate)>=Date.parse(statrDate) && Date.parse(currDate)<=Date.parse(endDate)){
                                 scheduler.config.readonly = false;
+                                console.log(endDate);
+                               
                             }
 
                             else{
                                 scheduler.config.readonly = true;
+                                 
                             }
 
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";

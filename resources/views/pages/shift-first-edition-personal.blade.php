@@ -552,6 +552,8 @@
                 // var userInput = selectBox.options[selectBox.selectedIndex].value;
                 changeDate2(array);
             });
+
+            console.log(document.getElementById('schID_2_doctor').value);
         }
 
         function changeDate1(array) {

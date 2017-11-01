@@ -726,13 +726,13 @@ class TestController extends Controller
 
         $str= 'Mon Oct 02 2017 00:00:00 GMT+0800 (CST)';
         $dateArr = explode(' ', $str);
-        $date = $this->processDateStr($str);
+        //$date = $this->processDateStr($str);
 
         $section_id = 3;
         $categoryInfo = $scheduleCategory->getSchCategoryInfo($section_id);
 
         $info=[
-            'date'=> $date,
+           
             'schCategorySerial'=>$section_id,
             'location' => $categoryInfo
         ];
@@ -951,10 +951,55 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
- 
+    
+         
+
         $schedule = new Schedule();
-       $scheduleSerial=$schedule->getScheduleDataByDateAndSessionID("2017-10-04",4)->scheduleID;
-       echo $scheduleSerial;
+
+        $scheduleCategory = new ScheduleCategory();
+       
+        $user = new User();
+
+        $date1 = $schedule->getScheduleDataByID(3080)->date;
+        //$date2 = $schedule->getScheduleDataByID($data['scheduleID_2'])->date;
+        $date2= "2017-11-09";
+        $schCategorySerial=$schedule->getScheduleDataByID(3080)->schCategorySerial;
+        $major_doctor = $user->getDoctorInfoByID($schedule->getScheduleDataByID(3080)->doctorID)->major;
+        if($schCategorySerial == 1 || $schCategorySerial ==2){
+            $major_schedule=$major_doctor;
+        }
+        else{
+            $major_schedule = $scheduleCategory->getSchCategoryMajor($schCategorySerial);
+        }
+        
+        
+        $scheduleRecord = $schedule->getDoctorInDate($date1,$date2,$major_schedule,$major_doctor);
+        $array = array();
+
+        
+        foreach ($scheduleRecord as $schedule) {
+
+            $scheduleID = $schedule->scheduleID;
+
+            if($schedule->doctorID == null){
+                $name="";
+            }
+            else{
+                $name = $user->getDoctorInfoByID($schedule->doctorID)->name;
+            }
+
+            $category = $scheduleCategory->findScheduleName($schedule->schCategorySerial)->schCategoryName;
+            $date = $schedule->date;
+            
+            array_push($array, array($scheduleID,$name,$category,$date));
+        }
+
+        //return $array;
+
+        //return $array;
+
+        //return $array;
+       
         //echo $scheduleRecordArr;
         //return $scheduleRecordArr; 
      

@@ -693,7 +693,7 @@
             }, function(array) {
                 var doctor = "";
                 for(i=0 ; i<array.length ; i++){
-                    doctor += "<option value="+array[i][0]+">"+array[i][1]+"-"+array[i][2]+"</option>";
+                    doctor += "<option value="+array[i][0]+">"+array[i][1]+"-"+array[i][2]+"-"+array[i][3]+"</option>";
                     console.log('1'+array[0][1]);
                     console.log(array[i][0]);
                 }
@@ -719,7 +719,7 @@
                 var date = "";
                 for(i=0 ; i<array.length ; i++){
                     date += "<option value="+array[i][0]+">"+array[i][0]+"</option>";
-                    console.log('1'+array[2]);
+                    
                 }
                 document.getElementById("date2").innerHTML  = date;
                 changeDoctor();
