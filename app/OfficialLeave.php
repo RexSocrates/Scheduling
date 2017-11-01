@@ -64,14 +64,7 @@ class OfficialLeave extends Model
         return $leaves;
     }
 
-    // 透過醫生ID 計算公假時數
-    public function getLeavesAmountByDoctorID($doctorID) {
-        $leaves = DB::table('OfficialLeave')
-            ->where('doctorID', $doctorID)
-            ->sum('updatedLeaveHours');
-        
-        return $leaves;
-    }
+   
     
     // 排班人員加入公假紀錄
     public function addLeaveByAdmin(array $dataArray) {
