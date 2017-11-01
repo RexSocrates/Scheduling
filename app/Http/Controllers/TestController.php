@@ -951,49 +951,41 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
-    
-         
-
-        $schedule = new Schedule();
-
-        $scheduleCategory = new ScheduleCategory();
-       
+    $schedule = new Schedule();
+        $reservationData = new ReservationData();
         $user = new User();
+        $announcement = new Announcement();
+        $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
+        $scheduleRecord = new ScheduleRecord();
+        $officialLeave = new OfficialLeave();
 
-        $date1 = $schedule->getScheduleDataByID(3080)->date;
-        //$date2 = $schedule->getScheduleDataByID($data['scheduleID_2'])->date;
-        $date2= "2017-11-09";
-        $schCategorySerial=$schedule->getScheduleDataByID(3080)->schCategorySerial;
-        $major_doctor = $user->getDoctorInfoByID($schedule->getScheduleDataByID(3080)->doctorID)->major;
-        if($schCategorySerial == 1 || $schCategorySerial ==2){
-            $major_schedule=$major_doctor;
-        }
-        else{
-            $major_schedule = $scheduleCategory->getSchCategoryMajor($schCategorySerial);
-        }
-        
-        
-        $scheduleRecord = $schedule->getDoctorInDate($date1,$date2,$major_schedule,$major_doctor);
-        $array = array();
+    $doctorName = $user->getAtWorkDoctors();
+        foreach($doctorName as $name){
 
-        
-        foreach ($scheduleRecord as $schedule) {
+            $date= date('Y-m');
+           
+            $mustOnDutyShiftArr=[
+            'doctorID'=>$name->doctorID,
+            'leaveMonth'=>$date
+            ];
 
-            $scheduleID = $schedule->scheduleID;
+            $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
 
-            if($schedule->doctorID == null){
-                $name="";
+            if($count!=0){
+                $mustOnDutyTotalShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift; //應上
+                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
+                $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
+                $updateLeaveHours= $officialLeave->getLeavesAmountByDoctorID($name->doctorID)-($shifHours*12)
+                $officialLeave->updateLeaveHours($name->doctorID,$updateLeaveHours);
             }
             else{
-                $name = $user->getDoctorInfoByID($schedule->doctorID)->name;
-            }
+                $mustOnDutyTotalShift=$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTotalShifts;
+                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
+                $updateLeaveHours= $officialLeave->getLeavesAmountByDoctorID($name->doctorID)-($shifHours*12)
+                $officialLeave->updateLeaveHours($name->doctorID,$updateLeaveHours);
+             }
 
-            $category = $scheduleCategory->findScheduleName($schedule->schCategorySerial)->schCategoryName;
-            $date = $schedule->date;
-            
-            array_push($array, array($scheduleID,$name,$category,$date));
-        }
-
+    }
         //return $array;
 
         //return $array;

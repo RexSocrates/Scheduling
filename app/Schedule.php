@@ -238,7 +238,8 @@ class Schedule extends Model
         $affectedRows = DB::table('Schedule')
             ->where('scheduleID', $scheduleID)
             ->update([
-               'doctorID'=> null
+               'doctorID'=> null,
+               'status'=>0
             ]);
         
         return $affectedRows;
@@ -552,10 +553,41 @@ class Schedule extends Model
      public function getNightScheduleByDoctorIDandDate($doctorID,$date){
         $predate= date("Y-m-d",strtotime($date."-1 day"));
 
-         $preNightcount = DB::table('Schedule')
+        $preNightcount = DB::table('Schedule')
                 ->where('doctorID',$doctorID)
                 ->where('date', $predate)
                 ->whereIn('schCategorySerial',[13,14,15,16,17,18,19,20,21])
+                ->count();
+
+     
+        return $preNightcount;
+
+    }
+
+    //確認醫生後一天班是否為白班
+     public function geDayScheduleByDoctorIDandDate($doctorID,$date){
+        $predate= date("Y-m-d",strtotime($date."+1 day"));
+
+        $preNightcount = DB::table('Schedule')
+                ->where('doctorID',$doctorID)
+                ->where('date', $predate)
+                ->whereIn('schCategorySerial',[1,2,3,4,5,7,8,9,10,11,12])
+                ->count();
+
+     
+        return $preNightcount;
+
+    }
+
+
+    //確認醫生後一天班是否為白班
+     public function getDayScheduleByDoctorIDandDate($doctorID,$date){
+        $laterdate= date("Y-m-d",strtotime($date."+1 day"));
+
+        $laterDaycount = DB::table('Schedule')
+                ->where('doctorID',$doctorID)
+                ->where('date', $laterdate)
+                ->whereIn('schCategorySerial',[5,6,7,8,9,10,11,12])
                 ->count();
 
        //  $count=0;
@@ -568,7 +600,7 @@ class Schedule extends Model
        //          ->count();
 
        // }
-        return $preNightcount;
+        return $laterDaycount;
 
     }
 

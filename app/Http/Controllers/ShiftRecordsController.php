@@ -351,6 +351,10 @@ class ShiftRecordsController extends Controller
         $doc1PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID1,$date1);
         $doc2PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID2,$date2);
 
+        //確認醫生後一天是否為白班
+        $doc1LaterDay = $schedule->getDayScheduleByDoctorIDandDate($doctorID1,$date1);
+        $doc2LaterDay = $schedule->getDayScheduleByDoctorIDandDate($doctorID2,$date2);
+
         //判斷在非値登院區班數
         $doc1Location =0;
         $doc2Location =0;
@@ -389,14 +393,53 @@ class ShiftRecordsController extends Controller
 
         $doc1Night=0;
 
+
         if($doc1PreNight != 0 and ($categoryID1==3 or $categoryID1==4 or $categoryID1==5 or $categoryID1==6 or $categoryID1==7 or $categoryID1==8 or $categoryID1==9 or $categoryID1==10 or $categoryID1==11 or $categoryID1==12)){
-            $doc1Night=1;
+            if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
+                $doc1Night=0;
+            }
+
+            else{
+                $doc1Night=1;
+            }
         }
+        
 
         $doc2Night=0;
 
         if($doc2PreNight != 0 and ($categoryID2==3 or $categoryID2==4 or $categoryID2==5 or $categoryID2==6 or $categoryID2==7 or $categoryID2==8 or $categoryID2==9 or $categoryID2==10 or $categoryID2==11 or $categoryID2==12)){
-            $doc2Night=1;
+            if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
+                $doc2Night=0;
+            }
+
+            else{
+                $doc2Night=1;
+            }
+        }
+
+
+        $doc1Day=0;
+
+        if($doc1LaterDay != 0 and ($categoryID1==13 or $categoryID1==14 or $categoryID1==15 or $categoryID1==16 or $categoryID1==17 or $categoryID1==18 or $categoryID1==19 or $categoryID1==20 or $categoryID1==21)){
+            if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
+                $doc1Day=0;
+            }
+
+            else{
+                $doc1Day=1;
+            }
+        }
+
+        $doc2Day=0;
+
+        if($doc2LaterDay != 0 and ($categoryID2==13 or $categoryID2==14 or $categoryID2==15 or $categoryID2==16 or $categoryID2==17 or $categoryID2==18 or $categoryID2==19 or $categoryID2==20 or $categoryID2==21)){
+            if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
+                $doc2Day=0;
+            }
+
+            else{
+                $doc2Day=1;
+            }
         }
 
         $doc2 = null;
@@ -424,10 +467,13 @@ class ShiftRecordsController extends Controller
             'doc2off' => $doc2off,
             'doc1Night' => $doc1Night,
             'doc2Night' => $doc2Night,
+            'doc1Day' => $doc1Day,
+            'doc2Day' => $doc2Day,
             'doc1Location'=>$doc1Location,
             'doc2Location'=>$doc2Location,
             'doc1Major'=>$doc1Major,
             'doc2Major'=>$doc2Major,
+
         ];
 
         

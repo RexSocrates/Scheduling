@@ -196,8 +196,16 @@ class ScheduleController extends Controller
         //$count = $schedule->checkDocStatus($id,$date);
 
         $countNight=0;
-        if($schedule->getNightScheduleByDoctorIDandDate($id,$date) != 0 and ($categoryID==3 or $categoryID==4 or $categoryID==5 or $categoryID==6 or $categoryID==7 or $categoryID==8 or $categoryID==9 or $categoryID==10 or $categoryID==11 or $categoryID==12)){
+
+        
+        if($schedule->getNightScheduleByDoctorIDandDate($id,$date) != 0 and ($categoryID==3 or $categoryID==4 or $categoryID==5 or $categoryID==6 or $categoryID==7 or $categoryID==8 or $categoryID==9 or $categoryID==10 or $categoryID==11 or $categoryID==12 )){
+
             $countNight=1;
+        }
+
+        $countDay=0;
+        if($schedule->geDayScheduleByDoctorIDandDate($id,$date) != 0 and ($categoryID==13 or $categoryID==14 or $categoryID==15 or $categoryID==16 or $categoryID==17 or $categoryID==18 or $categoryID==19 or $categoryID==20 or $categoryID==21)){
+            $countDay=1;
         }
 
          $location=0;
@@ -228,6 +236,7 @@ class ScheduleController extends Controller
             "countShedule"=>$schedule->checkDocStatus($id,$date),
             "countOff"=>$reservation->getResrvationByDateandDoctorID($id,$date),
             "countNight"=>$countNight,
+            "countDay"=>$countDay,
             "location" => $location,
             "major"=>$major
         ];
@@ -242,16 +251,12 @@ class ScheduleController extends Controller
         $user = new User();
         $reservation = new Reservation();
         $scheduleCategory = new ScheduleCategory();
-
         $scheduleID = $data['scheduleID'];
         $date = $data['date']; //移動到哪一天
         $categoryID= $data['classification'];
-
         $dateStr = $this->processDateStr($date); //移動到哪一天
-
         $doctorID = $schedule->getScheduleDataByID($scheduleID)->doctorID;
         $dateInSchedule = $schedule->getScheduleDataByID($scheduleID)->date;
-
         $docName = $user->getDoctorInfoByID($doctorID)->name;
         $docWeekend = $schedule->checkDocScheduleInWeekend($doctorID);
         $count = $schedule->checkDocStatus($doctorID,$dateStr);
@@ -259,10 +264,16 @@ class ScheduleController extends Controller
         $weekDayInSchedule = (int)date('N', strtotime($dateInSchedule));
         $countOff = $reservation->getResrvationByDateandDoctorID($doctorID,$dateStr);
 
-
         $countNight=0;
-        if($schedule->getNightScheduleByDoctorIDandDate($doctorID,$dateStr) != 0 and ($categoryID==3 or $categoryID==4 or $categoryID==5 or $categoryID==6 or $categoryID==7 or $categoryID==8 or $categoryID==9 or $categoryID==10 or $categoryID==11 or $categoryID==12)){
+        $date2 = date("Y-m-d",strtotime($dateInSchedule."+1 day"));
+
+        if($schedule->getNightScheduleByDoctorIDandDate($doctorID,$dateStr) != 0 and ($categoryID==3 or $categoryID==4 or $categoryID==5 or $categoryID==6 or $categoryID==7 or $categoryID==8 or $categoryID==9 or $categoryID==10 or $categoryID==11 or $categoryID==12 )){
             $countNight=1;
+        }
+
+        $countDay=0;
+        if($schedule->getDayScheduleByDoctorIDandDate($doctorID,$dateStr) != 0 and ($categoryID==13 or $categoryID==14 or $categoryID==15 or $categoryID==16 or $categoryID==17 or $categoryID==18 or $categoryID==19 or $categoryID==20 or $categoryID==21  )){
+            $countDay=1;
         }
 
         $location=0;
@@ -273,7 +284,6 @@ class ScheduleController extends Controller
             }
         }
     }
-
         $major=0;
         $major_doctor = "";
         if($categoryID==1 || $categoryID==2 ){
@@ -283,7 +293,6 @@ class ScheduleController extends Controller
             $major_doctor=$scheduleCategory->getSchCategoryMajor($categoryID);
         }
         if($user->getDoctorInfoByID($doctorID)->major != "All"){
-
             if($user->getDoctorInfoByID($doctorID)->major != $major_doctor){
                 $major=1;
             }
@@ -297,9 +306,7 @@ class ScheduleController extends Controller
             $scheduleSerial=0;
         }
         
-
         $dataArr = [];
-
         $info = [
             "count"=>$count,
             "docName"=>$docName,
@@ -311,14 +318,14 @@ class ScheduleController extends Controller
             'scheduleID'=>$scheduleSerial,
             "countOff"=>$countOff,
             "countNight"=>$countNight,
+            "countDay"=>$countDay,
             'location'=>$location,
             "major"=> $major,
             "yearMonth" =>date('Y-m',strtotime($dateStr)), //被拉到的
-            "yearMonthInSchedule" =>date('Y-m',strtotime($dateInSchedule)) //被拉到的
+            "yearMonthInSchedule" =>date('Y-m',strtotime($dateInSchedule)), //被拉到的
+            
         ];
-
         array_push($dataArr,$info);
-
         return $dataArr;
         
 
@@ -566,7 +573,8 @@ class ScheduleController extends Controller
               'location' => $location,
               'date' => $date,
               'doctorID'=>$doctorID,
-              'confirmed'=>1
+              'confirmed'=>1,
+              'status'=>0
             ];
 
         $weekDay = (int)date('N', strtotime($date));
@@ -613,6 +621,7 @@ class ScheduleController extends Controller
         $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
         $scheduleRecord = new ScheduleRecord();
 
+
         $schedule->confirmNextMonthSchedule();
         $reservationData->setScheduleAnnounceStatus();
 
@@ -624,31 +633,32 @@ class ScheduleController extends Controller
 
         $doctorName = $user->getAtWorkDoctors();
 
-        foreach($doctorName as $name){
+    //     foreach($doctorName as $name){
 
-            $date= date('Y-m');
+    //         $date= date('Y-m');
            
-            $mustOnDutyShiftArr=[
-            'doctorID'=>$name->doctorID,
-            'leaveMonth'=>$date
-            ];
+    //         $mustOnDutyShiftArr=[
+    //         'doctorID'=>$name->doctorID,
+    //         'leaveMonth'=>$date
+    //         ];
 
-            $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
+    //         $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
 
-            if($count!=0){
-                $mustOnDutyTotalShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift; //應上
-                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
-                $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
-                $scheduleRecord->addScheduleRecord($name->doctorID,$shifHours);
-            }
-            else{
-                $mustOnDutyTotalShift=$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTotalShifts;
-                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
-                $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
-                $scheduleRecord->addScheduleRecord($name->doctorID,$shifHours);
-             }
+    //         if($count!=0){
+    //             $mustOnDutyTotalShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift; //應上
+    //             $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
+    //             $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
+    //             $scheduleRecord->updateLeaveHours($name->doctorID,$shifHours);
+    //         }
+    //         else{
+    //             $mustOnDutyTotalShift=$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTotalShifts;
+    //             $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
+    //             $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
+    //             $scheduleRecord->updateLeaveHours($name->doctorID,$shifHours);
+    //          }
 
-    }
+    // }
+   
 
         $announcement->addAnnouncement($data);
 
