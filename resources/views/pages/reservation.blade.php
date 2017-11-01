@@ -25,8 +25,8 @@
 <input type="hidden" id='hiddenCountNight' value={{$countNight}}>
 <input type="hidden" id='hiddenCountOn' value={{$onAmount}}>
 <input type="hidden" id='hiddenCountOff' value={{$offAmount}}>
-
 <input type="hidden" id="originalEventStartDate" value="">
+<input type="hidden" id="endDate" value={{ $endDate }}>
 
     <div id="section" class="container-fix trans-left-five">
         <div class="container-section">
@@ -96,13 +96,24 @@
                         </div>
 
                         <script type="text/javascript" charset="utf-8">
-                            var currDate = Date.parse((new Date()).toDateString());
-
-                            if(Date.parse(currDate)<=Date.parse({{ $endDate }})){
-                                scheduler.config.readonly = false;
+                            var dateObj = new Date();
+                            var endDateStr = document.getElementById("endDate").value;
+                            
+                            var currDateStr = dateObj.getFullYear() + "-";
+                            
+                            if((dateObj.getMonth() + 1) < 10) {
+                                currDateStr += "0";
                             }
+                            currDateStr += (dateObj.getMonth() + 1) + "-";
+                            
+                            if(dateObj.getDate() < 10) {
+                                currDateStr += "0";
+                            }
+                            currDateStr += dateObj.getDate();
 
-                            else{
+                            if(Date.parse(currDateStr) <= Date.parse(endDateStr)){
+                                scheduler.config.readonly = false;
+                            }else{
                                 scheduler.config.readonly = true;
                             }
 

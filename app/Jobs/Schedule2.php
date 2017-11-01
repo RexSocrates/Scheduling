@@ -8,6 +8,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
+use DB;
+
 // 演算法用的model
 use App\User;
 use App\Reservation;
@@ -1424,6 +1426,15 @@ class Schedule2 implements ShouldQueue
                 $schObj->setSchedule($schDic);
             }
         }
+        
+        // call procedure
+        $procedureMonthStr = $this->monthInfo->year.'-';
+        if($this->monthInfo->month < 10) {
+            $procedureMonthStr += '0';
+        }
+        $procedureMonthStr += $this->monthInfo->month;
+        
+        DB::select("CALL usp_FillShift('".$procedureMonthStr."');");
     }
     
     
