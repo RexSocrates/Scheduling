@@ -952,42 +952,9 @@ class TestController extends Controller
 
    public function announceSchedule(){
     $schedule = new Schedule();
-        $reservationData = new ReservationData();
-        $user = new User();
-        $announcement = new Announcement();
-        $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
-        $scheduleRecord = new ScheduleRecord();
-        $officialLeave = new OfficialLeave();
-
-     $doctorName = $user->getAtWorkDoctors();
-        foreach($doctorName as $name){
-
-            $date="2017-12";
-           
-            $mustOnDutyShiftArr=[
-            'doctorID'=>$name->doctorID,
-            'leaveMonth'=>$date
-            ];
-
-            $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
-
-            if($count!=0){
-                $mustOnDutyTotalShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift; //應上
-                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
-                $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
-                $updateLeaveHours= $user->getDoctorInfoByID($name->doctorID)->currentOfficialLeaveHours-($shifHours*12);
-                $officialLeave->updateLeaveHours($name->doctorID,$updateLeaveHours);
-                //echo $shifHours;
-            }
-            else{
-                $mustOnDutyTotalShift=$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTotalShifts;
-                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
-                $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
-                $updateLeaveHours= $user->getDoctorInfoByID($name->doctorID)->currentOfficialLeaveHours-($shifHours*12);
-                $officialLeave->updateLeaveHours($name->doctorID,$updateLeaveHours);
-             }
-
-    }
+       
+echo date('Y-m',strtotime("2017-12-02"));
+   
 
         //return $array;
 

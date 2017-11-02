@@ -350,7 +350,7 @@ class ScheduleController extends Controller
               'isWeekday' => true,
               'location' => $categoryInfo,
               'date' => $startDate,
-              'confirmed'=>0
+              'confirmed'=>1
             ];
 
         $weekDay = (int)date('N', strtotime($startDate));
@@ -362,7 +362,7 @@ class ScheduleController extends Controller
         $count = $schedule->getScheduleDataByDateAndSessionIDWhenDoctorIDisNull($startDate,$categoryID);
 
         //  if($count!=""){
-            $schedule->addScheduleInNull($count->scheduleID,$schInfo);
+            $schedule->addFormalScheduleInNull($count->scheduleID,$schInfo);
             $scheduleID=$count->scheduleID;
         // }
         // else{

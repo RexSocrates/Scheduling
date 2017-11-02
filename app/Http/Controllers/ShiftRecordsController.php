@@ -473,6 +473,8 @@ class ShiftRecordsController extends Controller
             'doc2Location'=>$doc2Location,
             'doc1Major'=>$doc1Major,
             'doc2Major'=>$doc2Major,
+            'date1Month' =>date('Y-m',strtotime($date1)),
+            'date2Month' =>date('Y-m',strtotime($date2))
 
         ];
 

@@ -257,6 +257,20 @@ class Schedule extends Model
         
         return $affectedRows;
     }
+
+    //查詢已存在的班,將原本doctorID null,改為有醫生上班,正是班表
+    public function addFormalScheduleInNull($scheduleID, array $data){
+        $reservation = new Reservation();
+        
+        $affectedRows = DB::table('Schedule')
+            ->where('scheduleID', $scheduleID)
+            ->update([
+                'doctorID' => $data['doctorID'],
+                'confirmed' => $data['confirmed']
+            ]);
+        
+        return $affectedRows;
+    }
     //更新醫生班表是否有被換班狀態
     public function checkScheduleStatus($scheduleID,$status){
         $affectedRows = DB::table('Schedule')
@@ -571,7 +585,7 @@ class Schedule extends Model
         $preNightcount = DB::table('Schedule')
                 ->where('doctorID',$doctorID)
                 ->where('date', $predate)
-                ->whereIn('schCategorySerial',[1,2,3,4,5,7,8,9,10,11,12])
+                ->whereIn('schCategorySerial',[1,2,3,4,5,6,7,8,9,10,11,12])
                 ->count();
 
      
