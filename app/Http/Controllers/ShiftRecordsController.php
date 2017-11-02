@@ -557,6 +557,9 @@ class ShiftRecordsController extends Controller
         $shiftRecords->doc2Confirm($newChangeSerial,1);
         $shiftRecords->adminConfirm($newChangeSerial,1);
 
+         $schedule->checkScheduleStatus($scheduleID1,2);
+        $schedule->checkScheduleStatus($scheduleID2,2);
+
         $user = new User();
 
         $oldscheduleID1 = $schedule_1_Info->scheduleID;
