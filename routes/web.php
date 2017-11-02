@@ -22,7 +22,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 // 正式路由
 Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
 
-Route::get('newPage', 'AccountController@getNewPage');
+// 取得積欠班頁面
+Route::get('accumulatedShifts', 'ShiftRecordsController@getAccumulatedShifts');
 
 //得到單一醫生欠班狀況
 Route::get('getRecord','AccountController@getRecordByDoctor');

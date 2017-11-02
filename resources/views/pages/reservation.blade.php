@@ -25,10 +25,14 @@
 <input type="hidden" id='hiddenCountNight' value={{$countNight}}>
 <input type="hidden" id='hiddenCountOn' value={{$onAmount}}>
 <input type="hidden" id='hiddenCountOff' value={{$offAmount}}>
+<<<<<<< HEAD
 <input type="hidden" id="endDate" value="{{ $endDate }}">
 <input type="hidden" id="statrDate" value="{{ $startDate }}">
 
+=======
+>>>>>>> 884d214698aa27079cd8f7b88c2e69affbd5067e
 <input type="hidden" id="originalEventStartDate" value="">
+<input type="hidden" id="endDate" value={{ $endDate }}>
 
     <div id="section" class="container-fix trans-left-five">
         <div class="container-section">
@@ -98,6 +102,7 @@
                         </div>
 
                         <script type="text/javascript" charset="utf-8">
+<<<<<<< HEAD
                             //var currDate = Date.parse((new Date()).toDateString());
                             var currDate=new Date();
                             if(currDate.getDate()<10){
@@ -117,9 +122,26 @@
                                 scheduler.config.readonly = false;
                                 console.log(endDate);
                                
+=======
+                            var dateObj = new Date();
+                            var endDateStr = document.getElementById("endDate").value;
+                            
+                            var currDateStr = dateObj.getFullYear() + "-";
+                            
+                            if((dateObj.getMonth() + 1) < 10) {
+                                currDateStr += "0";
                             }
+                            currDateStr += (dateObj.getMonth() + 1) + "-";
+                            
+                            if(dateObj.getDate() < 10) {
+                                currDateStr += "0";
+>>>>>>> 884d214698aa27079cd8f7b88c2e69affbd5067e
+                            }
+                            currDateStr += dateObj.getDate();
 
-                            else{
+                            if(Date.parse(currDateStr) <= Date.parse(endDateStr)){
+                                scheduler.config.readonly = false;
+                            }else{
                                 scheduler.config.readonly = true;
                                  
                             }

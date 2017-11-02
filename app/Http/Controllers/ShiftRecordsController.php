@@ -12,7 +12,11 @@ use App\User;
 use App\ScheduleCategory;
 use App\Remark;
 use App\Reservation;
+
 use App\ReservationData;
+
+use App\ScheduleRecord;
+
 
 // import jobs
 use App\Jobs\SendAgreeShiftExchangeMail;
@@ -1048,5 +1052,66 @@ class ShiftRecordsController extends Controller
         return view('pages.shift-first-edition-personal');
     }
     
-    
+    // 取得積欠班的頁面
+    public function getAccumulatedShifts() {
+        $scheduleRecord = new ScheduleRecord();
+        $user = new User();
+        
+        $doctorsRecords=$scheduleRecord->getScheduleRecord();
+
+        //月份
+        $monthList =[]; 
+
+        $currentMonth= date("Y-m");
+        $currentYear = date('Y');
+
+        if($currentMonth <= ($currentYear.'-06')){
+            for($i = 1; $i <= 6; $i++) {
+                array_push($monthList, date('m', strtotime(($i+2).'month')));
+            }
+        }
+        if($currentMonth >= ($currentYear.'-06')){
+            for($i = 7; $i <= 12; $i++) {
+                array_push($monthList, date('m', strtotime(($i+2).'month')));
+            }
+        }
+        
+        $doctors = $user->getAtWorkDoctors();
+
+        $scheduleRecordArr = []; 
+
+        $shiftHours = [];
+
+        foreach ($doctors as $doctor ) {
+           $recordDic =[
+                'doctorID' => $doctor->doctorID,
+                'doctorName' => $doctor->name,
+                'totalShiftHours' => $scheduleRecord->getScheduleTotoalBydoctorID($doctor->doctorID),
+                'shiftHours' => ""
+            ];
+
+            // $doctorID=$doctor->doctorID;
+            // $doctorName=$doctor->name;
+            // $totalShiftHours=$scheduleRecord->getScheduleTotoalBydoctorID($doctor->doctorID);
+
+            $hours = $scheduleRecord->getScheduleRecordByDoctorID($doctor->doctorID);
+            
+            foreach ($hours as $shiftHour) {
+                $shiftHours = array($shiftHour->shiftHours);
+                 //array_push($scheduleRecordArr,[$shiftHours]);
+            }
+
+            array_push($scheduleRecordArr,[$shiftHours,$recordDic]);
+            //array_push($scheduleRecordArr,[$doctorID,$doctorName,$totalShiftHours,$shiftHours]);
+
+        }
+        
+        
+        return view('pages.accumulatedShifts', [
+             'doctors'=>$doctors,
+             'doctorsRecords'=>$scheduleRecordArr,
+             'shiftHours'=>$shiftHours,
+             'monthList'=>$monthList
+         ]);
+    }
 }
