@@ -365,9 +365,18 @@ class ShiftRecordsController extends Controller
                 $doc1Location = $schedule->getAnotherLocationShifts($doctorID1,$date1);
             }
 
-            if($schedule->getScheduleDataByID($scheduleID1)->location != $user->getDoctorInfoByID($doctorID2)->location){
+            if($doctorID2 != ""){
+               if($schedule->getScheduleDataByID($scheduleID1)->location != $user->getDoctorInfoByID($doctorID2)->location){
                 $doc2Location = $schedule->getAnotherLocationShifts($doctorID2,$date2);
+            
             }
+        }
+
+        if($doctorID2 == ""){
+            $doc2Location = $schedule->getAnotherLocationShifts($doctorID1,$date2);
+            
+        }
+            
         
         }
         
@@ -393,7 +402,6 @@ class ShiftRecordsController extends Controller
         }
 
         $doc1Night=0;
-
 
         if($doc1PreNight != 0 and ($categoryID1==3 or $categoryID1==4 or $categoryID1==5 or $categoryID1==6 or $categoryID1==7 or $categoryID1==8 or $categoryID1==9 or $categoryID1==10 or $categoryID1==11 or $categoryID1==12)){
             if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
@@ -448,7 +456,7 @@ class ShiftRecordsController extends Controller
             $doc2 = $user->getDoctorInfoByID($doctorID2)->name;
         }
         else{
-            $doc2=null;
+             $doc2 = $user->getDoctorInfoByID($doctorID1)->name;
         }
 
         $countDic=[

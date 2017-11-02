@@ -951,10 +951,16 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
-    $schedule = new Schedule();
+     
        
-echo date('Y-m',strtotime("2017-12-02"));
-   
+    $schedule = new Schedule();
+    $doctorID2 = null;
+       if($doctorID2 == ""){
+               
+                   echo  4;
+                
+            }
+
 
         //return $array;
 

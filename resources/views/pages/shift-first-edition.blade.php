@@ -1074,7 +1074,14 @@
 
                 var date = array[0]['date2'];
 
-                if(array[0]['doc2']==null){
+                console.log("location"+array[0]['doc2Location']);
+
+                if(array[0]['doc2Location']>=2){
+                    alert(array[0]['doc2']+"醫生本週已有2班非值登院區班");
+                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                    
+                }
+                else if(array[0]['doc2']==null){
                     updateShift(scheduleID_1,scheduleID_2);
                 }
 
@@ -1084,11 +1091,7 @@
                    
                 }
 
-                else if(array[0]['doc2Location']>=2){
-                    alert(array[0]['doc2']+"醫生本週已有2班非值登院區班");
-                     //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
-                    
-                }
+                
 
                 // else if(array[0]['doc1Major'] != 0){
                 //     alert(array[0]['doc1']+"醫生非該科醫生");
