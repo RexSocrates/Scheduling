@@ -216,7 +216,7 @@
                             scheduler.config.details_on_create=true;
                             scheduler.config.details_on_dblclick = true;
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
-//                            scheduler.config.readonly = true;   //唯讀，不能修改東西
+//                              
 //                            scheduler.config.dblclick_create = false;   //雙擊新增
                             scheduler.config.drag_create = false;   //拖拉新增
                             scheduler.xy.margin_left = -19;
@@ -225,8 +225,14 @@
                             scheduler.config.drag_resize= false;
                             scheduler.locale.labels.section_subject = "Subject";
                             scheduler.config.multi_day = true;
-
-
+                            
+                            if( {{$status}} == 2 ){
+                                 scheduler.config.readonly = false; 
+                            }
+                            else{
+                                scheduler.config.readonly = true; //唯讀，不能修改東西
+                            }
+                            
                             scheduler.form_blocks["hidden"] = {
                                 render:function(sns) {
                                     return "<div class='dhx_cal_ltext'><input type='hidden'></div>";

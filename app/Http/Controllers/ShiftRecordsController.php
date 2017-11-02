@@ -12,6 +12,7 @@ use App\User;
 use App\ScheduleCategory;
 use App\Remark;
 use App\Reservation;
+use App\ReservationData;
 
 // import jobs
 use App\Jobs\SendAgreeShiftExchangeMail;
@@ -978,6 +979,7 @@ class ShiftRecordsController extends Controller
     public function shiftFirstEdition($date=null){
         $schedule = new Schedule();
         $user = new User();
+        $reservationData = new ReservationData();
 
         $scheduleData = $schedule->getFirstSchedule();
 
@@ -989,7 +991,8 @@ class ShiftRecordsController extends Controller
             $data->doctorID = $doctorName->name;
         }
 
-
+        $month = date("Y-m");
+        $status=$reservationData->getDate($month)->status;
 
         $dateArr = explode('-', $date);
         
@@ -997,6 +1000,7 @@ class ShiftRecordsController extends Controller
         return view('pages.shift-first-edition',array(
             'schedule' => $scheduleData,
             'doctorName' => $doctors,
+            'status' => $status
         ));
 
     }
