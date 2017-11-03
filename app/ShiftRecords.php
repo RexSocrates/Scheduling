@@ -27,6 +27,7 @@ class ShiftRecords extends Model
         $shiftRecords = DB::table("ShiftRecords")
         ->where('doc2Confirm',1)
         ->where('adminConfirm',1)
+        ->orderBy('date','desc')
         ->get();
 
          return $shiftRecords;

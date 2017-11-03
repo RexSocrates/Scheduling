@@ -900,8 +900,8 @@
                     console.log("night"+array[0]['doc1Night']);
 
                      if(array[0]['doc1Night']!=0){
-                        alert(array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班\n無法換班56");
-                        ///refresh();
+                        alert(array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班\n無法換班");
+                        refresh();
                         // var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班?\n確定要換班嗎");
                         //     if (r == true) {
                         //         updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
@@ -938,7 +938,7 @@
                 }
 
                 else if(array[0]['doc1off']!=0){
-                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n確定要換班嗎dd");
+                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n確定要換班嗎");
                             if (r == true) {
                                 updateShift(scheduleID_1,scheduleID_2);
                             }
@@ -949,7 +949,7 @@
                 }
 
                 else if(array[0]['doc2off']!=0){
-                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"已有off班?\n確定要換班嗎33");
+                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"已有off班?\n確定要換班嗎");
                             if (r == true) {
                                 updateShift(scheduleID_1,scheduleID_2);
                             } 
@@ -1550,7 +1550,7 @@
                     refresh();
                 }
 
-                else if (array[0]['countOff']!=0 || array[0]['countNight']!=0 || array[0]['countDay']!=0){
+                else if ( array[0]['countNight']!=0 || array[0]['countDay']!=0){
 
                     //  if(array[0]['countOff']!=0 && array[0]['countNight']!=0){
                     //     var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"已有off班?\n且"+ array[0]['date']+"前一晚已有夜班\n確定要增班嗎");
@@ -1566,7 +1566,7 @@
 
 
                     if(array[0]['countNight'] != 0){
-                        alert( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班\n無法增班")
+                        alert( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班\n無法增班ss")
                         // var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n無法增班嗎");
 
                         //     if (r == true) {

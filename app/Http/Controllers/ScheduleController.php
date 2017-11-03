@@ -201,10 +201,13 @@ class ScheduleController extends Controller
         if($schedule->getNightScheduleByDoctorIDandDate($id,$date) != 0 and ($categoryID==3 or $categoryID==4 or $categoryID==5 or $categoryID==6 or $categoryID==7 or $categoryID==8 or $categoryID==9 or $categoryID==10 or $categoryID==11 or $categoryID==12 )){
 
             $countNight=1;
+
         }
 
         $countDay=0;
         if($schedule->geDayScheduleByDoctorIDandDate($id,$date) != 0 and ($categoryID==13 or $categoryID==14 or $categoryID==15 or $categoryID==16 or $categoryID==17 or $categoryID==18 or $categoryID==19 or $categoryID==20 or $categoryID==21)){
+
+
             $countDay=1;
         }
 
@@ -265,15 +268,31 @@ class ScheduleController extends Controller
         $countOff = $reservation->getResrvationByDateandDoctorID($doctorID,$dateStr);
 
         $countNight=0;
-        $date2 = date("Y-m-d",strtotime($dateInSchedule."+1 day"));
+        $preDate = date("Y-m-d",strtotime($dateStr."-1 day"));
+        $laterDate = date("Y-m-d",strtotime($dateStr."+1 day"));
 
         if($schedule->getNightScheduleByDoctorIDandDate($doctorID,$dateStr) != 0 and ($categoryID==3 or $categoryID==4 or $categoryID==5 or $categoryID==6 or $categoryID==7 or $categoryID==8 or $categoryID==9 or $categoryID==10 or $categoryID==11 or $categoryID==12 )){
-            $countNight=1;
+
+            if($preDate == $dateInSchedule){
+                $countNight=0;
+            }
+            else{
+                $countNight=1;
+            }
+            
+
         }
 
         $countDay=0;
         if($schedule->getDayScheduleByDoctorIDandDate($doctorID,$dateStr) != 0 and ($categoryID==13 or $categoryID==14 or $categoryID==15 or $categoryID==16 or $categoryID==17 or $categoryID==18 or $categoryID==19 or $categoryID==20 or $categoryID==21  )){
-            $countDay=1;
+            
+             if($laterDate == $dateInSchedule){
+                $countDay=0;
+            }
+            else{
+                $countDay=1;
+            }
+            
         }
 
         $location=0;
@@ -549,6 +568,7 @@ class ScheduleController extends Controller
     public function updateSchedule(Request $request){
         $scheduleCategory = new ScheduleCategory();
         $schedule = new Schedule();
+        $shiftRecords = new ShiftRecords();
         $user = new User();
 
         $data = $request->all();
@@ -583,14 +603,25 @@ class ScheduleController extends Controller
           $schInfo['isWeekday'] = false;
         }
         
+        $shiftInfo = [
+            'scheduleID_1' => $id,
+            'scheduleID_2' => $sch->scheduleID,
+            'schID_1_doctor' => $doctorID,
+            'schID_2_doctor' => $doctorID,
+            'doc2Confirm' => 1,
+            'adminConfirm' => 1,
+            'date' => date('Y-m-d')
+        ];
         
 
-         $array = array($doctorName,$oldDate,$oldSession,$date,$session);
+            $array = array($doctorName,$oldDate,$oldSession,$date,$session);
         // if($sch!=""){ //有查到資料
         //     // $newScheduleID=$schedule->addSchedule($schInfo);
         //     // $schedule->updateScheduleToNullByID($sch->doctorID);
             $schedule->addScheduleInNull($sch->scheduleID,$schInfo);
             $schedule->updateScheduleToNullByID($id);
+
+            $newChangeSerial = $shiftRecords->addShifts($shiftInfo);
             $newScheduleID=$sch->scheduleID;
             
         //  }
