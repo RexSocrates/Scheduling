@@ -951,15 +951,170 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
-     
-       
-    $schedule = new Schedule();
-    $doctorID2 = null;
-       if($doctorID2 == ""){
-               
-                   echo  4;
-                
+        $scheduleID1 = 4039;
+        $scheduleID2 = 4070;
+
+        $schedule = new Schedule();
+        $user =new User();
+        $reservation = new Reservation();
+        $scheduleCategory = new ScheduleCategory();
+
+
+        //判斷醫生1班
+        $doctorID1 = $schedule->getScheduleDataByID($scheduleID1)->doctorID;//2
+        $date1 = $schedule->getScheduleDataByID($scheduleID2)->date;
+        $categoryID1 =$schedule->getScheduleDataByID($scheduleID2)->schCategorySerial;
+        $weekday1 = (int)date('N', strtotime($date1));
+
+
+        //判斷醫生2班
+        $doctorID2 = $schedule->getScheduleDataByID($scheduleID2)->doctorID;
+        $date2 = $schedule->getScheduleDataByID($scheduleID1)->date;
+        $categoryID2 =$schedule->getScheduleDataByID($scheduleID1)->schCategorySerial;
+        $weekday2 = (int)date('N', strtotime($date2));
+
+        //確認當天一位醫生是否有上班 醫生id
+        $count1=$schedule->checkDocStatus($doctorID1,$date1);
+        $count2=$schedule->checkDocStatus($doctorID2,$date2);
+
+        //確認醫生假日班數
+        $doc1weekend = $schedule->checkDocScheduleInWeekend($doctorID1);
+        $doc2weekend = $schedule->checkDocScheduleInWeekend($doctorID2);
+
+        //確認醫生是否有off班
+        $doc1off = $reservation->getResrvationByDateandDoctorID($doctorID1,$date1);
+        $doc2off = $reservation->getResrvationByDateandDoctorID($doctorID2,$date2);
+
+        //確認醫生前一天是否為夜班
+        $doc1PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID1,$date1);
+        $doc2PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID2,$date2);
+
+        //確認醫生後一天是否為白班
+        $doc1LaterDay = $schedule->getDayScheduleByDoctorIDandDate($doctorID1,$date1);
+        $doc2LaterDay = $schedule->getDayScheduleByDoctorIDandDate($doctorID2,$date2);
+
+        //判斷在非値登院區班數
+        $doc1Location =0;
+        $doc2Location =0;
+        
+        if($schedule->getScheduleDataByID($scheduleID1)->location != $schedule->getScheduleDataByID($scheduleID2)->location){
+            if($schedule->getScheduleDataByID($scheduleID2)->location != $user->getDoctorInfoByID($doctorID1)->location){
+                $doc1Location = $schedule->getAnotherLocationShifts($doctorID1,$date1);
             }
+
+        if($doctorID2 != ""){
+               if($schedule->getScheduleDataByID($scheduleID1)->location != $user->getDoctorInfoByID($doctorID2)->location){
+                $doc2Location = $schedule->getAnotherLocationShifts($doctorID2,$date2);
+            
+            }
+        }
+
+        if($doctorID2 == ""){
+            $doc2Location = $schedule->getAnotherLocationShifts($doctorID1,$date2);
+            
+        }
+            
+        
+        }
+        
+        //判斷醫生科別
+        $doc1Major=0;
+        $doc2Major=0;
+
+        if($user->getDoctorInfoByID($doctorID1)->major != "All"){
+            if($scheduleCategory->getSchCategoryMajor($categoryID1) != $scheduleCategory->getSchCategoryMajor($categoryID2)){
+                if($user->getDoctorInfoByID($doctorID1)->major != $scheduleCategory->getSchCategoryMajor($categoryID1)){
+                    $doc1Major=1;
+                }
+                if($doctorID2 != null){
+                    if($user->getDoctorInfoByID($doctorID2)->major != $scheduleCategory->getSchCategoryMajor($categoryID2)){
+                        $doc2Major=2;
+                    }
+                }
+                if($doctorID2 == null){
+                    $doc2Major=0;
+                }
+
+            }
+        }
+
+        $doc1Night=0;
+
+        if($doc1PreNight != 0 and ($categoryID1==3 or $categoryID1==4 or $categoryID1==5 or $categoryID1==6 or $categoryID1==7 or $categoryID1==8 or $categoryID1==9 or $categoryID1==10 or $categoryID1==11 or $categoryID1==12)){
+
+            // if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
+            //     $doc1Night=0;
+            // }
+
+            // else{
+                $doc1Night=1;
+            // }
+        }
+        
+
+        $doc2Night=0;
+
+        if($doctorID2 != ""){
+
+            if($doc2PreNight != 0 and ($categoryID2==3 or $categoryID2==4 or $categoryID2==5 or $categoryID2==6 or $categoryID2==7 or $categoryID2==8 or $categoryID2==9 or $categoryID2==10 or $categoryID2==11 or $categoryID2==12)){
+            // if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
+            //     $doc2Night=0;
+            // }
+
+            // else{
+          
+                $doc2Night=1;
+            // }
+            }
+        }
+
+        if($doctorID2 == ""){
+            $doc2PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID1,$date2);
+            if($doc2PreNight != 0 and ($categoryID2==3 or $categoryID2==4 or $categoryID2==5 or $categoryID2==6 or $categoryID2==7 or $categoryID2==8 or $categoryID2==9 or $categoryID2==10 or $categoryID2==11 or $categoryID2==12)){
+            // if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
+            //     $doc2Night=0;
+            // }
+
+            // else{
+          
+                $doc2Night=1;
+            // }
+            }
+        }
+
+
+        $doc1Day=0;
+
+        if($doc1LaterDay != 0 and ($categoryID1==13 or $categoryID1==14 or $categoryID1==15 or $categoryID1==16 or $categoryID1==17 or $categoryID1==18 or $categoryID1==19 or $categoryID1==20 or $categoryID1==21)){
+            // if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
+            //     $doc1Day=0;
+            // }
+
+            // else{
+                $doc1Day=1;
+            // }
+        }
+
+        $doc2Day=0;
+
+        if($doc2LaterDay != 0 and ($categoryID2==13 or $categoryID2==14 or $categoryID2==15 or $categoryID2==16 or $categoryID2==17 or $categoryID2==18 or $categoryID2==19 or $categoryID2==20 or $categoryID2==21)){
+            // if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
+            //     $doc2Day=0;
+            // }
+
+            // else{
+                $doc2Day=1;
+            // }
+        }
+
+        $doc2 = null;
+        if($doctorID2!=null){
+            $doc2 = $user->getDoctorInfoByID($doctorID2)->name;
+        }
+        else{
+             $doc2 = $user->getDoctorInfoByID($doctorID1)->name;
+        }
+
 
 
         //return $array;
@@ -989,6 +1144,9 @@ class TestController extends Controller
 
 
         //$schedule->exchangeSchedule($newChangeSerial);
+        echo $doctorID2;
+        echo $date2;
+        echo $doc2Night;
         
            
            

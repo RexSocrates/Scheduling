@@ -25,12 +25,11 @@
 <input type="hidden" id='hiddenCountNight' value={{$countNight}}>
 <input type="hidden" id='hiddenCountOn' value={{$onAmount}}>
 <input type="hidden" id='hiddenCountOff' value={{$offAmount}}>
-<<<<<<< HEAD
+
 <input type="hidden" id="endDate" value="{{ $endDate }}">
 <input type="hidden" id="statrDate" value="{{ $startDate }}">
 
-=======
->>>>>>> 884d214698aa27079cd8f7b88c2e69affbd5067e
+
 <input type="hidden" id="originalEventStartDate" value="">
 <input type="hidden" id="endDate" value={{ $endDate }}>
 
@@ -102,27 +101,27 @@
                         </div>
 
                         <script type="text/javascript" charset="utf-8">
-<<<<<<< HEAD
+
                             //var currDate = Date.parse((new Date()).toDateString());
-                            var currDate=new Date();
-                            if(currDate.getDate()<10){
-                              var currdateString = currDate.getFullYear()+"-"+(currDate.getMonth()+1)+"-0"+currDate.getDate();
+                            // var currDate=new Date();
+                            // if(currDate.getDate()<10){
+                            //   var currdateString = currDate.getFullYear()+"-"+(currDate.getMonth()+1)+"-0"+currDate.getDate();
 
-                            }
-                            else{
-                               var currdateString = currDate.getFullYear()+"-"+(currDate.getMonth()+1)+"-"+currDate.getDate();
-                            }
+                            // }
+                            // else{
+                            //    var currdateString = currDate.getFullYear()+"-"+(currDate.getMonth()+1)+"-"+currDate.getDate();
+                            // }
                            
-                            var statrDate = document.getElementById("statrDate").value;
-                            var endDate = document.getElementById("endDate").value;
+                            // var statrDate = document.getElementById("statrDate").value;
+                            // var endDate = document.getElementById("endDate").value;
 
-                            console.log(currdateString);
+                            // console.log(currdateString);
 
-                            if(Date.parse(currDate)>=Date.parse(statrDate) && Date.parse(currDate)<=Date.parse(endDate)){
-                                scheduler.config.readonly = false;
-                                console.log(endDate);
+                            // if(Date.parse(currDate)>=Date.parse(statrDate) && Date.parse(currDate)<=Date.parse(endDate)){
+                            //     scheduler.config.readonly = false;
+                            //     console.log(endDate);
                                
-=======
+
                             var dateObj = new Date();
                             var endDateStr = document.getElementById("endDate").value;
                             
@@ -135,7 +134,7 @@
                             
                             if(dateObj.getDate() < 10) {
                                 currDateStr += "0";
->>>>>>> 884d214698aa27079cd8f7b88c2e69affbd5067e
+
                             }
                             currDateStr += dateObj.getDate();
 
@@ -454,7 +453,7 @@
 
                                 scheduler.parse([
 
-                                { start_date: "{{ $reservation[0]->date }} 00:00", end_date: "{{$reservation[0]->endDate}} 00:00", text: "{{ $reservation[1] }}", priority:"{{ $reservation[0]->categorySerial}}", hidden:"{{ $reservation[0]->resSerial}}"},
+                                { start_date: "{{ $reservation[0]->date }} 00:00", end_date: "{{$reservation[0]->endDate}} 00:00", text: "{{ $reservation[1] }}", priority:"{{ $reservation[0]->categorySerial}}", hidden:"{{ $reservation[0]->resSerial}}" },
 
                                 ],"json");
 

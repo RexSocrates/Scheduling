@@ -515,7 +515,7 @@
 
                 
 
-                else if (array[0]['doc1off']!=0 || array[0]['doc1Night']!=0 || array[0]['doc1Day']!=0 ){
+                else if (array[0]['doc1Night']!=0 || array[0]['doc1Day']!=0 ){
                     if(array[0]['doc1Night']!=0 ){
                        alert(array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班\n無法換班56");
                     }
@@ -525,19 +525,10 @@
                         refresh();
                     }
 
-                    else if(array[0]['doc1off']!=0){
-                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n確定要換班嗎");
-                            if (r == true) {
-                                updateShift(scheduleID_1,scheduleID_2);
-                            }
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
-                    }
+                    
                 }
 
-                else if(array[0]['doc2off']!=0 || array[0]['doc2Night']!=0 || array[0]['doc2Day']!=0){
+                else if( array[0]['doc2Night']!=0 || array[0]['doc2Day']!=0){
                     console.log("night"+array[0]['doc2Night']);
                     
                     if(array[0]['doc2Night']!=0 ){
@@ -550,7 +541,20 @@
                         refresh();
                     }
 
-                    else if(array[0]['doc2off']!=0){
+                    
+                   
+                }
+                else if(array[0]['doc1off']!=0){
+                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n確定要換班嗎");
+                            if (r == true) {
+                                updateShift(scheduleID_1,scheduleID_2);
+                            }
+                            else {
+                                alert("已取消");
+                                refresh();
+                            }
+                }
+                else if(array[0]['doc2off']!=0){
                         var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"已有off班?\n確定要換班嗎");
                             if (r == true) {
                                 save_form();
@@ -560,8 +564,6 @@
                                 refresh();
                             }
                     }
-                   
-                }
 
                 // else if( (array[0]['doc1weekend']<=4) && ( weekday2==6 || weekday2 ==7)  && ( weekday1!=6 && weekday1!=7) ){
                 //     dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生假日班不得少於4" });
@@ -584,7 +586,9 @@
 
         }
 
-
+           function refresh() {
+            location.reload();
+        }
          function save_form() {
             $.get('addShifts', {
                 scheduleID_1 : document.getElementById('date1').value,
