@@ -951,17 +951,20 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
-        $scheduleID1 = 4039;
-        $scheduleID2 = 4070;
-
+        
+        $user = new User();
+        $shiftRecordObj = new ShiftRecords();
         $schedule = new Schedule();
-        $user =new User();
-        $reservation = new Reservation();
         $scheduleCategory = new ScheduleCategory();
 
 
+        $shiftInfo = $shiftRecordObj->getShiftRecordByChangeSerial(139); 
+
+        $scheduleID1= $shiftInfo->scheduleID_1;
+        $scheduleID2= $shiftInfo->scheduleID_2;
+
         //判斷醫生1班
-        $doctorID1 = $schedule->getScheduleDataByID($scheduleID1)->doctorID;//2
+        $doctorID1 = $schedule->getScheduleDataByID($scheduleID1)->doctorID;
         $date1 = $schedule->getScheduleDataByID($scheduleID2)->date;
         $categoryID1 =$schedule->getScheduleDataByID($scheduleID2)->schCategorySerial;
         $weekday1 = (int)date('N', strtotime($date1));
@@ -973,17 +976,11 @@ class TestController extends Controller
         $categoryID2 =$schedule->getScheduleDataByID($scheduleID1)->schCategorySerial;
         $weekday2 = (int)date('N', strtotime($date2));
 
-        //確認當天一位醫生是否有上班 醫生id
+         //確認當天一位醫生是否有上班 醫生id
         $count1=$schedule->checkDocStatus($doctorID1,$date1);
         $count2=$schedule->checkDocStatus($doctorID2,$date2);
 
-        //確認醫生假日班數
-        $doc1weekend = $schedule->checkDocScheduleInWeekend($doctorID1);
-        $doc2weekend = $schedule->checkDocScheduleInWeekend($doctorID2);
-
-        //確認醫生是否有off班
-        $doc1off = $reservation->getResrvationByDateandDoctorID($doctorID1,$date1);
-        $doc2off = $reservation->getResrvationByDateandDoctorID($doctorID2,$date2);
+    
 
         //確認醫生前一天是否為夜班
         $doc1PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID1,$date1);
@@ -1002,7 +999,7 @@ class TestController extends Controller
                 $doc1Location = $schedule->getAnotherLocationShifts($doctorID1,$date1);
             }
 
-        if($doctorID2 != ""){
+            if($doctorID2 != ""){
                if($schedule->getScheduleDataByID($scheduleID1)->location != $user->getDoctorInfoByID($doctorID2)->location){
                 $doc2Location = $schedule->getAnotherLocationShifts($doctorID2,$date2);
             
@@ -1041,34 +1038,32 @@ class TestController extends Controller
         $doc1Night=0;
 
         if($doc1PreNight != 0 and ($categoryID1==3 or $categoryID1==4 or $categoryID1==5 or $categoryID1==6 or $categoryID1==7 or $categoryID1==8 or $categoryID1==9 or $categoryID1==10 or $categoryID1==11 or $categoryID1==12)){
-
-            // if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
-            //     $doc1Night=0;
-            // }
-
-            // else{
-                $doc1Night=1;
-            // }
+            $laterdate=date("Y-m-d",strtotime($date1."-1 day"));
+                if($laterdate == $date2){
+                    $doc1Night=0;
+                }   
+                else{
+                    $doc1Night=1;
+                } 
         }
         
 
         $doc2Night=0;
 
         if($doctorID2 != ""){
-
             if($doc2PreNight != 0 and ($categoryID2==3 or $categoryID2==4 or $categoryID2==5 or $categoryID2==6 or $categoryID2==7 or $categoryID2==8 or $categoryID2==9 or $categoryID2==10 or $categoryID2==11 or $categoryID2==12)){
-            // if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
-            //     $doc2Night=0;
-            // }
-
-            // else{
-          
+            $predate=date("Y-m-d",strtotime($date2."-1 day"));
+            if($predate == $date1){
+                $doc2Night=0;
+            }   
+            else{
                 $doc2Night=1;
-            // }
-            }
+            }   
+            
+         }
         }
 
-        if($doctorID2 == ""){
+         if($doctorID2 == ""){
             $doc2PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID1,$date2);
             if($doc2PreNight != 0 and ($categoryID2==3 or $categoryID2==4 or $categoryID2==5 or $categoryID2==6 or $categoryID2==7 or $categoryID2==8 or $categoryID2==9 or $categoryID2==10 or $categoryID2==11 or $categoryID2==12)){
             // if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
@@ -1076,8 +1071,13 @@ class TestController extends Controller
             // }
 
             // else{
-          
+            if($predate == $date1){
+                $doc2Night=0;
+            }   
+            else{
                 $doc2Night=1;
+            } 
+                
             // }
             }
         }
@@ -1086,26 +1086,42 @@ class TestController extends Controller
         $doc1Day=0;
 
         if($doc1LaterDay != 0 and ($categoryID1==13 or $categoryID1==14 or $categoryID1==15 or $categoryID1==16 or $categoryID1==17 or $categoryID1==18 or $categoryID1==19 or $categoryID1==20 or $categoryID1==21)){
-            // if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
-            //     $doc1Day=0;
-            // }
-
-            // else{
+            $predate=date("Y-m-d",strtotime($date2."-1 day"));
+            if($predate == $date1){
+                $doc1Day=0;
+            }   
+            else{
                 $doc1Day=1;
-            // }
+            }        
+          
         }
 
         $doc2Day=0;
-
-        if($doc2LaterDay != 0 and ($categoryID2==13 or $categoryID2==14 or $categoryID2==15 or $categoryID2==16 or $categoryID2==17 or $categoryID2==18 or $categoryID2==19 or $categoryID2==20 or $categoryID2==21)){
-            // if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
-            //     $doc2Day=0;
-            // }
-
-            // else{
-                $doc2Day=1;
+        if($doctorID2 != ""){
+            if($doc2LaterDay != 0 and ($categoryID2==13 or $categoryID2==14 or $categoryID2==15 or $categoryID2==16 or $categoryID2==17 or $categoryID2==18 or $categoryID2==19 or $categoryID2==20 or $categoryID2==21)){
+            $laterdate=date("Y-m-d",strtotime($date2."+1 day"));
+                if($laterdate == $date1){
+                    $doc2Day=0;
+                 }   
+                else{
+                    $doc2Day=1;
+                 } 
+            
+               
             // }
         }
+     }
+     if($doctorID2 != ""){
+        $doc2LaterDay = $schedule->getDayScheduleByDoctorIDandDate($doctorID1,$date2);
+            if($doc2LaterDay != 0 and ($categoryID2==13 or $categoryID2==14 or $categoryID2==15 or $categoryID2==16 or $categoryID2==17 or $categoryID2==18 or $categoryID2==19 or $categoryID2==20 or $categoryID2==21)){
+                if($laterdate == $date1){
+                    $doc2Day=0;
+                }   
+                else{
+                    $doc2Day=1;
+                 } 
+        }
+     }
 
         $doc2 = null;
         if($doctorID2!=null){
@@ -1115,41 +1131,44 @@ class TestController extends Controller
              $doc2 = $user->getDoctorInfoByID($doctorID1)->name;
         }
 
+        $status = 1; //代表true
+        if($doctorID1 == $shiftInfo->schID_1_doctor &&  $doctorID2 == $shiftInfo->schID_2_doctor){
+            // 表示兩筆上班資料都沒有其他異動
+            $status=1;
+        }
+        else{
+            $status=2;
+        }
 
 
-        //return $array;
+        $countDic=[
+            "scheduleID_1"=>$scheduleID1,
+            "scheduleID_2"=>$scheduleID2,
+            "count1"=>$count1,
+            "count2"=>$count2,
+            "doc1"=>$user->getDoctorInfoByID($doctorID1)->name,
+            "doc2"=>$doc2,
+            'date1'=>$date1,
+            'date2'=>$date2,
+            'doc1Night' => $doc1Night,
+            'doc2Night' => $doc2Night,
+            'doc1Day' => $doc1Day,
+            'doc2Day' => $doc2Day,
+            'doc1Location'=>$doc1Location,
+            'doc2Location'=>$doc2Location,
+            'doc1Major'=>$doc1Major,
+            'doc2Major'=>$doc2Major,
+            'status'=>$status,
+            'date1Month' =>date('Y-m',strtotime($date1)),
+            'date2Month' =>date('Y-m',strtotime($date2))
+        ];
 
-        //return $array;
-
-        //return $array;
-       
-        //echo $scheduleRecordArr;
-        //return $scheduleRecordArr; 
-     
-        // // $user = new User();
-
-       
-
-        // $oldscheduleID1 = $schedule_1_Info->scheduleID;
-        // $newscheduleID1 = $schedule_2_Info->scheduleID;
-        // $oldscheduleID2 = $schedule_2_Info->scheduleID;
-        // $newscheduleID2 = $schedule_1_Info->scheduleID;
-
-        // $job1 = new SendShiftExchangeMail($doctor1,$oldscheduleID1,$newscheduleID1);
-        // $job2 = new SendShiftExchangeMail($doctor2,$oldscheduleID2,$newscheduleID2);
-
-        // dispatch($job1);
-        // dispatch($job2);
-
-
-
-        //$schedule->exchangeSchedule($newChangeSerial);
-        echo $doctorID2;
-        echo $date2;
-        echo $doc2Night;
         
-           
-           
+        $countArr=[];
+        array_push($countArr,$countDic);
+
+        return $countArr;
+        
          }
          // 公假測試
         public function officialLeave(){

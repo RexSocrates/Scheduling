@@ -713,19 +713,19 @@
 
             });
 
-            console.log("date"+document.getElementById("date1").value);
+            console.log("date"+document.getElementById("date2").value);
         }
 
         function changeDate1(array) { //要求換班日期
                 document.getElementById("date1").innerHTML= "<option value="+array[0]+">"+array[2]+"</option>" 
 
-                changeDate2(array[2],array[3]);
+                changeDate2(array[0]);
         }
 
-        function changeDate2(date,doctorID){
+        function changeDate2(scheduleID){
             $.get('changeDate2' ,{
-                date:date,
-                doctorID : doctorID
+                scheduleID:scheduleID,
+               
             },function(array){
                 var date = "";
                 for(i=0 ; i<array.length ; i++){
@@ -736,8 +736,6 @@
                 changeDoctor();
             });
 
-        
-            
         }
 
        

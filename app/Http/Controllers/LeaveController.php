@@ -55,7 +55,7 @@ class LeaveController extends Controller
                 'month'=>$leave->leaveMonth,
                 'updateMustOnDutyShift'=>""
             ];
-        $updateOnDutyInfo['updateMustOnDutyShift']=($mustOnDutyShiftPerMonth->getOnDutyShift($onDutyInfo)->mustOnDutyShift)+($leave->leaveHours)/12;
+          $updateOnDutyInfo['updateMustOnDutyShift']=($mustOnDutyShiftPerMonth->getOnDutyShift($onDutyInfo)->mustOnDutyShift)+($leave->leaveHours/12);
             $mustOnDutyShiftPerMonth->updateOnDutyShift($updateOnDutyInfo);
             
         }
