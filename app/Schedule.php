@@ -497,7 +497,7 @@ class Schedule extends Model
         ->whereNotNull('doctorID')
         ->where('doctorID',$doctorID)
         ->where('date', 'like', $nextMonth.'%')
-        ->whereIn('schCategorySerial', [1,2,3,4,5,6,7,8,13, 14, 15, 16,17,18])
+        ->whereIn('schCategorySerial', [3,4,5,6,7,8,13, 14, 15, 16,17,18])
         ->count();
 
         return $count;
@@ -549,9 +549,9 @@ class Schedule extends Model
     }
 
     //計算醫生已上班書
-    public function totalShiftFirstEdition($doctorID){
+    public function totalShift($doctorID,$month){
         
-        $month=date("Y-m", strtotime('-1 month'));//上個月
+        //$month=date("Y-m", strtotime('+1 month'));
 
         $count = DB::table('Schedule')
         ->whereNotNull('doctorID')
@@ -562,6 +562,19 @@ class Schedule extends Model
         return $count;
     }
 
+    //  //計算醫生已上班書
+    // public function totalShift($doctorID){
+        
+    //     $month=date("Y-m");
+
+    //     $count = DB::table('Schedule')
+    //     ->whereNotNull('doctorID')
+    //     ->where('doctorID',$doctorID)
+    //     ->where('date', 'like', $month.'%')
+    //     ->count();
+
+    //     return $count;
+    // }
 
     //確認醫生前一天班是否為夜班
      public function getNightScheduleByDoctorIDandDate($doctorID,$date){
