@@ -22,6 +22,7 @@
 
 @section('navbar')
     <font class="brand-logo light">初版班表 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>個人</font>
+    
 @endsection
 
 @section('content')

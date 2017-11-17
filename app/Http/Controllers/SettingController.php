@@ -8,6 +8,8 @@ use\App\User;
 use\App\Announcement;
 use App\MustOnDutyShiftPerMonth;
 use App\ScheduleRecord;
+use App\OfficialLeave;
+use App\Schedule;
 
 use App\Jobs\Schedule2;
 
@@ -135,7 +137,11 @@ class SettingController extends Controller
         $reservationData = new ReservationData();
         $user = new User();
         $announcement = new Announcement();
-        
+        $scheduleRecord = new ScheduleRecord();
+        $officialLeave = new OfficialLeave();
+        $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
+        $schedule = new Schedule();
+
 
         $reservationData->setFirstScheduleAnnounceStatus();
 
@@ -145,6 +151,39 @@ class SettingController extends Controller
             'doctorID'=> $user->getCurrentUserID()
         ];
         
+
+        $doctorName = $user->getAtWorkDoctors();
+
+         foreach($doctorName as $name){
+
+            $date=date("Y-m", strtotime('-1 month')); //上個月的時間
+           
+            $mustOnDutyShiftArr=[
+            'doctorID'=>$name->doctorID,
+            'leaveMonth'=>$date
+            ];
+
+            $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
+
+            if($count!=0){
+                $mustOnDutyTotalShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift; //應上
+                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
+                $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
+                $updateLeaveHours= $user->getDoctorInfoByID($name->doctorID)->currentOfficialLeaveHours-($shifHours*12);
+                $officialLeave->updateLeaveHours($name->doctorID,$updateLeaveHours);
+                $scheduleRecord->addScheduleRecord($name->doctorID,($shifHours*-1));
+                //echo $shifHours;
+            }
+            else{
+                $mustOnDutyTotalShift=$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTotalShifts;
+                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
+                $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
+                $updateLeaveHours= $user->getDoctorInfoByID($name->doctorID)->currentOfficialLeaveHours-($shifHours*12);
+                $officialLeave->updateLeaveHours($name->doctorID,$updateLeaveHours);
+                $scheduleRecord->addScheduleRecord($name->doctorID,($shifHours*-1));
+             }
+
+    }
         $job = new Schedule2();
         
         dispatch($job);

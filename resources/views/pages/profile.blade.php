@@ -206,14 +206,12 @@
                         <!-- <label>月份</label> -->
                     </div>
 
-                    <div class="input-field col s12 margin-b20">
-                        <select name="hour" required>
-                            <option value="" selected disabled required>選擇時數</option>
-                            @foreach($leaveHours as $hour)
-                            <option value="{{ $hour }}">{{ $hour }}</option>
-                            @endforeach
-                        </select>
-                        <label>時數</label>
+                    <div class=input-field col s12">
+                         <div class="input-field col s12">
+                            <input id="hour" type="number" value="" name="hour" min=0 max="{{$doctor->currentOfficialLeaveHours}}" required>
+                            <label for="hour">時數</label>
+                    </div>
+                    
                     </div>
                     <div class="input-field col s12 margin-t0">
                         <textarea id="textarea1" class="materialize-textarea" type="text" name="content" required></textarea>

@@ -726,13 +726,13 @@ class TestController extends Controller
 
         $str= 'Mon Oct 02 2017 00:00:00 GMT+0800 (CST)';
         $dateArr = explode(' ', $str);
-        $date = $this->processDateStr($str);
+        //$date = $this->processDateStr($str);
 
         $section_id = 3;
         $categoryInfo = $scheduleCategory->getSchCategoryInfo($section_id);
 
         $info=[
-            'date'=> $date,
+           
             'schCategorySerial'=>$section_id,
             'location' => $categoryInfo
         ];
@@ -951,33 +951,52 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
- 
-        $schedule = new Schedule();
-       $scheduleSerial=$schedule->getScheduleDataByDateAndSessionID("2017-10-04",4)->scheduleID;
-       echo $scheduleSerial;
-        //echo $scheduleRecordArr;
-        //return $scheduleRecordArr; 
-     
-        // // $user = new User();
-
-       
-
-        // $oldscheduleID1 = $schedule_1_Info->scheduleID;
-        // $newscheduleID1 = $schedule_2_Info->scheduleID;
-        // $oldscheduleID2 = $schedule_2_Info->scheduleID;
-        // $newscheduleID2 = $schedule_1_Info->scheduleID;
-
-        // $job1 = new SendShiftExchangeMail($doctor1,$oldscheduleID1,$newscheduleID1);
-        // $job2 = new SendShiftExchangeMail($doctor2,$oldscheduleID2,$newscheduleID2);
-
-        // dispatch($job1);
-        // dispatch($job2);
-
-
-
-        //$schedule->exchangeSchedule($newChangeSerial);
         
+        $date = "2017-12-01";
+       echo date("Y-m",strtotime($date));
+        
+         }
+         // 公假測試
+        public function officialLeave(){
+        $schedule = new Schedule();
+        $reservationData = new ReservationData();
+        $user = new User();
+        $announcement = new Announcement();
+        $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
+        $scheduleRecord = new ScheduleRecord();
+        $officialLeave = new OfficialLeave();
+
+        $doctorName = $user->getAtWorkDoctors();
+        foreach($doctorName as $name){
+
+            $date="2017-12";
            
+            $mustOnDutyShiftArr=[
+            'doctorID'=>$name->doctorID,
+            'leaveMonth'=>$date
+            ];
+
+            $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
+
+            if($count!=0){
+                $mustOnDutyTotalShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift; //應上
+                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
+                $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
+                $updateLeaveHours= $user->getDoctorInfoByID($name->doctorID)->currentOfficialLeaveHours-($shifHours*12);
+                $officialLeave->updateLeaveHours($name->doctorID,$updateLeaveHours);
+                //echo $shifHours;
+            }
+            else{
+                $mustOnDutyTotalShift=$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTotalShifts;
+                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
+                $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
+                $updateLeaveHours= $user->getDoctorInfoByID($name->doctorID)->currentOfficialLeaveHours-($shifHours*12);
+                $officialLeave->updateLeaveHours($name->doctorID,$updateLeaveHours);
+             }
+
+    }
+    
+        
            
          }
          
