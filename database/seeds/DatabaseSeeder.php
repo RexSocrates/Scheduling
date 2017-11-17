@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
 //        $this->call(DateTest::class);
         
 //        $this->call(ShiftCategorySeeder::class);
-//        $this->call(ScheduleCategorySeeder::class);
+        $this->call(ScheduleCategorySeeder::class);
 //        $this->call(ConfirmStatusSeeder::class);
         
 //        $this->call(ReservationSeeder::class);
@@ -24,6 +24,6 @@ class DatabaseSeeder extends Seeder
         
         // 測試資料
 //        $this->call(DoctorsSeeder::class);
-        $this->call(DoctorAndResSeeder::class);
+//        $this->call(DoctorAndResSeeder::class);
     }
 }

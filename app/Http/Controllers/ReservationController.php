@@ -113,12 +113,14 @@ class ReservationController extends Controller
         }
         
         // 取得該醫生的應上總班數
-        $resLimit = (int)(($user->getCurrentUserInfo()->mustOnDutyTotalShifts) * 2 / 3);
+        $onResLimit = (int)(($user->getCurrentUserInfo()->mustOnDutyTotalShifts) * 2 / 3);
+        // 可預約的off班數量改為臨床總班數的1/2
+        $offResLimit = (int)(($user->getCurrentUserInfo()->mustOnDutyTotalShifts) / 2);
         
         // 取得醫生預約的on班與off班數量
         $docAndResObj = new DoctorAndReservation();
-        $onResAmount = $resLimit - $docAndResObj->getNextMonthOnResAmount($user->getCurrentUserID());
-        $offResAmount = $resLimit - $docAndResObj->getNextMonthOffResAmount($user->getCurrentUserID());
+        $onResAmount = $onResLimit - $docAndResObj->getNextMonthOnResAmount($user->getCurrentUserID());
+        $offResAmount = $offResLimit - $docAndResObj->getNextMonthOffResAmount($user->getCurrentUserID());
 
 
         return view('pages.reservation', [
