@@ -262,6 +262,7 @@
                                 {key:20, label:"淡夜內2"},
                                 {key:21, label:"淡夜外"}
                             ];
+                            
                             scheduler.createTimelineView({
                                 name:   "timeline",
                                 x_unit: "day",
@@ -272,7 +273,8 @@
                                 y_property: "section_id",
                                 render:"bar",
                                 round_position:true,    //有點像磁石
-                                event_dy: 46,
+//                                event_dy: 46,
+                                event_min_dy: 46,   //event的最小高度
                             });
                             
                             //===============
