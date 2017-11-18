@@ -121,21 +121,24 @@ class ReservationController extends Controller
         $docAndResObj = new DoctorAndReservation();
         $onResAmount = $onResLimit - $docAndResObj->getNextMonthOnResAmount($user->getCurrentUserID());
         $offResAmount = $offResLimit - $docAndResObj->getNextMonthOffResAmount($user->getCurrentUserID());
+        
+//        echo $docAndResObj->getNextMonthOnResAmount($user->getCurrentUserID()).'<br>';
+//        echo $onResAmount;
 
 
-        return view('pages.reservation', [
-            'startDate' => $startDate,
-            'endDate' =>  $endDate,
-            'reservations' => $data,
-            'countDay' => $countDay,
-            'countNight' => $countNight,
-            'doctorDay' =>$doctorDay,
-            'doctorNight'=> $doctorNight,
-            'onAmount' => $onResAmount,
-            'offAmount' => $offResAmount,
-            'remark'=> $doctorRemark,
-            'currentdate'=>date("Y-m-d")
-        ]);
+//        return view('pages.reservation', [
+//            'startDate' => $startDate,
+//            'endDate' =>  $endDate,
+//            'reservations' => $data,
+//            'countDay' => $countDay,
+//            'countNight' => $countNight,
+//            'doctorDay' =>$doctorDay,
+//            'doctorNight'=> $doctorNight,
+//            'onAmount' => $onResAmount,
+//            'offAmount' => $offResAmount,
+//            'remark'=> $doctorRemark,
+//            'currentdate'=>date("Y-m-d")
+//        ]);
         
     }
 
