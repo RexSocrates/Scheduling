@@ -69,7 +69,7 @@
                     <div class="card">
                         <div class="card-action card1">
                             <div class="title1">
-                                <font class="card-title">公假記錄</font>
+                                <font class="card-title">特休記錄</font>
                             </div>
                             <div class="title1 margin-l20">
                                 <font class="card-title">剩餘時數: {{$doctor->currentOfficialLeaveHours}}</font>
@@ -110,6 +110,7 @@
                     </div>	
                 </div>
                 
+<!--
                 <div class="col s8">
                     <div class="card">
                         <div class="card-action card1">
@@ -154,6 +155,7 @@
                         </div>
                     </div>	
                 </div>
+-->
                 
             </div>
         </div>
@@ -189,7 +191,7 @@
     <div id="modal2" class="modal modal-fixed-footer modal-announcement">
         <form action="addOfficialLeaveByDoctor" method="post">
             <div class="modal-header">
-                <h5 class="modal-announcement-title">申請使用公假</h5>
+                <h5 class="modal-announcement-title">申請使用特休</h5>
             </div>
             <div class="modal-content modal-content-customize1">
                 <div class="row margin-b0">

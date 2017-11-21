@@ -5,7 +5,7 @@
 @endsection
 
 @section('navbar')
-    <p class="brand-logo light">醫師公假紀錄</p>
+    <p class="brand-logo light">醫師特休紀錄</p>
 @endsection
 
 @section('nav-content')
@@ -85,7 +85,7 @@
       		  	<div id="page2" class="col s12">
 					<div class="card">
                         <div class="card-action">
-      		  	  			<font class="card-title">公假待確認</font>
+      		  	  			<font class="card-title">特休待確認</font>
       		  	  		</div>
       		  	  		<div class="divider"></div>
       		  	  	  	
@@ -110,7 +110,7 @@
                                         <td class="td-padding td-w-5">{{ $leave['updatedLeaveHours'] }}</td> 
                                         <td class="td-padding td-w-25">{{ $leave['remark'] }}</td>
                                         <td class="td-padding td-w-15">
-                                            <a href="confirmOffcialLeave/{{ $leave['serial']}}" class="waves-effect waves-light btn" name=confirm>允許</a>
+                                            <a href="confirmOffcialLeave/{{ $leave['serial']}}" class="waves-effect waves-light btn" name=confirm>確認</a>
                                             <a href="unconfirmOffcialLeave/{{ $leave['serial']}}" class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
                                         </td>
                                     </tr>

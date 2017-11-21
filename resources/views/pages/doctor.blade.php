@@ -134,8 +134,8 @@
                         <select name="identity" required>
                             <option value="" disabled>選擇權限</option>
                             <option value="Admin">排班人員</option>
-                            <option value="General">一般醫師</option>
-                            <option value="Announcement" selected>一般醫師(可發送公告)</option>
+                            <option value="General" selected>一般醫師</option>
+<!--                            <option value="Announcement">一般醫師(可發送公告)</option>-->
                         </select>
                         <label>權限</label>
                     </div>
@@ -269,7 +269,7 @@
 <!--                            <option value="" disabled>選擇權限</option>-->
                             <option value="Admin">排班人員</option>
                             <option value="General">一般醫師</option>
-                            <option value="Announcement">一般醫師(可發送公告)</option>
+<!--                            <option value="Announcement">一般醫師(可發送公告)</option>-->
                         </select>
                         <label>權限</label>
                     </div>
@@ -403,11 +403,13 @@
                 $("#doctorIdentity").val(identity).find("option[value=" + identity +"]").attr('selected', true);
                 if (identity == "Admin") {
                     identity = "排班人員";
-                } else if(identity == "Announcement"){
-                    identity = "一般醫師(可發送公告)";
                 } else if(identity == "General"){
                     identity = "一般醫師";
                 }
+                
+//                else if(identity == "Announcement"){
+//                    identity = "一般醫師(可發送公告)";
+//                } 
                 
                 document.getElementsByClassName("select-dropdown")[12].value = identity;
                 
