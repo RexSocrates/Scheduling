@@ -475,7 +475,7 @@
                 date1 : startDate,
                 date2 : endDate
             }, function() {
-                dhtmlx.message({ type:"error", text:"預約成功" });
+                dhtmlx.message({ type:"success", text:"預約成功" });
             });
         }
 
@@ -487,7 +487,7 @@
                 startDate : startDate,
                 endDate : endDate
             }, function() {
-                dhtmlx.message({ type:"error", text:"預約修改成功" });
+                dhtmlx.message({ type:"success", text:"預約修改成功" });
             });
         }
 
@@ -496,7 +496,7 @@
             $.post('sendReservationDelete', {
                 resSerial : resSerial,
             }, function() {
-                dhtmlx.message({ type:"error", text:"預約刪除成功" });
+                dhtmlx.message({ type:"success", text:"預約刪除成功" });
             });
         }
         
@@ -513,7 +513,7 @@
         }
 
         function alert2(){
-            dhtmlx.message({ type:"error", text:"備註送出完成" });
+            dhtmlx.message({ type:"success", text:"備註送出完成" });
         }
         
         // 確認是否可預on班或預off班
