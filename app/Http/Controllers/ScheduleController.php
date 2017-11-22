@@ -1062,7 +1062,7 @@ class ScheduleController extends Controller
 
             $onDutyArr=[
                 'doctorName'=> $name->name,
-                'totalShift'=>$schedule->totalShiftFirstEdition($name->doctorID),
+                'totalShift'=>$schedule->totalShift($name->doctorID,$date),
                 'taipei'=>$schedule->totalTaipeiShiftFirstEdition($name->doctorID),
                 'tamsui'=>$schedule->totalTamsuiShiftFirstEdition($name->doctorID),
                 'day'=> $schedule->totalDayShiftFirstEdition($name->doctorID),

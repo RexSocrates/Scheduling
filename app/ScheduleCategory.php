@@ -57,7 +57,6 @@ class ScheduleCategory extends Model
         } 
 
         if(
-            $categorySerial == 3 || $categorySerial == 4 ||
             $categorySerial == 7 || $categorySerial == 8 ||
             $categorySerial == 11 || $categorySerial == 12 ||
             $categorySerial == 17|| $categorySerial == 18 ||

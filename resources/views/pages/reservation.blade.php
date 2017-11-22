@@ -123,6 +123,7 @@
                                
 
                             var dateObj = new Date();
+                            var statrDate = document.getElementById("statrDate").value;
                             var endDateStr = document.getElementById("endDate").value;
                             
                             var currDateStr = dateObj.getFullYear() + "-";
@@ -138,8 +139,8 @@
                             }
                             currDateStr += dateObj.getDate();
 
-                            if(Date.parse(currDateStr) <= Date.parse(endDateStr)){
-                                scheduler.config.readonly = false;
+                            if(Date.parse(currDateStr) <= Date.parse(endDateStr) && Date.parse(currDateStr)>=Date.parse(statrDate) ){
+                                scheduler.config.readonly = false; //可以改
                             }else{
                                 scheduler.config.readonly = true;
                                  
