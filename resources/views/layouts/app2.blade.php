@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>馬偕醫院排班系統</title>
-
+    
+    <meta name="viewport" content="width=device-width; initial-scale=1.1; maximum-scale=3.0; user-scalable=1;">
+    
     <!--Import Google Icon Font-->
     <link type="text/css" rel="stylesheet" href="../css/icon.css" rel="stylesheet">
     <!--Import materialize.css-->
