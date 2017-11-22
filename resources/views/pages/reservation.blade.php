@@ -96,20 +96,21 @@
                         </div>
 
                         <script type="text/javascript" charset="utf-8">
-                            var currDate = Date.parse((new Date()).toDateString());
+                            var currDate = "2017-11-03";
 
-                            if(Date.parse(currDate)<=Date.parse({{ $endDate }})){
+                            // if(Date.parse(currDate)<=Date.parse({{ $endDate }})){
                                 scheduler.config.readonly = false;
-                            }
+                                console.log("111ee");
+                            // }
 
-                            else{
-                                scheduler.config.readonly = true;
-                            }
+                            // else{
+                            //     scheduler.config.readonly = true; //唯讀，不能修改東西
+                            // }
 
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
                             scheduler.config.api_date="%Y-%m-%d %H:%i";
                             scheduler.config.dblclick_create = false;   //雙擊新增
-                             //唯讀，不能修改東西
+                             
                           //scheduler.config.drag_create = false;   //拖拉新增
                             scheduler.config.details_on_create = false;
                             scheduler.config.details_on_dblclick = true;
