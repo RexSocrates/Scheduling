@@ -22,6 +22,7 @@
 
 @section('navbar')
     <font class="brand-logo light">初版班表 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>個人</font>
+    
 @endsection
 
 @section('content')
@@ -36,6 +37,7 @@
                                 <div class="dhx_cal_next_button">&nbsp;</div>
                                 <div class="dhx_cal_today_button"></div>
                                 <div class="dhx_cal_date"></div>
+                                <div class="dhx_cal_tab" name="month_tab" style="display: none;"></div>
         
 <!--                                <div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>-->
 <!--                                <div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>-->

@@ -63,6 +63,8 @@ class OfficialLeave extends Model
         
         return $leaves;
     }
+
+   
     
     // 排班人員加入公假紀錄
     public function addLeaveByAdmin(array $dataArray) {

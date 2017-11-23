@@ -552,6 +552,8 @@
                 // var userInput = selectBox.options[selectBox.selectedIndex].value;
                 changeDate2(array);
             });
+
+            console.log(document.getElementById('schID_2_doctor').value);
         }
 
         function changeDate1(array) {
@@ -661,7 +663,7 @@
                 id : scheduleID_1,
                 id2 : scheduleID_2
             }, function (array){
-                 dhtmlx.message({ type:"error", text: array[2]+array[1]+"\n和\n"+array[0]+array[3]+"換班成功" })
+                 dhtmlx.message({ type:"success", text: array[2]+array[1]+"\n和\n"+array[0]+array[3]+"換班成功" })
                  refresh();
                 //alert(array[2]+array[1]+"和"+array[0]+array[3]+"換班成功");
             });
@@ -946,7 +948,7 @@
                 
             }, function(id){
                 console.log(id);
-                dhtmlx.message({ type:"error", text:"修改成功" });
+                dhtmlx.message({ type:"success", text:"修改成功" });
                 refresh();
                 
             });

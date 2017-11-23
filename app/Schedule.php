@@ -238,7 +238,8 @@ class Schedule extends Model
         $affectedRows = DB::table('Schedule')
             ->where('scheduleID', $scheduleID)
             ->update([
-               'doctorID'=> null
+               'doctorID'=> null,
+               'status'=>0
             ]);
         
         return $affectedRows;
@@ -252,6 +253,20 @@ class Schedule extends Model
             ->where('scheduleID', $scheduleID)
             ->update([
                 'doctorID' => $data['doctorID']
+            ]);
+        
+        return $affectedRows;
+    }
+
+    //查詢已存在的班,將原本doctorID null,改為有醫生上班,正是班表
+    public function addFormalScheduleInNull($scheduleID, array $data){
+        $reservation = new Reservation();
+        
+        $affectedRows = DB::table('Schedule')
+            ->where('scheduleID', $scheduleID)
+            ->update([
+                'doctorID' => $data['doctorID'],
+                'confirmed' => $data['confirmed']
             ]);
         
         return $affectedRows;
@@ -534,29 +549,72 @@ class Schedule extends Model
     }
 
     //計算醫生已上班書
-    public function totalShiftFirstEdition($doctorID){
-        $currentMonth = date('Y-m');
-        $nextMonth=date("Y-m",strtotime($currentMonth."+1 month"));
+    public function totalShift($doctorID,$month){
+        
+        //$month=date("Y-m", strtotime('+1 month'));
 
         $count = DB::table('Schedule')
         ->whereNotNull('doctorID')
         ->where('doctorID',$doctorID)
-        ->where('date', 'like', $nextMonth.'%')
-        ->whereNotIn('schCategorySerial', [1,2])
+        ->where('date', 'like', $month.'%')
         ->count();
 
         return $count;
     }
 
+    //  //計算醫生已上班書
+    // public function totalShift($doctorID){
+        
+    //     $month=date("Y-m");
+
+    //     $count = DB::table('Schedule')
+    //     ->whereNotNull('doctorID')
+    //     ->where('doctorID',$doctorID)
+    //     ->where('date', 'like', $month.'%')
+    //     ->count();
+
+    //     return $count;
+    // }
 
     //確認醫生前一天班是否為夜班
      public function getNightScheduleByDoctorIDandDate($doctorID,$date){
         $predate= date("Y-m-d",strtotime($date."-1 day"));
 
-         $preNightcount = DB::table('Schedule')
+        $preNightcount = DB::table('Schedule')
                 ->where('doctorID',$doctorID)
                 ->where('date', $predate)
                 ->whereIn('schCategorySerial',[13,14,15,16,17,18,19,20,21])
+                ->count();
+
+     
+        return $preNightcount;
+
+    }
+
+    //確認醫生後一天班是否為白班
+     public function geDayScheduleByDoctorIDandDate($doctorID,$date){
+        $predate= date("Y-m-d",strtotime($date."+1 day"));
+
+        $preNightcount = DB::table('Schedule')
+                ->where('doctorID',$doctorID)
+                ->where('date', $predate)
+                ->whereIn('schCategorySerial',[1,2,3,4,5,6,7,8,9,10,11,12])
+                ->count();
+
+     
+        return $preNightcount;
+
+    }
+
+
+    //確認醫生後一天班是否為白班
+     public function getDayScheduleByDoctorIDandDate($doctorID,$date){
+        $laterdate= date("Y-m-d",strtotime($date."+1 day"));
+
+        $laterDaycount = DB::table('Schedule')
+                ->where('doctorID',$doctorID)
+                ->where('date', $laterdate)
+                ->whereIn('schCategorySerial',[5,6,7,8,9,10,11,12])
                 ->count();
 
        //  $count=0;
@@ -569,7 +627,7 @@ class Schedule extends Model
        //          ->count();
 
        // }
-        return $preNightcount;
+        return $laterDaycount;
 
     }
 
@@ -607,128 +665,189 @@ class Schedule extends Model
     }
 
      //列出在當天非上班日期
-    public function getDateNotInDate($doctorID, $date, $yearMonth){
-        $query = DB::table("Schedule")
-                ->select('date')
-                ->where('date', 'like',$yearMonth.'%')
-                ->where('doctorID',$doctorID)
-                ->whereNotNull('doctorID');
+    public function getDateNotInDate($scheduleID){
 
 
-        $info = DB::table("Schedule")
-                ->where('date', 'like',$yearMonth.'%')
-                ->whereNotIn('date',($query))
-                ->orderBy('date')
-                ->distinct()->get(['date']);
+         $info = DB::select('call usp_AvailableShift(?,?)',
+                   array($scheduleID,''));
+
+        // $query = DB::table("Schedule")
+        //         ->select('date')
+        //         ->where('date', 'like',$yearMonth.'%')
+        //         ->where('doctorID',$doctorID)
+        //         ->whereNotNull('doctorID');
+
+
+        // $info = DB::table("Schedule")
+        //         ->where('date', 'like',$yearMonth.'%')
+        //         ->whereNotIn('date',($query))
+        //         ->orderBy('date')
+        //         ->distinct()->get(['date']);
 
 
         return $info;          
 
     }
 
-     public function getDateNotInDateNotNull($doctorID, $major, $yearMonth){
-        $query = DB::table("Schedule")
-                ->select('date')
-                ->where('date', 'like',$yearMonth.'%')
-                ->where('doctorID',$doctorID)
-                ->whereNotNull('doctorID');
+     public function getDateNotInDateNotNull($scheduleID, $date){
 
-        $query2 = DB::table("Doctor")
-                ->select('doctorID')
-                ->whereIn('major',[$major,"All"]);
+        $info = DB::select('call usp_AvailableShiftDoctorNotNull(?,?)',
+                   array($scheduleID,$date));
+        // $query = DB::table("Schedule")
+        //         ->select('date')
+        //         ->where('date', 'like',$yearMonth.'%')
+        //         ->where('doctorID',$doctorID)
+        //         ->whereNotNull('doctorID');
 
-        $info = DB::table("Schedule")
-                ->whereNotIn('date',($query))
-                ->where('date', 'like',$yearMonth.'%')
+        // $query2 = DB::table("Doctor")
+        //         ->select('doctorID')
+        //         ->whereIn('major',[$major,"All"]);
+
+        // $info = DB::table("Schedule")
+        //         ->whereNotIn('date',($query))
+        //         ->where('date', 'like',$yearMonth.'%')
                
-                ->whereNotNull('doctorID')
-                ->orderBy('date')
-                ->distinct()->get(['date']);
+        //         ->whereNotNull('doctorID')
+        //         ->orderBy('date')
+        //         ->distinct()->get(['date']);
 
 
         return $info;          
 
     }
 
-    public function getDoctorInDate($date1, $date2, $major_schedule, $major_doctor){
-        $schCategorySerial=[];
+    public function getDoctorInDate($scheduleID,$date){
+        // $schCategorySerial=[];
+
+         $info = DB::select('call usp_AvailableShift(?,?)',
+                   array($scheduleID,$date));
+
        
+            
 
-        if($major_doctor == "Medical"){
-             $schCategorySerial=[1,2,3,4,5,6,9,10,13,14,15,16,19,20];
-        }
-        else if($major_doctor == "Surgical"){
-             $schCategorySerial=[1,2,3,4,7,8,11,12,13,14,17,18,21];
-        }
-        else if($major_doctor == "All"){
-             $schCategorySerial=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
-        }
+        // if($major_doctor == "Medical"){
+        //      $schCategorySerial=[1,2,3,4,5,6,9,10,13,14,15,16,19,20];
+        // }
+        // else if($major_doctor == "Surgical"){
+        //      $schCategorySerial=[1,2,3,4,7,8,11,12,13,14,17,18,21];
+        // }
+        // else if($major_doctor == "All"){
+        //      $schCategorySerial=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
+        // }
 
-        if($major_schedule == "All"){
+        // if($major_schedule == "All"){
 
-            $info = DB::table("Schedule")
-                ->whereIn("schCategorySerial",$schCategorySerial)
-                ->where('date', 'like',$date2)
-                ->get();
-        }
-        else{
-            $query = DB::table("Doctor")
-                ->select('doctorID')
-                ->whereIn('major',[$major_schedule,"All"]);
+        //     $info = DB::table("Schedule")
+        //         ->whereIn("schCategorySerial",$schCategorySerial)
+        //         ->where('date', 'like',$date2)
+        //         ->get();
+        // }
+        
+        // else{
+
+        //     $query = DB::table("Doctor")
+        //         ->select('doctorID')
+        //         ->whereIn('major',[$major_schedule,"All"]);
                 
                 
-            $info = DB::table("Schedule")
-                ->where('date', 'like',$date2)
-                ->whereIn('doctorID',$query)
-                ->whereIn("schCategorySerial",$schCategorySerial)
-                ->orwhereNull('doctorID')  
-                ->whereIn("schCategorySerial",$schCategorySerial)
-                ->where('date', 'like',$date2)
-                ->get();
+        //     $info = DB::table("Schedule")
+        //         ->where('date', 'like',$date2)
+        //         ->whereIn('doctorID',$query)
+        //         ->whereIn("schCategorySerial",$schCategorySerial)
+        //         ->orwhereNull('doctorID')  
+        //         ->whereIn("schCategorySerial",$schCategorySerial)
+        //         ->where('date', 'like',$date2)
+        //         ->get();
 
-        }
+        // }
         
 
         return $info;          
 
     }
-
-     public function getDoctorDateNotNull($date1, $date2, $major_schedule, $major_doctor){
-        $schCategorySerial=[];
+// public function getDoctorInDate($date1, $date2, $major_schedule, $major_doctor){
+//         $schCategorySerial=[];
        
+//         if($major_doctor == "Medical"){
+//              $schCategorySerial=[1,2,3,4,5,6,9,10,13,14,15,16,19,20];
+//         }
+//         else if($major_doctor == "Surgical"){
+//              $schCategorySerial=[1,2,7,8,11,12,17,18,21];
+//         }
+//         else if($major_doctor == "All"){
+//              $schCategorySerial=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
+//         }
+//         if($major_schedule == "All"){
+//             $info = DB::table("Schedule")
+//                 ->whereIn("schCategorySerial",$schCategorySerial)
+//                 ->where('date', 'like',$date2)
+//                 ->get();
+//         }
+//         else{
+//             $query = DB::table("Doctor")
+//                 ->select('doctorID')
+//                 ->whereIn('major',[$major_schedule,"All"]);
 
-        if($major_doctor == "Medical"){
-             $schCategorySerial=[1,2,3,4,5,6,9,10,13,14,15,16,19,20];
-        }
-        else if($major_doctor == "Surgical"){
-             $schCategorySerial=[1,2,3,4,7,8,11,12,13,14,17,18,21];
-        }
-        else if($major_doctor == "All"){
-             $schCategorySerial=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
-        }
-
-
-        if($major_schedule == "All"){
-            $info = DB::table("Schedule")
-                ->whereIn("schCategorySerial",$schCategorySerial)
-                ->whereNotNull('doctorID')
-                ->where('date', 'like',$date2)
-                ->get();
-
-        }
-
-        else{
-            $query = DB::table("Doctor")
-                ->select('doctorID')
-                ->whereIn('major',[$major_schedule,"All"]);
+//             $query2 = DB::table("Schedule")
+//                 ->select('doctorID')
+//                 ->where('date','like',$date1);    
                 
                 
-            $info = DB::table("Schedule")
-                ->whereIn('doctorID',$query)
-                ->whereIn("schCategorySerial",$schCategorySerial)
-                ->where('date', 'like',$date2)
-                ->get();
-        }
+//             $info = DB::table("Schedule")
+//                 ->where('date', 'like',$date2)
+//                 ->whereIn('doctorID',$query)
+                
+//                 ->whereIn("schCategorySerial",$schCategorySerial)
+                
+//                 //->whereNotIn('doctorID',$query2)
+//                 ->orwhereNull('doctorID') 
+//                 ->whereIn("schCategorySerial",$schCategorySerial)
+                
+//                 ->where('date', 'like',$date2)
+
+//                 ->get();
+//         }
+        
+//         return $info;          
+//     }
+     public function getDoctorDateNotNull($scheduleID,$date){
+        // $schCategorySerial=[];
+       $info = DB::select('call usp_AvailableShiftDoctorNotNull(?,?)',
+                   array($scheduleID,$date));
+
+
+        // if($major_doctor == "Medical"){
+        //      $schCategorySerial=[1,2,3,4,5,6,9,10,13,14,15,16,19,20];
+        // }
+        // else if($major_doctor == "Surgical"){
+        //      $schCategorySerial=[1,2,7,8,11,12,17,18,21];
+        // }
+        // else if($major_doctor == "All"){
+        //      $schCategorySerial=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
+        // }
+
+
+        // if($major_schedule == "All"){
+        //     $info = DB::table("Schedule")
+        //         ->whereIn("schCategorySerial",$schCategorySerial)
+        //         ->whereNotNull('doctorID')
+        //         ->where('date', 'like',$date2)
+        //         ->get();
+
+        // }
+
+        // else{
+        //     $query = DB::table("Doctor")
+        //         ->select('doctorID')
+        //         ->whereIn('major',[$major_schedule,"All"]);
+                
+                
+        //     $info = DB::table("Schedule")
+        //         ->whereIn('doctorID',$query)
+        //         ->whereIn("schCategorySerial",$schCategorySerial)
+        //         ->where('date', 'like',$date2)
+        //         ->get();
+        // }
 
 
         return $info;   
@@ -801,6 +920,15 @@ class Schedule extends Model
             'confirmed' => false,
             'status' => 0
         ]);
+    }
+
+
+    public function test($doctorID,$date){
+
+            $info = DB::select('call usp_AvailableForShift(?,?)',
+                   array($doctorID,$date)) ;
+
+            return $info;
     }
     
     

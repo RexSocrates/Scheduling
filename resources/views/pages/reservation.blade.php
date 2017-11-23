@@ -4,11 +4,9 @@
     <script src="../codebase/ext/dhtmlxscheduler_collision.js"></script>
     <script src="../codebase/ext/dhtmlxscheduler_limit.js"></script>
     <script src="../../codebase/ext/dhtmlxscheduler_serialize.js" type="text/javascript" charset="utf-8"></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
     
     
-
     <style>
         td{
             padding: 0;
@@ -21,12 +19,16 @@
 @endsection
 
 @section('content')
-<input type="hidden" id='hiddenCountDay' value={{$countDay}}>
-<input type="hidden" id='hiddenCountNight' value={{$countNight}}>
-<input type="hidden" id='hiddenCountOn' value={{$onAmount}}>
-<input type="hidden" id='hiddenCountOff' value={{$offAmount}}>
+    <input type="hidden" id='hiddenCountDay' value={{$countDay}}>
+    <input type="hidden" id='hiddenCountNight' value={{$countNight}}>
+    <input type="hidden" id='hiddenCountOn' value={{$onAmount}}>
+    <input type="hidden" id='hiddenCountOff' value={{$offAmount}}>
 
-<input type="hidden" id="originalEventStartDate" value="">
+    <input type="hidden" id="endDate" value="{{ $endDate }}">
+    <input type="hidden" id="statrDate" value="{{ $startDate }}">
+
+    <input type="hidden" id="originalEventStartDate" value="">
+    <input type="hidden" id="endDate" value={{ $endDate }}>
 
     <div id="section" class="container-fix trans-left-five">
         <div class="container-section">
@@ -53,13 +55,12 @@
                                     <div class="col s7">
                                         <form action="addRemark" method="post" class="col s6">
                                             <div class="input-field">
-                                                <textarea id="textarea1" class="materialize-textarea" name="remark"placeholder="請輸入出國時段或其他事情">{{$remark}}</textarea>
-    <!--                                                     data-length="150"-->
+                                                <textarea id="textarea1" class="materialize-textarea" name="remark" placeholder="請輸入出國時段或其他事情(字數限制150字)" onkeyup="textarea1_words_deal();">{{$remark}}</textarea>
                                                 <label for="textarea1">備註:</label>
 
                                             </div>
                                             <!-- <input type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right">提交</button> -->
-                                            @if ( $currentdate <= $endDate )
+                                            @if ( $currentdate <= $endDate && $currentdate >= $startDate)
                                              <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right" value="提交" onclick="alert2()">提交</button>
                                             @else
                                              <button type="submit" class="waves-effect waves-light btn blue-grey darken-1 white-text right" value="提交" disabled="">提交</button>
@@ -96,16 +97,49 @@
                         </div>
 
                         <script type="text/javascript" charset="utf-8">
-                            var currDate = "2017-11-03";
 
-                            // if(Date.parse(currDate)<=Date.parse({{ $endDate }})){
-                                scheduler.config.readonly = false;
-                                console.log("111ee");
+                            //var currDate = Date.parse((new Date()).toDateString());
+                            // var currDate=new Date();
+                            // if(currDate.getDate()<10){
+                            //   var currdateString = currDate.getFullYear()+"-"+(currDate.getMonth()+1)+"-0"+currDate.getDate();
+
                             // }
-
                             // else{
-                            //     scheduler.config.readonly = true; //唯讀，不能修改東西
+                            //    var currdateString = currDate.getFullYear()+"-"+(currDate.getMonth()+1)+"-"+currDate.getDate();
                             // }
+                           
+                            // var statrDate = document.getElementById("statrDate").value;
+                            // var endDate = document.getElementById("endDate").value;
+
+                            // console.log(currdateString);
+
+                            // if(Date.parse(currDate)>=Date.parse(statrDate) && Date.parse(currDate)<=Date.parse(endDate)){
+                            //     scheduler.config.readonly = false;
+                            //     console.log(endDate);
+                               
+
+                            var dateObj = new Date();
+                            var endDateStr = document.getElementById("endDate").value;
+                            
+                            var currDateStr = dateObj.getFullYear() + "-";
+                            
+                            if((dateObj.getMonth() + 1) < 10) {
+                                currDateStr += "0";
+                            }
+                            currDateStr += (dateObj.getMonth() + 1) + "-";
+                            
+                            if(dateObj.getDate() < 10) {
+                                currDateStr += "0";
+
+                            }
+                            currDateStr += dateObj.getDate();
+
+                            if(Date.parse(currDateStr) <= Date.parse(endDateStr)){
+                                scheduler.config.readonly = false;
+                            }else{
+                                scheduler.config.readonly = true;
+                                 
+                            }
 
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
                             scheduler.config.api_date="%Y-%m-%d %H:%i";
@@ -415,7 +449,7 @@
 
                                 scheduler.parse([
 
-                                { start_date: "{{ $reservation[0]->date }} 00:00", end_date: "{{$reservation[0]->endDate}} 00:00", text: "{{ $reservation[1] }}", priority:"{{ $reservation[0]->categorySerial}}", hidden:"{{ $reservation[0]->resSerial}}"},
+                                { start_date: "{{ $reservation[0]->date }} 00:00", end_date: "{{$reservation[0]->endDate}} 00:00", text: "{{ $reservation[1] }}", priority:"{{ $reservation[0]->categorySerial}}", hidden:"{{ $reservation[0]->resSerial}}" },
 
                                 ],"json");
 
@@ -437,7 +471,7 @@
                 date1 : startDate,
                 date2 : endDate
             }, function() {
-                dhtmlx.message({ type:"error", text:"預約成功" });
+                dhtmlx.message({ type:"success", text:"預約成功" });
             });
         }
 
@@ -449,7 +483,7 @@
                 startDate : startDate,
                 endDate : endDate
             }, function() {
-                dhtmlx.message({ type:"error", text:"預約修改成功" });
+                dhtmlx.message({ type:"success", text:"預約修改成功" });
             });
         }
 
@@ -458,7 +492,7 @@
             $.post('sendReservationDelete', {
                 resSerial : resSerial,
             }, function() {
-                dhtmlx.message({ type:"error", text:"預約刪除成功" });
+                dhtmlx.message({ type:"success", text:"預約刪除成功" });
             });
         }
         
@@ -475,7 +509,7 @@
         }
 
         function alert2(){
-            dhtmlx.message({ type:"error", text:"備註送出完成" });
+            dhtmlx.message({ type:"success", text:"備註送出完成" });
         }
         
         // 確認是否可預on班或預off班
@@ -502,6 +536,17 @@
             }
         }
         
+        //字數限制
+        function textarea1_words_deal() {
+            var curLength = $("#textarea1").val().length;
+            if (curLength > 150) {
+                var num = $("#textarea1").val().substr(0, 150);
+                $("#textarea1").val(num);
+                alert("超過字數限制(150字)，多出的字將被移除！");
+            } else {
+                $("#textCount").text(150 - $("#textarea1").val().length);
+            }
+        }
     </script>
 @endsection
 

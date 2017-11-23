@@ -10,10 +10,13 @@ class ScheduleRecord extends Model
     //
     public function addScheduleRecord($doctorID,$shiftHours){
 
+        
+        $date=date("Y-m", strtotime('-1 month')); //上個月的時間
+
     	 DB::table('ScheduleRecord')->insert([
             'doctorID' => $doctorID,
             'shiftHours' => $shiftHours,
-            'month' => date('Y-m')
+            'month' => $date
         ]);
 
     }

@@ -390,10 +390,12 @@ header, main, footer {
 }
 */
 /* invalid color */
+/*
 .input-field input[type=text].invalid {
     border-bottom: 1px solid #000;
     box-shadow: 0 1px 0 0 #000;
 }
+*/
 
 /* icon prefix color */
 .input-field .prefix {
@@ -676,15 +678,26 @@ input.select-dropdown {
     bottom: 0;
 }
 
-.dhtmlx-error {
-    border-radius: 0px !important;
+.dhtmlx-success {
+    background-color: #37bd7d !important;
+    border: 1px solid #27a066 !important;   
+}
+
+.dhtmlx-success div {
+    color: #FFF;
+    padding: 13px 9px 13px 18px !important;
+    background-color: #37bd7d !important;
     border: 0px !important;
+}
+
+.dhtmlx-error {
+    background-color: #e53935 !important;
 }
 
 .dhtmlx-error div {
     padding: 13px 9px 13px 18px !important;
     background-color: #e53935 !important;
-    
+    border: 0px !important;
 }
 
 .white_cell{

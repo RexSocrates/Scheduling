@@ -21,6 +21,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 
+// 取得積欠班頁面
+Route::get('accumulatedShifts', 'ShiftRecordsController@getAccumulatedShifts');
+
+
 Route::group(['middleware' => ['admin']], function () {
     // 給排班人員的路由
 
@@ -225,9 +229,10 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('/first-edition-all-personal','ScheduleController@firstEditionByDoctorID');
 
 
-	//初版班表->換班資訊-
-	Route::get('first-edition-shift-info','ShiftRecordsController@shiftRecords');
-	Route::post('first-edition-shift-info','ShiftRecordsController@firstEditionShiftAddShifts');
+
+//列出醫生剩餘班數 
+Route::get('showDoctorInfo','ScheduleController@showDoctorInfo');
+
 
 	// Route::post('doctorInfo','ShiftRecordsController@doctorInfo');
 	// Route::get('doctorInfo',function(){

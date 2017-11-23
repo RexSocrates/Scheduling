@@ -14,6 +14,24 @@
             opacity: 0;
             filter: alpha(opacity = 0);
         }
+
+        .dhx_cal_event.event_1 div, .dhx_cal_event_line.event_1{
+            background-color: #FC5BD5 !important;
+            border-color: #839595 !important;
+        }
+        .dhx_cal_event_clear.event_1{
+            color:#B82594 !important;
+        }
+
+        .dhx_cal_event.event_2 div, .dhx_cal_event_line.event_2{
+            background-color: red !important;
+            border-color: red !important;
+        }
+        .dhx_cal_event_clear.event_2{
+            color:#B82594 !important;
+        }
+
+        
     </style>
 @endsection
 
@@ -22,6 +40,7 @@
 @endsection
 
 @section('content')
+
 <input type='hidden' id="getDate">
  <input type="hidden" id="scheduleID_2" value=""><!--不能刪 -->
   <input type="hidden" id="scheduleID_1" value=""><!--不能刪 -->
@@ -32,6 +51,39 @@
             <div class="row">
                 <div class="col s12 m12">
                     <div class="card border-t">
+                     <div id="my_form1">
+                            <!-- <form action="" method="post"> -->
+                                <div class="modal-header">
+                                    <h5 class="modal-announcement-title">新增</h5>
+                                </div>
+
+                                <div class="lightbox">
+                                    <div class="row">
+                                        <input type="hidden" id= "section_id">
+                                        <div class="col s6"><h5>臨床班</h5><h5 id="classification"></h5></div>
+                                        <div class="col s6"><h5>日期</h5><h5 id ="date_1"></h5></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12 margin-b20">
+                                            <label>醫生</label>
+                                            <select name="doctor" class="browser-default" id="doctor" required>
+                                                <option value="" selected disabled>選擇醫生</option>
+<!--                                                <option value="" selected ></option>-->
+                                                <!-- @foreach($doctorName as $name)
+                                                <option value="{{$name->doctorID}}">{{$name->name}}</option>
+                                                @endforeach -->
+                                            </select>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lightbox-footer">
+                                     <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn" onclick="save_form_alert_addSchedule()">Save</button>
+                                <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel modal-btn" onclick="close_form1()">Cancel</button>
+                                </div>
+                            <!-- </form> -->
+      
+                        </div>
                         <div id="my_form">
                             <!-- <form action="change-shift-first-edition" method="post" > -->
                             <div class="modal-header">
@@ -101,8 +153,9 @@
                                 </div>
                             </div>
                             
-                            <div class="lightbox-footer">
-                                
+                            <div class="lightbox-footer">   
+                                <button class="modal-action waves-effect waves-light red lighten-1 btn-flat white-text modal-btn1" onclick="delete_doctor()">Delete</button>
+                                <font class="margin-l10">(刪除左邊醫生)</font>
                                 <button type="submit" class="modal-action waves-effect blue-grey darken-1 waves-light btn-flat white-text btn-save modal-btn" onclick="save()">Save</button>
                                 <button class="modal-action modal-close waves-effect waves-light btn-flat btn-cancel modal-btn" onclick="close_form()">Cancel</button>
                             </div>
@@ -209,6 +262,7 @@
                                 {key:20, label:"淡夜內2"},
                                 {key:21, label:"淡夜外"}
                             ];
+                            
                             scheduler.createTimelineView({
                                 name:   "timeline",
                                 x_unit: "day",
@@ -219,7 +273,8 @@
                                 y_property: "section_id",
                                 render:"bar",
                                 round_position:true,    //有點像磁石
-                                event_dy: 46,
+//                                event_dy: 46,
+                                event_min_dy: 46,   //event的最小高度
                             });
                             
                             //===============
@@ -413,7 +468,7 @@
                             scheduler.attachEvent("onBeforeEventChanged", function(ev, e, is_new, original){
 
                                 showScheduleInfo(ev.start_date,ev.section_id,ev.hidden);
-
+                                addNewSchedule(ev.start_date,ev.section_id);
                                 console.log("111"+ev.text);
                                 console.log("111"+ev.start_date+ev.hidden);
 
@@ -436,12 +491,23 @@
                                 return true;
                             });
                            
+                            scheduler.templates.event_class=function(start, end, event){
+                                var css = "";
+
+                                if(event.subject) // if event has subject property then special class should be assigned
+                                 css += "event_"+event.subject;
+
+                                if(event.id == scheduler.getState().select_id){
+                                    css += " selected";
+                                }
+                                return css; // default return       
+                         };
                            
                             //進入畫面後顯示的東西
                             scheduler.init('scheduler_here',new Date(res[3], month-1),"timeline");
                             scheduler.parse([
                                 @foreach($schedule as $data)
-                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}" },
+                                 { start_date: "{{ $data->date }} 00:00", end_date: "{{ $data->endDate }} 00:00", text:"{{ $data->doctorID }}", section_id:"{{ $data->schCategorySerial }}" ,hidden:"{{ $data->scheduleID}}", subject:"{{ $data->status }}" },
                                
                                 @endforeach
                             ],"json");
@@ -581,13 +647,13 @@
         function changeDate1(array) { //要求換班日期
                 document.getElementById("date1").innerHTML= "<option value="+array[0]+">"+array[2]+"</option>" 
 
-                changeDate2(array[2],array[3]);
+               changeDate2(array[0]);
         }
 
-        function changeDate2(date,doctorID){
+        function changeDate2(scheduleID){
             $.get('changeDate2' ,{
-                date:date,
-                doctorID : doctorID
+                scheduleID:scheduleID,
+                
             },function(array){
                 var date = "";
                 for(i=0 ; i<array.length ; i++){
@@ -684,14 +750,13 @@
 
             }, function(array){
 
-                var  scheduleID_1 = document.getElementById('date1').value;
+                 var  scheduleID_1 = document.getElementById('date1').value;
                 var  scheduleID_2 = document.getElementById('schID_2_doctor').value;
 
                 var weekday1 = array[0]['weekday1'];
                 var weekday2 = array[0]['weekday2'];
 
                 var date = array[0]['date2'];
-
 
                 if(array[0]['doc2']==null){
                     updateShift(scheduleID_1,scheduleID_2);
@@ -709,26 +774,52 @@
                     
                 }
 
+                // else if(array[0]['doc1Major'] != 0){
+                //     alert(array[0]['doc1']+"醫生非該科醫生");
+                //      //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                     
+                // }
+
+                // else if(array[0]['doc2Major'] != 0){
+                //     alert(array[0]['doc2']+"醫生非該科醫生");
+                //      //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                     
+                // }
                 else if(array[0]['date2'] == array[0]['date1']  ){
                     if(array[0]['doc1Night']!=0){
-                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班?\n確定要換班嗎");
-                            if (r == true) {
-                                updateShift(scheduleID_1,scheduleID_2);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
+                        alert( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班\n無法換班嗎")
+                        // var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班?\n確定要換班嗎");
+                        //     if (r == true) {
+                        //         updateShift(scheduleID_1,scheduleID_2);
+                        //     } 
+                        //     else {
+                        //         alert("已取消");
+                        //         refresh();
+                        //     }
+                        refresh();
                     }
+
                      else if(array[0]['doc2Night']!=0){
-                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"前一晚已有夜班?\n確定要換班嗎");
-                            if (r == true) {
-                                updateShift(scheduleID_1,scheduleID_2);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
+                        alert( array[0]['doc2']+ " 在 " + array[0]['date2']+"前一天已有夜班\n無法換班嗎");
+                        refresh();
+                        // var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"前一晚已有夜班?\n確定要換班嗎");
+                        //     if (r == true) {
+                        //         updateShift(scheduleID_1,scheduleID_2);
+                        //     } 
+                        //     else {
+                        //         alert("已取消");
+                        //         refresh();
+                        //     }
+                    }
+                    else if(array[0]['doc1Day']!=0){
+                        alert( array[0]['doc1']+ " 在 " + array[0]['date1']+"後一天已有早班\n無法換班嗎");
+                        refresh();
+                        
+                    }
+                    else if(array[0]['doc2Night']!=0){
+                        alert( array[0]['doc2']+ " 在 " + array[0]['date2']+"前一天已有夜班\n無法換班嗎");
+                        refresh();
+                       
                     }
                     else{
                      updateShift(scheduleID_1,scheduleID_2);
@@ -751,71 +842,58 @@
                     console.log("doc2"+array[0]['count2']);
                 }
 
-                else if (array[0]['doc1off']!=0 || array[0]['doc1Night']!=0 ){
-                    if(array[0]['doc1off']!=0 && array[0]['doc1Night']!=0 ){
-                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n且"+array[0]['date1']+"前一晚有夜班\n確定要換班嗎????");
-                            if (r == true) {
-                                updateShift(scheduleID_1,scheduleID_2);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
+                else if ( array[0]['doc1Night']!=0 || array[0]['doc1Day']!=0 ){
+                    
+                    if(array[0]['doc1Night']!=0){
+                        alert(array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班\n無法換班")
+                       
+                        refresh();
                     }
-                    else if(array[0]['doc1off']!=0){
-                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n確定要換班嗎???/");
-                            if (r == true) {
-                                updateShift(scheduleID_1,scheduleID_2);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
+                    else if(array[0]['doc1Day']!=0){
+                        alert(array[0]['doc1']+ " 在 " + array[0]['date1']+"後一天已有白班\n無法換班")
+                       
+                        refresh();
                     }
-                    else if(array[0]['doc1Night']!=0){
-                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班?\n確定要換班嗎");
-                            if (r == true) {
-                                updateShift(scheduleID_1,scheduleID_2);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
-                    }
+
+                   
+                    
                 }
 
-                else if (array[0]['doc2off']!=0 || array[0]['doc2Night']!=0 ){
-                    if(array[0]['doc2off']!=0 && array[0]['doc2Night']!=0 ){
-                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"已有off班?\n且"+array[0]['date2']+"前一晚有夜班\n確定要換班嗎?");
-                            if (r == true) {
-                                updateShift(scheduleID_1,scheduleID_2);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
+                else if ( array[0]['doc2Night']!=0 || array[0]['doc2Day']!=0 ){
+                   if(array[0]['doc2Night']!=0){
+                        alert(array[0]['doc2']+ " 在 " + array[0]['date2']+"前一晚已有夜班\n無法換班");
+                       
+                        refresh();
                     }
-                    else if(array[0]['doc2off']!=0){
-                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"已有off班?\n確定要換班嗎???/");
-                            if (r == true) {
-                                updateShift(scheduleID_1,scheduleID_2);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
+                    else if(array[0]['doc2Day']!=0){
+                        alert(array[0]['doc2']+ " 在 " + array[0]['date2']+"後一天已有白班\n無法換班");
+                       
+                        refresh();
                     }
-                    else if(array[0]['doc2Night']!=0){
-                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"前一晚已有夜班?\n確定要換班嗎");
-                            if (r == true) {
-                                updateShift(scheduleID_1,scheduleID_2);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
-                    }
+                   
+                                    
                 }
+                else if(array[0]['doc1off']!=0){
+                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n確定要換班嗎dd?");
+                            if (r == true) {
+                                updateShift(scheduleID_1,scheduleID_2);
+                            } 
+                            else {
+                                alert("已取消");
+                                refresh();
+                            }
+                }
+                else if(array[0]['doc2off']!=0){
+                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"已有off班?\n確定要換班嗎33");
+                            if (r == true) {
+                                updateShift(scheduleID_1,scheduleID_2);
+                            } 
+                            else {
+                                alert("已取消");
+                                refresh();
+                            }
+                    }
+
 
             
                 else{
@@ -861,7 +939,7 @@
 
                 var weekday = array[0]['weekDay'];
                 var weekDayInSchedule =array[0]['weekDayInSchedule'];
-                console.log("aa"+array[0]['location']);
+                console.log("aa"+array[0]['scheduleID']);
 
                 if (array[0]['location'] !=0){
                     alert(array[0]['docName']+"醫生這週已有2班非直登院區班" );
@@ -877,13 +955,41 @@
                     console.log("111");
                 }
 
-                else if(array[0]['date'] == array[0]['dateInSchedule'] && array[0]['scheduleID']!=0 ){
+                else if(array[0]['scheduleID']!=0 ){  //array[0]['date'] == array[0]['dateInSchedule']
                     checkDocStatus(id,array[0]['scheduleID']);
                 }
 
-                // else if(array[0]['date'] == array[0]['dateInSchedule']){
-                //      if(array[0]['countNight'] != 0){
-                //         var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n確定要增班嗎");
+                else if(array[0]['date'] == array[0]['dateInSchedule']){
+                    refresh();
+                //     if(array[0]['countNight'] != 0){
+                //         alert( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班\n無法增班")
+                //         // var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n無法增班嗎");
+
+                //         //     if (r == true) {
+                //         //         updateSchedule(scheduleID,date,classification);
+                //         //     } 
+                //         //     else {
+                //         //         alert("已取消");
+                //         //         refresh();
+                //         //     }
+                //         refresh();
+                //     }
+                //     else if(array[0]['countDay'] != 0){
+                //         alert( array[0]['docName']+ " 在 " + array[0]['date']+"後一天已有白班\n無法增班")
+                //         // var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n無法增班嗎");
+
+                //         //     if (r == true) {
+                //         //         updateSchedule(scheduleID,date,classification);
+                //         //     } 
+                //         //     else {
+                //         //         alert("已取消");
+                //         //         refresh();
+                //         //     }
+                //         refresh();
+                //     }
+
+                //     else if(array[0]['countOff']!=0){
+                //         var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"已有off班?\n確定要換班嗎");
 
                 //             if (r == true) {
                 //                 updateSchedule(scheduleID,date,classification);
@@ -897,26 +1003,54 @@
                 //         updateSchedule(scheduleID,date,classification);
                 //     }
                     
-                // }
+                }
 
-                // else if(array[0]['count']!=0){
-                //     alert(array[0]['docName']+"醫生"+array[0]['date']+"已有班" );
-                //     //dhtmlx.message({ type:"error", text:array[0]['docName']+"醫生"+array[0]['date']+"已有班" });
-                //     refresh();
-                // }
+                else if(array[0]['count']!=0){
+                    alert(array[0]['docName']+"醫生"+array[0]['date']+"已有班" );
+                    //dhtmlx.message({ type:"error", text:array[0]['docName']+"醫生"+array[0]['date']+"已有班" });
+                    refresh();
+                }
 
-                // else if (array[0]['countOff']!=0 || array[0]['countNight']!=0){
+                // else if (array[0]['countOff']!=0 || array[0]['countNight']!=0 || array[0]['countDay']!=0){
 
-                //      if(array[0]['countOff']!=0 && array[0]['countNight']!=0){
-                //         var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"已有off班?\n且"+ array[0]['date']+"前一晚已有夜班\n確定要增班嗎");
+                //     //  if(array[0]['countOff']!=0 && array[0]['countNight']!=0){
+                //     //     var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"已有off班?\n且"+ array[0]['date']+"前一晚已有夜班\n確定要增班嗎");
 
-                //             if (r == true) {
-                //                 updateSchedule(scheduleID,date,classification);
-                //             } 
-                //             else {
-                //                 alert("已取消");
-                //                 refresh();
-                //             }
+                //     //         if (r == true) {
+                //     //             updateSchedule(scheduleID,date,classification);
+                //     //         } 
+                //     //         else {
+                //     //             alert("已取消");
+                //     //             refresh();
+                //     //         }
+                //     // }
+
+
+                //     if(array[0]['countNight'] != 0){
+                //         alert( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班\n無法增班")
+                //         // var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n無法增班嗎");
+
+                //         //     if (r == true) {
+                //         //         updateSchedule(scheduleID,date,classification);
+                //         //     } 
+                //         //     else {
+                //         //         alert("已取消");
+                //         //         refresh();
+                //         //     }
+                //         refresh();
+                //     }
+                //     else if(array[0]['countDay'] != 0){
+                //         alert( array[0]['docName']+ " 在 " + array[0]['date']+"後一天已有白班\n無法增班")
+                //         // var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n無法增班嗎");
+
+                //         //     if (r == true) {
+                //         //         updateSchedule(scheduleID,date,classification);
+                //         //     } 
+                //         //     else {
+                //         //         alert("已取消");
+                //         //         refresh();
+                //         //     }
+                //         refresh();
                 //     }
 
                 //     else if(array[0]['countOff']!=0){
@@ -931,20 +1065,8 @@
                 //             }
                 //     }
 
-                //     else if(array[0]['countNight'] != 0){
-                //         var r = confirm( array[0]['docName']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n確定要增班嗎");
-
-                //             if (r == true) {
-                //                 updateSchedule(scheduleID,date,classification);
-                //             } 
-                //             else {
-                //                 alert("已取消");
-                //                 refresh();
-                //             }
-                //     }
                     
                     
-                // }
                 
                 
                 else if(array[0]['scheduleID']!=0){
@@ -954,27 +1076,14 @@
                  
              
 
-                // else if(array[0]['docWeekend']<=4 && (weekday != 6 && weekday != 7) && (weekDayInSchedule==6 || weekDayInSchedule==7)){
-                //     var check= confirm(array[0]['docName']+"醫生假日班不得少於4\n確定要換班嗎?");
-                //     if(check==true){
-                //         updateSchedule(scheduleID,date,classification);
-                //     }
-                //     else{
-                //         alert("已取消");
-                //         refresh();
-                //     }
-                //      console.log(array[0]['docWeekend']);
-                //      console.log(weekday);
-                // }
                 else {
                     refresh();
-                //     //updateSchedule(scheduleID,date,classification);
                     
-                 }
-                // // console.log(id);
+                }
+                // console.log(id);
                 // console.log(array[0]['scheduleID']);
                 console.log("id"+id);
-                console.log("sc2"+array[0]['scheduleID'])
+                console.log("sc2"+array[0]['countDay'])
 
                
             });
@@ -999,44 +1108,86 @@
 
                 var date = array[0]['date2'];
 
-                if(array[0]['doc1Location']>=2){
+                if(array[0]['date1Month'] != array[0]['date2Month']){
+                    alert("不同月份無法換班");
+                    refresh();
+                }
+                else if(array[0]['doc1Location']>=2){
                     alert(array[0]['doc1']+"醫生本週已有2班非值登院區班");
                     //dhtmlx.message({ type:"error", text:array[0]['doc1']+"醫生本週已有2班非值登院區班" });
-                    //refresh();
+                    refresh();
                 }
 
                 else if(array[0]['doc2Location']>=2){
                     alert(array[0]['doc2']+"醫生本週已有2班非值登院區班");
                      //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
-                     //refresh();
+                     refresh();
                 }
 
+                // else if(array[0]['doc1Major'] != 0){
+                //     alert(array[0]['doc1']+"醫生非該科醫生");
+                //      //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                //      refresh();
+                // }
+
+                // else if(array[0]['doc2Major'] != 0){
+                //     alert(array[0]['doc2']+"醫生非該科醫生");
+                //      //dhtmlx.message({ type:"error", text:array[0]['doc2']+"醫生本週已有2班非值登院區班" });
+                //      refresh();
+                // }
                 else if(array[0]['date2'] == array[0]['date1']  ){
                      if(array[0]['doc2Night']!=0){
-                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"前一晚已有夜班?\n確定要換班嗎");
-                            if (r == true) {
-                                updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
+                        alert(array[0]['doc2']+ " 在 " + array[0]['date2']+"前一晚已有夜班\n無法換班");
+                        refresh();
+                        // var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"前一晚已有夜班?\n無法換換班");
+                        //     if (r == true) {
+                        //         updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                        //     } 
+                        //     else {
+                        //         alert("已取消");
+                        //         refresh();
+                        //     }
                     }
                     else if(array[0]['doc1Night']!=0){
-                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班?\n確定要換班嗎");
-                            if (r == true) {
-                                updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
+                        // var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班?\n確定要換班嗎");
+                        //     if (r == true) {
+                        //         updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                        //     } 
+                        //     else {
+                        //         alert("已取消");
+                        //         refresh();
+                        //     }
+                        alert(array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班\n無法換班");
+                        refresh();
+                    }
+                    else if(array[0]['doc1Day']!=0){
+                        // var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班?\n確定要換班嗎");
+                        //     if (r == true) {
+                        //         updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                        //     } 
+                        //     else {
+                        //         alert("已取消");
+                        //         refresh();
+                        //     }
+                        alert(array[0]['doc1']+ " 在 " + array[0]['date1']+"後一天已有早班\n無法換班");
+                        refresh();
+                    }
+                    else if(array[0]['doc2Day']!=0){
+                        // var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班?\n確定要換班嗎");
+                        //     if (r == true) {
+                        //         updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                        //     } 
+                        //     else {
+                        //         alert("已取消");
+                        //         refresh();
+                        //     }
+                        alert(array[0]['doc2']+ " 在 " + array[0]['date2']+"後一天已有早班\n無法換班");
+                        refresh();
                     }
                     else{
-                     updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                        updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
                     }
                 }
-
 
                 else if(array[0]['count1']!=0){
                     alert(array[0]['doc1']+"醫生"+array[0]['date1']+"已有班");
@@ -1053,76 +1204,106 @@
                 }
 
 
-               else if(array[0]['doc2off']!=0 || array[0]['doc2Night']!=0){
+               else if(array[0]['doc2Night']!=0 || array[0]['doc2Day']!=0 ){
                     console.log("night"+array[0]['doc2Night']);
-
-                    if(array[0]['doc2off']!=0 && array[0]['doc2Night']!=0 ){
-                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"已有off班?\n且"+array[0]['date2']+"前一晚已有夜班\n確定要換班嗎");
-                            if (r == true) {
-                                updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
+                     if(array[0]['doc2Night']!=0){
+                        alert(array[0]['doc2']+ " 在 " + array[0]['date2']+"前一晚已有夜班\n無法換班");
+                        refresh();
+                        // var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"前一晚已有夜班?\n確定要換班嗎");
+                        //     if (r == true) {
+                        //         updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                        //     } 
+                        //     else {
+                        //         alert("已取消");
+                        //         refresh();
+                        //     }
                     }
-                    else if(array[0]['doc2off']!=0){
-                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"已有off班?\n確定要換班嗎");
-                            if (r == true) {
-                                updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
+                    else if(array[0]['doc2Day']!=0){
+                        // var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班?\n確定要換班嗎");
+                        //     if (r == true) {
+                        //         updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                        //     } 
+                        //     else {
+                        //         alert("已取消");
+                        //         refresh();
+                        //     }
+                        alert(array[0]['doc2']+ " 在 " + array[0]['date2']+"後一天已有早班\n無法換班");
+                        refresh();
                     }
-                    else if(array[0]['doc2Night']!=0){
-                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"前一晚已有夜班?\n確定要換班嗎");
-                            if (r == true) {
-                                updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
-                    }
+                    // if(array[0]['doc2off']!=0 && array[0]['doc2Night']!=0 ){
+                    //     var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"已有off班?\n且"+array[0]['date2']+"前一晚已有夜班\n確定要換班嗎");
+                    //         if (r == true) {
+                    //             updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                    //         } 
+                    //         else {
+                    //             alert("已取消");
+                    //             refresh();
+                    //         }
+                    // }
+                    
+                   
                 }
                 
-                else if(array[0]['doc1off']!=0 || array[0]['doc1Night']!=0){
-                    console.log("night"+array[0]['doc2Night']);
+                else if(array[0]['doc1Night']!=0 || array[0]['doc1Day']!=0 ){
+                    console.log("night"+array[0]['doc1Night']);
 
-                    if(array[0]['doc1off']!=0 && array[0]['doc1Night']!=0 ){
-                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n且"+array[0]['date1']+"前一晚已有夜班\n確定要換班嗎");
+                     if(array[0]['doc1Night']!=0){
+                        alert(array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班\n無法換班56");
+                        ///refresh();
+                        // var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班?\n確定要換班嗎");
+                        //     if (r == true) {
+                        //         updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                        //     } 
+                        //     else {
+                        //         alert("已取消");
+                        //         refresh();
+                        //     }
+                    }
+                    else if(array[0]['doc1Day']!=0){
+                        // var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班?\n確定要換班嗎");
+                        //     if (r == true) {
+                        //         updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                        //     } 
+                        //     else {
+                        //         alert("已取消");
+                        //         refresh();
+                        //     }
+                        alert(array[0]['doc1']+ " 在 " + array[0]['date1']+"後一天已有早班\n無法換班");
+                        refresh();
+                    }
+                    // if(array[0]['doc1off']!=0 && array[0]['doc1Night']!=0 ){
+                    //     var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n且"+array[0]['date1']+"前一晚已有夜班\n確定要換班嗎");
+                    //         if (r == true) {
+                    //             updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                    //         } 
+                    //         else {
+                    //             alert("已取消");
+                    //             refresh();
+                    //         }
+                    // }
+                    
+                    
+                }
+                else if(array[0]['doc2off']!=0){
+                        var r = confirm( array[0]['doc2']+ " 在 " + array[0]['date2']+"已有off班?\n確定要換班嗎");
                             if (r == true) {
-                                updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
+                                updateShift(scheduleID_1,scheduleID_2);
                             } 
                             else {
                                 alert("已取消");
                                 refresh();
                             }
-                    }
-                    else if(array[0]['doc1off']!=0){
+                }
+                else if(array[0]['doc1off']!=0){
                         var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"已有off班?\n確定要換班嗎");
                             if (r == true) {
-                                updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
-                            } 
+                                updateShift(scheduleID_1,scheduleID_2);
+                            }
                             else {
                                 alert("已取消");
                                 refresh();
                             }
                     }
-                    else if(array[0]['doc1Night']!=0){
-                        var r = confirm( array[0]['doc1']+ " 在 " + array[0]['date1']+"前一晚已有夜班?\n確定要換班嗎");
-                            if (r == true) {
-                                updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
-                            } 
-                            else {
-                                alert("已取消");
-                                refresh();
-                            }
-                    }
-                }
-
 
                 else if(array[0]['date2'] == array[0]['date1']  ){
                      updateShift(array[0]['scheduleID_1'],array[0]['scheduleID_2']);
@@ -1214,6 +1395,259 @@
         //         console.log("1111");
         //     });
         // }
+              
+        function delete_doctor(){
+
+            $.get("confirmDeleteSchedule",{
+                scheduleID : document.getElementById('date1').value
+            
+            }, function(array){
+                var weekday = array[0]['weekDay'];
+                // if( array[0]['docWeekend'] <=4 && (weekday == 6 || weekday == 7)){
+                //     var checkdelete = confirm(array[0]['docName']+"醫生假日班不得少於4\n確定要刪除嗎?");
+                //     if(checkdelete==true){
+                //         delete_confirm();
+                //     }
+                //     else{
+                //         alert("已取消");
+                //     }
+                // }
+                // if (array[0]['totalShift']<=array[0]['mustOnDuty']){
+                //     var checkdelete = confirm(array[0]['docName']+"總班數不得小於"+array[0]['mustOnDuty']+"\n"+"確定要刪除嗎?");
+                //     if(checkdelete==true){
+                //         delete_confirm();
+                //     }
+                //     else{
+                //         alert("已取消");
+                //     }
+
+                // }
+                //else{
+                    var date = document.getElementById("date1").options[document.getElementById('date1').selectedIndex].text;
+                    var r = confirm("是否刪除 " + array[0]['docName'] + " 在 " + date + " 的班?");
+                        if (r == true) {
+                            delete_confirm();
+                        } 
+                        else {
+                         alert("已取消");
+                     }
+                    
+                // }
+               
+            console.log(array[0]['totalShift']);
+            console.log(array[0]['mustOnDuty']);
+        });
+
+        }
+         function delete_confirm(){
+            $.get("deleteSchedule",{
+                scheduleID : document.getElementById('date1').value
+            
+            }, function(){
+                alert("成功刪除");
+                refresh();
+        });
+
+        }
+
+        function showScheduleInfo(date,section_id,id){
+            document.getElementById("shiftDate").value=date;
+            document.getElementById("shiftSessionID").value=section_id;
+            document.getElementById("scheduleID_1").value=id;
+            
+            $.get("showDoctorInfo",{
+                categorySerial: section_id,
+                date : document.getElementById("shiftDate").value
+            }, function(array){
+                
+                var info = "";
+                console.log("length"+array.length);
+                for(i=0 ; i<array.length ; i++){
+                    info += "<option value="+array[i]['doctorID']+">"+array[i]['doctorName']+" - 剩餘天數: "+(array[i]['totalShift'])+"</option>";
+                    console.log('1'+array[i]['doctorID']);
+                    console.log("section_id"+array[i]['doctorName']);
+                }
+                document.getElementById("doctor").innerHTML = info;
+        });
+
+             //console.log("date"+document.getElementById("shiftDate").value);
+        }
+
+        function save_form_alert_addSchedule(){
+            var id = document.getElementById('doctor').value;
+            var date =document.getElementById('date_1').innerText;
+            var classification = document.getElementById('section_id').innerText;
+
+            if(id == ""){
+                dhtmlx.message({ type:"error", text:"請選擇醫生" });
+            }
+
+           else{
+            confirmsaveSchedule(id,date,classification);
+           }
+            console.log(id);
+        }
         
+        function confirmsaveSchedule(id,date,classification){
+            $.get('confirmsaveSchedule',{
+                id: id, // doctorID
+                date: date,
+                classification: classification
+            }, function(array){
+                var id = document.getElementById('doctor').value;
+                var date =document.getElementById('date_1').innerText;
+                var classification = document.getElementById('section_id').innerText;
+
+                if(array[0]['location'] != 0 ){
+                    alert(array[0]['doc']+ " 在當週已有2班在非直登院區");
+                    refresh();
+                }
+                else if(array[0]['major'] != 0 ){
+                    alert(array[0]['doc']+ "非該科醫生");
+                    refresh();
+                }
+
+                else if(array[0]['countShedule']!=0){
+                    dhtmlx.message({ type:"error", text: array[0]['doc']+ " 在 " + array[0]['date']+"已有班" });
+                }
+
+                else if(array[0]['countOff']!=0 || array[0]['countNight']!=0 || array[0]['countDay']!=0 ){
+                   
+                     if(array[0]['countNight']!=0){
+                        //var r = confirm( array[0]['doc']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n確定要增班嗎");
+                            // if (r == true) {
+                            //     saveSchedule(id,date,classification);
+                            // } 
+                            // else {
+                                alert(array[0]['doc']+ " 在 " + array[0]['date']+"前一晚已有夜班\n無法增班");
+                                refresh();
+                            // }
+
+                    }
+                    
+                    else if(array[0]['countDay']!=0){
+                        //var r = confirm( array[0]['doc']+ " 在 " + array[0]['date']+"前一晚已有夜班?\n確定要增班嗎");
+                            // if (r == true) {
+                            //     saveSchedule(id,date,classification);
+                            // } 
+                            // else {
+                                alert(array[0]['doc']+ " 在 " + array[0]['date']+"後一天已有白班\n無法增班");
+                                refresh();
+                            // }
+
+                    }
+
+                    
+                    else if(array[0]['countOff']!=0){
+                        var r = confirm( array[0]['doc']+ " 在 " + array[0]['date']+"已有off班?\n確定要增班嗎");
+                            if (r == true) {
+                                saveSchedule(id,date,classification);
+                            } 
+                            else {
+                                alert("已取消");
+                                refresh();
+                            }
+                    }
+                   
+                
+                }
+
+                else{
+                    saveSchedule(id,date,classification);
+                }
+                console.log("abcdseee"+array[0]['countDay']);
+                
+            });
+        }
+        function saveSchedule(id,date,classification){
+            $.get('saveSchedule',{
+                id: id,
+                date: date,
+                classification: classification
+            }, function(){
+                //alert("成功");
+                scheduler.endLightbox(true, html("my_form1"));
+                refresh();
+                
+            });
+
+        }
+         function addNewSchedule(date,id){
+
+           var text = null;
+
+           if(id == 1){
+               text = "行政";
+           }else if(id == 2){
+               text = "教學";
+           }else if(id== 3){
+               text = "北白急救";
+           }else if(id == 4){
+               text = "北白發燒";
+           }else if(id == 5){
+               text = "北白內1";
+           }else if(id == 6){
+               text = "北白內2";
+           }else if(id == 7){
+               text = "北白外1";
+           }else if(id == 8){
+               text = "北白外2";
+           }else if(id == 9){
+               text = "淡白內1";
+           }else if(id == 10){
+               text = "淡白內2";
+           }else if(id == 11){
+               text = "淡白外1";
+           }else if(id == 12){
+               text = "淡白外1";
+           }else if(id == 13){
+               text = "北夜急救";
+           }else if(id == 14){
+               text = "北夜發燒";
+           }else if(id == 15){
+               text = "北夜內1";
+           }else if(id == 16){
+               text = "北夜內2";
+           }else if(id == 17){
+               text = "北夜外1";
+           }else if(id == 18){
+               text = "北夜外2";
+           }else if(id == 19){
+               text = "淡夜內1";
+           }else if(id == 20){
+               text = "淡夜內2";
+           }else if(id == 21){
+               text = "淡夜外";
+           }
+           
+           var day = date.getDay();
+           if((date.getMonth()+1)<10){
+                if(date.getDate()<10){
+                     var date2=date.getFullYear()+"-0"+(date.getMonth()+1) + "-0" + date.getDate();
+                }
+                else{
+                    var date2=date.getFullYear()+"-0"+(date.getMonth()+1) + "-" + date.getDate();
+                }
+
+           }
+           else{
+                if(date.getDate()<10){
+                    var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-0" + date.getDate();
+                }
+                else{
+                var date2=date.getFullYear()+"-"+(date.getMonth()+1) + "-" + date.getDate();
+                }
+            
+           }
+        
+           document.getElementById("section_id").innerHTML= "<input>"+id;
+           document.getElementById("date_1").innerHTML= "<h5 value="+date2+">"+date2+"</h5>";
+           document.getElementById("classification").innerHTML="<h5 value="+id+"> "+text+"</h5>";
+           
+       }
+       function close_form1() {
+            scheduler.endLightbox(false, html("my_form1"));
+        }
+
     </script>
 @endsection

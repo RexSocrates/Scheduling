@@ -13,6 +13,11 @@ use App\ScheduleCategory;
 use App\Remark;
 use App\Reservation;
 
+use App\ReservationData;
+
+use App\ScheduleRecord;
+
+
 // import jobs
 use App\Jobs\SendAgreeShiftExchangeMail;
 use App\Jobs\SendDenyShiftExchangeMail;
@@ -66,29 +71,223 @@ class ShiftRecordsController extends Controller
     public function getShiftRecordsBySerial(Request $request){
         $data = $request->all();
         $serial = $data['id'];
-        
-
+    
         $user = new User();
         $shiftRecordObj = new ShiftRecords();
         $schedule = new Schedule();
+        $scheduleCategory = new ScheduleCategory();
+
 
         $shiftInfo = $shiftRecordObj->getShiftRecordByChangeSerial($serial); 
 
-        $schedule_1_doctor = $schedule->getScheduleDataByID($shiftInfo->scheduleID_1)->doctorID; //2
-        $schedule_2_doctor = $schedule->getScheduleDataByID($shiftInfo->scheduleID_2)->doctorID; //3
+        $scheduleID1= $shiftInfo->scheduleID_1;
+        $scheduleID2= $shiftInfo->scheduleID_2;
 
+        //判斷醫生1班
+        $doctorID1 = $schedule->getScheduleDataByID($scheduleID1)->doctorID;
+        $date1 = $schedule->getScheduleDataByID($scheduleID2)->date;
+        $categoryID1 =$schedule->getScheduleDataByID($scheduleID2)->schCategorySerial;
+        $weekday1 = (int)date('N', strtotime($date1));
+
+
+        //判斷醫生2班
+        $doctorID2 = $schedule->getScheduleDataByID($scheduleID2)->doctorID;
+        $date2 = $schedule->getScheduleDataByID($scheduleID1)->date;
+        $categoryID2 =$schedule->getScheduleDataByID($scheduleID1)->schCategorySerial;
+        $weekday2 = (int)date('N', strtotime($date2));
+
+         //確認當天一位醫生是否有上班 醫生id
+        $count1=$schedule->checkDocStatus($doctorID1,$date1);
+        $count2=$schedule->checkDocStatus($doctorID2,$date2);
+
+    
+
+        //確認醫生前一天是否為夜班
+        $doc1PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID1,$date1);
+        $doc2PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID2,$date2);
+
+        //確認醫生後一天是否為白班
+        $doc1LaterDay = $schedule->getDayScheduleByDoctorIDandDate($doctorID1,$date1);
+        $doc2LaterDay = $schedule->getDayScheduleByDoctorIDandDate($doctorID2,$date2);
+
+        //判斷在非値登院區班數
+        $doc1Location =0;
+        $doc2Location =0;
+        
+        if($schedule->getScheduleDataByID($scheduleID1)->location != $schedule->getScheduleDataByID($scheduleID2)->location){
+            if($schedule->getScheduleDataByID($scheduleID2)->location != $user->getDoctorInfoByID($doctorID1)->location){
+                $doc1Location = $schedule->getAnotherLocationShifts($doctorID1,$date1);
+            }
+
+            if($doctorID2 != ""){
+               if($schedule->getScheduleDataByID($scheduleID1)->location != $user->getDoctorInfoByID($doctorID2)->location){
+                $doc2Location = $schedule->getAnotherLocationShifts($doctorID2,$date2);
+            
+            }
+        }
+
+        if($doctorID2 == ""){
+            $doc2Location = $schedule->getAnotherLocationShifts($doctorID1,$date2);
+            
+        }
+            
+        
+        }
+        
+        //判斷醫生科別
+        $doc1Major=0;
+        $doc2Major=0;
+
+        if($user->getDoctorInfoByID($doctorID1)->major != "All"){
+            if($scheduleCategory->getSchCategoryMajor($categoryID1) != $scheduleCategory->getSchCategoryMajor($categoryID2)){
+                if($user->getDoctorInfoByID($doctorID1)->major != $scheduleCategory->getSchCategoryMajor($categoryID1)){
+                    $doc1Major=1;
+                }
+                if($doctorID2 != null){
+                    if($user->getDoctorInfoByID($doctorID2)->major != $scheduleCategory->getSchCategoryMajor($categoryID2)){
+                        $doc2Major=2;
+                    }
+                }
+                if($doctorID2 == null){
+                    $doc2Major=0;
+                }
+
+            }
+        }
+
+        $doc1Night=0;
+
+        if($doc1PreNight != 0 and ($categoryID1==3 or $categoryID1==4 or $categoryID1==5 or $categoryID1==6 or $categoryID1==7 or $categoryID1==8 or $categoryID1==9 or $categoryID1==10 or $categoryID1==11 or $categoryID1==12)){
+            $laterdate=date("Y-m-d",strtotime($date1."-1 day"));
+                if($laterdate == $date2){
+                    $doc1Night=0;
+                }   
+                else{
+                    $doc1Night=1;
+                } 
+        }
+        
+
+        $doc2Night=0;
+
+        if($doctorID2 != ""){
+            if($doc2PreNight != 0 and ($categoryID2==3 or $categoryID2==4 or $categoryID2==5 or $categoryID2==6 or $categoryID2==7 or $categoryID2==8 or $categoryID2==9 or $categoryID2==10 or $categoryID2==11 or $categoryID2==12)){
+            $predate=date("Y-m-d",strtotime($date2."-1 day"));
+            if($predate == $date1){
+                $doc2Night=0;
+            }   
+            else{
+                $doc2Night=1;
+            }   
+            
+         }
+        }
+
+         if($doctorID2 == ""){
+            $doc2PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID1,$date2);
+            if($doc2PreNight != 0 and ($categoryID2==3 or $categoryID2==4 or $categoryID2==5 or $categoryID2==6 or $categoryID2==7 or $categoryID2==8 or $categoryID2==9 or $categoryID2==10 or $categoryID2==11 or $categoryID2==12)){
+            // if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
+            //     $doc2Night=0;
+            // }
+
+            // else{
+            if($predate == $date1){
+                $doc2Night=0;
+            }   
+            else{
+                $doc2Night=1;
+            } 
+                
+            // }
+            }
+        }
+
+
+        $doc1Day=0;
+
+        if($doc1LaterDay != 0 and ($categoryID1==13 or $categoryID1==14 or $categoryID1==15 or $categoryID1==16 or $categoryID1==17 or $categoryID1==18 or $categoryID1==19 or $categoryID1==20 or $categoryID1==21)){
+            $predate=date("Y-m-d",strtotime($date2."-1 day"));
+            if($predate == $date1){
+                $doc1Day=0;
+            }   
+            else{
+                $doc1Day=1;
+            }        
+          
+        }
+
+        $doc2Day=0;
+        if($doctorID2 != ""){
+            if($doc2LaterDay != 0 and ($categoryID2==13 or $categoryID2==14 or $categoryID2==15 or $categoryID2==16 or $categoryID2==17 or $categoryID2==18 or $categoryID2==19 or $categoryID2==20 or $categoryID2==21)){
+            $laterdate=date("Y-m-d",strtotime($date2."+1 day"));
+                if($laterdate == $date1){
+                    $doc2Day=0;
+                 }   
+                else{
+                    $doc2Day=1;
+                 } 
+            
+               
+            // }
+        }
+     }
+     if($doctorID2 != ""){
+        $doc2LaterDay = $schedule->getDayScheduleByDoctorIDandDate($doctorID1,$date2);
+            if($doc2LaterDay != 0 and ($categoryID2==13 or $categoryID2==14 or $categoryID2==15 or $categoryID2==16 or $categoryID2==17 or $categoryID2==18 or $categoryID2==19 or $categoryID2==20 or $categoryID2==21)){
+                if($laterdate == $date1){
+                    $doc2Day=0;
+                }   
+                else{
+                    $doc2Day=1;
+                 } 
+        }
+     }
+
+        $doc2 = null;
+        if($doctorID2!=null){
+            $doc2 = $user->getDoctorInfoByID($doctorID2)->name;
+        }
+        else{
+             $doc2 = $user->getDoctorInfoByID($doctorID1)->name;
+        }
 
         $status = 1; //代表true
-        if($schedule_1_doctor == $shiftInfo->schID_1_doctor &&  $schedule_2_doctor == $shiftInfo->schID_2_doctor){
+        if($doctorID1 == $shiftInfo->schID_1_doctor &&  $doctorID2 == $shiftInfo->schID_2_doctor){
             // 表示兩筆上班資料都沒有其他異動
             $status=1;
         }
         else{
             $status=2;
         }
-    
-        return $status;
 
+
+        $countDic=[
+            "scheduleID_1"=>$scheduleID1,
+            "scheduleID_2"=>$scheduleID2,
+            "count1"=>$count1,
+            "count2"=>$count2,
+            "doc1"=>$user->getDoctorInfoByID($doctorID1)->name,
+            "doc2"=>$doc2,
+            'date1'=>$date1,
+            'date2'=>$date2,
+            'doc1Night' => $doc1Night,
+            'doc2Night' => $doc2Night,
+            'doc1Day' => $doc1Day,
+            'doc2Day' => $doc2Day,
+            'doc1Location'=>$doc1Location,
+            'doc2Location'=>$doc2Location,
+            'doc1Major'=>$doc1Major,
+            'doc2Major'=>$doc2Major,
+            'status'=>$status,
+            'date1Month' =>date('Y-m',strtotime($date1)),
+            'date2Month' =>date('Y-m',strtotime($date2))
+        ];
+
+        
+        $countArr=[];
+        array_push($countArr,$countDic);
+
+        return $countArr;
     }
     
     // 依據使用者選擇的月份顯示換班資訊
@@ -351,6 +550,10 @@ class ShiftRecordsController extends Controller
         $doc1PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID1,$date1);
         $doc2PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID2,$date2);
 
+        //確認醫生後一天是否為白班
+        $doc1LaterDay = $schedule->getDayScheduleByDoctorIDandDate($doctorID1,$date1);
+        $doc2LaterDay = $schedule->getDayScheduleByDoctorIDandDate($doctorID2,$date2);
+
         //判斷在非値登院區班數
         $doc1Location =0;
         $doc2Location =0;
@@ -360,9 +563,18 @@ class ShiftRecordsController extends Controller
                 $doc1Location = $schedule->getAnotherLocationShifts($doctorID1,$date1);
             }
 
-            if($schedule->getScheduleDataByID($scheduleID1)->location != $user->getDoctorInfoByID($doctorID2)->location){
+            if($doctorID2 != ""){
+               if($schedule->getScheduleDataByID($scheduleID1)->location != $user->getDoctorInfoByID($doctorID2)->location){
                 $doc2Location = $schedule->getAnotherLocationShifts($doctorID2,$date2);
+            
             }
+        }
+
+        if($doctorID2 == ""){
+            $doc2Location = $schedule->getAnotherLocationShifts($doctorID1,$date2);
+            
+        }
+            
         
         }
         
@@ -390,21 +602,97 @@ class ShiftRecordsController extends Controller
         $doc1Night=0;
 
         if($doc1PreNight != 0 and ($categoryID1==3 or $categoryID1==4 or $categoryID1==5 or $categoryID1==6 or $categoryID1==7 or $categoryID1==8 or $categoryID1==9 or $categoryID1==10 or $categoryID1==11 or $categoryID1==12)){
-            $doc1Night=1;
+            $laterdate=date("Y-m-d",strtotime($date1."-1 day"));
+                if($laterdate == $date2){
+                    $doc1Night=0;
+                }   
+                else{
+                    $doc1Night=1;
+                } 
         }
+        
 
         $doc2Night=0;
 
-        if($doc2PreNight != 0 and ($categoryID2==3 or $categoryID2==4 or $categoryID2==5 or $categoryID2==6 or $categoryID2==7 or $categoryID2==8 or $categoryID2==9 or $categoryID2==10 or $categoryID2==11 or $categoryID2==12)){
-            $doc2Night=1;
+        if($doctorID2 != ""){
+            if($doc2PreNight != 0 and ($categoryID2==3 or $categoryID2==4 or $categoryID2==5 or $categoryID2==6 or $categoryID2==7 or $categoryID2==8 or $categoryID2==9 or $categoryID2==10 or $categoryID2==11 or $categoryID2==12)){
+            $predate=date("Y-m-d",strtotime($date2."-1 day"));
+            if($predate == $date1){
+                $doc2Night=0;
+            }   
+            else{
+                $doc2Night=1;
+            }   
+            
+         }
         }
+
+         if($doctorID2 == ""){
+            $doc2PreNight = $schedule->getNightScheduleByDoctorIDandDate($doctorID1,$date2);
+            if($doc2PreNight != 0 and ($categoryID2==3 or $categoryID2==4 or $categoryID2==5 or $categoryID2==6 or $categoryID2==7 or $categoryID2==8 or $categoryID2==9 or $categoryID2==10 or $categoryID2==11 or $categoryID2==12)){
+            // if($scheduleCategory->getSchCategoryTime($categoryID1) == $scheduleCategory->getSchCategoryTime($categoryID2) ){
+            //     $doc2Night=0;
+            // }
+
+            // else{
+            if($predate == $date1){
+                $doc2Night=0;
+            }   
+            else{
+                $doc2Night=1;
+            } 
+                
+            // }
+            }
+        }
+
+
+        $doc1Day=0;
+
+        if($doc1LaterDay != 0 and ($categoryID1==13 or $categoryID1==14 or $categoryID1==15 or $categoryID1==16 or $categoryID1==17 or $categoryID1==18 or $categoryID1==19 or $categoryID1==20 or $categoryID1==21)){
+            $predate=date("Y-m-d",strtotime($date2."-1 day"));
+            if($predate == $date1){
+                $doc1Day=0;
+            }   
+            else{
+                $doc1Day=1;
+            }        
+          
+        }
+
+        $doc2Day=0;
+        if($doctorID2 != ""){
+            if($doc2LaterDay != 0 and ($categoryID2==13 or $categoryID2==14 or $categoryID2==15 or $categoryID2==16 or $categoryID2==17 or $categoryID2==18 or $categoryID2==19 or $categoryID2==20 or $categoryID2==21)){
+            $laterdate=date("Y-m-d",strtotime($date2."+1 day"));
+                if($laterdate == $date1){
+                    $doc2Day=0;
+                 }   
+                else{
+                    $doc2Day=1;
+                 } 
+            
+               
+            // }
+        }
+     }
+     if($doctorID2 != ""){
+        $doc2LaterDay = $schedule->getDayScheduleByDoctorIDandDate($doctorID1,$date2);
+            if($doc2LaterDay != 0 and ($categoryID2==13 or $categoryID2==14 or $categoryID2==15 or $categoryID2==16 or $categoryID2==17 or $categoryID2==18 or $categoryID2==19 or $categoryID2==20 or $categoryID2==21)){
+                if($laterdate == $date1){
+                    $doc2Day=0;
+                }   
+                else{
+                    $doc2Day=1;
+                 } 
+        }
+     }
 
         $doc2 = null;
         if($doctorID2!=null){
             $doc2 = $user->getDoctorInfoByID($doctorID2)->name;
         }
         else{
-            $doc2=null;
+             $doc2 = $user->getDoctorInfoByID($doctorID1)->name;
         }
 
         $countDic=[
@@ -424,10 +712,15 @@ class ShiftRecordsController extends Controller
             'doc2off' => $doc2off,
             'doc1Night' => $doc1Night,
             'doc2Night' => $doc2Night,
+            'doc1Day' => $doc1Day,
+            'doc2Day' => $doc2Day,
             'doc1Location'=>$doc1Location,
             'doc2Location'=>$doc2Location,
             'doc1Major'=>$doc1Major,
             'doc2Major'=>$doc2Major,
+            'date1Month' =>date('Y-m',strtotime($date1)),
+            'date2Month' =>date('Y-m',strtotime($date2))
+
         ];
 
         
@@ -511,6 +804,9 @@ class ShiftRecordsController extends Controller
         $shiftRecords->doc2Confirm($newChangeSerial,1);
         $shiftRecords->adminConfirm($newChangeSerial,1);
 
+        $schedule->checkScheduleStatus($scheduleID1,2);
+        $schedule->checkScheduleStatus($scheduleID2,2);
+
         $user = new User();
 
         $oldscheduleID1 = $schedule_1_Info->scheduleID;
@@ -523,7 +819,9 @@ class ShiftRecordsController extends Controller
 
         //dispatch($job1);
         //dispatch($job2);
-
+        // $schedule->checkScheduleStatus($scheduleID1,2); //更改顏色
+        // $schedule->checkScheduleStatus($scheduleID2,2); //更改顏色
+        
         $schedule->exchangeSchedule($newChangeSerial);
            
         }
@@ -889,8 +1187,8 @@ class ShiftRecordsController extends Controller
         $scheduleID_1=$shiftRecordObj->getShiftRecordByChangeSerial($serial)->scheduleID_1;
         $scheduleID_2=$shiftRecordObj->getShiftRecordByChangeSerial($serial)->scheduleID_2;
 
-        $schedule->checkScheduleStatus($scheduleID_1,0);
-        $schedule->checkScheduleStatus($scheduleID_2,0);
+        $schedule->checkScheduleStatus($scheduleID_1,2);
+        $schedule->checkScheduleStatus($scheduleID_2,2);
 
         //$job = new SendShiftExchangingInformMail($serial);
 
@@ -925,6 +1223,7 @@ class ShiftRecordsController extends Controller
     public function shiftFirstEdition($date=null){
         $schedule = new Schedule();
         $user = new User();
+        $reservationData = new ReservationData();
 
         $scheduleData = $schedule->getFirstSchedule();
 
@@ -936,7 +1235,8 @@ class ShiftRecordsController extends Controller
             $data->doctorID = $doctorName->name;
         }
 
-
+        $month = date("Y-m");
+        $status=$reservationData->getDate($month)->status;
 
         $dateArr = explode('-', $date);
         
@@ -944,6 +1244,7 @@ class ShiftRecordsController extends Controller
         return view('pages.shift-first-edition',array(
             'schedule' => $scheduleData,
             'doctorName' => $doctors,
+            'status' => $status
         ));
 
     }
@@ -983,5 +1284,66 @@ class ShiftRecordsController extends Controller
         return view('pages.shift-first-edition-personal');
     }
     
-    
+    // 取得積欠班的頁面
+    public function getAccumulatedShifts() {
+        $scheduleRecord = new ScheduleRecord();
+        $user = new User();
+        
+        $doctorsRecords=$scheduleRecord->getScheduleRecord();
+
+        //月份
+        $monthList =[]; 
+
+        $currentMonth= date("Y-m");
+        $currentYear = date('Y');
+
+        if($currentMonth <= ($currentYear.'-06')){
+            for($i = 1; $i <= 6; $i++) {
+                array_push($monthList, date('m', strtotime(($i+2).'month')));
+            }
+        }
+        if($currentMonth >= ($currentYear.'-06')){
+            for($i = 7; $i <= 12; $i++) {
+                array_push($monthList, date('m', strtotime(($i+2).'month')));
+            }
+        }
+        
+        $doctors = $user->getAtWorkDoctors();
+
+        $scheduleRecordArr = []; 
+
+        $shiftHours = [];
+
+        foreach ($doctors as $doctor ) {
+           $recordDic =[
+                'doctorID' => $doctor->doctorID,
+                'doctorName' => $doctor->name,
+                'totalShiftHours' => $scheduleRecord->getScheduleTotoalBydoctorID($doctor->doctorID),
+                'shiftHours' => ""
+            ];
+
+            // $doctorID=$doctor->doctorID;
+            // $doctorName=$doctor->name;
+            // $totalShiftHours=$scheduleRecord->getScheduleTotoalBydoctorID($doctor->doctorID);
+
+            $hours = $scheduleRecord->getScheduleRecordByDoctorID($doctor->doctorID);
+            
+            foreach ($hours as $shiftHour) {
+                $shiftHours = array($shiftHour->shiftHours);
+                 //array_push($scheduleRecordArr,[$shiftHours]);
+            }
+
+            array_push($scheduleRecordArr,[$shiftHours,$recordDic]);
+            //array_push($scheduleRecordArr,[$doctorID,$doctorName,$totalShiftHours,$shiftHours]);
+
+        }
+        
+        
+        return view('pages.accumulatedShifts', [
+             'doctors'=>$doctors,
+             'doctorsRecords'=>$scheduleRecordArr,
+             'shiftHours'=>$shiftHours,
+             'monthList'=>$monthList
+         ]);
+    }
 }
