@@ -5,7 +5,7 @@
 @endsection
 
 @section('navbar')
-    <p class="brand-logo light">醫師公假紀錄</p>
+    <p class="brand-logo light">醫師特休紀錄</p>
 @endsection
 
 @section('nav-content')
@@ -85,7 +85,7 @@
       		  	<div id="page2" class="col s12">
 					<div class="card">
                         <div class="card-action">
-      		  	  			<font class="card-title">公假待確認</font>
+      		  	  			<font class="card-title">特休待確認</font>
       		  	  		</div>
       		  	  		<div class="divider"></div>
       		  	  	  	
