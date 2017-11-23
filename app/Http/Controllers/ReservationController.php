@@ -122,8 +122,7 @@ class ReservationController extends Controller
         $onResAmount = $onResLimit - $docAndResObj->getNextMonthOnResAmount($user->getCurrentUserID());
         $offResAmount = $offResLimit - $docAndResObj->getNextMonthOffResAmount($user->getCurrentUserID());
         
-//        echo $docAndResObj->getNextMonthOnResAmount($user->getCurrentUserID()).'<br>';
-//        echo $onResAmount;
+
 
 
         return view('pages.reservation', [
