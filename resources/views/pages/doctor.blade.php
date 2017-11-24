@@ -29,7 +29,7 @@
                                         <th>級別</th>
                                         <th>職登院區</th>
                                         <th>權限</th>
-                                        <th style="width:150px;">動作</th>
+                                        <th style="width:150px;">功能</th>
                                     </tr>
                                 </thead>
                                 <tbody>
