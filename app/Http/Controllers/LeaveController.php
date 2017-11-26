@@ -167,6 +167,99 @@ class LeaveController extends Controller
         ]);
        
     }
+    
+    // 時數存摺
+    public function getTimeRecord() {
+
+        $user = new User();
+        $officialLeave = new OfficialLeave();
+
+        $leaves= $officialLeave->getconfirmLeaves();
+
+        $leaveArr = [];
+        foreach ($leaves as $leave) {
+            $leaveDic =[
+                'date' =>$leave->recordDate,
+                'confirmingPerson' =>'',
+                'doctor' =>'',
+                'hours'=>$leave->leaveHours,
+                'updatedLeaveHours'=>$leave->updatedLeaveHours,
+                'remark'=>$leave->remark
+            ];
+            if($leave->confirmStatus != 0){
+                $leaveDic['confirmingPerson'] = $user->getDoctorInfoByID($leave->confirmingPersonID)->name;
+            }
+
+            $leaveDic['doctor'] = $user->getDoctorInfoByID($leave->doctorID)->name;
+
+            array_push($leaveArr,$leaveDic);
+        }
+
+        $doctors= $user->getDoctorList();
+        $doctorName = [];
+
+        foreach ($doctors as $doctor) {
+            $doctorDic =[
+                'id' => $doctor->doctorID,
+                'name' => $doctor->name
+            ];
+
+            array_push($doctorName,$doctorDic);
+        }
+        
+        $unconfirmLeaves = $officialLeave->getUnconfirmLeaves();
+        $unconfirmLeaveArr = [];
+        foreach ($unconfirmLeaves as $leave) {
+            $unconfirmLeaveDic =[
+                'serial' => $leave->leaveSerial,
+                'date' =>$leave->recordDate,
+                'doctor' =>'',
+                'hours'=>$leave->leaveHours,
+                'updatedLeaveHours'=>$user->getDoctorInfoByID($leave->doctorID)->currentOfficialLeaveHours,
+                'remark'=>$leave->remark
+            ];
+            
+            $unconfirmLeaveDic['doctor'] = $user->getDoctorInfoByID($leave->doctorID)->name;
+
+            array_push($unconfirmLeaveArr,$unconfirmLeaveDic);
+        }
+
+        $rejectedAndConfirmLeaves = $officialLeave->getRejectedAndConfirmLeaves();
+        $rejectedAndConfirmArr = [];
+        foreach ($rejectedAndConfirmLeaves as $leave) {
+            $rejectedAndConfirmDic =[
+                'serial' => $leave->leaveSerial,
+                'confirmingPerson' =>'',
+                'date' =>$leave->recordDate,
+                'doctor' =>'',
+                'hours'=>$leave->leaveHours,
+                'updatedLeaveHours'=>$leave->updatedLeaveHours,
+                'confirmStatus' => $leave->confirmStatus, 
+                'remark'=>$leave->remark
+            ];
+            
+            $rejectedAndConfirmDic['doctor'] = $user->getDoctorInfoByID($leave->doctorID)->name;
+            $rejectedAndConfirmDic['confirmingPerson'] = $user->getDoctorInfoByID($leave->confirmingPersonID)->name;
+
+            array_push($rejectedAndConfirmArr,$rejectedAndConfirmDic);
+        }
+
+
+
+            //return $doctorsLeave;
+        return view('pages.timeRecord', [
+            'leaveArr' => $leaveArr,
+            'rejectedAndConfirmArr' => $rejectedAndConfirmArr,
+            'unconfirmLeaveArr' =>$unconfirmLeaveArr,
+            'doctors' => $doctorName,
+        ]);
+       
+    }
+    
+    public function getTimeRecordDetails() {
+        
+        return view('pages.timeRecordDetails');
+    }
 
     
     //排班人員加入公假

@@ -144,7 +144,7 @@
                                         <td class="td-padding">{{ $record[6] }}</td>
                                         <td class="td-padding">{{ $record[2] }} <font class="font-w-b">{{ $record[0] }} {{ $record[4] }}</font> 與 {{ $record[3] }} <font class="font-w-b">{{ $record[1] }} {{ $record[5] }} </font> 互換</td>
                                         <td class="td-padding">
-                                            <a href = checkShift/{{$record[7]}} = class="waves-effect waves-light btn" name=confirm>允許</a>
+                                            <a href = checkShift/{{$record[7]}} = class="waves-effect waves-light btn" name=confirm>確認</a>
                                             <a href= rejectShift/{{$record[7]}} = class="waves-effect waves-light btn deep-orange darken-3" name=reject>拒絕</a>
                                         </td>
                                     </tr>

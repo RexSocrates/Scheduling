@@ -86,7 +86,7 @@
       		  	<div class="col s12 m4">
       		  	  	<div class="card center padding-t5">
                         <h1 class="teal-text text-lighten-2">{{ $currentOfficialLeaveHours }}</h1>
-      		  	  		<p class="blue-grey-text text-darken-3" style="font-weight: 500;">剩餘公假時數</p>
+      		  	  		<p class="blue-grey-text text-darken-3" style="font-weight: 500;">剩餘特休時數</p>
       		  	  	  	<div class="card-action center">
       		  	  	  	  	<a href="profile" class="margin-r0">申請使用</a>
       		  	  	  	</div>
@@ -108,14 +108,15 @@
                         <div class="row margin-b0">
                             <div class="input-field col s12">
                                 <i class="material-icons prefix modal-icons">chat_bubble</i>
-                                <input id="title" type="text" name="title" data-length="50" required>
+                                <input id="title" type="text" name="title" data-length="40" onkeyup="title_words_deal();" required>
                                 <label for="title">標題</label>
                             </div>
                             <div class="input-field col s12">
                                 <i class="material-icons prefix modal-icons">mode_edit</i>
-                                <textarea id="textarea1" class="materialize-textarea margin-b0" type="text" name="content" data-length="980" required></textarea>
+                                <textarea id="textarea" class="materialize-textarea margin-b0" type="text" name="content" data-length="700" onkeyup="textarea1_words_deal();" required></textarea>
                                 <label class="active" for="textarea1">內容</label>
                             </div>
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -151,6 +152,7 @@
 @section('script')
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
     <script src="../js/dropload.min.js"></script>
+
     <script>
         
 //        $(function(){
@@ -262,6 +264,30 @@
         function reset() {
             $('#form-modal1').trigger("reset");
             $('textarea').trigger('autoresize');
+        }
+        
+        //字數限制
+        function title_words_deal() {
+            var curLength = $("#title").val().length;
+            if (curLength > 40) {
+                var num = $("#title").val().substr(0, 40);
+                $("#title").val(num);
+                alert("超過字數限制，多出的字將被移除！");
+            } else {
+                $("#textCount").text(40 - $("#title").val().length);
+            }
+        }
+        
+        //字數限制
+        function textarea1_words_deal() {
+            var curLength = $("#textarea1").val().length;
+            if (curLength > 700) {
+                var num = $("#textarea1").val().substr(0, 700);
+                $("#textarea1").val(num);
+                alert("超過字數限制，多出的字將被移除！");
+            } else {
+                $("#textCount").text(700 - $("#textarea1").val().length);
+            }
         }
     </script>
 @endsection

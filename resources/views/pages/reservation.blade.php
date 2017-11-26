@@ -4,11 +4,9 @@
     <script src="../codebase/ext/dhtmlxscheduler_collision.js"></script>
     <script src="../codebase/ext/dhtmlxscheduler_limit.js"></script>
     <script src="../../codebase/ext/dhtmlxscheduler_serialize.js" type="text/javascript" charset="utf-8"></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
     
     
-
     <style>
         td{
             padding: 0;
@@ -21,17 +19,16 @@
 @endsection
 
 @section('content')
-<input type="hidden" id='hiddenCountDay' value={{$countDay}}>
-<input type="hidden" id='hiddenCountNight' value={{$countNight}}>
-<input type="hidden" id='hiddenCountOn' value={{$onAmount}}>
-<input type="hidden" id='hiddenCountOff' value={{$offAmount}}>
+    <input type="hidden" id='hiddenCountDay' value={{$countDay}}>
+    <input type="hidden" id='hiddenCountNight' value={{$countNight}}>
+    <input type="hidden" id='hiddenCountOn' value={{$onAmount}}>
+    <input type="hidden" id='hiddenCountOff' value={{$offAmount}}>
 
-<input type="hidden" id="endDate" value="{{ $endDate }}">
-<input type="hidden" id="statrDate" value="{{ $startDate }}">
+    <input type="hidden" id="endDate" value="{{ $endDate }}">
+    <input type="hidden" id="statrDate" value="{{ $startDate }}">
 
-
-<input type="hidden" id="originalEventStartDate" value="">
-<input type="hidden" id="endDate" value={{ $endDate }}>
+    <input type="hidden" id="originalEventStartDate" value="">
+    <input type="hidden" id="endDate" value={{ $endDate }}>
 
     <div id="section" class="container-fix trans-left-five">
         <div class="container-section">
@@ -58,8 +55,7 @@
                                     <div class="col s7">
                                         <form action="addRemark" method="post" class="col s6">
                                             <div class="input-field">
-                                                <textarea id="textarea1" class="materialize-textarea" name="remark"placeholder="請輸入出國時段或其他事情">{{$remark}}</textarea>
-    <!--                                                     data-length="150"-->
+                                                <textarea id="textarea1" class="materialize-textarea" name="remark" placeholder="請輸入出國時段或其他事情(字數限制150字)" onkeyup="textarea1_words_deal();">{{$remark}}</textarea>
                                                 <label for="textarea1">備註:</label>
 
                                             </div>
@@ -75,7 +71,6 @@
                                     </div>
                                 </div>
                             </form>
-
                         </div>
                     </div>
 
@@ -476,7 +471,7 @@
                 date1 : startDate,
                 date2 : endDate
             }, function() {
-                dhtmlx.message({ type:"error", text:"預約成功" });
+                dhtmlx.message({ type:"success", text:"預約成功" });
             });
         }
 
@@ -488,7 +483,7 @@
                 startDate : startDate,
                 endDate : endDate
             }, function() {
-                dhtmlx.message({ type:"error", text:"預約修改成功" });
+                dhtmlx.message({ type:"success", text:"預約修改成功" });
             });
         }
 
@@ -497,7 +492,7 @@
             $.post('sendReservationDelete', {
                 resSerial : resSerial,
             }, function() {
-                dhtmlx.message({ type:"error", text:"預約刪除成功" });
+                dhtmlx.message({ type:"success", text:"預約刪除成功" });
             });
         }
         
@@ -514,7 +509,7 @@
         }
 
         function alert2(){
-            dhtmlx.message({ type:"error", text:"備註送出完成" });
+            dhtmlx.message({ type:"success", text:"備註送出完成" });
         }
         
         // 確認是否可預on班或預off班
@@ -541,6 +536,17 @@
             }
         }
         
+        //字數限制
+        function textarea1_words_deal() {
+            var curLength = $("#textarea1").val().length;
+            if (curLength > 150) {
+                var num = $("#textarea1").val().substr(0, 150);
+                $("#textarea1").val(num);
+                alert("超過字數限制(150字)，多出的字將被移除！");
+            } else {
+                $("#textCount").text(150 - $("#textarea1").val().length);
+            }
+        }
     </script>
 @endsection
 

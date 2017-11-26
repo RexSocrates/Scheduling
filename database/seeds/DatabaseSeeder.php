@@ -24,6 +24,6 @@ class DatabaseSeeder extends Seeder
         
         // 測試資料
 //        $this->call(DoctorsSeeder::class);
-        $this->call(DoctorAndResSeeder::class);
+//        $this->call(DoctorAndResSeeder::class);
     }
 }

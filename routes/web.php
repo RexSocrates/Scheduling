@@ -135,6 +135,9 @@ Route::get('rejectShift/{id}','ShiftRecordsController@rejectShift');
 
 // 列出所有使用者的資訊以及公假
 Route::get('officialLeave', 'LeaveController@getOfficialLeavePage');
+//時數存摺
+Route::get('timeRecord', 'LeaveController@getTimeRecord');
+Route::get('timeRecordDetails', 'LeaveController@getTimeRecordDetails');
 
 //得到醫生的剩餘公假
  Route::get('getLeaveHoursByID','AccountController@hour');

@@ -5,14 +5,15 @@
 @endsection
 
 @section('navbar')
-    <p class="brand-logo light">醫師特休紀錄</p>
+    <p class="brand-logo light">時數存摺</p>
 @endsection
 
 @section('nav-content')
     <div class="nav-content blue-grey darken-1">
         <ul class="tabs tabs-transparent">
-            <li class="tab"><a class="active" href="#page1">查看紀錄</a></li>
-            <li class="tab"><a href="#page2">待確認</a></li>
+            <li class="tab"><a class="active" href="#page1">排班人員新增刪除的紀錄(改)</a></li>
+            <li class="tab"><a href="#page2">查看醫師紀錄</a></li>
+            <li class="tab"><a href="#page3">特休申請待確認</a></li>
         </ul>
     </div>
 @endsection
@@ -33,8 +34,8 @@
                                 <thead>
                                     <tr>
                                         <th class="td-w-5">日期</th>
-                                        <th class="td-w-5">申請人</th>
                                         <th class="td-w-5">對象</th>
+                                        <th class="td-w-5">類型</th>
                                         <th class="td-w-5">增加/減少</th>
                                         <th class="td-w-5">剩餘時數</th>
                                         <th class="td-w-20">內容</th>
@@ -42,50 +43,103 @@
                                 </thead>
 
                                 <tbody>
-
-                                    @foreach($rejectedAndConfirmArr as $leave)
-                                    <tr>
-                                        <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
-                                        <td class="td-padding td-w-5">{{ $leave['doctor'] }}</td>
-                                        <td class="td-padding td-w-5">{{ $leave['confirmingPerson'] }}</td>
-                                        <td class="td-padding td-w-5">{{ $leave['hours'] }}</td>
-                                        <td class="td-padding td-w-5">{{ $leave['updatedLeaveHours'] }}</td>
-
-                                        @if($leave['confirmStatus'] == 2)
-                                        <td class="td-padding td-w-20"><font class="red-text">(拒絕)</font>{{ $leave['remark'] }}</td>
-                                        @else
-                                        <td class="td-padding td-w-20">{{ $leave['remark'] }}</td>
-                                        @endif
-                                    </tr>
-                                    @endforeach
-
-                                  
                                     
-                                   <!--  @foreach($leaveArr as $leave)
+<!--
                                     <tr>
-                                        <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
-                                        <td class="td-padding td-w-5">{{ $leave['doctor'] }}</td>
-                                        <td class="td-padding td-w-5">{{ $leave['confirmingPerson'] }}</td>
-                                        @if($leave['hours']<0)
-                                            <td class="td-padding td-w-5">{{ $leave['hours'] }}</td>
-                                        @else
-                                            <td class="td-padding td-w-5">+{{ $leave['hours'] }}</td>
-                                        @endif
-                                        <td class="td-padding td-w-5">{{ $leave['updatedLeaveHours'] }}</td>
-                                        <td class="td-padding td-w-25">{{ $leave['remark'] }}</td>
+                                        <td class="td-padding td-w-5">2017-12-10</td>
+                                        <td class="td-padding td-w-5">張國頌</td>
+                                        <td class="td-padding td-w-5">張國頌</td>
+                                        <td class="td-padding td-w-5">-12</td>
+                                        <td class="td-padding td-w-5">18</td>
+                                        <td class="td-padding td-w-20"><font class="red-text">(拒絕)</font>ttt</td>
                                     </tr>
-                                    @endforeach
- -->
-                                   
+-->
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-12-12</td>
+                                        <td class="td-padding td-w-5">張國頌</td>
+                                        <td class="td-padding td-w-5">積欠班</td>
+                                        <td class="td-padding td-w-5">+2</td>
+                                        <td class="td-padding td-w-5">5</td>
+                                        <td class="td-padding td-w-20">test</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-12-10</td>
+                                        <td class="td-padding td-w-5">張國頌</td>
+                                        <td class="td-padding td-w-5">積欠班</td>
+                                        <td class="td-padding td-w-5">-1</td>
+                                        <td class="td-padding td-w-5">3</td>
+                                        <td class="td-padding td-w-20">test</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-12-05</td>
+                                        <td class="td-padding td-w-5">張國頌</td>
+                                        <td class="td-padding td-w-5">特休</td>
+                                        <td class="td-padding td-w-5">-2</td>
+                                        <td class="td-padding td-w-5">4</td>
+                                        <td class="td-padding td-w-20">test</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td class="td-padding td-w-5">2017-12-03</td>
+                                        <td class="td-padding td-w-5">張國頌</td>
+                                        <td class="td-padding td-w-5">特休</td>
+                                        <td class="td-padding td-w-5">+6</td>
+                                        <td class="td-padding td-w-5">6</td>
+                                        <td class="td-padding td-w-20">test</td>
+                                    </tr>
+                                    
+                                    
+
                                 </tbody>
                             </table>
       		  	  	  	</div>
       		  	  	</div>
       		  	</div>
-      		  	<div id="page2" class="col s12">
+      		  	<div id="page2" class="col s12 m12">
+      		  	  	<div class="card">
+      		  	  		<div class="card-action">
+      		  	  		    <font class="card-title">醫師列表</font>
+                        </div>
+      		  	  		<div class="divider"></div>
+      		  	  	  	<div class="card-content padding-t5">
+      		  	  	  	    <table id="officialLeave1" class="mdl-data-table striped highlight" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>名稱</th>
+                                        <th>剩餘時數</th>
+                                        <th>功能</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>張國頌</td>
+                                        <td>27</td>
+                                        <td>
+                                            <a class="waves-effect waves-light teal lighten-1 btn" href="timeRecordDetails">詳細紀錄</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>簡定國</td>
+                                        <td>42</td>
+                                        <td>
+                                            <a class="waves-effect waves-light teal lighten-1 btn" href="timeRecordDetails">詳細紀錄</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+      		  	  	  	</div>
+      		  	  	</div>
+      		  	</div>
+      		  	<div id="page3" class="col s12">
 					<div class="card">
                         <div class="card-action">
-      		  	  			<font class="card-title">特休待確認</font>
+      		  	  			<font class="card-title">特休申請待確認</font>
       		  	  		</div>
       		  	  		<div class="divider"></div>
       		  	  	  	
@@ -179,14 +233,19 @@
     <script>
         $(document).ready(function(){
             $('select').material_select();
-            
-            $('#officialLeave').DataTable();
-            
+            $('#officialLeave').DataTable({
+                "order": [[ 0, "desc" ]]    //  排序的位置
+            });
             document.getElementById("officialLeave_length").style.display = 'none';
-            
             document.getElementById("officialLeave_filter").style.cssText = 'text-align: left';
-            
             document.getElementById("officialLeave_filter").getElementsByTagName("label")[0].getElementsByTagName("input")[0].style.marginLeft = '0';
+  		});
+        
+        $(document).ready(function(){
+            $('#officialLeave1').DataTable();
+            document.getElementById("officialLeave1_length").style.display = 'none';
+            document.getElementById("officialLeave1_filter").style.cssText = 'text-align: left';
+            document.getElementById("officialLeave1_filter").getElementsByTagName("label")[0].getElementsByTagName("input")[0].style.marginLeft = '0';
   		});
     </script>
 

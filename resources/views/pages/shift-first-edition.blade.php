@@ -280,6 +280,7 @@
                                 {key:20, label:"淡夜內2"},
                                 {key:21, label:"淡夜外"}
                             ];
+                            
                             scheduler.createTimelineView({
                                 name:   "timeline",
                                 x_unit: "day",
@@ -290,8 +291,8 @@
                                 y_property: "section_id",
                                 render:"bar",
                                 round_position:true,    //有點像磁石
-                                event_dy: 46,
-
+//                                event_dy: 46,
+                                event_min_dy: 46,   //event的最小高度
                             });
                             
                             //===============
@@ -1008,7 +1009,7 @@
                 id : scheduleID_1,
                 id2 : scheduleID_2
             }, function (array){
-                // dhtmlx.message({ type:"error", text: array[2]+array[1]+"\n和\n"+array[0]+array[3]+"換班成功" })
+                // dhtmlx.message({ type:"success", text: array[2]+array[1]+"\n和\n"+array[0]+array[3]+"換班成功" })
                 if(array[0] == ""){
                     alert(array[2]+array[1]+"的班換至"+array[3]);
                 }

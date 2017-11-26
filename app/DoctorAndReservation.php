@@ -151,8 +151,11 @@ class DoctorAndReservation extends Model
         
         if($month == 12) {
             $year += 1;
+            $month = 1;
+        }else {
+            $month += 1;
         }
-        $month = ($month + 1) % 12;
+        
         
         if($month <= 9) {
             $month = '0'.$month;
