@@ -721,6 +721,28 @@ class ScheduleController extends Controller
 
         return $array;
     }
+    //調整班表->正式班表 彈出式視窗取得醫生2的上班日期
+    public function getDoctorScheduleDateByID(Request $request){
+        $data = $request->all();
+
+        $schedule = new Schedule();
+        $user = new User();
+
+        $scheduleID=$data['scheduleID'];
+        $doctor = $schedule->getDateNotInDateNotNull($scheduleID,"");
+        $array = array();
+
+        foreach ($doctor as $data) {
+            //$doctorID = $data->doctorID;
+            $date = $data->date;
+            //$id =$data->scheduleID;
+           
+            
+            array_push($array, array($date));
+        }
+
+        return $array;
+    }
 
     //調整班表->初版班表 彈出式視窗取得醫生2的上班資訊
     public function getDoctorNameFirstScheduleInfoByID(Request $request){

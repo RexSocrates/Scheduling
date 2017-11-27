@@ -79,7 +79,7 @@
             
             @if(Auth::user()->identity == 'Admin')
 
-                <li class="no-padding">
+               <!--  <li class="no-padding">
                     <ul class="collapsible collapsible-accordion">
                         <li>
                             <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-exchange.svg"></i>調整班表</a>
@@ -95,7 +95,7 @@
                     </ul>
                 </li>
                 <li><a href="doctors" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
-                <li><a href="officialLeave" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/note.svg"></i>醫師特休紀錄</a></li>
+                <li><a href="officialLeave" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/note.svg"></i>醫師特休紀錄</a></li> -->
 <!--                <li><a href="accumulatedShifts" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/clipboard.svg"></i>積欠班狀況</a></li>-->
                 
 

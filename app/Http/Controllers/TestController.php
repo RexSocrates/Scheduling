@@ -951,9 +951,38 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
+        //$data = $request->all();
+
+        $schedule = new Schedule();
+
+        $scheduleCategory = new ScheduleCategory();
+       
+        $user = new User();
+
         
-        $date = "2017-12-01";
-       echo date("Y-m",strtotime($date));
+        $scheduleRecord = $schedule->getDoctorDateNotNull(4007,"");
+
+        $array = array();
+
+        
+        foreach ($scheduleRecord as $schedule) {
+
+            $scheduleID = $schedule->scheduleID;
+
+            if($schedule->doctorID == null){
+                $name="";
+            }
+            else{
+                $name = $user->getDoctorInfoByID($schedule->doctorID)->name;
+            }
+
+            $category = $schedule->schCategoryName;
+            $date = $schedule->date;
+            echo $date;
+            array_push($array, array($scheduleID,$name,$category,$date));
+        }
+
+        return $array;
         
          }
          // 公假測試

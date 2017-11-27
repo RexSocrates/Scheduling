@@ -641,7 +641,7 @@
 
             });
 
-            console.log("date"+document.getElementById("date1").value);
+            console.log("date"+document.getElementById("date2").value);
         }
 
         function changeDate1(array) { //要求換班日期
@@ -651,7 +651,7 @@
         }
 
         function changeDate2(scheduleID){
-            $.get('changeDate2' ,{
+            $.get('changeDate' ,{
                 scheduleID:scheduleID,
                 
             },function(array){

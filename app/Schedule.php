@@ -671,23 +671,21 @@ class Schedule extends Model
          $info = DB::select('call usp_AvailableShift(?,?)',
                    array($scheduleID,''));
 
-        // $query = DB::table("Schedule")
-        //         ->select('date')
-        //         ->where('date', 'like',$yearMonth.'%')
-        //         ->where('doctorID',$doctorID)
-        //         ->whereNotNull('doctorID');
-
-
-        // $info = DB::table("Schedule")
-        //         ->where('date', 'like',$yearMonth.'%')
-        //         ->whereNotIn('date',($query))
-        //         ->orderBy('date')
-        //         ->distinct()->get(['date']);
-
-
         return $info;          
 
     }
+    
+    // //列出在當天非上班日期
+    // public function getDateNotInDate($scheduleID){
+
+
+    //      $info = DB::select('call usp_AvailableShiftDoctorNotNull(?,?)',
+    //                array($scheduleID,''));
+
+
+    //     return $info;          
+
+    // }
 
      public function getDateNotInDateNotNull($scheduleID, $date){
 

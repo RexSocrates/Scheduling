@@ -216,6 +216,9 @@ Route::get('changeDoctor','ScheduleController@getDoctorNameFirstScheduleInfoByID
 //調整班表->初版班表 彈出視窗選日期
 Route::get('changeDate2','ScheduleController@getDoctorFirstScheduleInfoByID');
 
+//調整班表->正式班表 彈出視窗選日期
+Route::get('changeDate','ScheduleController@getDoctorScheduleDateByID');
+
 //調整班表->彈出視窗醫生1資訊
 Route::get('changeDoctor1','ScheduleController@getDoctorInfoByScheduleID');
 
