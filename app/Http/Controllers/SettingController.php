@@ -164,24 +164,48 @@ class SettingController extends Controller
             ];
 
             $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
-
             if($count!=0){
                 $mustOnDutyTotalShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift; //應上
-                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
+                $totalShift=$schedule->totalShift($name->doctorID,$date); //已上
                 $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
                 $updateLeaveHours= $user->getDoctorInfoByID($name->doctorID)->currentOfficialLeaveHours-($shifHours*12);
                 $officialLeave->updateLeaveHours($name->doctorID,$updateLeaveHours);
                 $scheduleRecord->addScheduleRecord($name->doctorID,($shifHours*-1));
+
+                $leave = [
+                    'doctorID' =>$name->doctorID,
+                    'confirmingPersonID' => $user->getCurrentUserInfo()->doctorID,
+                    'leaveHours'=> $shifHours*-12,
+                    'updatedLeaveHours'=> $updateLeaveHours,
+                    'remark' => "積欠班",
+                    'confirmStatus'=>1
+ 
+                ];
+                 $leave = $officialLeave->addLeaveByAdmin($leave);
                 //echo $shifHours;
             }
             else{
                 $mustOnDutyTotalShift=$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTotalShifts;
-                $totalShift=$schedule->totalShiftFirstEdition($name->doctorID); //已上
+                $totalShift=$schedule->totalShift($name->doctorID,$date); //已上
                 $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
                 $updateLeaveHours= $user->getDoctorInfoByID($name->doctorID)->currentOfficialLeaveHours-($shifHours*12);
                 $officialLeave->updateLeaveHours($name->doctorID,$updateLeaveHours);
                 $scheduleRecord->addScheduleRecord($name->doctorID,($shifHours*-1));
+                $leave = [
+                    'doctorID' =>$name->doctorID,
+                    'confirmingPersonID' => $user->getCurrentUserInfo()->doctorID,
+                    'leaveHours'=> $shifHours*-12,
+                    'updatedLeaveHours'=> $updateLeaveHours,
+                    'remark' => "積欠班",
+                    'confirmStatus'=>1
+ 
+                ];
+                 $leave = $officialLeave->addLeaveByAdmin($leave);
              }
+
+           
+
+       
 
     }
         $job = new Schedule2();
