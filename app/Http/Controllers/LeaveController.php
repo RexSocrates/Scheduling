@@ -113,9 +113,11 @@ class LeaveController extends Controller
         foreach ($doctors as $doctor) {
             $doctorDic =[
                 'id' => $doctor->doctorID,
-                'name' => $doctor->name
+                'name' => $doctor->name,
+                
             ];
 
+           
             array_push($doctorName,$doctorDic);
         }
         
@@ -201,7 +203,8 @@ class LeaveController extends Controller
         foreach ($doctors as $doctor) {
             $doctorDic =[
                 'id' => $doctor->doctorID,
-                'name' => $doctor->name
+                'name' => $doctor->name,
+                'totalLeaveHours'=> $doctor->currentOfficialLeaveHours
             ];
 
             array_push($doctorName,$doctorDic);
@@ -256,9 +259,34 @@ class LeaveController extends Controller
        
     }
     
-    public function getTimeRecordDetails() {
+    public function getTimeRecordDetails($id) {
+
+        $officialLeave=new OfficialLeave();
+        $user = new User();
+        $doctorOfficialLeave = $officialLeave->getLeavesByDoctorID($id);
+
+        $officialLeaveArr =[];
+
+        foreach ($doctorOfficialLeave as $leave) {
+            $leaveDic =[
+                'name'=>$user->getDoctorInfoByID($id)->name,
+                'date' => $leave->recordDate,
+                'remark' => $leave->remark,
+                'hour' => $leave->leaveHours,
+                'status'=> ''
+            ];
+
+            
+            array_push($officialLeaveArr,$leaveDic);
+
+        }
+
         
-        return view('pages.timeRecordDetails');
+        return view('pages.timeRecordDetails',[
+            'doctorOfficialLeave'=>$officialLeaveArr,
+            'doctorName'=>$user->getDoctorInfoByID($id)->name
+
+            ]);
     }
 
     

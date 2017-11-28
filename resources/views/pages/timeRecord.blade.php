@@ -115,22 +115,16 @@
                                 </thead>
 
                                 <tbody>
+                                  @foreach($doctors as $doctor)
                                     <tr>
-                                        <td>1</td>
-                                        <td>張國頌</td>
-                                        <td>27</td>
-                                        <td>
-                                            <a class="waves-effect waves-light teal lighten-1 btn" href="timeRecordDetails">詳細紀錄</a>
-                                        </td>
+                                        <td>{{ $doctor['id'] }}</td>
+                                        <td>{{ $doctor['name'] }}</td>
+                                       
+                                        <td>{{ $doctor['totalLeaveHours'] }}</td>
+                                        <td><a class="waves-effect waves-light teal lighten-1 btn" href="timeRecordDetails/{{ $doctor['id'] }}">詳細紀錄</a></td>   
                                     </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>簡定國</td>
-                                        <td>42</td>
-                                        <td>
-                                            <a class="waves-effect waves-light teal lighten-1 btn" href="timeRecordDetails">詳細紀錄</a>
-                                        </td>
-                                    </tr>
+                                    @endforeach
+                                   
                                 </tbody>
                             </table>
       		  	  	  	</div>

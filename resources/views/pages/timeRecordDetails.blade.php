@@ -5,7 +5,7 @@
 @endsection
 
 @section('navbar')
-    <font class="brand-logo light">時數存摺 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>簡定國(醫生名稱)</font>
+    <font class="brand-logo light">時數存摺 <i class="material-icons arrow_right-icon">keyboard_arrow_right</i>{{$doctorName}}(醫生名稱)</font>
 @endsection
 
 @section('content')
@@ -24,7 +24,7 @@
                                     <tr>
                                         <th class="td-w-5">日期</th>
                                         <th class="td-w-5">對象</th>
-                                        <th class="td-w-5">類型</th>
+                                       <!--  <th class="td-w-5">類型</th> -->
                                         <th class="td-w-5">增加/減少</th>
                                         <th class="td-w-5">剩餘時數</th>
                                         <th class="td-w-20">內容</th>
@@ -32,41 +32,22 @@
                                 </thead>
 
                                 <tbody>
+                                     @foreach($doctorOfficialLeave as $leave)
                                     <tr>
-                                        <td class="td-padding td-w-5">2017-12-16</td>
-                                        <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">特休</td>
-                                        <td class="td-padding td-w-5">-5</td>
-                                        <td class="td-padding td-w-5">11</td>
-                                        <td class="td-padding td-w-20"><font class="red-text">(拒絕)</font>ttt</td>
+                                        <td class="td-padding td-w-5">{{ $leave['date'] }}</td>
+                                        <td class="td-padding td-w-5">{{ $leave['name'] }}</td>
+                                        @if ( $leave['hour'] >0 )
+                                            <td class="td-padding td-w-5">增加</td>
+                                        @else
+                                            <td class="td-padding td-w-5">減少</td>
+                                        @endif
+                                        <td class="td-padding td-w-5">{{ $leave['hour'] }}</td>
+                                        <td class="td-padding td-w-20">{{ $leave['remark'] }}</td>
+                                           
                                     </tr>
+                                    @endforeach
                                     
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-12-13</td>
-                                        <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">特休</td>
-                                        <td class="td-padding td-w-5">+2</td>
-                                        <td class="td-padding td-w-5">11</td>
-                                        <td class="td-padding td-w-20">ttt</td>
-                                    </tr>
                                     
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-12-07</td>
-                                        <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">積欠班</td>
-                                        <td class="td-padding td-w-5">-3</td>
-                                        <td class="td-padding td-w-5">9</td>
-                                        <td class="td-padding td-w-20">ttt</td>
-                                    </tr>
-                                    
-                                    <tr>
-                                        <td class="td-padding td-w-5">2017-12-05</td>
-                                        <td class="td-padding td-w-5">簡定國</td>
-                                        <td class="td-padding td-w-5">積欠班</td>
-                                        <td class="td-padding td-w-5">+12</td>
-                                        <td class="td-padding td-w-5">12</td>
-                                        <td class="td-padding td-w-20">ttt</td>
-                                    </tr>
                                     
                                 </tbody>
                             </table>

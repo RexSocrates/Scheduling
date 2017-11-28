@@ -54,6 +54,8 @@ class OfficialLeave extends Model
         
         return $leave;
     }
+
+    
     
     // 透過醫生ID 取得公假紀錄
     public function getLeavesByDoctorID($doctorID) {
