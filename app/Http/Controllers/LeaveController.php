@@ -286,7 +286,7 @@ class LeaveController extends Controller
             'doctorOfficialLeave'=>$officialLeaveArr,
             'doctorName'=>$user->getDoctorInfoByID($id)->name
 
-            ]);
+        ]);
     }
 
     

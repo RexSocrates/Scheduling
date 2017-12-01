@@ -953,7 +953,7 @@ class TestController extends Controller
    public function announceSchedule(){
         //$data = $request->all();
 
-        $reservationData = new ReservationData();
+     $reservationData = new ReservationData();
         $user = new User();
         $announcement = new Announcement();
         $scheduleRecord = new ScheduleRecord();
@@ -983,7 +983,6 @@ class TestController extends Controller
             ];
 
             $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
-
             if($count!=0){
                 $mustOnDutyTotalShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift; //應上
                 $totalShift=$schedule->totalShift($name->doctorID,$date); //已上
@@ -1014,7 +1013,7 @@ class TestController extends Controller
                 $leave = [
                     'doctorID' =>$name->doctorID,
                     'confirmingPersonID' => $user->getCurrentUserInfo()->doctorID,
-                    'leaveHours'=> $shifHours*12,
+                    'leaveHours'=> $shifHours*-12,
                     'updatedLeaveHours'=> $updateLeaveHours,
                     'remark' => "積欠班",
                     'confirmStatus'=>1

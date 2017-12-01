@@ -19,6 +19,7 @@ class SettingController extends Controller
     public function getSettingPage(){
 
         $month = date("Y-m");
+       
         $nextMonth=date("Y-m",strtotime("+1 month"));
         $reservationData = new ReservationData();
 
@@ -224,8 +225,6 @@ class SettingController extends Controller
         $announcement = new Announcement();
         $reservationData = new ReservationData();
 
-        $month=date("Y-m",strtotime("+1 month"));
-
         $data=[
             'title'=>"預班開放時間",
             'content'=>"時間預班".$month."-01"."~".$month."-10",
@@ -233,9 +232,6 @@ class SettingController extends Controller
         ];
 
        
-
-        $reservationData->addDate($month,01,10);
-
         $announcement->addAnnouncement($data);
 
          return redirect('setting');
