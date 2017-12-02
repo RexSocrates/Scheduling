@@ -13,7 +13,15 @@ class Schedule extends Model
 {
 	protected $table = 'Schedule';
 
-
+    public function callProcedure(){
+//        $procedureMonthStr="2018-01";
+        
+        $dateStr = date('Y-m-d');
+        $resMonth = date('Y-m', strtotime($dateStr.'+1 month'));
+        $info=DB::select('CALL usp_FillShift(?)',
+                  array($resMonth));
+        return $info;
+    }
     //取得所有初版班表資訊
     public function getFirstSchedule() {
         

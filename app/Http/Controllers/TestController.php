@@ -955,34 +955,8 @@ class TestController extends Controller
 
         $schedule = new Schedule();
 
-        $scheduleCategory = new ScheduleCategory();
-       
-        $user = new User();
-
-        
-        $scheduleRecord = $schedule->getDoctorDateNotNull(4007,"");
-
-        $array = array();
-
-        
-        foreach ($scheduleRecord as $schedule) {
-
-            $scheduleID = $schedule->scheduleID;
-
-            if($schedule->doctorID == null){
-                $name="";
-            }
-            else{
-                $name = $user->getDoctorInfoByID($schedule->doctorID)->name;
-            }
-
-            $category = $schedule->schCategoryName;
-            $date = $schedule->date;
-            echo $date;
-            array_push($array, array($scheduleID,$name,$category,$date));
-        }
-
-        return $array;
+       $schedule->test1();
+       echo "11";
         
          }
          // 公假測試
