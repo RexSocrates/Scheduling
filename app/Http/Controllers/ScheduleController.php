@@ -650,6 +650,10 @@ class ScheduleController extends Controller
 
         $doctorName = $user->getAtWorkDoctors();
 
+        $month=date("Y-m",strtotime("+1 month"));
+        $reservationData->addDate($month,01,10);
+
+
     //     foreach($doctorName as $name){
 
     //         $date= date('Y-m');
