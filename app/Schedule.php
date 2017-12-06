@@ -49,7 +49,7 @@ class Schedule extends Model
                   array($resMonth));
         return $info;
     }
->>>>>>> c935c4866615b12c9d45dbeea4135232ea87f187
+
     //取得所有初版班表資訊
     public function getFirstSchedule() {
         
