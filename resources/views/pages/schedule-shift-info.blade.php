@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col s12 m12">
                     <div class="card">
-                        <div class="card-action card1">
+                        <div class="card-action b-t0 card1">
                             <!-- <img src="../img/announcement.png" class="logo-img"> -->
                             <div class="title1">
                                 <font class="card-title">換班資訊區</font>
@@ -76,7 +76,7 @@
              <div class="row">
                 <div class="col s12 m12">
                     <div class="card">
-                        <div class="card-action">
+                        <div class="card-action b-t0">
                             <!-- <img src="../img/announcement.png" class="logo-img"> -->
                             <font class="card-title">換班確認狀態</font>
                         </div>
@@ -133,7 +133,7 @@
             <div class="row">
                 <div class="col s12 m12">
                     <div class="card">
-                        <div class="card-action">
+                        <div class="card-action b-t0">
                             <font class="card-title">換班待確認</font>
                         </div>
                         <div class="divider"></div>
@@ -177,7 +177,7 @@
             <div class="row">
                 <div class="col s12 m12">
                     <div class="card">
-                        <div class="card-action card1">
+                        <div class="card-action b-t0 card1">
                             <div class="title1">
                                 <font class="card-title">備註</font>
                             </div>

@@ -23,7 +23,7 @@
 			<div class="row">
                 <div id="page1" class="col s12 m12">
       		  	  	<div class="card">
-      		  	  		<div class="card-action">
+      		  	  		<div class="card-action b-t0">
       		  	  		    <font class="card-title">紀錄</font>
                             <a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1"><i class="material-icons">add</i></a>
                         </div>
@@ -84,7 +84,7 @@
       		  	</div>
       		  	<div id="page2" class="col s12">
 					<div class="card">
-                        <div class="card-action">
+                        <div class="card-action b-t0">
       		  	  			<font class="card-title">特休待確認</font>
       		  	  		</div>
       		  	  		<div class="divider"></div>

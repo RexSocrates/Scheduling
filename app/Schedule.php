@@ -13,6 +13,7 @@ class Schedule extends Model
 {
 	protected $table = 'Schedule';
 
+
     // public function test1($month){
     //         $info = DB::select('call usp_FillShift(?)',
     //                array($month));
@@ -20,6 +21,35 @@ class Schedule extends Model
     //         return $info;
     // }
    
+
+    public function callProcedure(){
+//        $procedureMonthStr="2018-01";
+        
+        $dateStr = date('Y-m');
+        $dateArr = explode('-', $dateStr);
+        $year = intval($dateArr[0]);
+        $month = intval($dateArr[1]);
+        
+        if($month == 12) {
+            $year += 1;
+            $month = 1;
+        }else {
+            $month += 1;
+        }
+        
+        $monthStr = '';
+        if($month < 10) {
+            $monthStr = '0'.$month;
+        }else {
+            $monthStr = $month;
+        }
+        $resMonth = $year.$monthStr;
+        
+        $info=DB::select('CALL usp_FillShift(?)',
+                  array($resMonth));
+        return $info;
+    }
+>>>>>>> c935c4866615b12c9d45dbeea4135232ea87f187
     //取得所有初版班表資訊
     public function getFirstSchedule() {
         

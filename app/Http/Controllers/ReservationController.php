@@ -86,8 +86,6 @@ class ReservationController extends Controller
             $endDate = $month."-".$reservationData->getDate($month)->endDate;
         }
 
-        
-
         $reservationData = $reservation->getReservationByID();
         //$reservationData = $reservation->getNextMonthReservationByID();
         

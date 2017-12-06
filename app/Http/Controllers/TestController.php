@@ -22,6 +22,8 @@ use App\ScheduleRecord;
 use App\Jobs\SendDeleteShiftMail;
 use App\Jobs\SendApplyShiftExchangeMail;
 
+use App\Jobs\Schedule2;
+
 class TestController extends Controller
 {
     
@@ -953,6 +955,7 @@ class TestController extends Controller
    public function announceSchedule(){
 $schedule = new Schedule();
         $user = new User();
+
         $reservation = new Reservation();
         $scheduleCategory = new ScheduleCategory();
 $location=0;
@@ -961,8 +964,7 @@ $location=0;
                     $location=1;
                 // }
 
-            }
-            echo $schedule->getAnotherLocationShifts(6,"2018-01-12");
+
         
          }
          // 公假測試
@@ -1009,6 +1011,12 @@ $location=0;
            
          }
          
+    
+    public function sch2() {
+        $job = new Schedule2();
+        
+        dispatch($job);
+    }
     
     // 取得特定醫師在那一週的非職登院區上班班數
     public function getAnotherLocationShifts() {

@@ -12,10 +12,10 @@
     <div id="section" class="container-fix trans-left-five">
 		<div class="container-section">
 			<div class="row">
-                <div class="col s5">                 
+                <div class="col s7">                 
                     <div class="card">
                         <!-- <form action="setDate" method="post"> -->
-                            <div class="card-action">
+                            <div class="card-action b-t0">
                                 <font class="card-title">預班時段</font>
                             </div>
                             <div class="divider"></div>
@@ -43,14 +43,14 @@
                 @if( $status ==1)
       		  	<div class="col s5">                 
                     <div class="card">
-                        <div class="card-action">
+                        <div class="card-action b-t0">
                             <font class="card-title">系統狀態</font>
                         </div>
                         <div class="divider"></div>
                         <div class="card-content center">
                             <h5 class="margin-t0">預班進行中</h5>
-                            <p>系統將會關閉X小時</p>
-                            <p>除排班人員外，所有醫生將不能進入系統</p>
+                            <p>系統將會關閉4小時</p>
+                            <p>所有醫生將不能進入系統</p>
                             
                             @if($firstSchedule == 1)
                             <button type="button" class="btn btn-secondary margin-t10" disabled>產生初版班表</button>
@@ -64,7 +64,7 @@
                 @elseif( $status ==2 )
                 <div class="col s5">                 
                     <div class="card">
-                        <div class="card-action">
+                        <div class="card-action b-t0">
                             <font class="card-title">系統狀態</font>
                         </div>
                         <div class="divider"></div>
@@ -79,7 +79,7 @@
                 @else
                 <div class="col s5">                 
                     <div class="card">
-                        <div class="card-action">
+                        <div class="card-action b-t0">
                             <font class="card-title">系統狀態</font>
                         </div>
                         <div class="divider"></div>

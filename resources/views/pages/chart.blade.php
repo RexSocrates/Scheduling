@@ -26,7 +26,7 @@
             <div class="row">
                 <div id="page1" class="col s12">
                     <div class="card">
-                        <div class="card-action card1">
+                        <div class="card-action b-t0 card1">
                             <form action="doctorsChart" method="post">
                                 <div class="title1">
                                     <font class="card-title">醫師名稱：</font>

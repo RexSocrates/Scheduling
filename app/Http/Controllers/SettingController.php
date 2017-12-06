@@ -155,13 +155,13 @@ class SettingController extends Controller
 
         $doctorName = $user->getAtWorkDoctors();
 
-         foreach($doctorName as $name){
+        foreach($doctorName as $name){
 
             $date=date("Y-m", strtotime('-1 month')); //上個月的時間
            
             $mustOnDutyShiftArr=[
-            'doctorID'=>$name->doctorID,
-            'leaveMonth'=>$date
+                'doctorID'=>$name->doctorID,
+                'leaveMonth'=>$date
             ];
 
             $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
@@ -204,16 +204,23 @@ class SettingController extends Controller
                  $leave = $officialLeave->addLeaveByAdmin($leave);
              }
 
-    }
-        // $job = new Schedule2();
-        
-        // dispatch($job);
 
-        // $announcement->addAnnouncement($data);
+
+    }
+        $job = new Schedule2();
+        
+        dispatch($job);
+
+
+        $announcement->addAnnouncement($data);
 
         
 
         return redirect('setting');
+
+        //$announcement->addAnnouncement($data);
+//        return redirect('setting');
+
     }
 
     public function toReservation(){

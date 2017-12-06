@@ -35,7 +35,7 @@
             <div class="row">
                 <div id="self" class="col s12">
                     <div class="card">
-                        <div class="card-action">
+                        <div class="card-action b-t0">
                             <font class="card-title">排班資訊</font>
                         </div>
                         <div class="divider"></div>
@@ -144,7 +144,7 @@
                             scheduler.config.xml_date="%Y-%m-%d %H:%i";
                             scheduler.config.api_date="%Y-%m-%d %H:%i";
                             scheduler.config.dblclick_create = false;   //雙擊新增
-                             //唯讀，不能修改東西
+                             
                           //scheduler.config.drag_create = false;   //拖拉新增
                             scheduler.config.details_on_create = false;
                             scheduler.config.details_on_dblclick = true;
