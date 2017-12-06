@@ -19,17 +19,26 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+// 透過 AJAX 顯示單一公告
+Route::get('getAnnouncement', 'AnnouncementController@getAnnouncement');
 
+// Ajax get request 編輯醫師資料
+Route::get('editDoctorInfo', 'AccountController@editDoctorInfo');
 
-// 取得積欠班頁面
-Route::get('accumulatedShifts', 'ShiftRecordsController@getAccumulatedShifts');
+// 新增預班
+Route::post('sendReservationAdd', 'ReservationController@addReservation');
 
+// 更新預班
+Route::post('sendReservationUpdate', 'ReservationController@updateReservation');
+
+// 刪除預班
+Route::post('sendReservationDelete', 'ReservationController@deleteReservation');
 
 Route::group(['middleware' => ['admin']], function () {
     // 給排班人員的路由
 
-    // Ajax get request 編輯醫師資料
-	Route::get('editDoctorInfo', 'AccountController@editDoctorInfo');
+	// 取得積欠班頁面
+	Route::get('accumulatedShifts', 'ShiftRecordsController@getAccumulatedShifts');
 
 	//得到單一醫生欠班狀況
 	Route::get('getRecord','AccountController@getRecordByDoctor');
@@ -156,6 +165,12 @@ Route::group(['middleware' => ['admin']], function () {
 
 	// 排班人員拒絕換班
 	Route::get('adminDisagreeShiftRecord/{serial}', 'ShiftRecordsController@adminDisagreeShiftRecord');
+
+	//所有換班紀錄
+	Route::get('/shiftRecords/', 'ShiftRecordsController@shiftRecords');
+
+	//單一醫生換班紀錄
+	Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecordsByDoctorID');
 });
 
 Route::group(['middleware' => ['auth']], function () {
@@ -172,9 +187,6 @@ Route::group(['middleware' => ['auth']], function () {
 	// 取得公告頁面
 	Route::get('index', 'AnnouncementController@getAnnouncementPage');
 
-	// 透過 AJAX 顯示單一公告
-	Route::get('getAnnouncement', 'AnnouncementController@getAnnouncement');
-
 	// 刪除公告
 	Route::get('deleteAnnouncement/{serial}', 'AnnouncementController@deleteAnnouncement');
 
@@ -183,8 +195,6 @@ Route::group(['middleware' => ['auth']], function () {
 
 	//一般醫生新增公假
 	Route::post('addOfficialLeaveByDoctor', 'AccountController@addOfficialLeaveByDoctor');
-
-
 
 	// 單一醫生上班紀錄的統計圖表
 	Route::get('doctorsChart', 'ChartController@getChartPage');
@@ -228,10 +238,8 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/first-edition-all-personal', 'ScheduleController@firstEditionByDoctorID');
 	Route::post('/first-edition-all-personal','ScheduleController@firstEditionByDoctorID');
 
-
-
-//列出醫生剩餘班數 
-Route::get('showDoctorInfo','ScheduleController@showDoctorInfo');
+	//列出醫生剩餘班數 
+	Route::get('showDoctorInfo','ScheduleController@showDoctorInfo');
 
 
 	// Route::post('doctorInfo','ShiftRecordsController@doctorInfo');
@@ -250,14 +258,7 @@ Route::get('showDoctorInfo','ScheduleController@showDoctorInfo');
 	//得到醫生的剩餘公假
 	 Route::get('getLeaveHoursByID','AccountController@hour');
 
-	// 新增預班
-	Route::post('sendReservationAdd', 'ReservationController@addReservation');
 
-	// 更新預班
-	Route::post('sendReservationUpdate', 'ReservationController@updateReservation');
-
-	// 刪除預班
-	Route::post('sendReservationDelete', 'ReservationController@deleteReservation');
 
 	// 列出換班資訊(一般醫生) 
 	Route::get('schedule-shift-info', 'ShiftRecordsController@getShiftRecords');
@@ -400,11 +401,7 @@ Route::get('deleteDoctorSchedule', 'TestController@deleteDoctorSchedule');
 // 測試申請換班的通知信件寄送工作
 Route::get('sendApplyEmailTest', 'TestController@sendApplyEmailTest');
 
-//所有換班紀錄
-Route::get('/shiftRecords/', 'ShiftRecordsController@shiftRecords');
 
-//單一醫生換班紀錄
-Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecordsByDoctorID');
 
 //新增換班
 // Route::get('/addShifts', function() {
