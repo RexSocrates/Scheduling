@@ -54,11 +54,14 @@ class OfficialLeave extends Model
         
         return $leave;
     }
+
+
     
     // 透過醫生ID 取得公假紀錄
     public function getLeavesByDoctorID($doctorID) {
         $leaves = DB::table('OfficialLeave')
             ->where('doctorID', $doctorID)
+            ->OrderBy('recordDate','desc')
             ->get();
         
         return $leaves;

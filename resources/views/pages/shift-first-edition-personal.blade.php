@@ -138,7 +138,9 @@
                                 <div class="dhx_cal_today_button"></div>
                                 <div class="dhx_cal_date"></div>
                                 <div class="dhx_cal_tab" name="timeline_tab" style="display: none;"></div>
-                                
+                                 <div class="dhx_cal_tab situation">
+                                    <a class="dhx_cal_tab red-text text-lighten-1" href="shift-first-edition">查看全部</a>
+                                </div>
                                 <div class="dhx_cal_tab margin-l20 noUnderline">
                                     <form action="shift-first-edition-personal" method="post">
                                         <font class="dhx-font">醫師:</font>

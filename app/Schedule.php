@@ -13,7 +13,15 @@ class Schedule extends Model
 {
 	protected $table = 'Schedule';
 
-
+    public function callProcedure(){
+//        $procedureMonthStr="2018-01";
+        
+        $dateStr = date('Y-m-d');
+        $resMonth = date('Y-m', strtotime($dateStr.'+1 month'));
+        $info=DB::select('CALL usp_FillShift(?)',
+                  array($resMonth));
+        return $info;
+    }
     //取得所有初版班表資訊
     public function getFirstSchedule() {
         
@@ -671,23 +679,21 @@ class Schedule extends Model
          $info = DB::select('call usp_AvailableShift(?,?)',
                    array($scheduleID,''));
 
-        // $query = DB::table("Schedule")
-        //         ->select('date')
-        //         ->where('date', 'like',$yearMonth.'%')
-        //         ->where('doctorID',$doctorID)
-        //         ->whereNotNull('doctorID');
-
-
-        // $info = DB::table("Schedule")
-        //         ->where('date', 'like',$yearMonth.'%')
-        //         ->whereNotIn('date',($query))
-        //         ->orderBy('date')
-        //         ->distinct()->get(['date']);
-
-
         return $info;          
 
     }
+    
+    // //列出在當天非上班日期
+    // public function getDateNotInDate($scheduleID){
+
+
+    //      $info = DB::select('call usp_AvailableShiftDoctorNotNull(?,?)',
+    //                array($scheduleID,''));
+
+
+    //     return $info;          
+
+    // }
 
      public function getDateNotInDateNotNull($scheduleID, $date){
 

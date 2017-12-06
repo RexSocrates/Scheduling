@@ -65,6 +65,73 @@
                             </div>
                         </div>
 -->
+               <!--  <div class="col s8">
+                    <div class="card">
+                        <div class="card-action card1">
+                            <div class="title1">
+
+                                <font class="card-title">特休使用記錄</font>
+
+                                <font class="card-title">時數存摺</font>
+                            </div>
+                            <div class="title1 margin-l20">
+                                <font class="card-title">剩餘時數: {{$doctor->currentOfficialLeaveHours}}</font>
+                            </div>
+                            <a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal2"><i class="material-icons">add</i></a>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        <div class="card-content padding-t5">
+                            <table class="centered striped highlight scroll area5">
+                                <thead>
+                                    <tr>
+                                        <th class="td-w-7">日期</th>
+                                        <th class="td-w-5">類型</th>
+                                        <th class="td-w-5">時數</th>
+                                        <th class="td-w-15">原因</th> -->
+<!--                                        <th class="td-w-5">狀態</th>-->
+                                  <!--   </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td class="td-padding td-w-7">2017-10-22</td>
+                                        <td class="td-padding td-w-5">積欠班</td>
+                                        <td class="td-padding td-w-5">+10</td>
+                                        <td class="td-padding td-w-15">文字測試文字測試文字測試文字測試文字測試</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-7">2017-10-22</td>
+                                        <td class="td-padding td-w-5">特休</td>
+                                        <td class="td-padding td-w-5">-10</td>
+                                        <td class="td-padding td-w-15"><font class="red-text">(拒絕)</font>文字測試文字測試文字測試文字測試文字測試</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-7">2017-10-22</td>
+                                        <td class="td-padding td-w-5">特休</td>
+                                        <td class="td-padding td-w-5">-10</td>
+                                        <td class="td-padding td-w-15"><font class="green-text text-darken-1">(確認)</font>文字測試文字測試文字測試文字測試文字測試</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td-padding td-w-7">2017-10-22</td>
+                                        <td class="td-padding td-w-5">特休</td>
+                                        <td class="td-padding td-w-5">-10</td>
+                                        <td class="td-padding td-w-15"><font class="grey-text text-darken-1">(等候確認)</font>文字測試文字測試文字測試文字測試文字測試</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td class="td-padding td-w-7">2017-10-22</td>
+                                        <td class="td-padding td-w-5">積欠班</td>
+                                        <td class="td-padding td-w-5">+10</td>
+                                        <td class="td-padding td-w-15">文字測試文字測試文字測試文字測試文字測試</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>	
+                </div> -->
+                
                 <div class="col s8">
                     <div class="card">
                         <div class="card-action card1">
@@ -191,7 +258,11 @@
     <div id="modal2" class="modal modal-fixed-footer modal-announcement">
         <form action="addOfficialLeaveByDoctor" method="post">
             <div class="modal-header">
+<<<<<<< HEAD
                 <h5 class="modal-announcement-title">申請使用特休</h5>
+=======
+                <h5 class="modal-announcement-title">申請使用特休時數</h5>
+>>>>>>> 03eaee97ef7a958094d4b095374f69200cbd11be
             </div>
             <div class="modal-content modal-content-customize1">
                 <div class="row margin-b0">
@@ -208,7 +279,7 @@
                         <!-- <label>月份</label> -->
                     </div>
 
-                    <div class=input-field col s12">
+                    <div class="input-field col s12">
                          <div class="input-field col s12">
                             <input id="hour" type="number" value="" name="hour" min=0 max="{{$doctor->currentOfficialLeaveHours}}" required>
                             <label for="hour">時數</label>

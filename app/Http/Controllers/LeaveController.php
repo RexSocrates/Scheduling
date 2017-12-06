@@ -113,9 +113,11 @@ class LeaveController extends Controller
         foreach ($doctors as $doctor) {
             $doctorDic =[
                 'id' => $doctor->doctorID,
-                'name' => $doctor->name
+                'name' => $doctor->name,
+                
             ];
 
+           
             array_push($doctorName,$doctorDic);
         }
         
@@ -166,6 +168,125 @@ class LeaveController extends Controller
             'doctors' => $doctorName,
         ]);
        
+    }
+    
+    // 時數存摺
+    public function getTimeRecord() {
+
+        $user = new User();
+        $officialLeave = new OfficialLeave();
+
+        $leaves= $officialLeave->getconfirmLeaves();
+
+        $leaveArr = [];
+        foreach ($leaves as $leave) {
+            $leaveDic =[
+                'date' =>$leave->recordDate,
+                'confirmingPerson' =>'',
+                'doctor' =>'',
+                'hours'=>$leave->leaveHours,
+                'updatedLeaveHours'=>$leave->updatedLeaveHours,
+                'remark'=>$leave->remark
+            ];
+            if($leave->confirmStatus != 0){
+                $leaveDic['confirmingPerson'] = $user->getDoctorInfoByID($leave->confirmingPersonID)->name;
+            }
+
+            $leaveDic['doctor'] = $user->getDoctorInfoByID($leave->doctorID)->name;
+
+            array_push($leaveArr,$leaveDic);
+        }
+
+        $doctors= $user->getDoctorList();
+        $doctorName = [];
+
+        foreach ($doctors as $doctor) {
+            $doctorDic =[
+                'id' => $doctor->doctorID,
+                'name' => $doctor->name,
+                'totalLeaveHours'=> $doctor->currentOfficialLeaveHours
+            ];
+
+            array_push($doctorName,$doctorDic);
+        }
+        
+        $unconfirmLeaves = $officialLeave->getUnconfirmLeaves();
+        $unconfirmLeaveArr = [];
+        foreach ($unconfirmLeaves as $leave) {
+            $unconfirmLeaveDic =[
+                'serial' => $leave->leaveSerial,
+                'date' =>$leave->recordDate,
+                'doctor' =>'',
+                'hours'=>$leave->leaveHours,
+                'updatedLeaveHours'=>$user->getDoctorInfoByID($leave->doctorID)->currentOfficialLeaveHours,
+                'remark'=>$leave->remark
+            ];
+            
+            $unconfirmLeaveDic['doctor'] = $user->getDoctorInfoByID($leave->doctorID)->name;
+
+            array_push($unconfirmLeaveArr,$unconfirmLeaveDic);
+        }
+
+        $rejectedAndConfirmLeaves = $officialLeave->getRejectedAndConfirmLeaves();
+        $rejectedAndConfirmArr = [];
+        foreach ($rejectedAndConfirmLeaves as $leave) {
+            $rejectedAndConfirmDic =[
+                'serial' => $leave->leaveSerial,
+                'confirmingPerson' =>'',
+                'date' =>$leave->recordDate,
+                'doctor' =>'',
+                'hours'=>$leave->leaveHours,
+                'updatedLeaveHours'=>$leave->updatedLeaveHours,
+                'confirmStatus' => $leave->confirmStatus, 
+                'remark'=>$leave->remark
+            ];
+            
+            $rejectedAndConfirmDic['doctor'] = $user->getDoctorInfoByID($leave->doctorID)->name;
+            $rejectedAndConfirmDic['confirmingPerson'] = $user->getDoctorInfoByID($leave->confirmingPersonID)->name;
+
+            array_push($rejectedAndConfirmArr,$rejectedAndConfirmDic);
+        }
+
+
+
+            //return $doctorsLeave;
+        return view('pages.timeRecord', [
+            'leaveArr' => $leaveArr,
+            'rejectedAndConfirmArr' => $rejectedAndConfirmArr,
+            'unconfirmLeaveArr' =>$unconfirmLeaveArr,
+            'doctors' => $doctorName,
+        ]);
+       
+    }
+    
+    public function getTimeRecordDetails($id) {
+
+        $officialLeave=new OfficialLeave();
+        $user = new User();
+        $doctorOfficialLeave = $officialLeave->getLeavesByDoctorID($id);
+
+        $officialLeaveArr =[];
+
+        foreach ($doctorOfficialLeave as $leave) {
+            $leaveDic =[
+                'name'=>$user->getDoctorInfoByID($id)->name,
+                'date' => $leave->recordDate,
+                'remark' => $leave->remark,
+                'hour' => $leave->leaveHours,
+                'status'=> ''
+            ];
+
+            
+            array_push($officialLeaveArr,$leaveDic);
+
+        }
+
+        
+        return view('pages.timeRecordDetails',[
+            'doctorOfficialLeave'=>$officialLeaveArr,
+            'doctorName'=>$user->getDoctorInfoByID($id)->name
+
+        ]);
     }
 
     

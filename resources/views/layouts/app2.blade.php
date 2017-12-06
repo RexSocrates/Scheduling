@@ -76,8 +76,10 @@
                 </ul>
             </li>
             <li><a href="schedule-shift-info" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/file.svg"></i>換班資訊</a></li>
+            
             @if(Auth::user()->identity == 'Admin')
-                <li class="no-padding">
+
+               <!--  <li class="no-padding">
                     <ul class="collapsible collapsible-accordion">
                         <li>
                             <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-exchange.svg"></i>調整班表</a>
@@ -93,11 +95,33 @@
                     </ul>
                 </li>
                 <li><a href="doctors" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
-                <li><a href="officialLeave" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/note.svg"></i>醫師特休紀錄</a></li>
+                <li><a href="officialLeave" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/note.svg"></i>醫師特休紀錄</a></li> -->
 <!--                <li><a href="accumulatedShifts" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/clipboard.svg"></i>積欠班狀況</a></li>-->
                 
+
+            <li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-exchange.svg"></i>調整班表</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="shift-first-edition">初版班表</a></li>
+                                <li><a href="shift-scheduler">正式班表</a></li>
+                                <li><a href="first-edition-situation">醫生排班現況</a></li>
+                                <li><a href="shift-info">換班資訊</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="doctors" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
+            <li id="timeRecord"><a href="timeRecord" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/note.svg"></i>時數存摺</a></li>
+            <li><a href="officialLeave" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/note.svg"></i>醫師特休紀錄</a></li>
+
             @endif
-                <li><a href="doctorsChart" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/pie-chart.svg"></i>統計圖表</a></li>
+            <!--                <li><a href="accumulatedShifts" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/clipboard.svg"></i>積欠班狀況</a></li>-->
+            
+            <li><a href="doctorsChart" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/pie-chart.svg"></i>統計圖表</a></li>
         </ul>
     </nav>
     

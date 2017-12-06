@@ -130,7 +130,16 @@ Route::group(['middleware' => ['admin']], function () {
 	Route::get('showDoctorInfo','ScheduleController@showDoctorInfo');
 
 
+
 	Route::get('updateScheduleID','ScheduleController@getDoctorInfoByScheduleID');
+
+	//時數存摺
+	Route::get('timeRecord', 'LeaveController@getTimeRecord');
+	Route::get('timeRecordDetails/{id}', 'LeaveController@getTimeRecordDetails');
+
+	//得到醫生的剩餘公假
+	Route::get('getLeaveHoursByID','AccountController@hour');
+
 
 	// 驗證 假日班 調整班表->刪除班
 	Route::get('confirmDeleteSchedule','ScheduleController@checkDocScheduleByperson');
@@ -220,9 +229,17 @@ Route::group(['middleware' => ['auth']], function () {
 	//列出全部班表資訊
 	Route::get('/schedule-all', 'ScheduleController@schedule');
 
+
 	//正式班表 查詢醫生
 	Route::post('/schedule-all-personal','ScheduleController@schedulerPersonal');
 	Route::get('/schedule-all-personal','ScheduleController@schedulerPersonal');
+
+	//調整班表->正式班表 彈出視窗選日期
+	Route::get('changeDate','ScheduleController@getDoctorScheduleDateByID');
+
+	//調整班表->彈出視窗醫生1資訊
+	Route::get('changeDoctor1','ScheduleController@getDoctorInfoByScheduleID');
+
 
 
 	//列出個人班表資訊

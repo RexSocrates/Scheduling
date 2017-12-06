@@ -17,6 +17,7 @@ use App\ShiftCategory;
 use App\Remark;
 use App\User;
 use App\ReservationData;
+use App\MustOnDutyShiftPerMonth;
 
 // jobs
 use App\Jobs\SendRandomNotificationMail;
@@ -110,18 +111,21 @@ class ReservationController extends Controller
             $doctorRemark=$getDoctorRemark->remark;
         }
         
-        // 取得該醫生的應上總班數
-        $onResLimit = (int)(($user->getCurrentUserInfo()->mustOnDutyTotalShifts) * 2 / 3);
+        // 取得醫生在排班月份申請的公假
+        $modSfhitObj = new MustOnDutyShiftPerMonth();
+        $leaveShifts = $modSfhitObj->getResMonthLeaveShift($doctorID);
+        
+        // 取得該醫生的應上總班數，需要先扣掉醫生申請的公假
+        $onResLimit = (int)(($user->getCurrentUserInfo()->mustOnDutyTotalShifts - $leaveShifts) * 2 / 3);
         // 可預約的off班數量改為臨床總班數的1/2
-        $offResLimit = (int)(($user->getCurrentUserInfo()->mustOnDutyTotalShifts) / 2);
+        $offResLimit = (int)(($user->getCurrentUserInfo()->mustOnDutyTotalShifts - $leaveShifts) / 2);
         
         // 取得醫生預約的on班與off班數量
         $docAndResObj = new DoctorAndReservation();
         $onResAmount = $onResLimit - $docAndResObj->getNextMonthOnResAmount($user->getCurrentUserID());
         $offResAmount = $offResLimit - $docAndResObj->getNextMonthOffResAmount($user->getCurrentUserID());
         
-//        echo $docAndResObj->getNextMonthOnResAmount($user->getCurrentUserID()).'<br>';
-//        echo $onResAmount;
+
 
 
         return view('pages.reservation', [

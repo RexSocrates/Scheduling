@@ -650,6 +650,10 @@ class ScheduleController extends Controller
 
         $doctorName = $user->getAtWorkDoctors();
 
+        $month=date("Y-m",strtotime("+1 month"));
+        $reservationData->addDate($month,01,10);
+
+
     //     foreach($doctorName as $name){
 
     //         $date= date('Y-m');
@@ -708,6 +712,28 @@ class ScheduleController extends Controller
 
         $scheduleID=$data['scheduleID'];
         $doctor = $schedule->getDateNotInDate($scheduleID);
+        $array = array();
+
+        foreach ($doctor as $data) {
+            //$doctorID = $data->doctorID;
+            $date = $data->date;
+            //$id =$data->scheduleID;
+           
+            
+            array_push($array, array($date));
+        }
+
+        return $array;
+    }
+    //調整班表->正式班表 彈出式視窗取得醫生2的上班日期
+    public function getDoctorScheduleDateByID(Request $request){
+        $data = $request->all();
+
+        $schedule = new Schedule();
+        $user = new User();
+
+        $scheduleID=$data['scheduleID'];
+        $doctor = $schedule->getDateNotInDateNotNull($scheduleID,"");
         $array = array();
 
         foreach ($doctor as $data) {
@@ -1062,7 +1088,7 @@ class ScheduleController extends Controller
 
             $onDutyArr=[
                 'doctorName'=> $name->name,
-                'totalShift'=>$schedule->totalShiftFirstEdition($name->doctorID),
+                'totalShift'=>$schedule->totalShift($name->doctorID,$date),
                 'taipei'=>$schedule->totalTaipeiShiftFirstEdition($name->doctorID),
                 'tamsui'=>$schedule->totalTamsuiShiftFirstEdition($name->doctorID),
                 'day'=> $schedule->totalDayShiftFirstEdition($name->doctorID),
