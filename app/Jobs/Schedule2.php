@@ -53,7 +53,7 @@ class Schedule2 implements ShouldQueue
     public $onSchDoctorIDs = [];
     
     // 上班地區在台北的 schedule category : 0 ~ 18
-    public $taipeiSchCateSerial = [0, 1, 2, 3, 4, 5, 10, 11, 12, 13, 14, 15];
+    public $taipeiSchCateSerial = [3, 4, 5, 6, 7, 8, 13, 14, 15, 16, 17, 18];
     
     // 存放排班月份的假日日期
     public $weekendDate = [];
@@ -1416,7 +1416,7 @@ class Schedule2 implements ShouldQueue
                     'doctorID' => $classTableObj->shifts[$schCateSerial],
                     'schCategorySerial' => ($schCateSerial + 3),
                     'isWeekday' => array_key_exists($day, $this->weekendDate) == false,
-                    'location' => array_key_exists((($schCateSerial + 1)), $this->taipeiSchCateSerial),
+                    'location' => (in_array(($schCateSerial + 3), $this->taipeiSchCateSerial))?"Taipei":"Tamsui",
                     'date' => $dateStr,
                     'endDate' => date('Y-m-d', strtotime($dateStr.'+1 day')),
                     'confirmed' => false,
