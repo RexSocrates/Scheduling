@@ -951,24 +951,18 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
-        //$data = $request->all();
+$schedule = new Schedule();
+        $user = new User();
+        $reservation = new Reservation();
+        $scheduleCategory = new ScheduleCategory();
+$location=0;
+       // if($user->getDoctorInfoByID(7)->location != $scheduleCategory->getSchCategoryInfo(4)){
+                 if($schedule->getAnotherLocationShifts(6,"2018-01-12")>=2){
+                    $location=1;
+                // }
 
-       
-
-           
-
-       
-
-    
-        // $job = new Schedule2();
-        
-        // dispatch($job);
-
-        // $announcement->addAnnouncement($data);
-
-        
-
-        // return redirect('setting');
+            }
+            echo $schedule->getAnotherLocationShifts(6,"2018-01-12");
         
          }
          // 公假測試

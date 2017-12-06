@@ -205,11 +205,11 @@ class SettingController extends Controller
              }
 
     }
-        $job = new Schedule2();
+        // $job = new Schedule2();
         
-        dispatch($job);
+        // dispatch($job);
 
-        $announcement->addAnnouncement($data);
+        // $announcement->addAnnouncement($data);
 
         
 

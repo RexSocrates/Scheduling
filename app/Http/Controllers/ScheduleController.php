@@ -217,7 +217,7 @@ class ScheduleController extends Controller
 
          $location=0;
             if($user->getDoctorInfoByID($id)->location != $scheduleCategory->getSchCategoryInfo($categoryID)){
-                if($schedule->getAnotherLocationShifts($id,$date)>= 2){
+                if($schedule->getAnotherLocationShifts($id,$date)>=2){
                     $location=1;
                 }
             }
@@ -437,7 +437,7 @@ class ScheduleController extends Controller
 
             $mustOnDutyShiftArr=[
             'doctorID'=>$doctor->doctorID,
-            'leaveMonth'=>$date
+            'leaveMonth'=>$month
             ];
 
             $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
@@ -451,13 +451,15 @@ class ScheduleController extends Controller
 
            
             if($count!=0){
-                $shiftDic['totalShift'] = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift-($schedule->totalShift($doctor->doctorID,$month));
+                $shiftDic['totalShift'] = ($mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift)-($schedule->totalShift($doctor->doctorID,$month));
+                
 
            
              }
 
             else{
-                 $shiftDic['totalShift']=$user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts-($schedule->totalShift($doctor->doctorID,$month));
+                 $shiftDic['totalShift']=($user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts)-($schedule->totalShift($doctor->doctorID,$month));
+                
          }    
 
             

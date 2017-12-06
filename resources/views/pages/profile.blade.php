@@ -2,7 +2,6 @@
 
 <!--
 @section('head')
-
 @endsection
 -->
 
@@ -16,7 +15,7 @@
             <div class="row">
                 <div class="col s4">                 
                     <div class="card">
-                        <div class="card-action">
+                        <div class="card-action b-t0">
                             <font class="card-title">基本資料</font>
                         </div>
                         <div class="divider"></div>
@@ -69,9 +68,7 @@
                     <div class="card">
                         <div class="card-action card1">
                             <div class="title1">
-
                                 <font class="card-title">特休使用記錄</font>
-
                                 <font class="card-title">時數存摺</font>
                             </div>
                             <div class="title1 margin-l20">
@@ -92,7 +89,6 @@
 <!--                                        <th class="td-w-5">狀態</th>-->
                                   <!--   </tr>
                                 </thead>
-
                                 <tbody>
                                     <tr>
                                         <td class="td-padding td-w-7">2017-10-22</td>
@@ -129,12 +125,12 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>	
+                    </div>  
                 </div> -->
                 
                 <div class="col s8">
                     <div class="card">
-                        <div class="card-action card1">
+                        <div class="card-action b-t0 card1">
                             <div class="title1">
                                 <font class="card-title">特休記錄</font>
                             </div>
@@ -174,7 +170,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>	
+                    </div>  
                 </div>
                 
 <!--
@@ -204,7 +200,6 @@
                                         <th class="td-w-5">班數</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     @foreach($doctorScheduleRecords as $record)
                                     <tr>
@@ -220,7 +215,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>	
+                    </div>  
                 </div>
 -->
                 
@@ -258,9 +253,7 @@
     <div id="modal2" class="modal modal-fixed-footer modal-announcement">
         <form action="addOfficialLeaveByDoctor" method="post">
             <div class="modal-header">
-
-                <h5 class="modal-announcement-title">申請使用特休時數</h5>
-
+                <h5 class="modal-announcement-title">申請使用特休</h5>
             </div>
             <div class="modal-content modal-content-customize1">
                 <div class="row margin-b0">
@@ -278,11 +271,8 @@
                     </div>
 
                     <div class="input-field col s12">
-                         <div class="input-field col s12">
-                            <input id="hour" type="number" value="" name="hour" min=0 max="{{$doctor->currentOfficialLeaveHours}}" required>
-                            <label for="hour">時數</label>
-                    </div>
-                    
+                        <input id="hour" type="number" value="" name="hour" min=0 max="{{$doctor->currentOfficialLeaveHours}}" required>
+                        <label for="hour">時數</label>
                     </div>
                     <div class="input-field col s12 margin-t0">
                         <textarea id="textarea1" class="materialize-textarea" type="text" name="content" required></textarea>
@@ -290,7 +280,6 @@
                     </div>
 
                    <!--  <div class="input-field col s12 margin-t0">
-
                         
                         <br><br><input type="month" name="bday" min="2017-09-01" required><br>
                         <label>選擇月份</label
@@ -314,7 +303,3 @@
         });
     </script>
 @endsection
-
-
-    
-	

@@ -75,12 +75,13 @@ class ShiftRecords extends Model
         ->orwhere('schID_2_doctor',$doctorID)
         ->where('doc2Confirm',1)
         ->where('adminConfirm',1)
+        ->orderBy('changeSerial','desc')
         ->get();
 
         return $shiftRecords;
     }
 
-     //查詢 單一醫生換班紀錄(已確認)
+     //查詢 單一醫生換班紀錄月份(已確認)
     public function getCheckShiftRecordsByCurrentMonth(){
         $user = new User();
         $month = date('Y-M');
@@ -89,6 +90,7 @@ class ShiftRecords extends Model
         ->where('doc2Confirm',1)
         ->where('adminConfirm',1)
         ->where('date', 'like', $month.'%')
+        ->orderBy('changeSerial','desc')
         ->get();
 
         return $shiftRecords;
@@ -102,6 +104,7 @@ class ShiftRecords extends Model
         ->where('schID_2_doctor',$doctorID)
         ->where('doc2Confirm',0)
         ->where('adminConfirm',0)
+        ->orderBy('changeSerial','desc')
         ->get();
 
         return $shiftRecords;
@@ -123,6 +126,7 @@ class ShiftRecords extends Model
     //查看 換班紀錄
     public function getShiftRecordsList(){
         $shiftRecords = DB::table("ShiftRecords")
+        ->orderBy('changeSerial','desc')
         ->get();
 
          return $shiftRecords;
@@ -153,6 +157,7 @@ class ShiftRecords extends Model
             ->where('doc2Confirm',1)
             ->where('adminConfirm',1)
             ->where('date', 'like', $month.'%')
+            ->orderBy('changeSerial','desc')
             ->get();
         
         return $records;
