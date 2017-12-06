@@ -967,6 +967,7 @@ $location=0;
 
         
          }
+     }
          // 公假測試
         public function officialLeave(){
         $schedule = new Schedule();

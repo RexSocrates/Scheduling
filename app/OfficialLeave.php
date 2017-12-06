@@ -62,7 +62,7 @@ class OfficialLeave extends Model
     public function getLeavesByDoctorID($doctorID) {
         $leaves = DB::table('OfficialLeave')
             ->where('doctorID', $doctorID)
-            ->OrderBy('recordDate','desc')
+            ->OrderBy('leaveSerial','desc')
             ->get();
         
         return $leaves;
