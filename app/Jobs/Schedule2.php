@@ -1572,13 +1572,21 @@ class Schedule2 implements ShouldQueue
         $month = (int)$dateArr[1];
         
         // 調整至排班的月份
-        $month = ($month + 1) % 12;
-        if($month == 1) {
+        if($month == 12) {
             $year += 1;
+            $month = 1;
+        }else {
+            $month += 1;
         }
         
         // 計算當月有幾天，取得排班次月第一日後往前推一天
-        $theMonthAfter = ($month + 1) % 12;
+        $theMonthAfter = 0;
+        if($month == 12) {
+            $theMonthAfter = 1;
+        }else {
+            $theMonthAfter += 1;
+        }
+        
         $nextMonthFirstDay = '';
         if($theMonthAfter == 1) {
             $nextMonthFirstDay = ($year + 1).'-'.$theMonthAfter.'-01';

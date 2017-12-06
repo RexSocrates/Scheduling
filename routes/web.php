@@ -180,15 +180,13 @@ Route::group(['middleware' => ['admin']], function () {
 
 	//單一醫生換班紀錄
 	Route::get('/getShiftRecordsByDoctorID', 'ShiftRecordsController@getShiftRecordsByDoctorID');
+    
+    // 正式路由
+	Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
 });
 
 Route::group(['middleware' => ['auth']], function () {
     // 給一般醫生(登入後的使用者)的路由
-    
-    // 正式路由
-	Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
-
-	Route::get('newPage', 'AccountController@getNewPage');
 
 	// 更新醫生資訊
 	Route::post('doctorInfoUpdate', 'AccountController@doctorInfoUpdate');
@@ -224,7 +222,7 @@ Route::group(['middleware' => ['auth']], function () {
 	// 新增備註
 	Route::post('/addRemark', 'ReservationController@addRemark');
 
-	Route::match(['get', 'post'], '/reservation_data', "ReservationController@renderData");
+//	Route::match(['get', 'post'], '/reservation_data', "ReservationController@renderData");
 
 	//列出全部班表資訊
 	Route::get('/schedule-all', 'ScheduleController@schedule');
@@ -432,7 +430,7 @@ Route::get('sendApplyEmailTest', 'TestController@sendApplyEmailTest');
 
 Route::get("info",'TestController@announceSchedule');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
-
+Route::get('function', 'TestController@sch2');
 
 
 Route::get('getShiftRecordByMonth', 'TestController@getShiftRecordByMonth');

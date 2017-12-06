@@ -19,7 +19,7 @@ class AdminMiddleware
         if (Auth::guard($guard)->check() && Auth::user()->identity == 'Admin') {
             return $next($request);
         }else {
-            return redirect('/');
+            return redirect('/index');
         }
     }
 }

@@ -22,6 +22,8 @@ use App\ScheduleRecord;
 use App\Jobs\SendDeleteShiftMail;
 use App\Jobs\SendApplyShiftExchangeMail;
 
+use App\Jobs\Schedule2;
+
 class TestController extends Controller
 {
     
@@ -1084,6 +1086,12 @@ class TestController extends Controller
            
          }
          
+    
+    public function sch2() {
+        $job = new Schedule2();
+        
+        dispatch($job);
+    }
     
     // 取得特定醫師在那一週的非職登院區上班班數
     public function getAnotherLocationShifts() {

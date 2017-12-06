@@ -16,8 +16,26 @@ class Schedule extends Model
     public function callProcedure(){
 //        $procedureMonthStr="2018-01";
         
-        $dateStr = date('Y-m-d');
-        $resMonth = date('Y-m', strtotime($dateStr.'+1 month'));
+        $dateStr = date('Y-m');
+        $dateArr = explode('-', $dateStr);
+        $year = intval($dateArr[0]);
+        $month = intval($dateArr[1]);
+        
+        if($month == 12) {
+            $year += 1;
+            $month = 1;
+        }else {
+            $month += 1;
+        }
+        
+        $monthStr = '';
+        if($month < 10) {
+            $monthStr = '0'.$month;
+        }else {
+            $monthStr = $month;
+        }
+        $resMonth = $year.$monthStr;
+        
         $info=DB::select('CALL usp_FillShift(?)',
                   array($resMonth));
         return $info;
