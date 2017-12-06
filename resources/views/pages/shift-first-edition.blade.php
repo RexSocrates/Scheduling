@@ -1,4 +1,4 @@
-@extends("layouts.app2")
+ㄕ@extends("layouts.app2")
 
 @section('head')
     <script src="../codebase/ext/dhtmlxscheduler_collision.js"></script>
@@ -1372,7 +1372,7 @@
                 else{
                     saveSchedule(id,date,classification);
                 }
-                console.log("abcdseee"+array[0]['countDay']);
+                console.log("abcdseee"+array[0]['location']);
                 
             });
         }

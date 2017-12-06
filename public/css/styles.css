@@ -836,3 +836,7 @@ tbody td:last-child, thead th:last-child {
     right: 174px;
     width: 95px !important;
 }
+
+.b-t0 {
+    border-top: 0 !important;
+}

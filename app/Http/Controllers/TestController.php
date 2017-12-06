@@ -953,92 +953,17 @@ class TestController extends Controller
     }
 
    public function announceSchedule(){
-        //$data = $request->all();
-
-     $reservationData = new ReservationData();
+$schedule = new Schedule();
         $user = new User();
-        $announcement = new Announcement();
-        $scheduleRecord = new ScheduleRecord();
-        $officialLeave = new OfficialLeave();
-        $mustOnDutyShiftPerMonth = new MustOnDutyShiftPerMonth();
-        $schedule = new Schedule();
 
+        $reservation = new Reservation();
+        $scheduleCategory = new ScheduleCategory();
+$location=0;
+       // if($user->getDoctorInfoByID(7)->location != $scheduleCategory->getSchCategoryInfo(4)){
+                 if($schedule->getAnotherLocationShifts(6,"2018-01-12")>=2){
+                    $location=1;
+                // }
 
-
-        $reservationData->setFirstScheduleAnnounceStatus();
-
-        $data=[
-            'title'=>"公布初版班表",
-            'content'=>"已公布初版班表",
-            'doctorID'=> $user->getCurrentUserID()
-        ];
-        
-
-        $doctorName = $user->getAtWorkDoctors();
-
-         foreach($doctorName as $name){
-
-            $date=date("Y-m", strtotime('-1 month')); //上個月的時間
-           
-            $mustOnDutyShiftArr=[
-            'doctorID'=>$name->doctorID,
-            'leaveMonth'=>$date
-            ];
-
-            $count= $mustOnDutyShiftPerMonth->countOnDutyShift($mustOnDutyShiftArr);
-            if($count!=0){
-                $mustOnDutyTotalShift = $mustOnDutyShiftPerMonth->getOnDutyShift($mustOnDutyShiftArr)->mustOnDutyShift; //應上
-                $totalShift=$schedule->totalShift($name->doctorID,$date); //已上
-                $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
-                $updateLeaveHours= $user->getDoctorInfoByID($name->doctorID)->currentOfficialLeaveHours-($shifHours*12);
-                $officialLeave->updateLeaveHours($name->doctorID,$updateLeaveHours);
-                $scheduleRecord->addScheduleRecord($name->doctorID,($shifHours*-1));
-
-                $leave = [
-                    'doctorID' =>$name->doctorID,
-                    'confirmingPersonID' => $user->getCurrentUserInfo()->doctorID,
-                    'leaveHours'=> $shifHours*-12,
-                    'updatedLeaveHours'=> $updateLeaveHours,
-                    'remark' => "積欠班",
-                    'confirmStatus'=>1
- 
-                ];
-                 $leave = $officialLeave->addLeaveByAdmin($leave);
-                //echo $shifHours;
-            }
-            else{
-                $mustOnDutyTotalShift=$user->getDoctorInfoByID($name->doctorID)->mustOnDutyTotalShifts;
-                $totalShift=$schedule->totalShift($name->doctorID,$date); //已上
-                $shifHours = $mustOnDutyTotalShift-$totalShift; //計算積欠或多餘
-                $updateLeaveHours= $user->getDoctorInfoByID($name->doctorID)->currentOfficialLeaveHours-($shifHours*12);
-                $officialLeave->updateLeaveHours($name->doctorID,$updateLeaveHours);
-                $scheduleRecord->addScheduleRecord($name->doctorID,($shifHours*-1));
-                $leave = [
-                    'doctorID' =>$name->doctorID,
-                    'confirmingPersonID' => $user->getCurrentUserInfo()->doctorID,
-                    'leaveHours'=> $shifHours*-12,
-                    'updatedLeaveHours'=> $updateLeaveHours,
-                    'remark' => "積欠班",
-                    'confirmStatus'=>1
- 
-                ];
-                 $leave = $officialLeave->addLeaveByAdmin($leave);
-             }
-
-           
-
-       
-
-    }
-        // $job = new Schedule2();
-        
-        // dispatch($job);
-
-        // $announcement->addAnnouncement($data);
-
-        
-
-        // return redirect('setting');
 
         
          }

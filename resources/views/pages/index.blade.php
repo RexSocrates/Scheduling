@@ -14,7 +14,7 @@
 			<div class="row">
       		  	<div class="col s12 m8">
       		  	  	<div class="card">
-      		  	  		<div class="card-action">
+      		  	  		<div class="card-action b-t0">
       		  	  			<font class="card-title">系統公告</font>
       		  	  			@if(Auth::user()->identity == 'Admin')
       		  	  			<a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1" onclick="reset()"><i class="material-icons">add</i></a>

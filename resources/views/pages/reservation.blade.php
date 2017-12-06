@@ -35,7 +35,7 @@
             <div class="row">
                 <div id="self" class="col s12">
                     <div class="card">
-                        <div class="card-action">
+                        <div class="card-action b-t0">
                             <font class="card-title">排班資訊</font>
                         </div>
                         <div class="divider"></div>

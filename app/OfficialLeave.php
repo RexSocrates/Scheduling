@@ -41,6 +41,7 @@ class OfficialLeave extends Model
     public function getconfirmLeaves() {
         $leaves = DB::table('OfficialLeave')
                 ->where('confirmStatus',1)
+                ->OrderBy('leaveSerial', "desc")
                 ->get();
         
         return $leaves;

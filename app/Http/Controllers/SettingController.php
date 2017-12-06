@@ -35,7 +35,7 @@ class SettingController extends Controller
                 $strDate = $reservationData->getDate($nextMonth)->startDate;
                 $endDate = $reservationData->getDate($nextMonth)->endDate;
                 $status = $reservationData->getDate($nextMonth)->status;
-                    if($today<($nextMonth.'-'.$endDate)){
+                    if($today<=($nextMonth.'-'.$endDate)){
                         $firstSchedule=1;
                     }
             }
@@ -203,13 +203,24 @@ class SettingController extends Controller
                 ];
                  $leave = $officialLeave->addLeaveByAdmin($leave);
              }
+
+
+
     }
         $job = new Schedule2();
         
         dispatch($job);
 
+
         $announcement->addAnnouncement($data);
+
+        
+
+        return redirect('setting');
+
+        //$announcement->addAnnouncement($data);
 //        return redirect('setting');
+
     }
 
     public function toReservation(){

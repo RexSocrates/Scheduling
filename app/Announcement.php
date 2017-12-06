@@ -14,7 +14,7 @@ class Announcement extends Model
     // 取得所有公告
     public function getAnnouncements() {
         $announcements = DB::table('Announcement')
-            ->orderBy('date', 'desc')
+            ->orderBy('announcementSerial', 'desc')
             ->get();
         
         return $announcements;
