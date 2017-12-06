@@ -11,7 +11,7 @@
 @section('nav-content')
     <div class="nav-content blue-grey darken-1">
         <ul class="tabs tabs-transparent">
-            <li class="tab"><a class="active" href="#page1">排班人員新增刪除的紀錄(改)</a></li>
+            <li class="tab"><a class="active" href="#page1">排班人員紀錄</a></li>
             <li class="tab"><a href="#page2">查看醫師紀錄</a></li>
             <li class="tab"><a href="#page3">特休申請待確認</a></li>
         </ul>

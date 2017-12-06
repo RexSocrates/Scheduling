@@ -258,11 +258,7 @@
     <div id="modal2" class="modal modal-fixed-footer modal-announcement">
         <form action="addOfficialLeaveByDoctor" method="post">
             <div class="modal-header">
-<<<<<<< HEAD
                 <h5 class="modal-announcement-title">申請使用特休</h5>
-=======
-                <h5 class="modal-announcement-title">申請使用特休時數</h5>
->>>>>>> 03eaee97ef7a958094d4b095374f69200cbd11be
             </div>
             <div class="modal-content modal-content-customize1">
                 <div class="row margin-b0">
@@ -280,11 +276,8 @@
                     </div>
 
                     <div class="input-field col s12">
-                         <div class="input-field col s12">
-                            <input id="hour" type="number" value="" name="hour" min=0 max="{{$doctor->currentOfficialLeaveHours}}" required>
-                            <label for="hour">時數</label>
-                    </div>
-                    
+                        <input id="hour" type="number" value="" name="hour" min=0 max="{{$doctor->currentOfficialLeaveHours}}" required>
+                        <label for="hour">時數</label>
                     </div>
                     <div class="input-field col s12 margin-t0">
                         <textarea id="textarea1" class="materialize-textarea" type="text" name="content" required></textarea>
