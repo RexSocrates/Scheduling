@@ -14,7 +14,7 @@
 			<div class="row">
                 <div class="col s12 m12">
       		  	  	<div class="card">
-      		  	  		<div class="card-action">
+      		  	  		<div class="card-action b-t0">
       		  	  			<font class="card-title">醫師列表</font>
                             <a class="btn-floating halfway-fab waves-effect waves-light red accent-2" href="#modal1"><i class="material-icons">add</i></a>
       		  	  		</div>

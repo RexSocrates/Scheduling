@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col s4">                 
                     <div class="card">
-                        <div class="card-action">
+                        <div class="card-action b-t0">
                             <font class="card-title">基本資料</font>
                         </div>
                         <div class="divider"></div>
@@ -134,7 +134,7 @@
                 
                 <div class="col s8">
                     <div class="card">
-                        <div class="card-action card1">
+                        <div class="card-action b-t0 card1">
                             <div class="title1">
                                 <font class="card-title">特休記錄</font>
                             </div>

@@ -14,7 +14,7 @@
 			<div class="row">
                 <div class="col s12 m12">
       		  	  	<div class="card">
-      		  	  		<div class="card-action">
+      		  	  		<div class="card-action b-t0">
       		  	  		    <font class="card-title">紀錄</font>
                         </div>
       		  	  		<div class="divider"></div>

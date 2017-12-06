@@ -15,7 +15,7 @@
                 <div class="col s7">                 
                     <div class="card">
                         <!-- <form action="setDate" method="post"> -->
-                            <div class="card-action">
+                            <div class="card-action b-t0">
                                 <font class="card-title">預班時段</font>
                             </div>
                             <div class="divider"></div>
@@ -43,7 +43,7 @@
                 @if( $status ==1)
       		  	<div class="col s5">                 
                     <div class="card">
-                        <div class="card-action">
+                        <div class="card-action b-t0">
                             <font class="card-title">系統狀態</font>
                         </div>
                         <div class="divider"></div>
@@ -64,7 +64,7 @@
                 @elseif( $status ==2 )
                 <div class="col s5">                 
                     <div class="card">
-                        <div class="card-action">
+                        <div class="card-action b-t0">
                             <font class="card-title">系統狀態</font>
                         </div>
                         <div class="divider"></div>
@@ -79,7 +79,7 @@
                 @else
                 <div class="col s5">                 
                     <div class="card">
-                        <div class="card-action">
+                        <div class="card-action b-t0">
                             <font class="card-title">系統狀態</font>
                         </div>
                         <div class="divider"></div>
