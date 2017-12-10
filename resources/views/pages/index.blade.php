@@ -113,7 +113,7 @@
                             </div>
                             <div class="input-field col s12">
                                 <i class="material-icons prefix modal-icons">mode_edit</i>
-                                <textarea id="textarea" class="materialize-textarea margin-b0" type="text" name="content" data-length="700" onkeyup="textarea1_words_deal();" required></textarea>
+                                <textarea id="textarea1" class="materialize-textarea margin-b0" type="text" name="content" data-length="700" onkeyup="textarea1_words_deal();" required></textarea>
                                 <label class="active" for="textarea1">內容</label>
                             </div>
 

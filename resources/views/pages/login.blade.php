@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title>馬偕醫院排班系統</title>
 
-    <meta name="viewport" content="width=device-width; initial-scale=0.7; maximum-scale=1.5; user-scalable=1;">
+    <meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=1.5, user-scalable=1">
      
   	<!--Import Google Icon Font-->
     <link type="text/css" rel="stylesheet" href="../css/icon.css" rel="stylesheet">
@@ -35,10 +35,8 @@
                 <div class="col s12 m12 card margin-0">
                     <div class="card-action b-t0" style="padding-bottom: 10px;">
                         <center>
-                            <img src="../img/logo1.png" style="width: 310px;margin-top: 20px;">
+                            <img src="../img/logo1.png" class="login-logo">
 <!--                            <p class="card-title margin-b0" style="font-weight: 400">馬偕醫院急診室排班系統</p>-->
-<!--                            <img src="../img/logo2.png" style="width: 284px;height: 235px;margin-top: 20px;">-->
-<!--                            <img src="../img/logo3.png" style="width: 806px;height: 668px;">-->
                         </center>
                     </div>
 

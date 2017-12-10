@@ -11,6 +11,10 @@
         td{
             padding: 0;
         }
+        
+        .character-counter {
+            margin-top: -22px;
+        }
     </style>
 @endsection
 
@@ -55,7 +59,7 @@
                                     <div class="col s7">
                                         <form action="addRemark" method="post" class="col s6">
                                             <div class="input-field">
-                                                <textarea id="textarea1" class="materialize-textarea" name="remark" placeholder="請輸入出國時段或其他事情(字數限制150字)" onkeyup="textarea1_words_deal();">{{$remark}}</textarea>
+                                                <textarea id="textarea1" class="materialize-textarea" name="remark" placeholder="請輸入出國時段或其他事情(字數限制150字)" data-length="150" onkeyup="textarea1_words_deal();">{{$remark}}</textarea>
                                                 <label for="textarea1">備註:</label>
 
                                             </div>

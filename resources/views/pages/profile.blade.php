@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col s4">                 
                     <div class="card">
-                        <div class="card-action">
+                        <div class="card-action b-t0">
                             <font class="card-title">基本資料</font>
                         </div>
                         <div class="divider"></div>
@@ -134,7 +134,7 @@
                 
                 <div class="col s8">
                     <div class="card">
-                        <div class="card-action card1">
+                        <div class="card-action b-t0 card1">
                             <div class="title1">
                                 <font class="card-title">特休記錄</font>
                             </div>
@@ -277,14 +277,12 @@
                     </div>
 
                     <div class="input-field col s12">
-                         <div class="input-field col s12">
-                            <input id="hour" type="number" value="" name="hour" min=0 max="{{$doctor->currentOfficialLeaveHours}}" required>
-                            <label for="hour">時數</label>
+                        <input placeholder="申請的時數不能小於剩餘的時數" id="hour" type="number" value="" name="hour" min="0" max="{{$doctor->currentOfficialLeaveHours}}" required>
+                        <label for="hour">時數</label>
                     </div>
                     
-                    </div>
                     <div class="input-field col s12 margin-t0">
-                        <textarea id="textarea1" class="materialize-textarea" type="text" name="content" required></textarea>
+                        <textarea id="textarea1" class="materialize-textarea" type="text" name="content" data-length="150" maxlength="150" required></textarea>
                         <label for="textarea1">申請原因</label>
                     </div>
 

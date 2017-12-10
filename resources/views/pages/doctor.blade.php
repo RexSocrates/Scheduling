@@ -75,7 +75,7 @@
             <div class="modal-content modal-content-customize">
                 <div id="modal-left" class="row margin-b0">
                     <div class="input-field col s12">
-                        <input id="title" type="text" value="" name="name" required>
+                        <input id="title" type="text" value="" name="name" data-length="30" maxlength="30" required>
                         <label for="title">醫師名稱</label>
                     </div>
                     <div class="input-field col s12">
@@ -143,39 +143,39 @@
                 
                 <div id="modal-right" class="row margin-b0">
                     <div class="input-field col s12">
-                        <input value="15" name="totalShift" type="number" required>
+                        <input value="15" name="totalShift" type="number" min="0" max="100" required>
                         <label for="totalShifts">總班數(包含行政與教學)</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="mustOnDutyTotalShifts" type="number" required>
+                        <input value="0" name="mustOnDutyTotalShifts" type="number" min="0" max="100" required>
                         <label for="mustOnDutyTaipeiShifts">臨床總班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="weekendShifts" type="number" required>
+                        <input value="0" name="weekendShifts" type="number" min="0" max="100" required>
                         <label for="weekendShifts">臨床假日班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="mustOnDutyTaipeiShifts" type="number" required>
+                        <input value="0" name="mustOnDutyTaipeiShifts" type="number" min="0" max="100" required>
                         <label for="mustOnDutyTaipeiShifts">臨床台北院區班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="mustOnDutyTamsuiShifts" type="number" required>
+                        <input value="0" name="mustOnDutyTamsuiShifts" type="number" min="0" max="100" required>
                         <label for="mustOnDutyTamsuiShifts">臨床淡水院區班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="mustOnDutyDayShifts" type="number" required>
+                        <input value="0" name="mustOnDutyDayShifts" type="number" min="0" max="100" required>
                         <label for="mustOnDutyDayShifts">臨床白天班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="mustOnDutyNightShifts" type="number" required>
+                        <input value="0" name="mustOnDutyNightShifts" type="number" min="0" max="100" required>
                         <label for="mustOnDutyNightShifts">臨床夜晚班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="mustOnDutyMedicalShifts" type="number" required>
+                        <input value="0" name="mustOnDutyMedicalShifts" type="number" min="0" max="100" required>
                         <label for="mustOnDutyMedicalShifts">臨床內科班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="mustOnDutySurgicalShifts" type="number" required>
+                        <input value="0" name="mustOnDutySurgicalShifts" type="number" min="0" max="100" required>
                         <label for="mustOnDutySurgicalShifts">臨床外科班數</label>
                     </div>
                 </div>
@@ -207,7 +207,7 @@
             <div class="modal-content modal-content-customize">
                 <div id="modal-left1" class="row margin-b0">
                     <div class="input-field col s12">
-                        <input id="doctorName" type="text" name="name" required>
+                        <input id="doctorName" type="text" name="name" data-length="30" maxlength="30" required>
                         <label for="title">醫師名稱</label>
                     </div>
                     <div class="input-field col s12">
@@ -277,39 +277,39 @@
                 
                 <div id="modal-right1" class="row margin-b0">
                     <div class="input-field col s12">
-                        <input value="15" name="totalShift" id="totalShift" type="number" required>
+                        <input value="15" name="totalShift" id="totalShift" type="number" min="0" max="100" required>
                         <label for="totalShifts">總班數(包含行政與教學)</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="mustOnDutyTotalShifts" id="mustOnDutyTotalShifts" type="number" required>
+                        <input value="0" name="mustOnDutyTotalShifts" id="mustOnDutyTotalShifts" type="number" min="0" max="100" required>
                         <label for="mustOnDutyTaipeiShifts">臨床總班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="weekendShifts" id="weekendShifts" type="number" required>
+                        <input value="0" name="weekendShifts" id="weekendShifts" type="number" min="0" max="100" required>
                         <label for="weekendShifts">臨床假日班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="mustOnDutyTaipeiShifts" id="mustOnDutyTaipeiShifts" type="number" required>
+                        <input value="0" name="mustOnDutyTaipeiShifts" id="mustOnDutyTaipeiShifts" type="number" min="0" max="100" required>
                         <label for="mustOnDutyTaipeiShifts">臨床台北院區班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="mustOnDutyTamsuiShifts" id="mustOnDutyTamsuiShifts" type="number" required>
+                        <input value="0" name="mustOnDutyTamsuiShifts" id="mustOnDutyTamsuiShifts" type="number" min="0" max="100" required>
                         <label for="mustOnDutyTamsuiShifts">臨床淡水院區班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="mustOnDutyDayShifts" id="mustOnDutyDayShifts" type="number" required>
+                        <input value="0" name="mustOnDutyDayShifts" id="mustOnDutyDayShifts" type="number" min="0" max="100" required>
                         <label for="mustOnDutyDayShifts">臨床白天班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="mustOnDutyNightShifts" id="mustOnDutyNightShifts" type="number" required>
+                        <input value="0" name="mustOnDutyNightShifts" id="mustOnDutyNightShifts" type="number" min="0" max="100" required>
                         <label for="mustOnDutyNightShifts">臨床夜晚班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="mustOnDutyMedicalShifts" id="mustOnDutyMedicalShifts" type="number" required>
+                        <input value="0" name="mustOnDutyMedicalShifts" id="mustOnDutyMedicalShifts" type="number" min="0" max="100" required>
                         <label for="mustOnDutyMedicalShifts">臨床內科班數</label>
                     </div>
                     <div class="input-field col s12">
-                        <input value="0" name="mustOnDutySurgicalShifts" id="mustOnDutySurgicalShifts" type="number" required>
+                        <input value="0" name="mustOnDutySurgicalShifts" id="mustOnDutySurgicalShifts" type="number" min="0" max="100" required>
                         <label for="mustOnDutySurgicalShifts">臨床外科班數</label>
                     </div>
                 </div>
