@@ -39,7 +39,7 @@ class SettingController extends Controller
                         $firstSchedule=1;
                     }
             }
-    }
+        }
         
         else if($reservationData->getStatus($month)->status !=1){
             $m = (int)date('m',strtotime("+1 month"));
@@ -151,6 +151,7 @@ class SettingController extends Controller
             'content'=>"已公布初版班表",
             'doctorID'=> $user->getCurrentUserID()
         ];
+        $announcement->addAnnouncement($data);
         
 
         $doctorName = $user->getAtWorkDoctors();
@@ -206,13 +207,13 @@ class SettingController extends Controller
 
 
 
-    }
+        }
         $job = new Schedule2();
         
         dispatch($job);
 
 
-        $announcement->addAnnouncement($data);
+        
 
         
 

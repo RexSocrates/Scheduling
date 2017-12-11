@@ -34,7 +34,7 @@ Route::post('sendReservationUpdate', 'ReservationController@updateReservation');
 // 刪除預班
 Route::post('sendReservationDelete', 'ReservationController@deleteReservation');
 
-Route::group(['middleware' => ['admin']], function () {
+//Route::group(['middleware' => ['admin']], function () {
     // 給排班人員的路由
 
 	// 取得積欠班頁面
@@ -183,9 +183,9 @@ Route::group(['middleware' => ['admin']], function () {
     
     // 正式路由
 	Route::get('doctors', 'AccountController@getAtWorkDoctorsPage');
-});
+//});
 
-Route::group(['middleware' => ['auth']], function () {
+//Route::group(['middleware' => ['auth']], function () {
     // 給一般醫生(登入後的使用者)的路由
 
 	// 更新醫生資訊
@@ -293,7 +293,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('doctor2DenyShiftRecord/{serial}', 'ShiftRecordsController@doctor2DenyShiftRecord');
 
 
-});
+//});
 
 
 

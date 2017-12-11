@@ -31,7 +31,7 @@ class OfficialLeave extends Model
         $leaves = DB::table('OfficialLeave')
                 ->where('confirmStatus',2)
                 ->orwhere('confirmStatus',1)
-                ->OrderBy('recordDate', "desc")
+                ->orderBy('recordDate', "desc")
                 ->get();
         
         return $leaves;
@@ -41,7 +41,7 @@ class OfficialLeave extends Model
     public function getconfirmLeaves() {
         $leaves = DB::table('OfficialLeave')
                 ->where('confirmStatus',1)
-                ->OrderBy('leaveSerial', "desc")
+                ->orderBy('leaveSerial', 'desc')
                 ->get();
         
         return $leaves;
@@ -62,7 +62,7 @@ class OfficialLeave extends Model
     public function getLeavesByDoctorID($doctorID) {
         $leaves = DB::table('OfficialLeave')
             ->where('doctorID', $doctorID)
-            ->OrderBy('leaveSerial','desc')
+            ->orderBy('leaveSerial','desc')
             ->get();
         
         return $leaves;
