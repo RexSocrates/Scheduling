@@ -18,6 +18,7 @@ use App\Remark;
 use App\User;
 use App\ReservationData;
 use App\MustOnDutyShiftPerMonth;
+use App\OfficialLeave;
 
 // jobs
 use App\Jobs\SendRandomNotificationMail;
@@ -113,7 +114,13 @@ class ReservationController extends Controller
         
         // 取得醫生在排班月份申請的公假
         $modSfhitObj = new MustOnDutyShiftPerMonth();
-        $leaveShifts = $modSfhitObj->getResMonthLeaveShift($doctorID);
+//        $leaveShifts = $modSfhitObj->getResMonthLeaveShift($doctorID);
+        
+        
+        $leaveObj = new OfficialLeave();
+        $leaveShifts = $leaveObj->getResMonthConfirmLeaves();
+//        echo 'Leave shifts : '.$leaveShifts.'<br>';
+//        echo 'Ans : '..'<br>';
         
         // 取得該醫生的應上總班數，需要先扣掉醫生申請的公假
         $onResLimit = (int)(($user->getCurrentUserInfo()->mustOnDutyTotalShifts - $leaveShifts) * 2 / 3);

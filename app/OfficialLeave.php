@@ -47,6 +47,26 @@ class OfficialLeave extends Model
         return $leaves;
     }
     
+    //取得排班月所有確認的公假申請
+    public function getResMonthConfirmLeaves() {
+        $resMonthStr = date('Y-m', strtotime(date('Y-m').'+1 month'));
+        
+        $leaves = DB::table('OfficialLeave')
+            ->where('confirmStatus',1)
+            ->where('leaveMonth', $resMonthStr)
+            ->orderBy('leaveSerial', 'desc')
+            ->get();
+        
+        $leaveCount = 0;
+        foreach($leaves as $leave) {
+            if($leave->leaveHours <= 0) {
+                $leaveCount += abs($leave->leaveHours);
+            }
+        }
+        
+        return ($leaveCount / 12);
+    }
+    
     // 取得單一公假紀錄
     public function getLeaveBySerial($serial) {
         $leave = DB::table('OfficialLeave')

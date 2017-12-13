@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
+use Mail;
+use App\Jobs\SendFakeMail;
+use App\Mail\FakeMail;
+
 use App\User;
 use App\Remark;
 use App\Announcement;
@@ -21,6 +25,8 @@ use App\ScheduleRecord;
 
 use App\Jobs\SendDeleteShiftMail;
 use App\Jobs\SendApplyShiftExchangeMail;
+
+
 
 use App\Jobs\Schedule2;
 
@@ -1040,6 +1046,10 @@ $location=0;
         // 與星期日的差距
         $sundayGap = 7 - $week;
         echo date('Y-m-d', strtotime($date.'+'.$sundayGap.' days')).'<br>';
+    }
+    
+    public function sendFakeMail() {
+        Mail::to('georgelesliemackay0@gmail.com')->send(new FakeMail());
     }
 }
 

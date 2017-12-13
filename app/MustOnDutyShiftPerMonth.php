@@ -53,6 +53,8 @@ class MustOnDutyShiftPerMonth extends Model
         // 取得排班月的時間
         $resMonthStr = date('Y-m', strtotime(date('Y-m').'+1 month'));
         
+//        echo 'Res month str : '.$resMonthStr.'<br>';
+        
         $info = DB::table('MustOnDutyShiftPerMonth')
             ->where('doctorID', $doctorID)
             ->where('month', $resMonthStr)

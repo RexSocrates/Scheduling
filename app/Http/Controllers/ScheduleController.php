@@ -458,9 +458,9 @@ class ScheduleController extends Controller
              }
 
             else{
-                 $shiftDic['totalShift']=($user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyMedicalShifts)-($schedule->totalShift($doctor->doctorID,$month));
+                 $shiftDic['totalShift']=($user->getDoctorInfoByID($doctor->doctorID)->mustOnDutyTotalShifts)-($schedule->totalShift($doctor->doctorID,$month));
                 
-         }    
+            }    
 
             
             array_push($shiftArr,$shiftDic);
