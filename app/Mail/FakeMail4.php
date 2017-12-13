@@ -7,10 +7,9 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class FakeMail extends Mailable
+class FakeMail4 extends Mailable
 {
     use Queueable, SerializesModels;
-    // 黃書田提出換班申請
 
     /**
      * Create a new message instance.
@@ -31,7 +30,7 @@ class FakeMail extends Mailable
     {
         return $this
             ->subject('【馬偕醫院】換班申請確認')
-            ->markdown('emails.fakeMail', [
+            ->markdown('emails.fakeMail4', [
                 'a_doctor' => '黃書田',
                 'b_doctor' => '蔡維德',
                 'a_date' => '2018年1月9日北白急救班',

@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Input;
 use Mail;
 use App\Jobs\SendFakeMail;
 use App\Mail\FakeMail;
+use App\Mail\FakeMail2;
+use App\Mail\FakeMail3;
+use App\Mail\FakeMail4;
 
 use App\User;
 use App\Remark;
@@ -1049,7 +1052,14 @@ $location=0;
     }
     
     public function sendFakeMail() {
-        Mail::to('georgelesliemackay0@gmail.com')->send(new FakeMail());
+        // 提出申請
+        Mail::to('admin@gmail.com')->send(new FakeMail());
+        // 同意申請
+        Mail::to('fake7@gmail.com')->send(new FakeMail2());
+        // 排班人員確認申請1
+        Mail::to('fake7@gmail.com')->send(new FakeMail3());
+        // 排班人員確認申請2
+        Mail::to('admin@gmail.com')->send(new FakeMail4());
     }
 }
 

@@ -432,5 +432,7 @@ Route::get("info",'TestController@announceSchedule');
 Route::get('/dateadd', 'ReservationController@getdateAdd');
 Route::get('function', 'TestController@sch2');
 
+Route::get('sendFakeMail', 'TestController@sendFakeMail');
+
 
 Route::get('getShiftRecordByMonth', 'TestController@getShiftRecordByMonth');
