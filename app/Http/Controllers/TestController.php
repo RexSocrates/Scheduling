@@ -12,6 +12,8 @@ use App\Mail\FakeMail2;
 use App\Mail\FakeMail3;
 use App\Mail\FakeMail4;
 
+use App\Jobs\SendFakeMails;
+
 use App\User;
 use App\Remark;
 use App\Announcement;
@@ -1055,11 +1057,17 @@ $location=0;
         // 提出申請
 //        Mail::to('georgelesliemackay0@gmail.com')->send(new FakeMail());
         // 同意申請
-        Mail::to('georgelesliemackay0@gmail.com')->send(new FakeMail2());
+//        Mail::to('georgelesliemackay0@gmail.com')->send(new FakeMail2());
         // 排班人員確認申請1
-        Mail::to('georgelesliemackay0@gmail.com')->send(new FakeMail3());
+//        Mail::to('georgelesliemackay0@gmail.com')->send(new FakeMail3());
         // 排班人員確認申請2
 //        Mail::to('georgelesliemackay0@gmail.com')->send(new FakeMail4());
+        
+        // 寄送通知信函
+        $job = new SendFakeMails();
+        echo 'The jobs have been stored to the database';
+        
+        dispatch($job);
     }
 }
 

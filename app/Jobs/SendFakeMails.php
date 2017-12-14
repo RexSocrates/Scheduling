@@ -8,6 +8,10 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
+use Mail;
+use App\Mail\FakeMail2;
+use App\Mail\FakeMail3;
+
 class SendFakeMails implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -29,6 +33,9 @@ class SendFakeMails implements ShouldQueue
      */
     public function handle()
     {
-        //
+        // 同意申請
+        Mail::to('georgelesliemackay0@gmail.com')->send(new FakeMail2());
+        // 排班人員確認申請1
+        Mail::to('georgelesliemackay0@gmail.com')->send(new FakeMail3());
     }
 }
