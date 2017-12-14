@@ -66,7 +66,7 @@
                                     <div class="row">
                                         <div class="col s12 margin-b20">
                                             <label>醫生</label>
-                                            <select name="doctor" class="browser-default" id="doctor" required>
+                                            <select name="doctor" class="browser-default font-s" id="doctor" required>
                                                 <option value="" selected disabled>選擇醫生</option>
 <!--                                                <option value="" selected ></option>-->
                                                 <!-- @foreach($doctorName as $name)

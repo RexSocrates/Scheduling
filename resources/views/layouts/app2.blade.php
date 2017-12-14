@@ -115,7 +115,7 @@
                 </ul>
             </li>
             <li><a href="doctors" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
-            <li id="timeRecord"><a href="timeRecord" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/note.svg"></i>時數存摺</a></li>
+<!--            <li id="timeRecord"><a href="timeRecord" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/note.svg"></i>時數存摺</a></li>-->
             <li><a href="officialLeave" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/note.svg"></i>醫師特休紀錄</a></li>
 
             @endif

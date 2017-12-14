@@ -151,12 +151,12 @@
                             <label for="radio-minus">減少</label>
                         </p>
                     </div>
-                    <div class="input-field col s12">
-                        <input id="hour" type="number" value="" name="hour" min=0 required>
+                    <div class="input-field col s12 margin-b10">
+                        <input id="hour" type="number" value="" name="hour" min="0" max="180" required>
                         <label for="hour">時數</label>
                     </div>
                     <div class="input-field col s12 margin-t0">
-                        <textarea id="textarea1" class="materialize-textarea" type="text" name="content" required></textarea>
+                        <textarea id="textarea1" class="materialize-textarea" type="text" name="content" data-length="150" maxlength="150" required></textarea>
                         <label for="textarea1">內容</label>
                     </div>
                 </div>
