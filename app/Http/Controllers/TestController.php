@@ -1053,13 +1053,13 @@ $location=0;
     
     public function sendFakeMail() {
         // 提出申請
-        Mail::to('admin@gmail.com')->send(new FakeMail());
+//        Mail::to('georgelesliemackay0@gmail.com')->send(new FakeMail());
         // 同意申請
-        Mail::to('fake7@gmail.com')->send(new FakeMail2());
+        Mail::to('georgelesliemackay0@gmail.com')->send(new FakeMail2());
         // 排班人員確認申請1
-        Mail::to('fake7@gmail.com')->send(new FakeMail3());
+        Mail::to('georgelesliemackay0@gmail.com')->send(new FakeMail3());
         // 排班人員確認申請2
-        Mail::to('admin@gmail.com')->send(new FakeMail4());
+//        Mail::to('georgelesliemackay0@gmail.com')->send(new FakeMail4());
     }
 }
 
