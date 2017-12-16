@@ -258,11 +258,9 @@
     <div id="modal2" class="modal modal-fixed-footer modal-announcement">
         <form action="addOfficialLeaveByDoctor" method="post">
             <div class="modal-header">
-<<<<<<< HEAD
-                <h5 class="modal-announcement-title">申請使用特休</h5>
-=======
+
                 <h5 class="modal-announcement-title">申請使用特休時數</h5>
->>>>>>> 03eaee97ef7a958094d4b095374f69200cbd11be
+
             </div>
             <div class="modal-content modal-content-customize1">
                 <div class="row margin-b0">

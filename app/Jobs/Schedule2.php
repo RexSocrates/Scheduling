@@ -1433,7 +1433,7 @@ class Schedule2 implements ShouldQueue
             $procedureMonthStr += '0';
         }
         $procedureMonthStr += $this->monthInfo->month;
-        
+
         DB::select("CALL usp_FillShift('".$procedureMonthStr."');");
     }
     

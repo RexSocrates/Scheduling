@@ -139,7 +139,7 @@
                                 return "width-200";
                             };
                             
-                                    var date = new Date();
+                            var date = new Date();
                             var toString =  date.toString();
                             var res = toString.split(" ");
                             var month = 0;

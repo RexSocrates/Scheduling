@@ -13,7 +13,13 @@ class Schedule extends Model
 {
 	protected $table = 'Schedule';
 
+    // public function test1($month){
+    //         $info = DB::select('call usp_FillShift(?)',
+    //                array($month));
 
+    //         return $info;
+    // }
+   
     //取得所有初版班表資訊
     public function getFirstSchedule() {
         

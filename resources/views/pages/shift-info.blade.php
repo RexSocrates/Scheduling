@@ -176,7 +176,7 @@
                        
                     }
                     else{
-                     checkShift(id);
+                     adminAgreeShiftRecord(id);
                     }
                     
                 }
@@ -245,7 +245,7 @@
                 //     }
             
                 else{
-                    checkShift(id);
+                    adminAgreeShiftRecord(id);
                 }
                 
                
