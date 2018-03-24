@@ -1,131 +1,208 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>馬偕醫院排班系統</title>
+@extends("layouts.app2")
 
-  	<!--Import Google Icon Font-->
-    <link type="text/css" rel="stylesheet" href="../css/icon.css" rel="stylesheet">
-    <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="../css/materialize.css"  media="screen,projection"/>
-    <link type="text/css" rel="stylesheet" href="../css/styles.css"/>
-   	
-</head>
-<body>
+@section('head')
+    <link type="text/css" rel="stylesheet" href="../css/nouislider.css" rel="stylesheet">
+@endsection
 
-	<nav id="slide-out" class="side-nav">
-		<ul>
-			<div class="logo-div">
-				<a href="index.html" class="logo-a">
-		    		<img src="../img/logo-mackay.png" class="logo-img">
-		    		<font class="logo-p">馬偕醫院排班系統</font>
-	   			</a>
-	   		</div>
-	   		<li class="divider"></li>
-    	  	<li><a href="reservation.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-prearrange.svg"></i>預班表</a></li>
-    	  	<li><a href="first-edition.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-first-edition.svg"></i>初版班表</a></li>
-    	  	<li><a href="schedule.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-schedule.svg"></i>正式班表</a></li>
-    	  	<li><a href="shift.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/calendar-exchange.svg"></i>調整班表</a></li>
-    	  	<li><a href="doctor.html" class="waves-effect"><i class="material-icons"><img class="side-nav-icon" src="../img/doctor.svg"></i>醫師管理</a></li>
-    	</ul>
-	</nav>
-    
-	<header id="header" class="container-fix trans-left-five">
-		<nav id="navbar">
-	    	<div class="nav-wrapper blue-grey darken-1 logo-padding-left">
-	    		<a onclick="sideNav()" class="blue-grey darken-1 waves-effect waves-light menu-btn">
-	    			<i class="material-icons menu-icon" valign="middle">menu</i>
-	    		</a>
-			    <p class="brand-logo light">設定</p>
-			    <ul class="right">
-			      	<li>
-			      		<a class="dropdown-notification-button" href="#!" data-activates="dropdown-notification">
-			      			<img src="../img/notifications-button.png" class="notifications-icon">
-			      		</a>
-			      	</li>
-			      	<li>
-			      		<a class="dropdown-button" href="#!" data-activates="dropdown1">張XX醫生<i class="material-icons right">arrow_drop_down</i>
-			      		</a>
-			      	</li>
-			    </ul>
-	    	</div>
-	  	</nav>
-		
-		<ul id="dropdown-notification" class="dropdown-content">
-            <li><font class="notification">5/12 李XX醫生換班成功<p>2 days ago</p></font></li>
-            <li><font class="notification">5/11 系統公告 請去查閱<p>3 days ago</p></font></li>
-        </ul>
-        
-	  	<ul id="dropdown1" class="dropdown-content">
-		  	<li><a href="setting.html">設定</a></li>
-		  	<li><a href="profile.html">個人資料</a></li>
-		  	<li class="divider"></li>
-		  	<li><a href="logout.html">登出</a></li>
-		</ul>
-        
-        <a href="#" data-activates="slide-out" class="button-collapse"></a>
-	</header>
+@section('navbar')
+    <p class="brand-logo light">設定</p>
+@endsection
 
-	<div id="section" class="container-fix trans-left-five">
+@section('content')
+    <div id="section" class="container-fix trans-left-five">
 		<div class="container-section">
 			<div class="row">
-      		  	
-				
+                <div class="col s7">                 
+                    <div class="card">
+                        <!-- <form action="setDate" method="post"> -->
+                            <div class="card-action b-t0">
+                                <font class="card-title">預班時段</font>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="card-content">
+                                <input type="hidden" id="startDate" name="startDate">
+                                <input type="hidden" id="endDate" name="endDate">
+
+                                <p class="slider-text">{{ $month }}月<font id="startFont"></font>日 
+                                至 {{ $month }} 月<font id="endFont"></font>日</p>
+                                <div id="slider"></div>
+                            </div>
+                            <div class="card-action">
+                                @if($status !=1 )
+                                <button type="submit" class="modal-action waves-effect waves-light btn btn-save" 
+                                disabled>Save</button>
+                                @else
+                                <button type="submit" class="modal-action waves-effect waves-light btn btn-save" 
+                                onclick="setDate()">Save</button>
+                                @endif
+                            </div>
+                            {{ csrf_field() }}
+                        <!-- </form> -->
+                    </div>
+                </div>
+                @if( $status ==1)
+      		  	<div class="col s5">                 
+                    <div class="card">
+                        <div class="card-action b-t0">
+                            <font class="card-title">系統狀態</font>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="card-content center">
+                            <h5 class="margin-t0">預班進行中</h5>
+                            <p>系統將會關閉4小時</p>
+                            <p>所有醫生將不能進入系統</p>
+                            
+                            @if($firstSchedule == 1)
+                            <button type="button" class="btn btn-secondary margin-t10" disabled>產生初版班表</button>
+                            @else
+                            <button type="button" class="btn btn-secondary margin-t10" onclick="announceFirstSchedule()">產生初版班表</button>
+                           
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                @elseif( $status ==2 )
+                <div class="col s5">                 
+                    <div class="card">
+                        <div class="card-action b-t0">
+                            <font class="card-title">系統狀態</font>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="card-content center">
+                            <h5 class="margin-t0">初版班表調整中</h5>
+                            <p>排班人員可以調整初版班表</p>
+                            <p>調整完成後按下按鈕公佈正式班表</p>
+                            <button type="button" class="btn btn-secondary margin-t10" onclick="announceSchedule()">公佈正式班表</button>
+                        </div>
+                    </div>
+                </div>
+                @else
+                <div class="col s5">                 
+                    <div class="card">
+                        <div class="card-action b-t0">
+                            <font class="card-title">系統狀態</font>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="card-content center">
+                            <h5 class="margin-t0">正式班表已公佈</h5>
+                            <p>當預班時段到達時，請按下面按鈕開放預班</p>
+                            <button type="button" class="btn btn-secondary margin-t10" onclick="reservation()">開放下一次預班</button>
+                        </div>
+                    </div>
+                </div>
+				@endif
       		</div>
 		</div>
 	</div>
+@endsection
 
-	<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="../js/materialize.min.js"></script>
-	<script type="text/javascript">
-		var sideNav = (function() {
-		  	var first = true;
-		  	return function() {
-		  	  	first ? slideToLeft() : slideToRight();
-		  	  	first = !first;
-		  	}
-		})();
-		
-		function slideToLeft() {
-		  	document.getElementById("slide-out").style.width = "0";
-		    document.getElementById("header").style.marginLeft = "0";
-		    document.getElementById("section").style.marginLeft = "0";
-		};
-		function slideToRight() {
-			document.getElementById("slide-out").style.width = "250px";
-		    document.getElementById("header").style.marginLeft = "250px";
-		  	document.getElementById("section").style.marginLeft = "250px";
-		};
+@section('script')
+    <script src="../js/nouislider.js"></script>
+    <script src="../js/wNumb.js"></script>
+    <script>
+        var slider = document.getElementById('slider');
+            
+        var start={{ $strDate }};
+        var end={{ $endDate }};
+
+        function setDate(){
+             $.get('setDate',{
+                startDate:document.getElementById('startDate').value,
+                endDate:document.getElementById('endDate').value
+                
+            }, function(){
+                change();
+
+            });
+        }
+        function change(){
+             $.get('getDate',{
+                
+            }, function(array){
+                
+                start = array[0];
+                end = array[1];
+
+                document.getElementById('startFont').innerHTML = start;
+                document.getElementById('endFont').innerHTML = end;
+                location.reload();
+            });
+        }
         
-//        查看side-nav現在是處於哪一頁
-		$(".side-nav>ul>li").each(function() {
-		    var navItem = $(this);
-		    var href = window.location.href;
-			var filename = href.replace(/^.*[\\\/]/, '')
-
-		    if (navItem.find("a").attr("href") == filename) {
-		      	navItem.addClass("active");
-		    }
-		});
-
-		$(document).ready(function(){
-  		  	// the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-  		  	$('.modal').modal();
-  		});
+        var dt = new Date();
+        var year = dt.getFullYear();
+        var month = dt.getMonth() + 1;
+        var curMonthDays = new Date(year,month,0).getDate();
         
-        $('.dropdown-notification-button').dropdown({
-            inDuration: 300,
-            outDuration: 225,
-            constrainWidth: false, // Does not change width of dropdown to that of the activator
-            hover: true, // Activate on hover
-            gutter: 0, // Spacing from edge
-            belowOrigin: true, // Displays dropdown below the button
-            alignment: 'right', // Displays dropdown with edge aligned to the left of button
-            stopPropagation: false // Stops event propagation
+        //計算每年每月最大的日數是多少
+        noUiSlider.create(slider, {
+            start: [ start, end ],
+            step: 1,
+            connect: true,
+            range: {
+                'min': 1,
+                'max': curMonthDays,
+            }
         });
         
-    </script>
+        var startDate = document.getElementById('startDate');
+        var endDate = document.getElementById('endDate');
+        var startFont = document.getElementById('startFont');
+        var endFont = document.getElementById('endFont');
 
-	
-</body>
-</html>
+        slider.noUiSlider.on('update', function( values, handle ) {
+
+            var value = values[handle];
+
+            if ( handle ) {
+                endDate.value = value;
+                endFont.innerHTML = parseInt(value);
+            } else {
+                startDate.value = value;
+                startFont.innerHTML = parseInt(value);
+            }
+        });
+
+        function announceSchedule(){
+            $.get('announceSchedule',{
+                
+            }, function(){
+               alert("正式班表公布成功");
+               location.reload();
+            });
+        }
+
+
+        function announceFirstSchedule(){
+            $.get('announceFirstSchedule',{
+                
+            }, function(){
+               alert("初版班表公布成功");
+               location.reload();
+            });
+           
+        }
+
+        function reservation(){
+            $.get('toReservation',{
+                
+            }, function(){
+               alert("開放預班");
+               location.reload();
+            });
+           
+        }
+        
+
+
+        
+//        startDate.addEventListener('change', function(){
+//            slider.noUiSlider.set([this.value, null]);
+//        });
+//        
+//        endDate.addEventListener('change', function(){
+//            slider.noUiSlider.set([null, this.value]);
+//        });
+        
+    </script>
+@endsection

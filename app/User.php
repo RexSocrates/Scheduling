@@ -20,8 +20,12 @@ class User extends Authenticatable
      *
      * @var array
      */
+    // 註冊醫師時所有可填入的欄位必須在這邊紀錄
     protected $fillable = [
-        'email', 'password', 'name', 'level', 'major', 'location', 'identity'
+        'email', 'password', 'name', 'level', 'major', 'location', 'identity', 'totalShift',
+        'mustOnDutyTotalShifts', 'mustOnDutyMedicalShifts', 'mustOnDutySurgicalShifts',
+        'mustOnDutyTaipeiShifts', 'mustOnDutyTamsuiShifts', 'mustOnDutyDayShifts',
+        'mustOnDutyNightShifts', 'weekendShifts'
     ];
 
     /**
@@ -36,6 +40,15 @@ class User extends Authenticatable
     // 回傳目前登入之使用者ID
     public function getCurrentUserID() {
         return Auth::id();
+    }
+    
+    // 回傳目前登入之使用者資訊
+    public function getCurrentUserInfo() {
+        $user = DB::table('Doctor')
+            ->where('doctorID', $this->getCurrentUserID())
+            ->first();
+        
+        return $user;
     }
     
     // 取得排班人員列表
@@ -95,6 +108,15 @@ class User extends Authenticatable
                 'major' => $data['major'],
                 'location' => $data['location'],
                 'identity' => $data['identity'],
+                'totalShift' => $data['totalShift'],
+                'mustOnDutyTotalShifts' => $data['mustOnDutyTotalShifts'],
+                'mustOnDutyMedicalShifts' => $data['mustOnDutyMedicalShifts'],
+                'mustOnDutySurgicalShifts' => $data['mustOnDutySurgicalShifts'],
+                'mustOnDutyTaipeiShifts' => $data['mustOnDutyTaipeiShifts'],
+                'mustOnDutyTamsuiShifts' => $data['mustOnDutyTamsuiShifts'],
+                'mustOnDutyDayShifts' => $data['mustOnDutyDayShifts'],
+                'mustOnDutyNightShifts' => $data['mustOnDutyNightShifts'],
+                'weekendShifts' => $data['weekendShifts']
             ]);
         
         return $rows;
@@ -111,10 +133,22 @@ class User extends Authenticatable
                 'mustOnDutyMedicalShifts' => $data['mustOnDutyMedicalShifts'],
                 'mustOnDutySurgicalShifts' => $data['mustOnDutySurgicalShifts'],
                 'mustOnDutyTaipeiShifts' => $data['mustOnDutyTaipeiShifts'],
-                'mustOnDutyTamsuiShifts' => $data['mustOnDutyTamsuiShifts']
+                'mustOnDutyTamsuiShifts' => $data['mustOnDutyTamsuiShifts'],
+                'mustOnDutyTamsuiShifts' => $data['mustOnDutyDayShifts'],
+                'mustOnDutyTamsuiShifts' => $data['mustOnDutyNightShifts']
             ]);
         
         return $rows;
+    }
+
+    //查詢醫生藉由科別
+    public function getDoctorByMajor($major){
+        $doctors = DB::table('Doctor')
+                ->whereNotIn('Major',[$major])
+                ->get();
+
+                return $doctors;
+
     }
     
     // 醫生離職

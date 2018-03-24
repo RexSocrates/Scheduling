@@ -18,7 +18,7 @@
 聯絡信箱:{{ $admin->email }}
 <br>
 ※ 此信件為系統發出信件，請勿直接回覆。若您有問題請向相關人員提出，謝謝!
-
+<br>
 
 @component('mail::button', ['url' => 'http://localhost:8000/login'])
 立即登入系統

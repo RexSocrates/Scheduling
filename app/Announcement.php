@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use DB;
+
 class Announcement extends Model
 {
     //
@@ -12,9 +14,10 @@ class Announcement extends Model
     // 取得所有公告
     public function getAnnouncements() {
         $announcements = DB::table('Announcement')
+            ->orderBy('announcementSerial', 'desc')
             ->get();
         
-        return $accouncement;
+        return $announcements;
     }
     
     // 透過公告編號取得單一公告
@@ -28,15 +31,31 @@ class Announcement extends Model
     
     // 新增公告
     public function addAnnouncement($data) {
-        $currentMonth = date('Y-m-d');
-        
-        $newSerial = DB::tabe('Announcement')->insertGetId([
+        $newSerial = DB::table('Announcement')->insertGetId([
             'doctorID' => $data['doctorID'],
             'title' => $data['title'],
             'content' => $data['content'],
-            'date' => $currentMonth
+            'date' => date('Y-m-d')
         ]);
         
         return $newSerial;
+    }
+    
+    // 更新公告
+    public function updateAccouncement($data) {
+        DB::table('Announcement')
+            ->where('announcementSerial', $data['announcementSerial'])
+            ->update([
+                'title' => $data['title'],
+                'content' => $data['content'],
+                'date' => date('Y-m-d')
+            ]);
+    }
+    
+    // 刪除公告
+    public function deleteAnnouncement($serial) {
+        DB::table('Announcement')
+            ->where('announcementSerial', $serial)
+            ->delete();
     }
 }

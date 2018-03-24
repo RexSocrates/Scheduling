@@ -26,7 +26,7 @@ class AgreeShiftExchange extends Mailable
      */
     public function __construct($applicant, $receiver, $applicantShift, $receiverShift, $admin)
     {
-        //
+        // 以下皆為單一物件
         $this->applicant = $applicant;
         $this->receiver = $receiver;
         $this->applicantShift = $applicantShift;

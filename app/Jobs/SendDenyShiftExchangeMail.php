@@ -11,6 +11,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Mail;
 use App\Mail\DenyShiftExchange;
 
+// import model
+use App\User;
+
 class SendDenyShiftExchangeMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -25,12 +28,14 @@ class SendDenyShiftExchangeMail implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($applicant, $receiver, $admin)
+    public function __construct($applicantID, $receiverID)
     {
         //
-        $this->applicant = $applicant;
-        $this->receiver = $receiver;
-        $this->admin = $admin;
+        $userObj = new User();
+        
+        $this->applicant = $userObj->getDoctorInfoByID($applicantID);
+        $this->receiver = $userObj->getDoctorInfoByID($receiverID);
+        $this->admin = $userObj->getAdminList()[0];
     }
 
     /**
@@ -42,6 +47,6 @@ class SendDenyShiftExchangeMail implements ShouldQueue
     {
         //
         Mail::to($this->applicant->email)
-            ->send(new DenyShiftExchange());
+            ->send(new DenyShiftExchange($this->applicant, $this->receiver, $this->admin));
     }
 }

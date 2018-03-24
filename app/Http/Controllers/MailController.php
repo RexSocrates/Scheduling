@@ -6,11 +6,17 @@ use Illuminate\Http\Request;
 
 use Auth;
 
+use Mail;
+use App\Mail\RandomNotification;
+
 use App\Jobs\SendAgreeShiftExchangeMail;
 use App\Jobs\SendApplyShiftExchangeMail;
 use App\Jobs\SendDenyShiftExchangeMail;
 use App\Jobs\SendShiftExchangeMail;
 use App\Jobs\SendShiftExchangingInformMail;
+use App\Jobs\SendRandomNotificationMail;
+
+use App\Reservation;
 
 // 僅供信件發送測試用
 class MailController extends Controller
@@ -19,7 +25,7 @@ class MailController extends Controller
     // 排班人員換班後通知被換班的兩位醫師
     public function sendShiftExchangeMail() {
         
-        $job = new SendShiftExchangeMail('台北白班發燒1', '淡水夜班發燒1');
+        $job = new SendShiftExchangeMail(1, 1);
         
         dispatch($job);
         
@@ -62,8 +68,20 @@ class MailController extends Controller
         echo '郵件已送出';
     }
     
-    // 通知排班人員醫師A以及醫師B已同意換班
-    public function shiftExchangingInform() {
+    // 預班人數過多
+    public function sendRandomNotificationMail() {
+        $resSerial = 56;
         
+        $job = new SendRandomNotificationMail($resSerial);
+        
+        dispatch($job);
+        
+        echo '工作已放入佇列';
+        
+        
+        
+//        Mail::to('socrateshung053@gmail.com')->send(new RandomNotification($resSerial));
+        
+//        echo '郵件已送出';
     }
 }

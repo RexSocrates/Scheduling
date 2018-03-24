@@ -27,7 +27,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/doctors';
 
     /**
      * Create a new controller instance.
@@ -36,7 +36,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+//        $this->middleware('admin');
     }
 
     /**
@@ -49,7 +49,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'email' => 'required|string|email|max:255|unique:Doctor',
-            'password' => 'required|string|min:4',
+            'birthday' => 'required|string|min:4',
             'name' => 'required|string|max:255',
             'level' => 'required|string',
             'major' => 'required|string',
@@ -69,11 +69,20 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => bcrypt($data['birthday']),
             'major' => $data['major'],
             'level' => $data['level'],
             'location' => $data['location'],
             'identity' => $data['identity'],
+            'totalShift' => $data['totalShift'],
+            'mustOnDutyTotalShifts' => $data['mustOnDutyTotalShifts'],
+            'mustOnDutyMedicalShifts' => $data['mustOnDutyMedicalShifts'],
+            'mustOnDutySurgicalShifts' => $data['mustOnDutySurgicalShifts'],
+            'mustOnDutyTaipeiShifts' => $data['mustOnDutyTaipeiShifts'],
+            'mustOnDutyTamsuiShifts' => $data['mustOnDutyTamsuiShifts'],
+            'mustOnDutyDayShifts' => $data['mustOnDutyDayShifts'],
+            'mustOnDutyNightShifts' => $data['mustOnDutyNightShifts'],
+            'weekendShifts' => $data['weekendShifts']
         ]);
     }
     
