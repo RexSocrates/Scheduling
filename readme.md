@@ -7,19 +7,19 @@ The system was developed with the php framework of Laravel. To know more about t
 ## Introduction to Scheduling
 
 Each user should login with their own email address and password through the login page.
-![Login page](https://imgur.com/I2qigOi "Login Page")
+![Imgur](https://i.imgur.com/I2qigOi.png "Login Page")
 
 After login to the system, users can view the announcements issued by directors in announcement page, they can click "more" button to know the detail.
-![Announcement page](https://imgur.com/NZkWNvz "Announcement Page")
+![Imgur](https://i.imgur.com/NZkWNvz.png "Announcement Page")
 
 If the user's identity is a director, then the user can issue new announcements by clicking the botton at the top of announcements.
-![Announcement Page_Director](https://imgur.com/sGPvJtA "Announcement Page_Director")
+![Imgur](https://i.imgur.com/sGPvJtA.png "Announcement Page_Director")
 
 In this page, users can arrange and submit their shift arrangement, they can decide time(daytime / night), location, subject etc.
-![Shift Arrangement](https://imgur.com/GQOtCUt "Shift Arrangement")
+![Imgur](https://i.imgur.com/GQOtCUt.png "Shift Arrangement")
 
 After the users submit their arrangement, the scheduling algorithm starts finding the solution for them. When a solution is obtained, the system display the result.
-![Arrangement result](https://imgur.com/NKrH0Up "Arrangement result")
+![Imgur](https://i.imgur.com/NKrH0Up.png "Arrangement result")
 
 If a user would like to change their shifts, he / she can submit their requests.
-![Change shift](https://imgur.com/P2j64dx "Change shift")
+![Imgur](https://i.imgur.com/P2j64dx.png "Change shift")
